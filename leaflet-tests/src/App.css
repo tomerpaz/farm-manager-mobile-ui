@@ -1,0 +1,5 @@
+.sr-only {
+  display: none;
+}
+
+#map { height: 180px; }
