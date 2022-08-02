@@ -8,8 +8,6 @@ const FieldsMap = (props) => {
 
             <MapContainer style={{ height: window.innerHeight -130, width: '100%' }} center={position} zoom={13} scrollWheelZoom={false}>
 
-
-
                 {/* <FeatureGroup>
             <EditControl
               position='topright'
