@@ -6,7 +6,7 @@ const FieldsMap = (props) => {
     return (
         <div id="map" dir='ltr' >
 
-            <MapContainer style={{ height: window.innerHeight -130, width: '100%' }} center={position} zoom={13} scrollWheelZoom={false}>
+            <MapContainer style={{ height: window.screen.height -250, width: '100%' }} center={position} zoom={13} scrollWheelZoom={false}>
 
                 {/* <FeatureGroup>
             <EditControl
