@@ -1,16 +1,15 @@
 {
   "files": {
-    "main.css": "/farm-manager-mobile-ui/static/css/main.073c9b0a.css",
-    "main.js": "/farm-manager-mobile-ui/static/js/main.ffe31128.js",
+    "main.css": "/farm-manager-mobile-ui/static/css/main.e6c13ad2.css",
+    "main.js": "/farm-manager-mobile-ui/static/js/main.2cb6c931.js",
     "static/js/787.02bc3481.chunk.js": "/farm-manager-mobile-ui/static/js/787.02bc3481.chunk.js",
-    "static/media/logo.svg": "/farm-manager-mobile-ui/static/media/logo.6ce24c58023cc2f8fd88fe9d219db6c6.svg",
     "index.html": "/farm-manager-mobile-ui/index.html",
-    "main.073c9b0a.css.map": "/farm-manager-mobile-ui/static/css/main.073c9b0a.css.map",
-    "main.ffe31128.js.map": "/farm-manager-mobile-ui/static/js/main.ffe31128.js.map",
+    "main.e6c13ad2.css.map": "/farm-manager-mobile-ui/static/css/main.e6c13ad2.css.map",
+    "main.2cb6c931.js.map": "/farm-manager-mobile-ui/static/js/main.2cb6c931.js.map",
     "787.02bc3481.chunk.js.map": "/farm-manager-mobile-ui/static/js/787.02bc3481.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.073c9b0a.css",
-    "static/js/main.ffe31128.js"
+    "static/css/main.e6c13ad2.css",
+    "static/js/main.2cb6c931.js"
   ]
 }
