@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/farm-manager-mobile-ui/static/css/main.e6c13ad2.css",
-    "main.js": "/farm-manager-mobile-ui/static/js/main.9a780eb3.js",
+    "main.js": "/farm-manager-mobile-ui/static/js/main.c1404ec6.js",
     "static/js/787.02bc3481.chunk.js": "/farm-manager-mobile-ui/static/js/787.02bc3481.chunk.js",
     "index.html": "/farm-manager-mobile-ui/index.html",
     "main.e6c13ad2.css.map": "/farm-manager-mobile-ui/static/css/main.e6c13ad2.css.map",
-    "main.9a780eb3.js.map": "/farm-manager-mobile-ui/static/js/main.9a780eb3.js.map",
+    "main.c1404ec6.js.map": "/farm-manager-mobile-ui/static/js/main.c1404ec6.js.map",
     "787.02bc3481.chunk.js.map": "/farm-manager-mobile-ui/static/js/787.02bc3481.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.e6c13ad2.css",
-    "static/js/main.9a780eb3.js"
+    "static/js/main.c1404ec6.js"
   ]
 }
