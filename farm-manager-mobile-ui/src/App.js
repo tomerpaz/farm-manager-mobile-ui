@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './App.css';
 import AppFrame from './AppFrame';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
@@ -31,7 +30,8 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
 
-      <AppFrame />
+        <AppFrame />
+
     </ThemeProvider>
     // <div className="App">
     //   <header className="App-header">

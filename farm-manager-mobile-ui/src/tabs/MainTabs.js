@@ -12,6 +12,7 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import NavigationIcon from '@mui/icons-material/Navigation';
 import ActivityForm from '../activity/ActivityForm'
 import FieldsMap from '../maps/FieldsMap';
+import { Link, Route, Routes, useLocation, matchPath } from 'react-router-dom';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -26,7 +27,7 @@ function TabPanel(props) {
         >
             {value === index && (
                 <Box >
-                    <Typography>{children}</Typography>
+                    {children}
                 </Box>
             )}
         </div>
@@ -42,8 +43,8 @@ TabPanel.propTypes = {
 
 const fabStyle = {
     position: 'absolute',
-    bottom: 16,
-    right: 16,
+    bottom: 36,
+    right: 24,
 };
 
 
@@ -62,35 +63,58 @@ function a11yProps(index) {
         'aria-controls': `simple-tabpanel-${index}`,
     };
 }
-const MainTabs = () => {
-    const [value, setValue] = useState(0);
 
-    const handleChange = (event, newValue) => {
-        setValue(newValue);
-    };
+
+
+const MainTabs = () => {
+
+
+    const {pathname} = useLocation();
+
+    const paths = ['/map', '/fields', '/activities', 130, 44];
+
+    const getIndex  = (element) => element === pathname;
+
+   const value =  paths.findIndex(getIndex);
+
+
+    // console.log(pathname)
+
+
+
+    // const [value, setValue] = useState(0);
+
+    // const handleChange = (event, newValue) => {
+    //     setValue(newValue);
+    // };
+
 
     return (
-        <Box sx={{ width: '100%' }}>
-            <FmAppBar />
+        <Box >
+
+
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
 
-                <Tabs value={value} onChange={handleChange} aria-label="basic tabs example"
+                <Tabs value={value} aria-label="basic tabs example"
                     // indicatorColor="secondary"
                     textColor="inherit"
-                    backgroundColor="primary"
                     variant="fullWidth"
                 >
-                    <Tab label="Item One" {...a11yProps(0)} />
+                    {/* <Tab label="Inbox" value="/inbox/:id" to="/inbox/1" component={Link} /> */}
+                    <Tab label="MAP" to="/map" component={Link}   {...a11yProps(0)}/>
+                    <Tab label="Fields" to="/fields" component={Link} {...a11yProps(1)} />
+                    <Tab label="activities" to="/activities" component={Link}  {...a11yProps(2)}/>
+                    {/* <Tab label="Item One" {...a11yProps(0)} />
                     <Tab label="Item Two" {...a11yProps(1)} />
-                    <Tab label="Item Three" {...a11yProps(2)} />
+                    <Tab label="Item Three" {...a11yProps(2)} /> */}
                 </Tabs>
             </Box>
-            <TabPanel value={value} index={0}>
+            <TabPanel component={'div'} value={value} index={0}>
                 <FieldsMap />
                 <FloatingActionButtons />
+
             </TabPanel>
             <TabPanel value={value} index={1}>
-                Item Two
                 <FloatingActionButtons />
 
             </TabPanel>
