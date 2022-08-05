@@ -98,7 +98,9 @@ const FmAppBar = () => {
   const handleLogout = () => {
     setAnchorEl(null);
     handleMobileMenuClose();
-    navigate("/");
+    const _user = localStorage.removeItem("token")
+
+    navigate("/login");
   };
 
   const menuId = 'primary-search-account-menu';
@@ -231,7 +233,7 @@ const FmAppBar = () => {
               </Badge>
             </IconButton>
             <IconButton
-              onClick={()=>navigate("/")}
+              onClick={handleLogout}
               size="large"
               aria-label="log out"
               color="inherit"

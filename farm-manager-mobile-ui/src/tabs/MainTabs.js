@@ -13,6 +13,7 @@ import NavigationIcon from '@mui/icons-material/Navigation';
 import ActivityForm from '../activity/ActivityForm'
 import FieldsMap from '../maps/FieldsMap';
 import { Link, Route, Routes, useLocation, matchPath } from 'react-router-dom';
+import FieldList from './fields/FieldList';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -73,12 +74,15 @@ const MainTabs = () => {
 
     const paths = ['/map', '/fields', '/activities', 130, 44];
 
-    const getIndex  = (element) => element === pathname;
-
-   const value =  paths.findIndex(getIndex);
+    const getIndex  = ((element) => element === pathname  ) ;
 
 
-    // console.log(pathname)
+
+
+   const value =  paths.findIndex(getIndex) > 0 ? paths.findIndex(getIndex)  : 0 ;
+
+
+     console.log('value',value)
 
 
 
@@ -115,6 +119,7 @@ const MainTabs = () => {
 
             </TabPanel>
             <TabPanel value={value} index={1}>
+                <FieldList/>
                 <FloatingActionButtons />
 
             </TabPanel>

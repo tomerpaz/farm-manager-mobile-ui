@@ -6,6 +6,11 @@ const Login = (props) => {
 
     let navigate = useNavigate();
 
+    const login = () => {
+		localStorage.setItem("token", JSON.stringify({token: "token"}));
+        console.log('login')
+		navigate("/map");
+	}
     return (
         <Box
             component="form"
@@ -54,7 +59,7 @@ const Login = (props) => {
                     autoComplete="current-password"
                 />
 
-                <Button fullWidth={true} size='large' onClick={() => navigate("/map")} disableElevation variant="contained">Login</Button>
+                <Button fullWidth={true} size='large' onClick={login} disableElevation variant="contained">Login</Button>
             </Box>
         </Box>
 
