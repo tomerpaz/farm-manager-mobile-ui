@@ -1,4 +1,4 @@
-import {useState}   from 'react';
+import { useState } from 'react';
 import { styled, alpha } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -15,7 +15,10 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 import MailIcon from '@mui/icons-material/Mail';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
+import Logout from '@mui/icons-material/Logout';
+
 import ComboBox from '../components/FmAutocomplete';
+import { useNavigate } from 'react-router-dom';
 
 
 const Search = styled('div')(({ theme }) => ({
@@ -63,8 +66,16 @@ const FmAppBar = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
 
+  const [filterAnchorEl, setFilterAnchorEl] = useState(null);
+
+
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+  const isFilterOpen = Boolean(filterAnchorEl);
+
+
+  let navigate = useNavigate();
+
 
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -81,6 +92,13 @@ const FmAppBar = () => {
 
   const handleMobileMenuOpen = (event) => {
     setMobileMoreAnchorEl(event.currentTarget);
+  };
+
+
+  const handleLogout = () => {
+    setAnchorEl(null);
+    handleMobileMenuClose();
+    navigate("/");
   };
 
   const menuId = 'primary-search-account-menu';
@@ -153,6 +171,19 @@ const FmAppBar = () => {
           <AccountCircle />
         </IconButton>
         <p>Profile</p>
+      </MenuItem>
+      <MenuItem onClick={handleLogout}>
+        <IconButton
+          size="large"
+          aria-label="log out"
+          aria-controls="primary-search-account-menu"
+          aria-haspopup="true"
+          color="inherit"
+        >
+          <Logout />
+        </IconButton>
+
+        <p>Logout</p>
       </MenuItem>
     </Menu>
   );

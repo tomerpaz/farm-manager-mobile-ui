@@ -111,7 +111,7 @@ const MainTabs = () => {
             </Box>
             <TabPanel component={'div'} value={value} index={0}>
                 <FieldsMap />
-                <FloatingActionButtons />
+                {/* <FloatingActionButtons /> */}
 
             </TabPanel>
             <TabPanel value={value} index={1}>

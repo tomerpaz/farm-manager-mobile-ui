@@ -4,6 +4,7 @@ import { Box } from '@mui/material';
 import { Routes, Route, Outlet, Link } from "react-router-dom";
 import FieldsMap from './maps/FieldsMap';
 import FmAppBar from './appbar/FmAppBar';
+import Signin from './system/Signin';
 
 
 
@@ -13,18 +14,18 @@ const AppFrame = () => {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-
+  
   return (
-    <Box>
+    <Box  display={'flex'} flex={1} flexDirection={'column'}>
       <FmAppBar />
-      <MainTabs/>
-      <Routes>
-        {/* <Route path="/" element={<FieldsMap />} /> */}
-        <Route path="/map" element={<Outlet/>}/>
-        <Route path="/fields" element={<Outlet/>} />
-        <Route path="/activities" element={<Outlet/>}/>
-      </Routes>
       
+      <Routes>
+        <Route path="/" element={<Signin />} />
+        <Route path="/map" element={<MainTabs />} />
+        <Route path="/fields" element={<MainTabs />} />
+        <Route path="/activities" element={<MainTabs />} />
+      </Routes>
+
     </Box>
 
   );
