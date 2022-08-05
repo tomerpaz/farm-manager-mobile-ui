@@ -1,8 +1,8 @@
 import { BottomNavigation, BottomNavigationAction, Box } from "@mui/material";
 import RestoreIcon from '@mui/icons-material/Restore';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import  LocationOnIcon from '@mui/icons-material/LocationOn';
-import  Map from '@mui/icons-material/Map';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
+import Map from '@mui/icons-material/Map';
 
 import { MapContainer, Marker, Popup, TileLayer, FeatureGroup, Circle } from "react-leaflet";
 import { useState } from "react";
