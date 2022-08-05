@@ -176,8 +176,6 @@ const FmAppBar = () => {
         <IconButton
           size="large"
           aria-label="log out"
-          aria-controls="primary-search-account-menu"
-          aria-haspopup="true"
           color="inherit"
         >
           <Logout />
@@ -207,7 +205,7 @@ const FmAppBar = () => {
             component="div"
             sx={{ display: { xs: 'none', sm: 'block' } }}
           >
-            MUI
+            Farm Manager
           </Typography>
           <Search>
             <SearchIconWrapper>
@@ -231,6 +229,14 @@ const FmAppBar = () => {
               <Badge badgeContent={17} color="error">
                 <NotificationsIcon />
               </Badge>
+            </IconButton>
+            <IconButton
+              onClick={()=>navigate("/")}
+              size="large"
+              aria-label="log out"
+              color="inherit"
+            >
+                <Logout />
             </IconButton>
             <IconButton
               size="large"
