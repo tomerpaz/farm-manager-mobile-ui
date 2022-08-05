@@ -32,8 +32,7 @@ const AppFrame = () => {
 
       <Routes>
         <Route path="/" element={<ProtectedRoutes />}>
-        <Route path='/' element={<MainTabs />} />
-
+          <Route path='/' element={<MainTabs />} />
           <Route path='/map' element={<MainTabs />} />
           <Route path='/fields' element={<MainTabs />} />
           <Route path='/activities' element={<MainTabs />} />
