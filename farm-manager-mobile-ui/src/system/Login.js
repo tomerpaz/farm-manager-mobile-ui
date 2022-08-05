@@ -2,7 +2,7 @@ import { Box, Button, TextField } from "@mui/material"
 import { useNavigate } from "react-router-dom";
 import LogoLeaf from "../icons/LogoLeaf";
 
-const Signin = (props) => {
+const Login = (props) => {
 
     let navigate = useNavigate();
 
@@ -23,11 +23,11 @@ const Signin = (props) => {
             alignItems={'center'}
 
             flex={1}
-            marginTop={'20%'}
+            
 
         >
 
-            <Box
+            <Box marginTop={10}
                 flex={1}
                 alignItems={'center'}
                 display={'flex'}
@@ -54,11 +54,11 @@ const Signin = (props) => {
                     autoComplete="current-password"
                 />
 
-                <Button fullWidth={true} size='large' onClick={() => navigate("/map")} disableElevation variant="contained">Signin</Button>
+                <Button fullWidth={true} size='large' onClick={() => navigate("/map")} disableElevation variant="contained">Login</Button>
             </Box>
         </Box>
 
 
     )
 }
-export default Signin;
+export default Login;
