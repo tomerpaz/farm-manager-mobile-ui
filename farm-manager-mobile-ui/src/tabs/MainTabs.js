@@ -120,11 +120,12 @@ const MainTabs = () => {
             </TabPanel>
             <TabPanel value={value} index={1}>
                 <FieldList/>
-                <FloatingActionButtons />
 
             </TabPanel>
             <TabPanel value={value} index={2}>
                 <ActivityForm />
+                <FloatingActionButtons />
+
             </TabPanel>
         </Box>
     );

@@ -1,17 +1,31 @@
 import { Box, Button, TextField } from "@mui/material"
 import { useNavigate } from "react-router-dom";
+import { useForm, Controller } from "react-hook-form";
+
 import LogoLeaf from "../icons/LogoLeaf";
 
 const Login = (props) => {
 
     let navigate = useNavigate();
 
+
+    const { handleSubmit, control } = useForm();
+
+
+
+    const onSubmit = data => {
+        console.log('data', data);
+        login();
+    };
+
     const login = () => {
-		localStorage.setItem("token", JSON.stringify({token: "token"}));
+        localStorage.setItem("token", JSON.stringify({ token: "token" }));
         console.log('login')
-		navigate("/map");
-	}
+        navigate("/map");
+    }
     return (
+
+
         <Box
             component="form"
             sx={{
@@ -28,7 +42,7 @@ const Login = (props) => {
             alignItems={'center'}
 
             flex={1}
-            
+            onSubmit={handleSubmit(onSubmit)}
 
         >
 
@@ -38,28 +52,49 @@ const Login = (props) => {
                 display={'flex'}
                 flexDirection={'column'}>
                 <LogoLeaf color='primary' fontSize={'large'} />
-                <TextField
-                    required
-                    name={'username'}
-                    id="outlined-required"
-                    label="User Name"
+
+                <Controller
+                    name="username"
+                    control={control}
                     defaultValue=""
-                />
-                {/* <TextField
-                    disabled
-                    id="outlined-disabled"
-                    label="Disabled"
-                    defaultValue="Hello World"
-                /> */}
-                <TextField
-                    id="outlined-password-input"
-                    name={'password'}
-                    label="Password"
-                    type="password"
-                    autoComplete="current-password"
+                    render={({ field: { onChange, value }, fieldState: { error } }) => (
+                        <TextField
+                            label="User Name"
+                            error={!!error}
+                            helperText={error ? error.message : null}
+                            value={value}
+                            onChange={onChange}
+                        />
+                    )}
+                    rules={{ required: 'Username required' }}
+
+
                 />
 
-                <Button fullWidth={true} size='large' onClick={login} disableElevation variant="contained">Login</Button>
+
+
+
+
+                <Controller
+                    name="password"
+                    control={control}
+                    defaultValue=""
+                    render={({ field: { onChange, value }, fieldState: { error } }) => (
+                        <TextField
+                            label="Password"
+                            value={value}
+                            onChange={onChange}
+                            error={!!error}
+                            helperText={error ? error.message : null}
+                            type="password"
+                            autoComplete="current-password"
+                        />
+                    )}
+                    rules={{ required: 'Password required' }}
+                />
+
+
+                <Button type="submit" fullWidth={true} size='large' disableElevation variant="contained">Login</Button>
             </Box>
         </Box>
 

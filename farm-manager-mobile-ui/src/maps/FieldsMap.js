@@ -6,6 +6,7 @@ import Map from '@mui/icons-material/Map';
 
 import { MapContainer, Marker, Popup, TileLayer, FeatureGroup, Circle } from "react-leaflet";
 import { useState } from "react";
+import GeoLocation from "./GeoLocation";
 const position = [51.505, -0.09]
 
 const FieldsMap = (props) => {
@@ -46,6 +47,8 @@ const FieldsMap = (props) => {
                             A pretty CSS3 popup. <br /> Easily customizable.
                         </Popup>
                     </Marker> */}
+                    <GeoLocation />
+
                 </MapContainer>
             </div>
             <BottomNavigation
