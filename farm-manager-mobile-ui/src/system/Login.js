@@ -3,15 +3,21 @@ import { useNavigate } from "react-router-dom";
 import { useForm, Controller } from "react-hook-form";
 
 import LogoLeaf from "../icons/LogoLeaf";
+import { useDispatch, useSelector } from "react-redux";
+import { decrement, increment } from '../data/slices/fieldSlice'
 
 const Login = (props) => {
 
     let navigate = useNavigate();
 
+    const count = useSelector((state) => state.field.value)
+    const dispatch = useDispatch()
 
     const { handleSubmit, control } = useForm();
 
 
+
+    console.log('count',count)
 
     const onSubmit = data => {
         console.log('data', data);
@@ -21,6 +27,8 @@ const Login = (props) => {
     const login = () => {
         localStorage.setItem("token", JSON.stringify({ token: "token" }));
         console.log('login')
+
+        dispatch(increment())
         navigate("/map");
     }
     return (
