@@ -1,14 +1,20 @@
 import { Box, Button, TextField } from "@mui/material"
 import { useNavigate } from "react-router-dom";
-import { useForm, Controller } from "react-hook-form";
+import { useForm, Controller, useWatch } from "react-hook-form";
 
-import LogoLeaf from "../icons/LogoLeaf";
+import LogoLeaf from "../../icons/LogoLeaf";
 import { useDispatch, useSelector } from "react-redux";
-import { decrement, increment } from '../data/slices/fieldSlice'
+import { decrement, increment } from '../fields/fieldSlice'
+import { setCredentials } from "./authSlice";
+import { useLoginMutation } from "./authApiSlice";
 
 const Login = (props) => {
 
-    let navigate = useNavigate();
+
+
+    const navigate = useNavigate()
+
+    const [login, { isLoading }] = useLoginMutation()
 
     const count = useSelector((state) => state.field.value)
     const dispatch = useDispatch()
@@ -16,21 +22,51 @@ const Login = (props) => {
     const { handleSubmit, control } = useForm();
 
 
+    const user = useWatch({ name: 'username', control });
+    const pwd = useWatch({ name: 'password', control });
+
 
     console.log('count',count)
 
-    const onSubmit = data => {
-        console.log('data', data);
-        login();
+    const onSubmit = async (e) => {
+
+        console.log('data', e);
+        // login();
+
+        try {
+            console.log(user, pwd)
+            const userData = await login(e).unwrap()
+            console.log('userData', userData);
+            dispatch(setCredentials({ ...userData, user }))
+            // setUser('')
+            // setPwd('')
+            navigate('/map')
+        } catch (err) {
+            // if (!err?.originalStatus) {
+            //     // isLoading: true until timeout occurs
+            //     setErrMsg('No Server Response');
+            // } else if (err.originalStatus === 400) {
+            //     setErrMsg('Missing Username or Password');
+            // } else if (err.originalStatus === 401) {
+            //     setErrMsg('Unauthorized');
+            // } else {
+            //     setErrMsg('Login Failed');
+            // }
+            // errRef.current.focus();
+        }
+        
     };
 
-    const login = () => {
-        localStorage.setItem("token", JSON.stringify({ token: "token" }));
-        console.log('login')
 
-        dispatch(increment())
-        navigate("/map");
-    }
+
+
+    // const login = () => {
+    //     localStorage.setItem("token", JSON.stringify({ token: "token" }));
+    //     console.log('login')
+
+    //     dispatch(increment())
+    //     navigate("/map");
+    // }
     return (
 
 

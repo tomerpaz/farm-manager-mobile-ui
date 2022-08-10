@@ -19,6 +19,8 @@ import Logout from '@mui/icons-material/Logout';
 
 import ComboBox from '../components/FmAutocomplete';
 import { useNavigate } from 'react-router-dom';
+import { logOut } from '../features/auth/authSlice';
+import { useDispatch } from 'react-redux';
 
 
 const Search = styled('div')(({ theme }) => ({
@@ -66,6 +68,9 @@ const FmAppBar = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
 
+  const dispatch = useDispatch()
+
+
   const [filterAnchorEl, setFilterAnchorEl] = useState(null);
 
 
@@ -98,7 +103,7 @@ const FmAppBar = () => {
   const handleLogout = () => {
     setAnchorEl(null);
     handleMobileMenuClose();
-    const _user = localStorage.removeItem("token")
+    dispatch(logOut());
 
     navigate("/login");
   };

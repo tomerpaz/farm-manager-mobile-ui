@@ -1,6 +1,15 @@
 import './App.css';
-import AppFrame from './AppFrame';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import MainTabs from './tabs/MainTabs';
+import { Box } from '@mui/material';
+import { Routes, Route, Outlet, Link, useNavigate, useLocation } from "react-router-dom";
+import FmAppBar from './appbar/FmAppBar';
+import Login from './features/auth/Login';
+import ProtectedRoutes from './router/ProtectedRoutes';
+import PublicRoutes from './router/PublicRoutes';
+import he from "./lang/he.json";
+import en from "./lang/en.json";
+
 
 
 export const PRIMARY_MAIN = '#49A05E';
@@ -30,7 +39,21 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
 
-        <AppFrame />
+      <Box display={'flex'} flex={1} flexDirection={'column'}>
+        <FmAppBar />
+
+        <Routes>
+          <Route path="/" element={<ProtectedRoutes />}>
+            <Route path='/' element={<MainTabs />} />
+            <Route path='/map' element={<MainTabs />} />
+            <Route path='/fields' element={<MainTabs />} />
+            <Route path='/activities' element={<MainTabs />} />
+          </Route>
+          <Route path="/" element={<PublicRoutes />}>
+            <Route path="/login" element={<Login />} />
+          </Route>
+        </Routes>
+      </Box>
 
     </ThemeProvider>
     // <div className="App">
