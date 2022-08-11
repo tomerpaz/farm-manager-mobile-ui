@@ -12,8 +12,6 @@ const baseQuery = fetchBaseQuery({
         headers.set("Content-Type", 'application/json')
         headers.set('X-Requested-With', 'XMLHttpRequest')
 
-        
-
         return headers
     }
 })

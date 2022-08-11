@@ -3,12 +3,12 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import MainTabs from './tabs/MainTabs';
 import { Box } from '@mui/material';
 import { Routes, Route, Outlet, Link, useNavigate, useLocation } from "react-router-dom";
-import FmAppBar from './appbar/FmAppBar';
 import Login from './features/auth/Login';
 import ProtectedRoutes from './router/ProtectedRoutes';
 import PublicRoutes from './router/PublicRoutes';
 import he from "./lang/he.json";
 import en from "./lang/en.json";
+import Layout from './components/Layout';
 
 
 
@@ -38,11 +38,8 @@ const theme = createTheme({
 function App() {
   return (
     <ThemeProvider theme={theme}>
-
-      <Box display={'flex'} flex={1} flexDirection={'column'}>
-        <FmAppBar />
-
-        <Routes>
+      <Routes>
+        <Route path="/" element={<Layout />}>
           <Route path="/" element={<ProtectedRoutes />}>
             <Route path='/' element={<MainTabs />} />
             <Route path='/map' element={<MainTabs />} />
@@ -52,8 +49,9 @@ function App() {
           <Route path="/" element={<PublicRoutes />}>
             <Route path="/login" element={<Login />} />
           </Route>
-        </Routes>
-      </Box>
+        </Route>
+      </Routes>
+
 
     </ThemeProvider>
     // <div className="App">
