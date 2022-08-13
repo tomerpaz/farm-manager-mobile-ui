@@ -2,7 +2,7 @@ import './App.css';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import MainTabs from './tabs/MainTabs';
 import { Box } from '@mui/material';
-import { Routes, Route, Outlet, Link, useNavigate, useLocation } from "react-router-dom";
+import { Routes, Route, Outlet, Link, useNavigate, useLocation, Navigate } from "react-router-dom";
 import Login from './features/auth/Login';
 import ProtectedRoutes from './router/ProtectedRoutes';
 import PublicRoutes from './router/PublicRoutes';
@@ -36,12 +36,13 @@ const theme = createTheme({
 });
 
 function App() {
+  const defaultRoute = "/map";
   return (
     <ThemeProvider theme={theme}>
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route path="/" element={<ProtectedRoutes />}>
-            <Route path='/' element={<MainTabs />} />
+            <Route index element={ <Navigate to={defaultRoute} replace />} />
             <Route path='/map' element={<MainTabs />} />
             <Route path='/fields' element={<MainTabs />} />
             <Route path='/activities' element={<MainTabs />} />
@@ -50,26 +51,9 @@ function App() {
             <Route path="/login" element={<Login />} />
           </Route>
         </Route>
+        <Route path="*" element={<Navigate to={defaultRoute} replace />} />
       </Routes>
-
-
     </ThemeProvider>
-    // <div className="App">
-    //   <header className="App-header">
-    //     <img src={logo} className="App-logo" alt="logo" />
-    //     <p>
-    //       Edit <code>src/App.js</code> and save to reload.
-    //     </p>
-    //     <a
-    //       className="App-link"
-    //       href="https://reactjs.org"
-    //       target="_blank"
-    //       rel="noopener noreferrer"
-    //     >
-    //       Learn React
-    //     </a>
-    //   </header>
-    // </div>
   );
 }
 
