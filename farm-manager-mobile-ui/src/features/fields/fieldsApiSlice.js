@@ -1,27 +1,71 @@
+import {
+    createSelector,
+    createEntityAdapter
+} from "@reduxjs/toolkit";
+import { polygon } from "leaflet";
 import { apiSlice } from "../../app/api/apiSlice";
 
 
-const fieldsAdapter = createEntityAdapter({
-    //sortComparer: (a, b) => b.date.localeCompare(a.date)
-})
+
+export const fieldsAdapter = createEntityAdapter()
 const initialState = fieldsAdapter.getInitialState()
 
+export function safeParseJson(json) {
+
+    if (json) {
+        try {
+            return JSON.parse(json);
+        }
+        catch (err) {
+
+        }
+    }
+    return null;
+}
 
 export const fieldsApiSlice = apiSlice.injectEndpoints({
+
     endpoints: builder => ({
-        getFields: builder.mutation({
-            query: year => `/api/farm/fields/${year}`
-        }),
-        transformResponse: responseData => {
-            return fieldsAdapter.setAll(initialState, responseData)
-        },
-        providesTags: (result, error, arg) => [
-            { type: 'Field', id: "LIST" },
-            ...result.ids.map(id => ({ type: 'Field', id }))
-        ]
+        getFieldsByYear: builder.query({
+            query: (year) => `/api/farm/fields/${year}`,
+            transformResponse: responseData => {
+                const fields = responseData.map(field => {
+                    if (field?.polygon) field.polygon = safeParseJson(field.polygon);
+                    return field;
+                });
+
+
+                return fieldsAdapter.setAll(initialState, fields)
+            },
+            providesTags: (result, error, arg) => [
+                { type: 'Field', id: "LIST" },
+                ...result.ids.map(id => ({ type: 'Field', id }))
+            ]
+        })
     })
 })
 
 export const {
-    useGetFieldsQuery
+    useGetFieldsByYearQuery
 } = fieldsApiSlice
+
+
+// returns the query result object
+export const selectFieldssResult = fieldsApiSlice.endpoints.getFieldsByYear.select()
+
+// Creates memoized selector
+const selectFieldsData = createSelector(
+    selectFieldssResult,
+    fieldsResult => fieldsResult.data // normalized state object with ids & entities
+)
+
+//getSelectors creates these selectors and we rename them with aliases using destructuring
+export const {
+    selectAll: selectAllFields,
+    selectById: selectFieldById,
+    selectIds: selectFieldIds,
+    //   selectByYear: selectFieldByYear,
+    // Pass in a selector that returns the fields slice of state
+} = fieldsAdapter.getSelectors(state => selectFieldsData(state) ?? initialState)
+
+export const getFieldsState = (state) => state.fields;
