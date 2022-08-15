@@ -13,9 +13,21 @@ import ActivityForm from '../activity/ActivityForm'
 import FieldsMap from '../maps/FieldsMap';
 import { Link, Route, Routes, useLocation, matchPath } from 'react-router-dom';
 import FieldList from './fields/FieldList';
+import { fieldsAdapter, fieldsApiSlice, getFieldsState, selectAllFields, selectFieldssResult, useGetFieldsByYearQuery, useGetFieldsQuery } from '../features/fields/fieldsApiSlice';
+import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { logOut, selectCurrentToken, selectUser } from '../features/auth/authSlice';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
+
+
+    // const [getFields] = useGetFieldsQuery;
+
+    // console.log('getFields',getFields)
+
+
+
 
     return (
         <div
@@ -68,20 +80,53 @@ function a11yProps(index) {
 
 const MainTabs = () => {
 
+    const dispatch = useDispatch()
 
-    const {pathname} = useLocation();
+    const { pathname } = useLocation();
+
+	const user = useSelector(selectUser)
+
+
 
     const paths = ['/map', '/fields', '/activities', 130, 44];
 
-    const getIndex  = ((element) => element === pathname  ) ;
+    const getIndex = ((element) => element === pathname);
+
+    const {
+        data,
+        isLoading,
+        isSuccess,
+        isError,
+        error
+    } = useGetFieldsByYearQuery(user.year)
 
 
 
 
-   const value =  paths.findIndex(getIndex) > 0 ? paths.findIndex(getIndex)  : 0 ;
+    // console.log('isLoading',isLoading,'isSuccess',isSuccess,'isError',error)
+
+        
+  //  console.log('fields',fields)
+   // console.log('selectAllFields',allFields)
+
+   // console.log('selectFieldssResult',selectFieldssResult(2022))
 
 
-     console.log('value',value)
+   
+
+    // console.log('fieldsAdapter',fieldsAdapter.getSelectors()).selectAllFields();
+
+    if(!data){
+        return <div>Loding</div>
+    }
+
+    const fields = data.ids.map(id=>data.entities[id]);
+
+
+    const value = paths.findIndex(getIndex) > 0 ? paths.findIndex(getIndex) : 0;
+
+
+    console.log('value', value)
 
 
 
@@ -90,6 +135,7 @@ const MainTabs = () => {
     // const handleChange = (event, newValue) => {
     //     setValue(newValue);
     // };
+
 
 
     return (
@@ -104,21 +150,21 @@ const MainTabs = () => {
                     variant="fullWidth"
                 >
                     {/* <Tab label="Inbox" value="/inbox/:id" to="/inbox/1" component={Link} /> */}
-                    <Tab label="MAP" to="/map" component={Link}   {...a11yProps(0)}/>
+                    <Tab label="MAP" to="/map" component={Link}   {...a11yProps(0)} />
                     <Tab label="Fields" to="/fields" component={Link} {...a11yProps(1)} />
-                    <Tab label="activities" to="/activities" component={Link}  {...a11yProps(2)}/>
+                    <Tab label="activities" to="/activities" component={Link}  {...a11yProps(2)} />
                     {/* <Tab label="Item One" {...a11yProps(0)} />
                     <Tab label="Item Two" {...a11yProps(1)} />
                     <Tab label="Item Three" {...a11yProps(2)} /> */}
                 </Tabs>
             </Box>
             <TabPanel component={'div'} value={value} index={0}>
-                <FieldsMap />
+                <FieldsMap fields={fields}/>
                 {/* <FloatingActionButtons /> */}
 
             </TabPanel>
             <TabPanel value={value} index={1}>
-                <FieldList/>
+                <FieldList />
 
             </TabPanel>
             <TabPanel value={value} index={2}>

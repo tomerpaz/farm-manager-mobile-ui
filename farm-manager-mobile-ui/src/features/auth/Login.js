@@ -3,9 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { useForm, Controller, useWatch } from "react-hook-form";
 
 import LogoLeaf from "../../icons/LogoLeaf";
-import { useDispatch, useSelector } from "react-redux";
-import { decrement, increment } from '../fields/fieldSlice'
-import { setCredentials } from "./authSlice";
 import { useLoginMutation } from "./authApiSlice";
 
 const Login = (props) => {
@@ -14,10 +11,7 @@ const Login = (props) => {
 
     const navigate = useNavigate()
 
-    const [login, { isLoading }] = useLoginMutation()
-
-    const count = useSelector((state) => state.field.value)
-    const dispatch = useDispatch()
+    const [login] = useLoginMutation()
 
     const { handleSubmit, control } = useForm();
 
@@ -26,22 +20,15 @@ const Login = (props) => {
     const pwd = useWatch({ name: 'password', control });
 
 
-    console.log('count',count)
 
     const onSubmit = async (e) => {
 
-        console.log('data', e);
-        // login();
-
         try {
-            console.log(user, pwd)
-            const userData = await login(e).unwrap()
-            console.log('userData', userData);
-            dispatch(setCredentials({ ...userData, user }))
-            // setUser('')
-            // setPwd('')
+            const loginData = await login(e).unwrap()
+            localStorage.setItem('token',loginData.token)
             navigate('/map')
         } catch (err) {
+            
             // if (!err?.originalStatus) {
             //     // isLoading: true until timeout occurs
             //     setErrMsg('No Server Response');
@@ -58,15 +45,6 @@ const Login = (props) => {
     };
 
 
-
-
-    // const login = () => {
-    //     localStorage.setItem("token", JSON.stringify({ token: "token" }));
-    //     console.log('login')
-
-    //     dispatch(increment())
-    //     navigate("/map");
-    // }
     return (
 
 

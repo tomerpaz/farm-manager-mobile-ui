@@ -1,12 +1,15 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { setCredentials, logOut } from '../../features/auth/authSlice'
+import { setCredentials, logOut, setUserData } from '../../features/auth/authSlice'
+
+
+
 
 const baseQuery = fetchBaseQuery({
-    //baseUrl: 'http://localhost:8080',
-    baseUrl: 'https://api.manager.farm',
+    baseUrl: 'http://localhost:8080',
+    // baseUrl: 'https://api.manager.farm',
    // credentials: 'include',
     prepareHeaders: (headers, { getState }) => {
-        const token = getState().auth.token
+        const token = localStorage.getItem('token')        //getState().auth.token
         if (token) {
             headers.set("X-Authorization", `Bearer ${token}`)
         }
@@ -19,7 +22,19 @@ const baseQuery = fetchBaseQuery({
 
 const baseQueryWithReauth = async (args, api, extraOptions) => {
     let result = await baseQuery(args, api, extraOptions)
-    console.log('baseQueryWithReauth',result)
+    if(!api.getState().auth.user){
+        // const userData = await baseQuery('/api/farm/user', api, extraOptions)
+        // const token = localStorage.getItem('token')        //getState().auth.token
+        // api.dispatch(setUserData({ userData, token }))
+
+        // const userData = await getUser().unwrap()
+
+     //   dispatch(setUserData({ token: loginData.token, user: userData }))
+
+      //  console.log(userData);
+
+    }
+ //   console.log('baseQueryWithReauth',result)
     if (result?.error?.originalStatus === 403) {
         console.log('sending refresh token')
         // send refresh token to get new access token 
@@ -40,6 +55,10 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
 }
 
 export const apiSlice = createApi({
+    reducerPath: 'api', // optional
     baseQuery: baseQueryWithReauth,
+    tagTypes: ['Field'],
+
     endpoints: builder => ({})
 })
+

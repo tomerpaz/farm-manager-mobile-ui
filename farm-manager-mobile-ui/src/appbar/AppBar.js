@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { styled, alpha } from '@mui/material/styles';
-import {AppBar as MuiAppBar} from '@mui/material';
+import { AppBar as MuiAppBar } from '@mui/material';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
@@ -19,8 +19,8 @@ import Logout from '@mui/icons-material/Logout';
 
 import ComboBox from '../components/FmAutocomplete';
 import { useNavigate } from 'react-router-dom';
-import { logOut } from '../features/auth/authSlice';
-import { useDispatch } from 'react-redux';
+import { logOut, selectUser } from '../features/auth/authSlice';
+import { useDispatch, useSelector } from 'react-redux';
 
 
 const Search = styled('div')(({ theme }) => ({
@@ -69,6 +69,7 @@ const AppBar = () => {
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
 
   const dispatch = useDispatch()
+
 
 
   const [filterAnchorEl, setFilterAnchorEl] = useState(null);
@@ -193,6 +194,21 @@ const AppBar = () => {
     </Menu>
   );
 
+  // if (!user) {
+  //   return <Box sx={{ flexGrow: 1 }}>
+  //     <MuiAppBar position="static" elevation={0}>
+  //        <Toolbar>
+  //       <Typography
+  //         variant="h6"
+  //         noWrap
+  //         component="div"
+  //         sx={{ display: { xs: 'none', sm: 'block' } }}
+  //       >
+  //         Farm Manager
+  //       </Typography>
+  //     </MuiAppBar>
+  //   </Box>
+  // }
   return (
     <Box sx={{ flexGrow: 1 }}>
       <MuiAppBar position="static" elevation={0}>
@@ -243,7 +259,7 @@ const AppBar = () => {
               aria-label="log out"
               color="inherit"
             >
-                <Logout />
+              <Logout />
             </IconButton>
             <IconButton
               size="large"

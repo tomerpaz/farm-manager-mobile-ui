@@ -14,7 +14,7 @@ export default configureStore({
   reducer: {
       [apiSlice.reducerPath]: apiSlice.reducer,
       auth: authReducer,
-      field: fieldReducer,
+  //    field: fieldReducer,
   },
   middleware: getDefaultMiddleware =>
       getDefaultMiddleware().concat(apiSlice.middleware),

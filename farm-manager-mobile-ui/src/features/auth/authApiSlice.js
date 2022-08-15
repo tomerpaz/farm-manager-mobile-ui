@@ -9,9 +9,23 @@ export const authApiSlice = apiSlice.injectEndpoints({
                 body: { ...credentials }
             })
         }),
+        getUser: builder.mutation({
+            query: () => ({
+                url: '/api/farm/user',
+              
+            })
+        }),
+        getUserData: builder.query({
+            query: () => ({
+                url: '/api/farm/user',
+              
+            })
+        }),
     })
 })
 
 export const {
-    useLoginMutation
+    useLoginMutation,
+    useGetUserMutation,
+    useGetUserDataQuery
 } = authApiSlice

@@ -9,6 +9,7 @@ import PublicRoutes from './router/PublicRoutes';
 import he from "./lang/he.json";
 import en from "./lang/en.json";
 import Layout from './components/Layout';
+import UserRoutes from './components/UserRoutes';
 
 
 
@@ -42,10 +43,12 @@ function App() {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route path="/" element={<ProtectedRoutes />}>
-            <Route index element={ <Navigate to={defaultRoute} replace />} />
-            <Route path='/map' element={<MainTabs />} />
-            <Route path='/fields' element={<MainTabs />} />
-            <Route path='/activities' element={<MainTabs />} />
+            <Route path="/" element={<UserRoutes />}>
+              <Route index element={<Navigate to={defaultRoute} replace />} />
+              <Route path='/map' element={<MainTabs />} />
+              <Route path='/fields' element={<MainTabs />} />
+              <Route path='/activities' element={<MainTabs />} />
+            </Route>
           </Route>
           <Route path="/" element={<PublicRoutes />}>
             <Route path="/login" element={<Login />} />

@@ -4,38 +4,31 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import Map from '@mui/icons-material/Map';
 
-import { MapContainer, Marker, Popup, TileLayer, FeatureGroup, Circle } from "react-leaflet";
+import { MapContainer, Marker, Popup, TileLayer, FeatureGroup, Circle, Polygon } from "react-leaflet";
 import { useState } from "react";
 import GeoLocation from "./GeoLocation";
+import { selectAllFields, selectFieldIds, selectFieldssResult, useGetFieldsByYearQuery, useGetFieldsQuery } from "../features/fields/fieldsApiSlice";
+import { useSelector } from "react-redux";
+import { selectUser } from "../features/auth/authSlice";
+
+
+
 const position = [51.505, -0.09]
 
 const FieldsMap = (props) => {
     const [value, setValue] = useState(0);
 
+    const { fields } = props;
+
+    const user = useSelector(selectUser)
+
+
     return (
         <Box>
             <div id="map" dir='ltr' >
 
-                <MapContainer style={{ height: window.screen.height - 280, width: '100%' }} center={position} zoom={13} scrollWheelZoom={false}>
+                <MapContainer style={{ height: window.screen.height - 280, width: '100%' }} center={[user.lng, user.lat]} zoom={user.zoom} scrollWheelZoom={false}>
 
-                    {/* <FeatureGroup>
-            <EditControl
-              position='topright'
-              onEdited={e => console.log(e)}
-              onCreated={e => console.log(e)}
-              onDeleted={e => console.log(e)}
-              draw={{
-                rectangle: false
-              }}
-            />
-            <Circle center={[51.51, -0.06]} radius={200} />
-          </FeatureGroup> */}
-
-
-                    {/* <TileLayer
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          /> */}
 
                     <TileLayer
                         // attribution='&amp;copy <a href="http://www.esri.com/">Esri</a>'
@@ -47,8 +40,29 @@ const FieldsMap = (props) => {
                             A pretty CSS3 popup. <br /> Easily customizable.
                         </Popup>
                     </Marker> */}
-                    <GeoLocation />
 
+                    <GeoLocation />
+                    {fields.filter(f => f.polygon).map(f =>
+                        <Polygon field={f} key={f.id}
+                            color={f.color}
+                            fillColor={f.color}
+                            //     fillOpacity={opacity}
+                            positions={f.polygon}>
+                            {/* // {index < MAX_PER_MAP && <MapTooltip textArr={textArr}>  </MapTooltip>}
+                            // <Popup className={LEAFLET_POPUP_CLASS}>
+                            //     <FieldCard
+                            //         dir={dir}
+                            //         domain={domain}
+                            //         crops={crops} yearFilter={yearFilter}
+                            //         text={text} history={history}
+                            //         areaUnit={areaUnit}
+                            //         caller={MAP}
+                            //         user={user}
+                            //         documentor={documentor}
+                            //         className={classes.popup} />
+                            // </Popup> */}
+                        </Polygon>
+                    )}
                 </MapContainer>
             </div>
             <BottomNavigation
