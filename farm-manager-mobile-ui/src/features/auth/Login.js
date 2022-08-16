@@ -1,6 +1,9 @@
 import { Box, Button, TextField } from "@mui/material"
 import { useNavigate } from "react-router-dom";
 import { useForm, Controller, useWatch } from "react-hook-form";
+import AccountCircle from '@mui/icons-material/AccountCircle';
+import PasswordOutlined from '@mui/icons-material/PasswordOutlined';
+import LoginOutlined from '@mui/icons-material/LoginOutlined';
 
 import LogoLeaf from "../../icons/LogoLeaf";
 import { useLoginMutation } from "./authApiSlice";
@@ -25,10 +28,10 @@ const Login = (props) => {
 
         try {
             const loginData = await login(e).unwrap()
-            localStorage.setItem('token',loginData.token)
+            localStorage.setItem('token', loginData.token)
             navigate('/map')
         } catch (err) {
-            
+
             // if (!err?.originalStatus) {
             //     // isLoading: true until timeout occurs
             //     setErrMsg('No Server Response');
@@ -41,7 +44,7 @@ const Login = (props) => {
             // }
             // errRef.current.focus();
         }
-        
+
     };
 
 
@@ -68,7 +71,8 @@ const Login = (props) => {
 
         >
 
-            <Box marginTop={10}
+            <Box 
+                marginTop={20}
                 flex={1}
                 alignItems={'center'}
                 display={'flex'}
@@ -80,13 +84,18 @@ const Login = (props) => {
                     control={control}
                     defaultValue=""
                     render={({ field: { onChange, value }, fieldState: { error } }) => (
-                        <TextField
-                            label="User Name"
-                            error={!!error}
-                            helperText={error ? error.message : null}
-                            value={value}
-                            onChange={onChange}
-                        />
+                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                            <AccountCircle color='primary'//sx={{ color: 'action.active', mr: 1, my: 0.5 }} 
+                            />
+                            <TextField
+                                // label="User Name"
+                                error={!!error}
+                          //      helperText={error ? error.message : null}
+                                value={value}
+                                onChange={onChange}
+                            />
+                        </Box>
+
                     )}
                     rules={{ required: 'Username required' }}
 
@@ -102,21 +111,29 @@ const Login = (props) => {
                     control={control}
                     defaultValue=""
                     render={({ field: { onChange, value }, fieldState: { error } }) => (
-                        <TextField
-                            label="Password"
-                            value={value}
-                            onChange={onChange}
-                            error={!!error}
-                            helperText={error ? error.message : null}
-                            type="password"
-                            autoComplete="current-password"
-                        />
+                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                            <PasswordOutlined color='primary'//sx={{ color: 'action.active', mr: 1, my: 0.5 }} 
+                            />
+                            <TextField
+                               // label="Password"
+                                value={value}
+                                onChange={onChange}
+                                error={!!error}
+                              //  helperText={error ? error.message : null}
+                                type="password"
+                                autoComplete="current-password"
+                            />
+                        </Box>
+
                     )}
                     rules={{ required: 'Password required' }}
                 />
 
 
-                <Button type="submit" fullWidth={true} size='large' disableElevation variant="contained">Login</Button>
+                <Box display={'flex'} flexDirection='row'>
+                    <Box padding={1}></Box>
+                    <Button   type="submit" size='large' fullWidth disableElevation variant="contained"><LoginOutlined/></Button>
+                </Box>
             </Box>
         </Box>
 
