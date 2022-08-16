@@ -36,8 +36,10 @@ const theme = createTheme({
   },
 });
 
+export const defaultRoute = "/map";
+
+
 function App() {
-  const defaultRoute = "/map";
   return (
     <ThemeProvider theme={theme}>
       <Routes>
