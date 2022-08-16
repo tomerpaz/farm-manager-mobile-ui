@@ -70,6 +70,7 @@ const AppBar = () => {
 
   const dispatch = useDispatch()
 
+  const user = useSelector(selectUser);
 
 
   const [filterAnchorEl, setFilterAnchorEl] = useState(null);
@@ -81,7 +82,6 @@ const AppBar = () => {
 
 
   let navigate = useNavigate();
-
 
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -194,21 +194,23 @@ const AppBar = () => {
     </Menu>
   );
 
-  // if (!user) {
-  //   return <Box sx={{ flexGrow: 1 }}>
-  //     <MuiAppBar position="static" elevation={0}>
-  //        <Toolbar>
-  //       <Typography
-  //         variant="h6"
-  //         noWrap
-  //         component="div"
-  //         sx={{ display: { xs: 'none', sm: 'block' } }}
-  //       >
-  //         Farm Manager
-  //       </Typography>
-  //     </MuiAppBar>
-  //   </Box>
-  // }
+  if (!user) {
+    return <Box sx={{ flexGrow: 1 }}>
+      <MuiAppBar position="static" elevation={0}>
+        <Toolbar>
+          <Typography
+            variant="h6"
+            noWrap
+            component="div"
+            sx={{ display: { xs: 'none', sm: 'block' } }}
+          >
+            Farm Manager
+          </Typography>
+        </Toolbar>
+      </MuiAppBar>
+
+    </Box>
+  }
   return (
     <Box sx={{ flexGrow: 1 }}>
       <MuiAppBar position="static" elevation={0}>

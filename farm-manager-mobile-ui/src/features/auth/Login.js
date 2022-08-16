@@ -1,4 +1,4 @@
-import { Box, Button, TextField } from "@mui/material"
+import { Box, Button, InputAdornment, TextField } from "@mui/material"
 import { useNavigate } from "react-router-dom";
 import { useForm, Controller, useWatch } from "react-hook-form";
 import AccountCircle from '@mui/icons-material/AccountCircle';
@@ -71,7 +71,7 @@ const Login = (props) => {
 
         >
 
-            <Box 
+            <Box
                 marginTop={20}
                 flex={1}
                 alignItems={'center'}
@@ -84,56 +84,55 @@ const Login = (props) => {
                     control={control}
                     defaultValue=""
                     render={({ field: { onChange, value }, fieldState: { error } }) => (
-                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                            <AccountCircle color='primary'//sx={{ color: 'action.active', mr: 1, my: 0.5 }} 
-                            />
-                            <TextField
-                                // label="User Name"
-                                error={!!error}
-                          //      helperText={error ? error.message : null}
-                                value={value}
-                                onChange={onChange}
-                            />
-                        </Box>
 
+                        <TextField
+                            // label="User Name"
+                            error={!!error}
+                            //      helperText={error ? error.message : null}
+                            value={value}
+                            onChange={onChange}
+                            InputProps={{
+                                startAdornment: (
+                                    <InputAdornment position="start">
+                                        <AccountCircle />
+                                    </InputAdornment>
+                                ),
+                            }}
+                        />
                     )}
                     rules={{ required: 'Username required' }}
-
-
                 />
-
-
-
-
-
                 <Controller
                     name="password"
                     control={control}
                     defaultValue=""
                     render={({ field: { onChange, value }, fieldState: { error } }) => (
-                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                            <PasswordOutlined color='primary'//sx={{ color: 'action.active', mr: 1, my: 0.5 }} 
-                            />
-                            <TextField
-                               // label="Password"
-                                value={value}
-                                onChange={onChange}
-                                error={!!error}
-                              //  helperText={error ? error.message : null}
-                                type="password"
-                                autoComplete="current-password"
-                            />
-                        </Box>
+
+                        <TextField
+                            // label="Password"
+                            value={value}
+                            onChange={onChange}
+                            error={!!error}
+                            //  helperText={error ? error.message : null}
+                            type="password"
+                            autoComplete="current-password"
+                            InputProps={{
+                                startAdornment: (
+                                    <InputAdornment position="start">
+                                        <PasswordOutlined />
+                                    </InputAdornment>
+                                ),
+                            }}
+                        />
+
 
                     )}
                     rules={{ required: 'Password required' }}
                 />
 
 
-                <Box display={'flex'} flexDirection='row'>
-                    <Box padding={1}></Box>
-                    <Button   type="submit" size='large' fullWidth disableElevation variant="contained"><LoginOutlined/></Button>
-                </Box>
+
+                <Button type="submit" size='large' fullWidth disableElevation variant="contained"><LoginOutlined /></Button>
             </Box>
         </Box>
 
