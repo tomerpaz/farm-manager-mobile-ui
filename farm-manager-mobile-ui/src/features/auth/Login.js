@@ -72,7 +72,7 @@ const Login = (props) => {
         >
 
             <Box
-                marginTop={20}
+                marginTop={15}
                 flex={1}
                 alignItems={'center'}
                 display={'flex'}
