@@ -1,37 +1,27 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Outlet } from 'react-router-dom'
-import AppBar from '../appbar/AppBar'
-import { useGetUserMutation, useGetUserDataQuery } from '../features/auth/authApiSlice'
+import { useGetUserDataQuery } from '../features/auth/authApiSlice'
 import { selectUser, setUserData } from '../features/auth/authSlice'
+import Loading from './Loading'
 
 const UserRoutes = () => {
 
     const dispatch = useDispatch()
     const user = useSelector(selectUser);
 
-
-    const {
-        data,
-        isLoading,
-        isSuccess,
-        isError,
-        error } = useGetUserDataQuery()
-
+    const { data, isLoading, isSuccess: isUserSucess, isError, error } = useGetUserDataQuery()
 
     useEffect(() => {
-        if (isSuccess) {
+        if (isUserSucess) {
             dispatch(setUserData({
                 user: data, token: localStorage.getItem('token')
             }))
         }
-    }, [isSuccess])
+    }, [isUserSucess])
 
-    if (user) {
-        return <Outlet />
-    } else {
-        return <div>Loading...</div>
-    }
+    return user ? <Outlet /> : <Loading />
+
 }
 
 export default UserRoutes
