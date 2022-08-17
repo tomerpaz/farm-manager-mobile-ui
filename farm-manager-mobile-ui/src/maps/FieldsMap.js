@@ -5,7 +5,7 @@ import LocationOnIcon from '@mui/icons-material/LocationOn';
 import Map from '@mui/icons-material/Map';
 
 import { MapContainer, Marker, Popup, TileLayer, FeatureGroup, Circle, Polygon } from "react-leaflet";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import GeoLocation from "./GeoLocation";
 import { selectAllFields, selectFieldIds, selectFieldssResult, useGetFieldsByYearQuery, useGetFieldsQuery } from "../features/fields/fieldsApiSlice";
 import { useSelector } from "react-redux";
@@ -17,17 +17,27 @@ const position = [51.505, -0.09]
 
 const FieldsMap = (props) => {
     const [value, setValue] = useState(0);
+    const [map, setSetMap] = useState(0);
 
     const { fields } = props;
 
     const user = useSelector(selectUser)
+
+    // useEffect(() => {
+    //     if(map && user){
+    //         map.setView([user.lng, user.lat], user.zoom);
+    //     }
+    // }, [user])
+    
 
 
     return (
         <Box>
             <div id="map" dir='ltr' >
 
-                <MapContainer style={{ height: window.screen.height - 280, width: '100%' }} center={[user.lng, user.lat]} zoom={user.zoom} scrollWheelZoom={false}>
+                <MapContainer style={{ height: window.screen.height - 280, width: '100%' }} center={[user.lng, user.lat]} zoom={user.zoom} scrollWheelZoom={false}
+                    ref={setSetMap}
+                >
 
 
                     <TileLayer

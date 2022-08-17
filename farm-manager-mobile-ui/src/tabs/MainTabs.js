@@ -86,8 +86,6 @@ const MainTabs = () => {
 
 	const user = useSelector(selectUser)
 
-
-
     const paths = ['/map', '/fields', '/activities', 130, 44];
 
     const getIndex = ((element) => element === pathname);
@@ -101,40 +99,19 @@ const MainTabs = () => {
     } = useGetFieldsByYearQuery(user.year)
 
 
-
-
-    // console.log('isLoading',isLoading,'isSuccess',isSuccess,'isError',error)
-
-        
-  //  console.log('fields',fields)
-   // console.log('selectAllFields',allFields)
-
-   // console.log('selectFieldssResult',selectFieldssResult(2022))
-
-
-   
-
-    // console.log('fieldsAdapter',fieldsAdapter.getSelectors()).selectAllFields();
-
     if(!data){
         return <div>Loding</div>
     }
 
     const fields = data.ids.map(id=>data.entities[id]);
 
+   //   console.log('fields',fields)
+
 
     const value = paths.findIndex(getIndex) > 0 ? paths.findIndex(getIndex) : 0;
 
 
-    console.log('value', value)
-
-
-
-    // const [value, setValue] = useState(0);
-
-    // const handleChange = (event, newValue) => {
-    //     setValue(newValue);
-    // };
+//    console.log('value', value)
 
 
 
