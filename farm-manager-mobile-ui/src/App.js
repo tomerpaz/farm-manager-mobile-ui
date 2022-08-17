@@ -48,6 +48,7 @@ function App() {
             <Route path="/" element={<UserRoutes />}>
               <Route index element={<Navigate to={DEFAULT_ROUTE} replace />} />
               <Route path='/tabs/*' element={<MainTabs />} />
+              <Route path='/field/:fieldId' element={<div>Field</div>} />
             </Route>
           </Route>
           <Route path="/" element={<PublicRoutes />}>

@@ -11,6 +11,7 @@ import RestoreIcon from '@mui/icons-material/Restore';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { Link } from 'react-router-dom';
 
 
 function renderRow(props) {
@@ -19,14 +20,14 @@ function renderRow(props) {
     return (
         <Box style={style}>
 
-            <ListItem key={index} component="div" disablePadding
+            <ListItem key={index} component={"div"} disablePadding 
             // secondaryAction={
             //     <IconButton edge="end" aria-label="delete">
             //         <DeleteIcon />
             //     </IconButton>
             // }
             >
-                <ListItemButton>
+                <ListItemButton to={`/field/${field.id}`} component={Link}>
                     <ListItemAvatar>
                         <Avatar>
                             <WorkIcon />

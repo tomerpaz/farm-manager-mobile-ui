@@ -28,7 +28,7 @@ const FieldsMap = (props) => {
     //         map.setView([user.lng, user.lat], user.zoom);
     //     }
     // }, [user])
-    
+
 
 
     return (
@@ -56,6 +56,12 @@ const FieldsMap = (props) => {
                         <Polygon field={f} key={f.id}
                             color={f.color}
                             fillColor={f.color}
+                            eventHandlers={{
+                                //  mouseover: highlightFeature,
+                                  click: () => {
+                                      console.log("marker clicked " + f.id);
+                                  }
+                              }}
                             //     fillOpacity={opacity}
                             positions={f.polygon}>
                             {/* // {index < MAX_PER_MAP && <MapTooltip textArr={textArr}>  </MapTooltip>}
@@ -71,6 +77,7 @@ const FieldsMap = (props) => {
                             //         documentor={documentor}
                             //         className={classes.popup} />
                             // </Popup> */}
+
                         </Polygon>
                     )}
                 </MapContainer>
