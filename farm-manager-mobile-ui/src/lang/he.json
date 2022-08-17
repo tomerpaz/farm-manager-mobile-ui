@@ -3,6 +3,9 @@
     "lang": "he",
     "field": "חלקה",
     "crop": "גידול",
-    "variety": "זן"
-  }
+    "variety": "זן",
+    "dunam": "דונם",
+    "hectare": "הקטר",
+    "acre": "אקר"
+}
   

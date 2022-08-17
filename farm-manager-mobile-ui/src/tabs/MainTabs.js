@@ -17,6 +17,7 @@ import { fieldsAdapter, fieldsApiSlice, getFieldsState, selectAllFields, selectF
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { logOut,  selectUser } from '../features/auth/authSlice';
+import { DEFAULT_ROUTE } from '../App';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -84,9 +85,10 @@ const MainTabs = () => {
 
     const { pathname } = useLocation();
 
+    console.log('pathname',pathname)
 	const user = useSelector(selectUser)
 
-    const paths = ['/map', '/fields', '/activities', 130, 44];
+    const paths = ['/tabs/map', '/tabs/fields', '/tabs/activities', 130, 44];
 
     const getIndex = ((element) => element === pathname);
 
@@ -127,9 +129,9 @@ const MainTabs = () => {
                     variant="fullWidth"
                 >
                     {/* <Tab label="Inbox" value="/inbox/:id" to="/inbox/1" component={Link} /> */}
-                    <Tab label="MAP" to="/map" component={Link}   {...a11yProps(0)} />
-                    <Tab label="Fields" to="/fields" component={Link} {...a11yProps(1)} />
-                    <Tab label="activities" to="/activities" component={Link}  {...a11yProps(2)} />
+                    <Tab label="MAP" to={DEFAULT_ROUTE} component={Link}   {...a11yProps(0)} />
+                    <Tab label="Fields" to="/tabs/fields" component={Link} {...a11yProps(1)} />
+                    <Tab label="activities" to="/tabs/activities" component={Link}  {...a11yProps(2)} />
                     {/* <Tab label="Item One" {...a11yProps(0)} />
                     <Tab label="Item Two" {...a11yProps(1)} />
                     <Tab label="Item Three" {...a11yProps(2)} /> */}

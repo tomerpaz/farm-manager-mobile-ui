@@ -36,7 +36,7 @@ const theme = createTheme({
   },
 });
 
-export const defaultRoute = "/map";
+export const DEFAULT_ROUTE = "/tabs/map";
 
 
 function App() {
@@ -46,17 +46,15 @@ function App() {
         <Route path="/" element={<Layout />}>
           <Route path="/" element={<ProtectedRoutes />}>
             <Route path="/" element={<UserRoutes />}>
-              <Route index element={<Navigate to={defaultRoute} replace />} />
-              <Route path='/map' element={<MainTabs />} />
-              <Route path='/fields' element={<MainTabs />} />
-              <Route path='/activities' element={<MainTabs />} />
+              <Route index element={<Navigate to={DEFAULT_ROUTE} replace />} />
+              <Route path='/tabs/*' element={<MainTabs />} />
             </Route>
           </Route>
           <Route path="/" element={<PublicRoutes />}>
             <Route path="/login" element={<Login />} />
           </Route>
         </Route>
-        <Route path="*" element={<Navigate to={defaultRoute} replace />} />
+        <Route path="*" element={<Navigate to={DEFAULT_ROUTE} replace />} />
       </Routes>
     </ThemeProvider>
   );

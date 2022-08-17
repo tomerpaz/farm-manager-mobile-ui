@@ -7,6 +7,7 @@ import LoginOutlined from '@mui/icons-material/LoginOutlined';
 
 import LogoLeaf from "../../icons/LogoLeaf";
 import { useLoginMutation } from "./authApiSlice";
+import { DEFAULT_ROUTE } from "../../App";
 
 const Login = (props) => {
 
@@ -29,7 +30,7 @@ const Login = (props) => {
         try {
             const loginData = await login(e).unwrap()
             localStorage.setItem('token', loginData.token)
-            navigate('/map')
+            navigate(DEFAULT_ROUTE)
         } catch (err) {
 
             // if (!err?.originalStatus) {

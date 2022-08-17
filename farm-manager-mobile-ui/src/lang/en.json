@@ -3,6 +3,9 @@
     "lang": "en",
     "field": "Field",
     "crop": "Crop",
-    "variety": "Variety"
+    "variety": "Variety",
+    "dunam": "Dunam",
+    "hectare": "Hectare",
+    "acre": "Acre"
   }
   
