@@ -13,38 +13,45 @@ import LocationOnIcon from '@mui/icons-material/LocationOn';
 import DeleteIcon from '@mui/icons-material/Delete';
 
 
-function renderRow(props) {
-    const { index, style } = props;
-
-    return (
-        <Box>
-            <ListItem key={index} component="div" disablePadding
-
-                secondaryAction={
-                    <IconButton edge="end" aria-label="delete">
-                        <DeleteIcon />
-                    </IconButton>
-                }
-            >
-                <ListItemButton>
-                    <ListItemAvatar>
-                        <Avatar>
-                            <WorkIcon />
-                        </Avatar>
-                    </ListItemAvatar>
-                    <ListItemText primary={`Field ${index + 1}`} secondary="Jan 7, 2014" />
-                </ListItemButton>
-            </ListItem>
-            <Divider />
 
 
-        </Box>
-    );
-}
-
-export default function FieldList() {
+export default function FieldList(props) {
     const height = window.screen.height - 280;
     const [value, setValue] = React.useState(0);
+
+
+    const { fields } = props;
+
+
+    const renderRow = (props) => {
+        const { index, style } = props;
+    console.log(fields[index]);
+        return (
+            <Box>
+                <ListItem key={index} component="div" disablePadding
+    
+                    secondaryAction={
+                        <IconButton edge="end" aria-label="delete">
+                            <DeleteIcon />
+                        </IconButton>
+                    }
+                >
+                    <ListItemButton>
+                        <ListItemAvatar>
+                            <Avatar>
+                                <WorkIcon />
+                            </Avatar>
+                        </ListItemAvatar>
+                        <ListItemText primary={`${fields[index].name}, ${fields[index].cropName},${fields[index].varietyName}`} secondary={fields[index].startDate} />
+                    </ListItemButton>
+                </ListItem>
+                <Divider />
+    
+    
+            </Box>
+        );
+    }
+
     return (
         <Box
             sx={{ width: '100%', height: height, bgcolor: 'background.paper' }}
@@ -53,7 +60,7 @@ export default function FieldList() {
                 height={height}
 
                 itemSize={46}
-                itemCount={200}
+                itemCount={fields.length}
                 overscanCount={5}
             >
                 {renderRow}
