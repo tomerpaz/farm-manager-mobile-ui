@@ -12,11 +12,13 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Link } from 'react-router-dom';
+import { getFruitIcon } from '../../icons/FruitIconUtil';
 
 
 function renderRow(props) {
     const { index, style, field } = props;
     const cropEngName = field.cropEngName
+    
     return (
         <Box style={style}>
 
@@ -29,8 +31,8 @@ function renderRow(props) {
             >
                 <ListItemButton to={`/field/${field.id}`} component={Link}>
                     <ListItemAvatar>
-                        <Avatar>
-                            <WorkIcon />
+                        <Avatar sx={{backgroundColor:'white'}}>
+                            {getFruitIcon(cropEngName)}
                         </Avatar>
                     </ListItemAvatar>
                     <ListItemText primary={
@@ -63,7 +65,7 @@ function renderRow(props) {
 
 
 export default function FieldList(props) {
-    const height = window.screen.height - 280;
+    const height = window.window.innerHeight - 170;
     const [value, setValue] = React.useState(0);
 
 

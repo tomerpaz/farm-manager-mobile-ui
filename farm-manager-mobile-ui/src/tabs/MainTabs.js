@@ -118,10 +118,10 @@ const MainTabs = () => {
 
 
     return (
-        <Box >
+        <Box display={'flex'} flex={1} flexDirection={'column'}>
 
 
-            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+            <Box  alignItems={'stretch'} display={'flex'} flex={1} flexDirection={'column'}sx={{ borderBottom: 1, borderColor: 'divider' }}>
 
                 <Tabs value={value} aria-label="basic tabs example"
                     // indicatorColor="secondary"

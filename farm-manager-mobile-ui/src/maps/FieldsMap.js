@@ -29,13 +29,14 @@ const FieldsMap = (props) => {
     //     }
     // }, [user])
 
-
+    const height = window.window.innerHeight - 170;
 
     return (
-        <Box>
-            <div id="map" dir='ltr' >
+        <Box display={'flex'} flex={1} alignItems={'stretch'} flexDirection={'column'} justifyContent={'space-between'}>
+            
+            <Box flex={1} style={{height: '100%'}} id="map" dir='ltr' >
 
-                <MapContainer style={{ height: window.screen.height - 280, width: '100%' }} center={[user.lng, user.lat]} zoom={user.zoom} scrollWheelZoom={false}
+                <MapContainer style={{ height: height, width: '100%' }} center={[user.lng, user.lat]} zoom={user.zoom} scrollWheelZoom={false}
                     ref={setSetMap}
                 >
 
@@ -81,7 +82,7 @@ const FieldsMap = (props) => {
                         </Polygon>
                     )}
                 </MapContainer>
-            </div>
+            </Box>
             <BottomNavigation
                 showLabels
                 value={value}
