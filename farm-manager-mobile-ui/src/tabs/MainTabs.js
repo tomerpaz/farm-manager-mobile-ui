@@ -16,7 +16,7 @@ import FieldList from './fields/FieldList';
 import { fieldsAdapter, fieldsApiSlice, getFieldsState, selectAllFields, selectFieldssResult, useGetFieldsByYearQuery, useGetFieldsQuery } from '../features/fields/fieldsApiSlice';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
-import { logOut, selectCurrentToken, selectUser } from '../features/auth/authSlice';
+import { logOut,  selectUser } from '../features/auth/authSlice';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -164,7 +164,7 @@ const MainTabs = () => {
 
             </TabPanel>
             <TabPanel value={value} index={1}>
-                <FieldList />
+                <FieldList fields={fields}/>
 
             </TabPanel>
             <TabPanel value={value} index={2}>

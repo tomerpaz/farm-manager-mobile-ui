@@ -6,7 +6,6 @@ const authSlice = createSlice({
     reducers: {
         setCredentials: (state, action) => {
             const { user, token } = action.payload
-           // state.user = action.payload
             state.token = token
             localStorage.setItem('token',token)
         },
@@ -14,14 +13,10 @@ const authSlice = createSlice({
             const { user, token } = action.payload
             state.user = user
             state.token = token
-            localStorage.setItem('token',token)
         },
         logOut: (state, action) => {
-            console.log('logOut...');
             state.user = null
-            state.token = null
             localStorage.removeItem('token')
-
         }
     },
 })

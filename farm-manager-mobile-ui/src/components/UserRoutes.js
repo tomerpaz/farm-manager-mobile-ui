@@ -10,15 +10,15 @@ const UserRoutes = () => {
     const dispatch = useDispatch()
     const user = useSelector(selectUser);
 
-    const { data, isLoading, isSuccess: isUserSucess, isError, error } = useGetUserDataQuery()
+    const { data, isLoading, isSuccess, isError, error } = useGetUserDataQuery()
 
     useEffect(() => {
-        if (isUserSucess) {
-            dispatch(setUserData({
-                user: data, token: localStorage.getItem('token')
-            }))
+
+        if (isSuccess) {
+            dispatch(setUserData({user: data, token: localStorage.getItem('token')})); 
         }
-    }, [isUserSucess])
+    
+    }, [ data, isLoading, isSuccess, isError])
 
     return user ? <Outlet /> : <Loading />
 

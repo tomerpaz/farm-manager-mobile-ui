@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
-import { FixedSizeList } from 'react-window';
+import { FixedSizeList, } from 'react-window';
 import { Divider, ListItemAvatar, Avatar, BottomNavigation, BottomNavigationAction, IconButton } from '@mui/material';
 import WorkIcon from '@mui/icons-material/Work';
 import List from '@mui/icons-material/List';
