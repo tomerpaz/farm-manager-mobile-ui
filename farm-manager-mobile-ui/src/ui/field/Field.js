@@ -100,7 +100,7 @@ const Field = () => {
           disabled={field.imageryId === null}
           label="Imagery"
           to={`/field/${src}/${fieldId}/imagery`} component={Link}
-          icon={<SatelliteAltOutlined />}
+          icon={<SatelliteAltOutlined/>}
         />
       </BottomNavigation>
     </Box >
@@ -109,7 +109,3 @@ const Field = () => {
 }
 
 export default Field
-
-// export default function LabelBottomNavigation() {
-
-// }
