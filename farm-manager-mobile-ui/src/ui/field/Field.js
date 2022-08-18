@@ -1,52 +1,111 @@
-import { useState } from 'react';
 import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
-import FolderIcon from '@mui/icons-material/Folder';
 import RestoreIcon from '@mui/icons-material/Restore';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import LocationOnIcon from '@mui/icons-material/LocationOn';
+import Card from '@mui/material/Card';
+import CardHeader from '@mui/material/CardHeader';
+import CardContent from '@mui/material/CardContent';
+import Avatar from '@mui/material/Avatar';
+import { red } from '@mui/material/colors';
 
-import { Box, Typography } from '@mui/material';
-import { useParams } from 'react-router-dom';
+import { Box, Button, IconButton, Paper, Typography } from '@mui/material';
+import { Routes, useParams, Route, Link, useLocation, useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { selectFieldById } from '../../features/fields/fieldSlice';
+import Loading from '../../components/Loading';
+import { MapContainer, Polygon, TileLayer } from 'react-leaflet';
+import { CloseOutlined, DashboardOutlined, ExitToAppOutlined, Info, InfoOutlined, SatelliteAltOutlined } from '@mui/icons-material';
+import FieldInfo from './FieldInfo';
+import FieldDashboard from './FieldDashboard';
+import FieldHistory from './FieldHistory';
+import FieldImagery from './FieldImagery';
+import { getFruitIcon } from '../../icons/FruitIconUtil';
 
 const Field = () => {
-  const [value, setValue] = useState('recents');
+  const { pathname } = useLocation();
+  const { fieldId, src } = useParams()
 
-  const { fieldId } = useParams()
+
+  const field = useSelector((state) => selectFieldById(state, Number(fieldId)));
+  const navigate = useNavigate()
 
 
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
+  if (!field) {
+    return <Loading />
+  }
+
+  const paths = [`/field/${src}/${fieldId}/info`,
+  `/field/${src}/${fieldId}/dash`,
+  `/field/${src}/${fieldId}/history`,
+  `/field/${src}/${fieldId}/imagery`
+
+  ];
+
+  const getIndex = ((element) => element === pathname);
+
+
+  const height = (window.window.innerHeight - 120);
+
+
+  const value = paths.findIndex(getIndex) > 0 ? paths.findIndex(getIndex) : 0;
+
+  console.log(field)
+
 
   return (
-    <Box sx={{ height: '100%' }} flexGrow={1} display={'flex'} flex={1} alignItems={'stretch'} alignContent={'stretch'} justifyContent={'space-between'} flexDirection={'column'}>
-      <Box sx={{ height: '100%' }} display={'flex'} flex={1} alignItems={'stretch'} justifyContent={'space-between'} flexDirection={'column'}>
-        <Typography>Field Data</Typography>
-        <Typography> { fieldId }</Typography>
+    <Box >
+      <Card sx={{ height: height }}>
+        <CardHeader
+          avatar={
+            <Avatar sx={{ backgroundColor: 'white' }}>
+              {getFruitIcon(field.cropEngName)}
+            </Avatar>
+          }
+          action={
+            <IconButton aria-label="settings" onClick={() => navigate(`/tabs/${src}`)}>
+              <CloseOutlined />
+            </IconButton>
+          }
+          title={field.name}
+          subheader={field.startDate}
+        />
+        <CardContent >
 
-      </Box>
-      <BottomNavigation value={value} onChange={handleChange}>
+
+          {pathname.includes("/info") && <FieldInfo />}
+          {pathname.includes("/dash") && <FieldDashboard />}
+          {pathname.includes("/history") && <FieldHistory />}
+          {pathname.includes("/imagery") && <FieldImagery />}
+
+        </CardContent>
+      </Card>
+
+      <BottomNavigation value={value}
+        showLabels>
+        <BottomNavigationAction
+          label="Info"
+          to={`/field/${src}/${fieldId}/info`} component={Link}
+          icon={<InfoOutlined />}
+        />
+        <BottomNavigationAction
+          label="Dashboard"
+          to={`/field/${src}/${fieldId}/dash`} component={Link}
+          icon={<DashboardOutlined />}
+        />
         <BottomNavigationAction
           label="Recents"
-          value="recents"
+          to={`/field/${src}/${fieldId}/history`} component={Link}
           icon={<RestoreIcon />}
         />
         <BottomNavigationAction
-          label="Favorites"
-          value="favorites"
-          icon={<FavoriteIcon />}
+          disabled={field.imageryId === null}
+          label="Imagery"
+          to={`/field/${src}/${fieldId}/imagery`} component={Link}
+          icon={<SatelliteAltOutlined />}
         />
-        <BottomNavigationAction
-          label="Nearby"
-          value="nearby"
-          icon={<LocationOnIcon />}
-        />
-        <BottomNavigationAction label="Folder" value="folder" icon={<FolderIcon />} />
       </BottomNavigation>
-    </Box>
-  );
+    </Box >
 
+  );
 }
 
 export default Field

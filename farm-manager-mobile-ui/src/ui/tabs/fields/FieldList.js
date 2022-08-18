@@ -11,6 +11,8 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import { Link } from 'react-router-dom';
 import { getFruitIcon } from '../../../icons/FruitIconUtil';
+import { useSelector } from 'react-redux';
+import { selectFields } from '../../../features/fields/fieldSlice';
 
 
 function renderRow(props) {
@@ -26,7 +28,7 @@ function renderRow(props) {
             //     </IconButton>
             // }
             >
-                <ListItemButton to={`/field/${field.id}`} component={Link}>
+                <ListItemButton to={`/field/fields/${field.id}/info`} component={Link}>
                     <ListItemAvatar>
                         <Avatar sx={{backgroundColor:'white'}}>
                             {getFruitIcon(cropEngName)}
@@ -62,11 +64,10 @@ function renderRow(props) {
 
 
 export default function FieldList(props) {
-    const height = window.window.innerHeight - 170;
-    const [value, setValue] = React.useState(0);
+    const height = window.window.innerHeight - 110;
 
 
-    const { fields } = props;
+    const fields = useSelector(selectFields);
 
 
     // const renderRow = (props) => {
@@ -111,18 +112,6 @@ export default function FieldList(props) {
                 {(props) => renderRow({ ...props, field: fields[props.index] })}
 
             </FixedSizeList>
-            <BottomNavigation
-                showLabels
-                value={value}
-                onChange={(event, newValue) => {
-                    setValue(newValue);
-                }}
-            >
-                <BottomNavigationAction label="List" icon={<List />} />
-                <BottomNavigationAction label="Recents" icon={<RestoreIcon />} />
-                <BottomNavigationAction label="Favorites" icon={<FavoriteIcon />} />
-                <BottomNavigationAction label="Archive" icon={<LocationOnIcon />} />
-            </BottomNavigation>
         </Box>
     );
 }

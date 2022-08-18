@@ -10,6 +10,7 @@ import Layout from './components/Layout';
 import UserRoutes from './components/UserRoutes';
 import MainTabs from './ui/tabs/MainTabs';
 import Field from './ui/field/Field';
+import DataRoutes from './components/routes/DataRoutes';
 
 
 
@@ -29,10 +30,10 @@ const theme = createTheme({
       // Purple and green play nicely together.
       main: PRIMARY_MAIN,
     },
-    // secondary: {
-    //   // This is green.A700 as hex.
-    //   main: '#11cb5f',
-    // },
+    secondary: {
+      // This is green.A700 as hex.
+      main: SECONDARY_MAIN,
+    },
   },
 });
 
@@ -46,9 +47,11 @@ function App() {
         <Route path="/" element={<Layout />}>
           <Route path="/" element={<ProtectedRoutes />}>
             <Route path="/" element={<UserRoutes />}>
-              <Route index element={<Navigate to={DEFAULT_ROUTE} replace />} />
-              <Route path='/tabs/*' element={<MainTabs />} />
-              <Route path='/field/:fieldId' element={<Field/>} />
+              <Route path="/" element={<DataRoutes />}>
+                <Route index element={<Navigate to={DEFAULT_ROUTE} replace />} />
+                <Route path='/tabs/*' element={<MainTabs />} />
+                <Route path='/field/:src/:fieldId/*' element={<Field />} />
+              </Route>
             </Route>
           </Route>
           <Route path="/" element={<PublicRoutes />}>

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { styled, alpha } from '@mui/material/styles';
-import { AppBar as MuiAppBar } from '@mui/material';
+import { AppBar as MuiAppBar, Drawer, SwipeableDrawer } from '@mui/material';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
@@ -68,6 +68,9 @@ const AppBar = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
 
+  const [drawerAnchorEl, setDrawerAnchorEl] = useState(null);
+
+
   const dispatch = useDispatch()
 
   const user = useSelector(selectUser);
@@ -79,9 +82,19 @@ const AppBar = () => {
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
   const isFilterOpen = Boolean(filterAnchorEl);
+  const isDrawerOpen = Boolean(drawerAnchorEl);
 
 
   let navigate = useNavigate();
+
+  const handleDrawerOpen = (event) => {
+    setDrawerAnchorEl(event.currentTarget);
+  };
+
+  const handleDrawerClose = () => {
+    setDrawerAnchorEl(null);
+  };
+
 
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -202,7 +215,7 @@ const AppBar = () => {
             variant="h6"
             noWrap
             component="div"
-            // sx={{ display: { xs: 'none', sm: 'block' } }}
+          // sx={{ display: { xs: 'none', sm: 'block' } }}
           >
             Farm Manager
           </Typography>
@@ -211,6 +224,30 @@ const AppBar = () => {
 
     </Box>
   }
+
+  const renderDrawer =
+    (
+
+      // <SwipeableDrawer
+      //   anchor={drawerAnchorEl}
+      //   open={isDrawerOpen}
+      //   onClose={handleDrawerClose}
+      //   onOpen={handleDrawerOpen}
+      // >
+      // <div>HI</div>
+      // </SwipeableDrawer>
+
+      <SwipeableDrawer sx={{width: '100%'}}
+        anchor={'left'}
+        open={isDrawerOpen}
+        onClose={handleDrawerClose}
+        onOpen={handleDrawerOpen}
+      >
+       <div>JI</div>
+      </SwipeableDrawer>
+    )
+
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <MuiAppBar position="static" elevation={0}>
@@ -220,6 +257,7 @@ const AppBar = () => {
             edge="start"
             color="inherit"
             aria-label="open drawer"
+            onClick={handleDrawerOpen}
             sx={{ mr: 2 }}
           >
             <MenuIcon />
@@ -291,6 +329,7 @@ const AppBar = () => {
       </MuiAppBar>
       {renderMobileMenu}
       {renderMenu}
+      {/* {renderDrawer} */}
     </Box>
   );
 }

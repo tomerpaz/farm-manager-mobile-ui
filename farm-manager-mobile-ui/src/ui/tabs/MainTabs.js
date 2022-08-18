@@ -13,6 +13,7 @@ import { useDispatch } from 'react-redux';
 import { useGetFieldsByYearQuery } from '../../features/fields/fieldsApiSlice';
 import { selectUser } from '../../features/auth/authSlice';
 import { DEFAULT_ROUTE } from "../../App";
+import { selectFields } from '../../features/fields/fieldSlice';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -76,39 +77,40 @@ function a11yProps(index) {
 
 const MainTabs = () => {
 
-    const dispatch = useDispatch()
+    // const dispatch = useDispatch()
 
     const { pathname } = useLocation();
 
-    console.log('pathname',pathname)
-	const user = useSelector(selectUser)
+    // console.log('pathname',pathname)
+    const user = useSelector(selectUser)
 
     const paths = ['/tabs/map', '/tabs/fields', '/tabs/activities', 130, 44];
 
     const getIndex = ((element) => element === pathname);
 
-    const {
-        data,
-        isLoading,
-        isSuccess,
-        isError,
-        error
-    } = useGetFieldsByYearQuery(user.year)
+
+    // const {
+    //     data,
+    //     isLoading,
+    //     isSuccess,
+    //     isError,
+    //     error
+    // } = useGetFieldsByYearQuery(user.year)
 
 
-    if(!data){
-        return <div>Loding</div>
-    }
+    // if(!data){
+    //     return <div>Loding</div>
+    // }
 
-    const fields = data.ids.map(id=>data.entities[id]);
+    // const fields = data.ids.map(id=>data.entities[id]);
 
-   //   console.log('fields',fields)
+    //   console.log('fields',fields)
 
 
     const value = paths.findIndex(getIndex) > 0 ? paths.findIndex(getIndex) : 0;
 
 
-//    console.log('value', value)
+    //    console.log('value', value)
 
 
 
@@ -116,7 +118,7 @@ const MainTabs = () => {
         <Box display={'flex'} flex={1} flexDirection={'column'}>
 
 
-            <Box  alignItems={'stretch'} display={'flex'} flex={1} flexDirection={'column'}sx={{ borderBottom: 1, borderColor: 'divider' }}>
+            <Box alignItems={'stretch'} display={'flex'} flex={1} flexDirection={'column'} sx={{ borderBottom: 1, borderColor: 'divider' }}>
 
                 <Tabs value={value} aria-label="basic tabs example"
                     // indicatorColor="secondary"
@@ -133,13 +135,12 @@ const MainTabs = () => {
                 </Tabs>
             </Box>
             <TabPanel component={'div'} value={value} index={0}>
-                <FieldsMap fields={fields}/>
-                {/* <FloatingActionButtons /> */}
-
+                <FieldsMap />
+                <FloatingActionButtons />
             </TabPanel>
             <TabPanel value={value} index={1}>
-                <FieldList fields={fields}/>
-
+                <FieldList />
+                <FloatingActionButtons />
             </TabPanel>
             <TabPanel value={value} index={2}>
                 <ActivityForm />

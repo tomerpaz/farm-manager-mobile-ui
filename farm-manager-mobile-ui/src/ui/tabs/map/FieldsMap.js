@@ -10,16 +10,13 @@ import GeoLocation from "../../../components/GeoLocation";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../../features/auth/authSlice";
 import { useNavigate } from "react-router-dom";
+import { selectFields } from "../../../features/fields/fieldSlice";
 
-
-
-const position = [51.505, -0.09]
 
 const FieldsMap = (props) => {
-    const [value, setValue] = useState(0);
     const [map, setSetMap] = useState(0);
 
-    const { fields } = props;
+    const fields = useSelector(selectFields);
 
     const user = useSelector(selectUser)
 
@@ -31,7 +28,7 @@ const FieldsMap = (props) => {
     //     }
     // }, [user])
 
-    const height = window.window.innerHeight - 170;
+    const height = window.window.innerHeight - 110;
 
     return (
         <Box display={'flex'} flex={1} alignItems={'stretch'} flexDirection={'column'} justifyContent={'space-between'}>
@@ -62,7 +59,7 @@ const FieldsMap = (props) => {
                             eventHandlers={{
                                 //  mouseover: highlightFeature,
                                   click: () => {
-                                    navigate(`/field/${f.id}`)
+                                    navigate(`/field/map/${f.id}/info`)
 
                                     //   console.log("marker clicked " + f.id);
                                   }
@@ -87,18 +84,6 @@ const FieldsMap = (props) => {
                     )}
                 </MapContainer>
             </Box>
-            <BottomNavigation
-                showLabels
-                value={value}
-                onChange={(event, newValue) => {
-                    setValue(newValue);
-                }}
-            >
-                <BottomNavigationAction label="Map" icon={<Map />} />
-                <BottomNavigationAction label="Recents" icon={<RestoreIcon />} />
-                <BottomNavigationAction label="Favorites" icon={<FavoriteIcon />} />
-                <BottomNavigationAction label="Archive" icon={<LocationOnIcon />} />
-            </BottomNavigation>
         </Box>
     )
 }
