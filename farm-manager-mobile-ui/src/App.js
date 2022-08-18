@@ -1,7 +1,5 @@
 import './App.css';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import MainTabs from './tabs/MainTabs';
-import { Box } from '@mui/material';
 import { Routes, Route, Outlet, Link, useNavigate, useLocation, Navigate } from "react-router-dom";
 import Login from './features/auth/Login';
 import ProtectedRoutes from './router/ProtectedRoutes';
@@ -10,6 +8,8 @@ import he from "./lang/he.json";
 import en from "./lang/en.json";
 import Layout from './components/Layout';
 import UserRoutes from './components/UserRoutes';
+import MainTabs from './ui/tabs/MainTabs';
+import Field from './ui/field/Field';
 
 
 
@@ -48,7 +48,7 @@ function App() {
             <Route path="/" element={<UserRoutes />}>
               <Route index element={<Navigate to={DEFAULT_ROUTE} replace />} />
               <Route path='/tabs/*' element={<MainTabs />} />
-              <Route path='/field/:fieldId' element={<div>Field</div>} />
+              <Route path='/field/:fieldId' element={<Field/>} />
             </Route>
           </Route>
           <Route path="/" element={<PublicRoutes />}>

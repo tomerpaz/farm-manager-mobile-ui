@@ -6,10 +6,10 @@ import Map from '@mui/icons-material/Map';
 
 import { MapContainer, Marker, Popup, TileLayer, FeatureGroup, Circle, Polygon } from "react-leaflet";
 import { useEffect, useState } from "react";
-import GeoLocation from "./GeoLocation";
-import { selectAllFields, selectFieldIds, selectFieldssResult, useGetFieldsByYearQuery, useGetFieldsQuery } from "../features/fields/fieldsApiSlice";
+import GeoLocation from "../../../components/GeoLocation";
 import { useSelector } from "react-redux";
-import { selectUser } from "../features/auth/authSlice";
+import { selectUser } from "../../../features/auth/authSlice";
+import { useNavigate } from "react-router-dom";
 
 
 
@@ -22,6 +22,8 @@ const FieldsMap = (props) => {
     const { fields } = props;
 
     const user = useSelector(selectUser)
+
+    let navigate = useNavigate();
 
     // useEffect(() => {
     //     if(map && user){
@@ -60,7 +62,9 @@ const FieldsMap = (props) => {
                             eventHandlers={{
                                 //  mouseover: highlightFeature,
                                   click: () => {
-                                      console.log("marker clicked " + f.id);
+                                    navigate(`/field/${f.id}`)
+
+                                    //   console.log("marker clicked " + f.id);
                                   }
                               }}
                             //     fillOpacity={opacity}

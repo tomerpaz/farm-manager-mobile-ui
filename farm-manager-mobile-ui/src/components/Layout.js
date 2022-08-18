@@ -7,7 +7,7 @@ const Layout = () => {
     return (
         <>
             <AppBar />
-            <main>
+            <main className='App'>
 
                 <Outlet />
             </main>

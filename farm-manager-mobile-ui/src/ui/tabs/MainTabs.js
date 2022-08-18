@@ -1,23 +1,18 @@
-import { useState } from 'react';
 import PropTypes from 'prop-types';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Fab from '@mui/material/Fab';
 import AddIcon from '@mui/icons-material/Add';
-import EditIcon from '@mui/icons-material/Edit';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import NavigationIcon from '@mui/icons-material/Navigation';
-import ActivityForm from '../activity/ActivityForm'
-import FieldsMap from '../maps/FieldsMap';
+import ActivityForm from '../../activity/ActivityForm'
+import FieldsMap from './map/FieldsMap';
 import { Link, Route, Routes, useLocation, matchPath } from 'react-router-dom';
 import FieldList from './fields/FieldList';
-import { fieldsAdapter, fieldsApiSlice, getFieldsState, selectAllFields, selectFieldssResult, useGetFieldsByYearQuery, useGetFieldsQuery } from '../features/fields/fieldsApiSlice';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
-import { logOut,  selectUser } from '../features/auth/authSlice';
-import { DEFAULT_ROUTE } from '../App';
+import { useGetFieldsByYearQuery } from '../../features/fields/fieldsApiSlice';
+import { selectUser } from '../../features/auth/authSlice';
+import { DEFAULT_ROUTE } from "../../App";
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
