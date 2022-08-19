@@ -3,12 +3,16 @@ import { Box, Button, FormControl, IconButton, MenuItem, Select, Typography } fr
 import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
+import { selectUser } from '../../features/auth/authSlice'
 import { selectFieldById } from '../../features/fields/fieldSlice'
 import ColorPalette from './ColorPalette'
 import FieldMap from './FieldMap'
 
 const FieldImagery = () => {
 
+    const  {imageryKey} = useSelector(selectUser);
+
+    console.log('imageryKey',imageryKey);
     const [view, setView] = useState('ndvi');
     const [palette, setPalette] = useState(3);
 
@@ -20,7 +24,6 @@ const FieldImagery = () => {
     const height = (window.window.innerHeight - 350);
 
     const dir = 'ltr'
-    const src = 'map'
     const selectedDate = new Date().toLocaleDateString('en-GB', { day: "2-digit", month: "2-digit", year: "2-digit" })
 
     return (
@@ -32,8 +35,7 @@ const FieldImagery = () => {
 
 
                 <Box marginTop={1}
-                    display={'flex'} flex={1} alignItems={'stretch'} justifyContent={'space-between'} 
-
+                    display={'flex'} flex={1} alignItems={'center'} justifyContent={'space-between'} 
                 >
                     <Button color='secondary' variant="outlined" disableElevation>
                         {dir === 'rtl' ? <ChevronRightOutlined /> : <ChevronLeftOutlined />}
