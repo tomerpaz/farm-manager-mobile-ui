@@ -5,8 +5,9 @@ import { setCredentials, logOut, setUserData } from '../../features/auth/authSli
 
 
 const baseQuery = fetchBaseQuery({
- //   baseUrl: 'http://localhost:8080',
-       baseUrl: 'https://api.manager.farm',
+    //baseUrl: 'http://localhost:8080',
+    
+    baseUrl: 'https://api.manager.farm',
    // credentials: 'include',
     prepareHeaders: (headers, { getState }) => {
         const token = localStorage.getItem('token')        //getState().auth.token
