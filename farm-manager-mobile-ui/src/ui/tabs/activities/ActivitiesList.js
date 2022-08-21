@@ -52,8 +52,8 @@ const ActivitiesList = () => {
 
             return activities.map(e =>
 
-                <Fragment>
-                    <ListItem key={e.uuid}>
+                <Fragment key={e.uuid}>
+                    <ListItem >
                         <ListItemAvatar>
                             <Avatar>
                                 <ImageIcon />
