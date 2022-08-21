@@ -13,12 +13,13 @@ import { Link } from 'react-router-dom';
 import { getFruitIcon } from '../../../icons/FruitIconUtil';
 import { useSelector } from 'react-redux';
 import { selectFields } from '../../../features/fields/fieldSlice';
-import { selectUser } from '../../../features/auth/authSlice';
+import { selectLang, selectUser } from '../../../features/auth/authSlice';
 import { useFields } from '../../../features/fields/fieldsApiSlice';
 
 
 function renderRow(props) {
-    const { index, style, field } = props;
+    const { index, style, field, areaUnit } = props;
+
     const cropEngName = field.cropEngName
     return (
         <Box style={style}>
@@ -42,7 +43,7 @@ function renderRow(props) {
                                 {`${field.name}`}
                             </Typography>
                             <Typography>
-                                {`${field.area}`}
+                                {`${field.area} ${areaUnit}`}
                             </Typography>
                         </Box>
                     }
@@ -73,6 +74,7 @@ export default function FieldList(props) {
 
     const fields = useFields(user.year)
 
+    const text =  useSelector(selectLang)
 
     // const renderRow = (props) => {
     //     const { index, style } = props;
@@ -113,7 +115,7 @@ export default function FieldList(props) {
                 itemCount={fields.length}
                 overscanCount={5}
             >
-                {(props) => renderRow({ ...props, field: fields[props.index] })}
+                {(props) => renderRow({ ...props, field: fields[props.index], areaUnit: text[user.areaUnit] })}
 
             </FixedSizeList>
         </Box>

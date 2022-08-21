@@ -20,16 +20,16 @@ import FieldHistory from './FieldHistory';
 import FieldImagery from './FieldImagery';
 import { getFruitIcon } from '../../icons/FruitIconUtil';
 import { useFieldsById } from '../../features/fields/fieldsApiSlice';
-import { selectUser } from '../../features/auth/authSlice';
+import { selectLang, selectUser } from '../../features/auth/authSlice';
 
 const Field = () => {
   const { pathname } = useLocation();
   const { fieldId, src } = useParams()
 
-
+  const text =  useSelector(selectLang)
   const user = useSelector(selectUser);
   const field = useFieldsById(user.year, Number(fieldId))
-  
+
   const navigate = useNavigate()
 
 
@@ -52,13 +52,12 @@ const Field = () => {
 
   const value = paths.findIndex(getIndex) > 0 ? paths.findIndex(getIndex) : 0;
 
-  console.log(field)
 
 
   return (
     <Box >
       <Card sx={{ height: height }}>
-        <CardHeader
+        <CardHeader sx={{  padding: 1 }}
           avatar={
             <Avatar sx={{ backgroundColor: 'white' }}>
               {getFruitIcon(field.cropEngName)}
@@ -69,10 +68,10 @@ const Field = () => {
               <CloseOutlined />
             </IconButton>
           }
-          title={field.name}
-          subheader={field.startDate}
+          title={<Typography variant='h6'>{field.name}</Typography> }
+          subheader={<Typography color='secondary' variant='subtitle1'>{field.startDate}</Typography>}
         />
-        <CardContent >
+        <CardContent sx={{  paddingTop: 0 }}>
 
 
           {pathname.includes("/info") && <FieldInfo />}

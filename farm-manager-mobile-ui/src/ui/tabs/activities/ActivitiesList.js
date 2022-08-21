@@ -1,11 +1,10 @@
-import { Avatar, List, ListItem, ListItemText, ListItemAvatar, Box, Button, Typography } from '@mui/material';
+import React, { Fragment, useState } from 'react'
+import { Avatar, List, ListItem, ListItemText, ListItemAvatar, Box, Button, Typography, Divider } from '@mui/material';
 import ImageIcon from '@mui/icons-material/Image';
-import WorkIcon from '@mui/icons-material/Work';
-import BeachAccessIcon from '@mui/icons-material/BeachAccess';
-import React, { useState } from 'react'
 import { useSelector } from 'react-redux';
 import { getActivitiesState, useGetActivitiesFlatQuery } from '../../../features/activities/activitiesApiSlice';
 import { ChevronLeftOutlined, ChevronRightOutlined } from '@mui/icons-material';
+import { selectLang } from '../../../features/auth/authSlice';
 
 const ActivitiesList = () => {
 
@@ -27,6 +26,7 @@ const ActivitiesList = () => {
         error
     } = useGetActivitiesFlatQuery({ page, maxResult, isPlan, orderBy, dir })
 
+    const text = useSelector(selectLang)
 
 
     // useEffect(() => {
@@ -38,7 +38,10 @@ const ActivitiesList = () => {
     // }, [data, isLoading, isSuccess, isError])
 
     const activityDescription = (e) => {
-        return e.activityDef? e.activityDef.name : e.type;
+        // if(!text[e.type]){
+        //     console.log(e.type)
+        // }
+        return e.activityDef ? e.activityDef.name : text[e.type.toLowerCase()];
     }
 
     const renderRows = () => {
@@ -49,25 +52,19 @@ const ActivitiesList = () => {
 
             return activities.map(e =>
 
-                <ListItem key={e.uuid}>
-                    <ListItemAvatar>
-                        <Avatar>
-                            <ImageIcon />
-                        </Avatar>
-                    </ListItemAvatar>
-                    <ListItemText primary={activityDescription(e) + ' ' + e.fieldDesc} secondary={e.execution} />
-                </ListItem>
+                <Fragment>
+                    <ListItem key={e.uuid}>
+                        <ListItemAvatar>
+                            <Avatar>
+                                <ImageIcon />
+                            </Avatar>
+                        </ListItemAvatar>
+                        <ListItemText primary={activityDescription(e) + ' ' + e.fieldDesc} secondary={e.execution} />
+                    </ListItem>
+                    <Divider />
+                </Fragment>
             )
         }
-
-        // if (isSuccess) {
-        //     
-
-        //     return (
-
-        //         )
-
-        // }
     }
 
 
@@ -82,17 +79,17 @@ const ActivitiesList = () => {
             <Box margin={1}
                 display={'flex'} flex={1} alignItems={'center'} justifyContent={'space-between'}
             >
-                <Button disabled={page === 0} onClick={()=>setPage(page-1)} color='secondary' variant="outlined" disableElevation>
+                <Button disabled={page === 0} onClick={() => setPage(page - 1)} color='secondary' variant="outlined" disableElevation>
                     {dir === 'rtl' ? <ChevronRightOutlined /> : <ChevronLeftOutlined />}
                 </Button>
                 {/* <Typography>
                         {selectedDate}
                     </Typography>
                     <CloudOutlined />*/}
-                    <Typography>
-                        {page+1}
-                    </Typography> 
-                <Button onClick={()=>setPage(page+1)} color='secondary' variant="outlined" disableElevation>
+                <Typography>
+                    {page + 1}
+                </Typography>
+                <Button onClick={() => setPage(page + 1)} color='secondary' variant="outlined" disableElevation>
                     {dir === 'rtl' ? <ChevronLeftOutlined /> : <ChevronRightOutlined />}
                 </Button >
             </Box>

@@ -15,6 +15,16 @@ export const activitiesAdapter = createEntityAdapter({
 })
 const initialState = activitiesAdapter.getInitialState()
 
+
+export const fieldActivitiesAdapter = createEntityAdapter({
+//     selectId: e => e.uuid,
+//    //     console.log(e,a)
+
+//    //    return e.uuid},
+ //  sortComparer: (e) => e.execution,
+})
+const fieldActivityinitialState = fieldActivitiesAdapter.getInitialState()
+
 // export function safeParseJson(json) {
 
 //     if (json) {
@@ -42,12 +52,25 @@ export const activityApiSlice = apiSlice.injectEndpoints({
                 { type: 'Activities', id: "LIST" },
                 ...result.ids.map(id => ({ type: 'Activities', id }))
             ]
+        }),
+        getActivitiesField: builder.query({
+///activities/field/{fieldId}{page}/{maxResult}/{isPlan}/{orderBy}/{dir}
+            query: (args) => `/api/farm/activities/field/${args.fieldId}/${args.page}/${args.maxResult}/${args.isPlan}/${args.orderBy}/${args.dir}`,
+            transformResponse: responseData => {
+
+                return fieldActivitiesAdapter.setAll(fieldActivityinitialState, responseData.content)
+            },
+            providesTags: (result, error, arg) => [
+                { type: 'FieldActivities', id: "LIST" },
+                ...result.ids.map(id => ({ type: 'FieldActivities', id }))
+            ]
         })
     })
 })
 
 export const {
-    useGetActivitiesFlatQuery
+    useGetActivitiesFlatQuery,
+    useGetActivitiesFieldQuery
 } = activityApiSlice
 
 

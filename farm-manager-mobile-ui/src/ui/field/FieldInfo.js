@@ -2,7 +2,7 @@ import { Box, Typography } from '@mui/material'
 import React from 'react'
 import { useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
-import { selectUser } from '../../features/auth/authSlice'
+import { selectLang, selectUser } from '../../features/auth/authSlice'
 import { useFieldsById } from '../../features/fields/fieldsApiSlice'
 import { selectFieldById } from '../../features/fields/fieldSlice'
 import FieldMap from './FieldMap'
@@ -10,7 +10,6 @@ import FieldMap from './FieldMap'
 const FieldInfo = () => {
 
     const { fieldId } = useParams()
-
 
 
     const user = useSelector(selectUser);

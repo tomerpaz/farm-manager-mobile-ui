@@ -4,8 +4,7 @@ import { Routes, Route, Outlet, Link, useNavigate, useLocation, Navigate } from 
 import Login from './features/auth/Login';
 import ProtectedRoutes from './router/ProtectedRoutes';
 import PublicRoutes from './router/PublicRoutes';
-import he from "./lang/he.json";
-import en from "./lang/en.json";
+
 import Layout from './components/Layout';
 import UserRoutes from './components/UserRoutes';
 import MainTabs from './ui/tabs/MainTabs';
