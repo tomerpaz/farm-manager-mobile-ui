@@ -6,14 +6,18 @@ import { selectUser } from "../../../features/auth/authSlice";
 import { useNavigate } from "react-router-dom";
 import { selectFields } from "../../../features/fields/fieldSlice";
 import { Box } from "@mui/material";
+import { selectFieldsData, useFields, useGetFieldsByYearQuery } from "../../../features/fields/fieldsApiSlice";
+
+
 
 
 const FieldsMap = (props) => {
     const [map, setSetMap] = useState(0);
 
-    const fields = useSelector(selectFields);
-
     const user = useSelector(selectUser)
+
+    const fields = useFields(user.year)
+
 
     let navigate = useNavigate();
 

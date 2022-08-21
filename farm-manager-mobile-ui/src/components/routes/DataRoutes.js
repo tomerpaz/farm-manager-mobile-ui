@@ -6,9 +6,9 @@ import { useGetFieldsByYearQuery } from '../../features/fields/fieldsApiSlice'
 import { selectFields, setFields } from '../../features/fields/fieldSlice'
 import Loading from '../Loading'
 const DataRoutes = () => {
-    const dispatch = useDispatch()
-    const fields = useSelector(selectFields);
-    const user = useSelector(selectUser);
+    // const dispatch = useDispatch()
+    // const fields = useSelector(selectFields);
+     const user = useSelector(selectUser);
 
     const {
         data,
@@ -18,15 +18,15 @@ const DataRoutes = () => {
         error
     } = useGetFieldsByYearQuery(user.year)
    
-    useEffect(() => {
-        if (isSuccess) {
-            const fieldsData = data.ids.map(id => data.entities[id]);
-            dispatch(setFields(fieldsData));
-        } 
+    // useEffect(() => {
+    //     if (isSuccess) {
+    //         const fieldsData = data.ids.map(id => data.entities[id]);
+    //         dispatch(setFields(fieldsData));
+    //     } 
 
-    }, [data, isLoading, isSuccess, isError])
+    // }, [data, isLoading, isSuccess, isError])
 
-    return fields ? <Outlet /> : <Loading />
+    return data ? <Outlet /> : <Loading />
 }
 
 export default DataRoutes

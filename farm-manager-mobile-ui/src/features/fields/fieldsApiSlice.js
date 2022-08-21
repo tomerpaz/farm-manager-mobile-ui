@@ -2,7 +2,6 @@ import {
     createSelector,
     createEntityAdapter
 } from "@reduxjs/toolkit";
-import { polygon } from "leaflet";
 import { apiSlice } from "../../app/api/apiSlice";
 
 
@@ -69,3 +68,18 @@ export const {
 } = fieldsAdapter.getSelectors(state => selectFieldsData(state) ?? initialState)
 
 export const getFieldsState = (state) => state.fields;
+
+export function useFields(year) {
+    const { data } = useGetFieldsByYearQuery(year)
+    if (data) {
+        const fields = data.ids.map(id => data.entities[id]);
+        return fields;
+    }
+    return []
+}
+
+export function useFieldsById(year, id) {
+    const { data } = useGetFieldsByYearQuery(year)
+    return data.entities[id]
+}
+

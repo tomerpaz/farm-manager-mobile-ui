@@ -19,13 +19,17 @@ import FieldDashboard from './FieldDashboard';
 import FieldHistory from './FieldHistory';
 import FieldImagery from './FieldImagery';
 import { getFruitIcon } from '../../icons/FruitIconUtil';
+import { useFieldsById } from '../../features/fields/fieldsApiSlice';
+import { selectUser } from '../../features/auth/authSlice';
 
 const Field = () => {
   const { pathname } = useLocation();
   const { fieldId, src } = useParams()
 
 
-  const field = useSelector((state) => selectFieldById(state, Number(fieldId)));
+  const user = useSelector(selectUser);
+  const field = useFieldsById(user.year, Number(fieldId))
+  
   const navigate = useNavigate()
 
 
@@ -100,7 +104,7 @@ const Field = () => {
           disabled={field.imageryId === null}
           label="Imagery"
           to={`/field/${src}/${fieldId}/imagery`} component={Link}
-          icon={<SatelliteAltOutlined/>}
+          icon={<SatelliteAltOutlined />}
         />
       </BottomNavigation>
     </Box >

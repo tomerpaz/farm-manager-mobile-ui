@@ -13,6 +13,8 @@ import { Link } from 'react-router-dom';
 import { getFruitIcon } from '../../../icons/FruitIconUtil';
 import { useSelector } from 'react-redux';
 import { selectFields } from '../../../features/fields/fieldSlice';
+import { selectUser } from '../../../features/auth/authSlice';
+import { useFields } from '../../../features/fields/fieldsApiSlice';
 
 
 function renderRow(props) {
@@ -67,7 +69,9 @@ export default function FieldList(props) {
     const height = window.window.innerHeight - 110;
 
 
-    const fields = useSelector(selectFields);
+    const user = useSelector(selectUser)
+
+    const fields = useFields(user.year)
 
 
     // const renderRow = (props) => {

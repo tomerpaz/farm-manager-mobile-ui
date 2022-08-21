@@ -4,6 +4,7 @@ import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import { selectUser } from '../../features/auth/authSlice'
+import { useFieldsById } from '../../features/fields/fieldsApiSlice'
 import { selectFieldById } from '../../features/fields/fieldSlice'
 import ColorPalette from './ColorPalette'
 import FieldMap from './FieldMap'
@@ -19,8 +20,9 @@ const FieldImagery = () => {
 
     const { fieldId } = useParams()
 
-    const field = useSelector((state) => selectFieldById(state, Number(fieldId)));
-
+    const user = useSelector(selectUser);
+    const field = useFieldsById(user.year, Number(fieldId))
+   
     const height = (window.window.innerHeight - 350);
 
     const dir = 'ltr'

@@ -5,9 +5,9 @@ import { setCredentials, logOut, setUserData } from '../../features/auth/authSli
 
 
 const baseQuery = fetchBaseQuery({
-    //baseUrl: 'http://localhost:8080',
+    baseUrl: 'http://localhost:8080',
     
-    baseUrl: 'https://api.manager.farm',
+  //  baseUrl: 'https://api.manager.farm',
    // credentials: 'include',
     prepareHeaders: (headers, { getState }) => {
         const token = localStorage.getItem('token')        //getState().auth.token
@@ -48,7 +48,7 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
 export const apiSlice = createApi({
     reducerPath: 'api', // optional
     baseQuery: baseQueryWithReauth,
-    tagTypes: ['Field', 'User'],
+    tagTypes: ['Field', 'User', 'Activities'],
 
     endpoints: builder => ({})
 })

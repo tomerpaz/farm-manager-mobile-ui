@@ -9,11 +9,11 @@ import FieldsMap from './map/FieldsMap';
 import { Link, Route, Routes, useLocation, matchPath } from 'react-router-dom';
 import FieldList from './fields/FieldList';
 import { useSelector } from 'react-redux';
-import { useDispatch } from 'react-redux';
-import { useGetFieldsByYearQuery } from '../../features/fields/fieldsApiSlice';
+
 import { selectUser } from '../../features/auth/authSlice';
 import { DEFAULT_ROUTE } from "../../App";
 import { selectFields } from '../../features/fields/fieldSlice';
+import ActivitiesList from './activities/ActivitiesList';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -52,7 +52,7 @@ TabPanel.propTypes = {
 
 const fabStyle = {
     position: 'absolute',
-    bottom: 36,
+    bottom: 60,
     right: 24,
 };
 
@@ -143,7 +143,7 @@ const MainTabs = () => {
                 <FloatingActionButtons />
             </TabPanel>
             <TabPanel value={value} index={2}>
-                <ActivityForm />
+                <ActivitiesList />
                 <FloatingActionButtons />
 
             </TabPanel>
