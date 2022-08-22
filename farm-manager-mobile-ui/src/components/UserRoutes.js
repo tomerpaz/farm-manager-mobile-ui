@@ -20,7 +20,6 @@ const UserRoutes = () => {
         if (isSuccess) {
             // console.log(data.lang)
 
-            dispatch(setUserData({user: user, token: localStorage.getItem('token')})); 
             dispatch(setLang(en));
             
         } 
