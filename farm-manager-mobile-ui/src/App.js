@@ -1,6 +1,6 @@
 import './App.css';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { Routes, Route, Outlet, Link, useNavigate, useLocation, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import Login from './features/auth/Login';
 import ProtectedRoutes from './router/ProtectedRoutes';
 import PublicRoutes from './router/PublicRoutes';
@@ -10,7 +10,6 @@ import UserRoutes from './components/UserRoutes';
 import MainTabs from './ui/tabs/MainTabs';
 import Field from './ui/field/Field';
 import DataRoutes from './components/routes/DataRoutes';
-import TokenRoutes from './components/routes/TokenRoutes';
 import Activity from './ui/activity/Activity';
 
 
@@ -50,17 +49,14 @@ function App() {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route path="/" element={<ProtectedRoutes />}>
-            {/* <Route path="/" element={<TokenRoutes />}> */}
             <Route path="/" element={<UserRoutes />}>
               <Route path="/" element={<DataRoutes />}>
                 <Route index element={<Navigate to={DEFAULT_ROUTE} replace />} />
                 <Route path='/tabs/*' element={<MainTabs />} />
                 <Route path='/field/:src/:fieldId/*' element={<Field />} />
                 <Route path='/activity/:src/:activityId' element={<Activity />} />
-
               </Route>
             </Route>
-            {/* </Route> */}
           </Route>
           <Route path="/" element={<PublicRoutes />}>
             <Route path="/login" element={<Login />} />
