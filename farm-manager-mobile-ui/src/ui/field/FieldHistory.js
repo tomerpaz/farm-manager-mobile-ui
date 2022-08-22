@@ -6,6 +6,9 @@ import { ChevronLeftOutlined, ChevronRightOutlined } from '@mui/icons-material';
 import { selectLang } from '../../features/auth/authSlice';
 import { useParams } from 'react-router-dom';
 import { useGetActivitiesFieldQuery, useGetActivitiesFlatQuery } from '../../features/activities/activitiesApiSlice';
+import Loading from '../../components/Loading';
+import ListPager from '../../components/ui/ListPager';
+import ActivityTypeIcon from '../../icons/ActivityTypeIcon';
 
 const FieldHistory = () => {
   const [page, setPage] = useState(0);
@@ -20,74 +23,61 @@ const FieldHistory = () => {
   const text = useSelector(selectLang)
 
   const {
-      data,
-      isLoading,
-      isSuccess,
-      isError,
-      error
-  } = useGetActivitiesFieldQuery({fieldId, page, maxResult, isPlan, orderBy, dir })
+    data,
+    isLoading,
+    isSuccess,
+    isError,
+    error
+  } = useGetActivitiesFieldQuery({ fieldId, page, maxResult, isPlan, orderBy, dir })
 
 
+  if (!data || isLoading) {
+    return <Loading />
+  }
 
 
   const activityDescription = (e) => {
     // if(!text[e.type]){
     //     console.log(e.type)
     // }
-   
-    return e.activityDef ? e.activityDef.name : text[e.type.toLowerCase()];
-}
 
-console.log('FieldHistory',data)
+    return e.activityDef ? e.activityDef.name : text[e.type.toLowerCase()];
+  }
+
+  //console.log('FieldHistory',data)
 
 
 
   const renderRows = () => {
-    if (isSuccess) {
-        const activities = data.ids.map(id => data.entities[id]);
+    if (isSuccess && data) {
+      const activities = data.content;
 
-        return activities.map(e =>
+      return activities.map(e =>
 
-            <Fragment key={e.id}>
-                <ListItem >
-                    <ListItemAvatar>
-                        <Avatar>
-                            <ImageIcon />
-                        </Avatar>
-                    </ListItemAvatar>
-                    <ListItemText primary={activityDescription(e)} secondary={e.execution} />
-                </ListItem>
-                <Divider />
-            </Fragment>
-        )
+        <Fragment key={e.id}>
+          <ListItem >
+            <ListItemAvatar>
+              <Avatar sx={{ bgcolor: 'white' }}>
+                <ActivityTypeIcon type={e.type} />
+              </Avatar>
+            </ListItemAvatar>
+            <ListItemText primary={activityDescription(e)} secondary={e.execution} />
+          </ListItem>
+          <Divider />
+        </Fragment>
+      )
     }
-}
+  }
 
   return (
     <Box >
 
-    <List sx={{ height, overflow: 'auto', width: '100%', bgcolor: 'background.paper' }}>
+      <List sx={{ height, overflow: 'auto', width: '100%', bgcolor: 'background.paper' }}>
         {renderRows()}
 
-    </List>
-    <Box margin={1}
-        display={'flex'} flex={1} alignItems={'center'} justifyContent={'space-between'}
-    >
-        <Button disabled={page === 0} onClick={() => setPage(page - 1)} color='secondary' variant="outlined" disableElevation>
-            {dir === 'rtl' ? <ChevronRightOutlined /> : <ChevronLeftOutlined />}
-        </Button>
-        {/* <Typography>
-                {selectedDate}
-            </Typography>
-            <CloudOutlined />*/}
-        <Typography>
-            {page + 1}
-        </Typography>
-        <Button onClick={() => setPage(page + 1)} color='secondary' variant="outlined" disableElevation>
-            {dir === 'rtl' ? <ChevronLeftOutlined /> : <ChevronRightOutlined />}
-        </Button >
+      </List>
+      <ListPager dir={dir} page={page} totalPages={data.totalPages} setPage={setPage} />
     </Box>
-</Box>
   )
 }
 

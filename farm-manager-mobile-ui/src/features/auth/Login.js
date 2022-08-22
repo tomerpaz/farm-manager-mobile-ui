@@ -8,11 +8,14 @@ import LoginOutlined from '@mui/icons-material/LoginOutlined';
 import LogoLeaf from "../../icons/LogoLeaf";
 import { useLoginMutation } from "./authApiSlice";
 import { DEFAULT_ROUTE } from "../../App";
+import { useEffect } from "react";
 
 const Login = (props) => {
 
 
 
+
+      
     const navigate = useNavigate()
 
     const [login] = useLoginMutation()
@@ -26,13 +29,17 @@ const Login = (props) => {
 
 
     const onSubmit = async (e) => {
-
+        console.log(e)
         try {
             const loginData = await login(e).unwrap()
+            console.log('loginData',loginData)
             localStorage.setItem('token', loginData.token)
+            const token = localStorage.getItem('token');
+            console.log(' onSubmit token',token)
             navigate(DEFAULT_ROUTE)
         } catch (err) {
 
+            console.log(err);
             // if (!err?.originalStatus) {
             //     // isLoading: true until timeout occurs
             //     setErrMsg('No Server Response');

@@ -50,7 +50,7 @@ TabPanel.propTypes = {
 
 const fabStyle = {
     position: 'absolute',
-    bottom: 60,
+    bottom: 80,
     right: 24,
 };
 

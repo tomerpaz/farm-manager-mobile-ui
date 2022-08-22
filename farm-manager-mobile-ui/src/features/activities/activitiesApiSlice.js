@@ -16,54 +16,36 @@ export const activitiesAdapter = createEntityAdapter({
 const initialState = activitiesAdapter.getInitialState()
 
 
-export const fieldActivitiesAdapter = createEntityAdapter({
-//     selectId: e => e.uuid,
-//    //     console.log(e,a)
-
-//    //    return e.uuid},
- //  sortComparer: (e) => e.execution,
-})
-const fieldActivityinitialState = fieldActivitiesAdapter.getInitialState()
-
-// export function safeParseJson(json) {
-
-//     if (json) {
-//         try {
-//             return JSON.parse(json);
-//         }
-//         catch (err) {
-
-//         }
-//     }
-//     return null;
-// }
-
 export const activityApiSlice = apiSlice.injectEndpoints({
 
     endpoints: builder => ({
         getActivitiesFlat: builder.query({
 
             query: (args) => `/api/farm/activities/flat/${args.page}/${args.maxResult}/${args.isPlan}/${args.orderBy}/${args.dir}`,
-            transformResponse: responseData => {
+            // transformResponse: responseData => {
 
-                return activitiesAdapter.setAll(initialState, responseData.content)
-            },
+            //     return activitiesAdapter.setAll(initialState, responseData.content)
+            // },
             providesTags: (result, error, arg) => [
                 { type: 'Activities', id: "LIST" },
-                ...result.ids.map(id => ({ type: 'Activities', id }))
+                ...result.content.map(e => ({ type: 'Activities', id: e.uuid }))
             ]
         }),
         getActivitiesField: builder.query({
-///activities/field/{fieldId}{page}/{maxResult}/{isPlan}/{orderBy}/{dir}
             query: (args) => `/api/farm/activities/field/${args.fieldId}/${args.page}/${args.maxResult}/${args.isPlan}/${args.orderBy}/${args.dir}`,
-            transformResponse: responseData => {
+            // transformResponse: responseData => {
 
-                return fieldActivitiesAdapter.setAll(fieldActivityinitialState, responseData.content)
-            },
-            providesTags: (result, error, arg) => [
+            //     return fieldActivitiesAdapter.setAll(fieldActivityinitialState, responseData)
+            // },
+            providesTags: (result, error, arg) => {
+                // console.log('result',result)
+                // console.log('arg', arg)
+
+                return [
+               
                 { type: 'FieldActivities', id: "LIST" },
-                ...result.ids.map(id => ({ type: 'FieldActivities', id }))
-            ]
+                ...result.content.map(e => ({ type: 'FieldActivities', id: e.id }))
+            ]}
         })
     })
 })

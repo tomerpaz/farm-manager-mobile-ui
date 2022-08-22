@@ -10,7 +10,8 @@ const baseQuery = fetchBaseQuery({
   //  baseUrl: 'https://api.manager.farm',
    // credentials: 'include',
     prepareHeaders: (headers, { getState }) => {
-        const token = localStorage.getItem('token')        //getState().auth.token
+        const token = localStorage.getItem('token');
+        console.log('token',token)
         if (token) {
             headers.set("X-Authorization", `Bearer ${token}`)
         }
@@ -40,7 +41,9 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
     //     }
     // }
     if (result?.error?.status === 401) {
-        api.dispatch(api.util.resetApiState())
+       // api.dispatch(api.util.resetApiState())
+      // api.dispatch( api.utils.invalidateTags))
+      
         api.dispatch(logOut())
     }
     return result

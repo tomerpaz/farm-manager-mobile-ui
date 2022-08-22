@@ -5,6 +5,10 @@ import { useSelector } from 'react-redux';
 import { getActivitiesState, useGetActivitiesFlatQuery } from '../../../features/activities/activitiesApiSlice';
 import { ChevronLeftOutlined, ChevronRightOutlined } from '@mui/icons-material';
 import { selectLang } from '../../../features/auth/authSlice';
+import ListPager from '../../../components/ui/ListPager';
+import Loading from '../../../components/Loading';
+import ActivityTypeIcon from '../../../icons/ActivityTypeIcon';
+import { PRIMARY_MAIN } from '../../../App';
 
 const ActivitiesList = () => {
 
@@ -29,6 +33,9 @@ const ActivitiesList = () => {
     const text = useSelector(selectLang)
 
 
+    if (!data || isLoading) {
+        return <Loading />
+    }
     // useEffect(() => {
     //     if (isSuccess) {
     //         
@@ -46,17 +53,17 @@ const ActivitiesList = () => {
 
     const renderRows = () => {
         if (isSuccess) {
-            const activities = data.ids.map(id => data.entities[id]);
+            const activities = data.content;
 
-            console.log('activities: ', activities)
+            //   console.log('activities: ', activities)
 
             return activities.map(e =>
 
                 <Fragment key={e.uuid}>
                     <ListItem >
                         <ListItemAvatar>
-                            <Avatar>
-                                <ImageIcon />
+                            <Avatar sx={{ bgcolor: 'white' }}>
+                                <ActivityTypeIcon type={e.type}/>
                             </Avatar>
                         </ListItemAvatar>
                         <ListItemText primary={activityDescription(e) + ' ' + e.fieldDesc} secondary={e.execution} />
@@ -76,23 +83,8 @@ const ActivitiesList = () => {
                 {renderRows()}
 
             </List>
-            <Box margin={1}
-                display={'flex'} flex={1} alignItems={'center'} justifyContent={'space-between'}
-            >
-                <Button disabled={page === 0} onClick={() => setPage(page - 1)} color='secondary' variant="outlined" disableElevation>
-                    {dir === 'rtl' ? <ChevronRightOutlined /> : <ChevronLeftOutlined />}
-                </Button>
-                {/* <Typography>
-                        {selectedDate}
-                    </Typography>
-                    <CloudOutlined />*/}
-                <Typography>
-                    {page + 1}
-                </Typography>
-                <Button onClick={() => setPage(page + 1)} color='secondary' variant="outlined" disableElevation>
-                    {dir === 'rtl' ? <ChevronLeftOutlined /> : <ChevronRightOutlined />}
-                </Button >
-            </Box>
+            <ListPager dir={dir} page={page} totalPages={data.totalPages} setPage={setPage} />
+
         </Box>
     )
 }
