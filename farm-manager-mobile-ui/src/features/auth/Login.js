@@ -9,11 +9,14 @@ import LogoLeaf from "../../icons/LogoLeaf";
 import { useLoginMutation } from "./authApiSlice";
 import { DEFAULT_ROUTE } from "../../App";
 import { useEffect } from "react";
+import { setCredentials } from "./authSlice";
+import { useDispatch } from "react-redux";
 
 const Login = (props) => {
 
 
 
+    // const dispatch = useDispatch()
 
       
     const navigate = useNavigate()
@@ -29,13 +32,11 @@ const Login = (props) => {
 
 
     const onSubmit = async (e) => {
-        console.log(e)
+        // console.log(e)
         try {
             const loginData = await login(e).unwrap()
-            console.log('loginData',loginData)
             localStorage.setItem('token', loginData.token)
-            const token = localStorage.getItem('token');
-            console.log(' onSubmit token',token)
+           // dispatch(setCredentials(loginData.token))
             navigate(DEFAULT_ROUTE)
         } catch (err) {
 

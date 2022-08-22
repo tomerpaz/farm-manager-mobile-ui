@@ -6,13 +6,15 @@ import { logOut } from '../../features/auth/authSlice'
 
 const baseQuery = fetchBaseQuery({
     baseUrl: 'http://localhost:8080',
-    
-  //  baseUrl: 'https://api.manager.farm',
-   // credentials: 'include',
+
+    //  baseUrl: 'https://api.manager.farm',
+    // credentials: 'include',
     prepareHeaders: (headers, { getState }) => {
+        //const token = getState().auth.token;
+
         const token = localStorage.getItem('token');
-        console.log('token',token)
         if (token) {
+
             headers.set("X-Authorization", `Bearer ${token}`)
         }
         headers.set("Content-Type", 'application/json')
@@ -21,8 +23,11 @@ const baseQuery = fetchBaseQuery({
         return headers
     }
 })
-
+function sleep(time) {
+    return new Promise((resolve) => setTimeout(resolve, time));
+}
 const baseQueryWithReauth = async (args, api, extraOptions) => {
+
     let result = await baseQuery(args, api, extraOptions)
 
     // if (result?.error?.status === 401) {
@@ -35,15 +40,15 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
     //         api.dispatch(setCredentials({ ...refreshResult.data, user }))
     //         // retry the original query with new access token 
     //         result = await baseQuery(args, api, extraOptions)
-            
+
     //     } else {
     //         api.dispatch(logOut())
     //     }
     // }
     if (result?.error?.status === 401) {
-       // api.dispatch(api.util.resetApiState())
-      // api.dispatch( api.utils.invalidateTags))
-      
+        api.dispatch(api.util.resetApiState())
+        // api.dispatch( api.utils.invalidateTags))
+
         api.dispatch(logOut())
     }
     return result
@@ -52,7 +57,7 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
 export const apiSlice = createApi({
     reducerPath: 'api', // optional
     baseQuery: baseQueryWithReauth,
-    tagTypes: ['Field', 'User', 'Activities','FieldActivities'],
+    tagTypes: ['Field', 'Activities', 'User', 'FieldActivities'],
 
     endpoints: builder => ({})
 })

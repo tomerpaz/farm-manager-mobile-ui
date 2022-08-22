@@ -10,6 +10,7 @@ import UserRoutes from './components/UserRoutes';
 import MainTabs from './ui/tabs/MainTabs';
 import Field from './ui/field/Field';
 import DataRoutes from './components/routes/DataRoutes';
+import TokenRoutes from './components/routes/TokenRoutes';
 
 
 
@@ -45,6 +46,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route path="/" element={<ProtectedRoutes />}>
+            {/* <Route path="/" element={<TokenRoutes />}> */}
             <Route path="/" element={<UserRoutes />}>
               <Route path="/" element={<DataRoutes />}>
                 <Route index element={<Navigate to={DEFAULT_ROUTE} replace />} />
@@ -52,6 +54,7 @@ function App() {
                 <Route path='/field/:src/:fieldId/*' element={<Field />} />
               </Route>
             </Route>
+            {/* </Route> */}
           </Route>
           <Route path="/" element={<PublicRoutes />}>
             <Route path="/login" element={<Login />} />

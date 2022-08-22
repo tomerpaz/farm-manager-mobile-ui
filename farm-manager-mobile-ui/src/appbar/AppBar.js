@@ -74,8 +74,9 @@ const AppBar = () => {
 
   const dispatch = useDispatch()
 
-  const { data: user } = useGetUserDataQuery()
+  //const { data: user } = useGetUserDataQuery()
 
+  const user = localStorage.getItem('token');
 
   const [filterAnchorEl, setFilterAnchorEl] = useState(null);
 

@@ -12,11 +12,11 @@ const UserRoutes = () => {
 
     const dispatch = useDispatch()
 
+    
     const { data: user, isLoading, isSuccess, isError, error } = useGetUserDataQuery()
-    console.log('UserRoutes',user, isLoading, isSuccess, isError, error);
+   // console.log('UserRoutes',user, isLoading, isSuccess, isError, error);
 
-    const token = localStorage.getItem('token');
-    console.log('UserRoutes', token);
+
     useEffect(() => {
 
        // console.log(he);
