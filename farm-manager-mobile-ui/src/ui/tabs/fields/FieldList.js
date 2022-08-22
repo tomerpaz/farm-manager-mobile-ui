@@ -5,16 +5,12 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import { FixedSizeList, } from 'react-window';
 import { Divider, ListItemAvatar, Avatar, BottomNavigation, BottomNavigationAction, IconButton, Typography } from '@mui/material';
-import List from '@mui/icons-material/List';
-import RestoreIcon from '@mui/icons-material/Restore';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import LocationOnIcon from '@mui/icons-material/LocationOn';
 import { Link } from 'react-router-dom';
 import { getFruitIcon } from '../../../icons/FruitIconUtil';
 import { useSelector } from 'react-redux';
-import { selectFields } from '../../../features/fields/fieldSlice';
-import { selectLang, selectUser } from '../../../features/auth/authSlice';
+import { selectLang } from '../../../features/auth/authSlice';
 import { useFields } from '../../../features/fields/fieldsApiSlice';
+import { useGetUserDataQuery } from '../../../features/auth/authApiSlice';
 
 
 function renderRow(props) {
@@ -70,7 +66,7 @@ export default function FieldList(props) {
     const height = window.window.innerHeight - 110;
 
 
-    const user = useSelector(selectUser)
+    const { data: user } = useGetUserDataQuery()
 
     const fields = useFields(user.year)
 

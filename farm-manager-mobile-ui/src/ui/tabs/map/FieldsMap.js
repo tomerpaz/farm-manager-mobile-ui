@@ -1,12 +1,10 @@
 import { MapContainer, TileLayer, Polygon } from "react-leaflet";
 import { useState } from "react";
 import GeoLocation from "../../../components/GeoLocation";
-import { useSelector } from "react-redux";
-import { selectUser } from "../../../features/auth/authSlice";
 import { useNavigate } from "react-router-dom";
-import { selectFields } from "../../../features/fields/fieldSlice";
 import { Box } from "@mui/material";
 import { selectFieldsData, useFields, useGetFieldsByYearQuery } from "../../../features/fields/fieldsApiSlice";
+import { useGetUserDataQuery } from '../../../features/auth/authApiSlice'
 
 
 
@@ -14,7 +12,7 @@ import { selectFieldsData, useFields, useGetFieldsByYearQuery } from "../../../f
 const FieldsMap = (props) => {
     const [map, setSetMap] = useState(0);
 
-    const user = useSelector(selectUser)
+    const { data: user } = useGetUserDataQuery()
 
     const fields = useFields(user.year)
 

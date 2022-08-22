@@ -1,18 +1,16 @@
 import { Box, Typography } from '@mui/material'
 import React from 'react'
-import { useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
-import { selectLang, selectUser } from '../../features/auth/authSlice'
 import { useFieldsById } from '../../features/fields/fieldsApiSlice'
-import { selectFieldById } from '../../features/fields/fieldSlice'
 import FieldMap from './FieldMap'
+import { useGetUserDataQuery } from '../../features/auth/authApiSlice';
 
 const FieldInfo = () => {
 
     const { fieldId } = useParams()
 
 
-    const user = useSelector(selectUser);
+    const { data: user } = useGetUserDataQuery()
 
     const field = useFieldsById(user.year,Number(fieldId))
 

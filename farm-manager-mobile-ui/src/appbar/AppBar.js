@@ -19,8 +19,9 @@ import Logout from '@mui/icons-material/Logout';
 
 import ComboBox from '../components/FmAutocomplete';
 import { useNavigate } from 'react-router-dom';
-import { logOut, selectUser } from '../features/auth/authSlice';
+import { logOut } from '../features/auth/authSlice';
 import { useDispatch, useSelector } from 'react-redux';
+import { useGetUserDataQuery } from '../features/auth/authApiSlice';
 
 
 const Search = styled('div')(({ theme }) => ({
@@ -73,7 +74,7 @@ const AppBar = () => {
 
   const dispatch = useDispatch()
 
-  const user = useSelector(selectUser);
+  const { data: user } = useGetUserDataQuery()
 
 
   const [filterAnchorEl, setFilterAnchorEl] = useState(null);

@@ -1,26 +1,28 @@
 import { ChevronLeft, ChevronLeftOutlined, ChevronRight, ChevronRightOutlined, CloudOutlined, MoreVert, Streetview } from '@mui/icons-material'
-import { Box, Button, FormControl, IconButton, MenuItem, Select, Typography } from '@mui/material'
+import { Box, Button, MenuItem, Select, Typography } from '@mui/material'
 import React, { useState } from 'react'
-import { useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
-import { selectUser } from '../../features/auth/authSlice'
 import { useFieldsById } from '../../features/fields/fieldsApiSlice'
-import { selectFieldById } from '../../features/fields/fieldSlice'
 import ColorPalette from './ColorPalette'
 import FieldMap from './FieldMap'
+import { useGetUserDataQuery } from '../../features/auth/authApiSlice';
 
 const FieldImagery = () => {
 
-    const  {imageryKey} = useSelector(selectUser);
 
-    console.log('imageryKey',imageryKey);
     const [view, setView] = useState('ndvi');
     const [palette, setPalette] = useState(3);
 
 
     const { fieldId } = useParams()
 
-    const user = useSelector(selectUser);
+    const { data: user } = useGetUserDataQuery()
+
+
+    const  {imageryKey} = user;
+
+    console.log('imageryKey',imageryKey);
+
     const field = useFieldsById(user.year, Number(fieldId))
    
     const height = (window.window.innerHeight - 350);

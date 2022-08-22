@@ -5,29 +5,27 @@ import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardContent from '@mui/material/CardContent';
 import Avatar from '@mui/material/Avatar';
-import { red } from '@mui/material/colors';
 
-import { Box, Button, IconButton, Paper, Typography } from '@mui/material';
-import { Routes, useParams, Route, Link, useLocation, useNavigate } from 'react-router-dom';
+import { Box, IconButton, Paper, Typography } from '@mui/material';
+import { useParams, Link, useLocation, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { selectFieldById } from '../../features/fields/fieldSlice';
 import Loading from '../../components/Loading';
-import { MapContainer, Polygon, TileLayer } from 'react-leaflet';
-import { CloseOutlined, DashboardOutlined, ExitToAppOutlined, Info, InfoOutlined, SatelliteAltOutlined } from '@mui/icons-material';
+import { CloseOutlined, DashboardOutlined, InfoOutlined, SatelliteAltOutlined } from '@mui/icons-material';
 import FieldInfo from './FieldInfo';
 import FieldDashboard from './FieldDashboard';
 import FieldHistory from './FieldHistory';
 import FieldImagery from './FieldImagery';
 import { getFruitIcon } from '../../icons/FruitIconUtil';
 import { useFieldsById } from '../../features/fields/fieldsApiSlice';
-import { selectLang, selectUser } from '../../features/auth/authSlice';
+import { selectLang } from '../../features/auth/authSlice';
+import { useGetUserDataQuery } from '../../features/auth/authApiSlice';
 
 const Field = () => {
   const { pathname } = useLocation();
   const { fieldId, src } = useParams()
 
   const text =  useSelector(selectLang)
-  const user = useSelector(selectUser);
+  const { data: user } = useGetUserDataQuery()
   const field = useFieldsById(user.year, Number(fieldId))
 
   const navigate = useNavigate()

@@ -8,9 +8,7 @@ import ActivityForm from '../../activity/ActivityForm'
 import FieldsMap from './map/FieldsMap';
 import { Link, Route, Routes, useLocation, matchPath } from 'react-router-dom';
 import FieldList from './fields/FieldList';
-import { useSelector } from 'react-redux';
 
-import { selectUser } from '../../features/auth/authSlice';
 import { DEFAULT_ROUTE } from "../../App";
 import { selectFields } from '../../features/fields/fieldSlice';
 import ActivitiesList from './activities/ActivitiesList';
@@ -77,12 +75,7 @@ function a11yProps(index) {
 
 const MainTabs = () => {
 
-    // const dispatch = useDispatch()
-
     const { pathname } = useLocation();
-
-    // console.log('pathname',pathname)
-    const user = useSelector(selectUser)
 
     const paths = ['/tabs/map', '/tabs/fields', '/tabs/activities', 130, 44];
 
