@@ -17,7 +17,6 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import Logout from '@mui/icons-material/Logout';
 
-import ComboBox from '../components/FmAutocomplete';
 import { useNavigate } from 'react-router-dom';
 import { logOut } from '../features/auth/authSlice';
 import { useDispatch, useSelector } from 'react-redux';

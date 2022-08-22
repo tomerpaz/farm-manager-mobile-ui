@@ -9,11 +9,13 @@ import ListPager from '../../../components/ui/ListPager';
 import Loading from '../../../components/Loading';
 import ActivityTypeIcon from '../../../icons/ActivityTypeIcon';
 import { PRIMARY_MAIN } from '../../../App';
+import { useNavigate } from 'react-router-dom';
 
 const ActivitiesList = () => {
 
 
     const [page, setPage] = useState(0);
+    const navigate = useNavigate();
 
     const height = window.window.innerHeight - 180;
 
@@ -60,7 +62,7 @@ const ActivitiesList = () => {
             return activities.map(e =>
 
                 <Fragment key={e.uuid}>
-                    <ListItem >
+                    <ListItem onClick={()=>navigate(`/activity/al/${e.uuid}`)}>
                         <ListItemAvatar>
                             <Avatar sx={{ bgcolor: 'white' }}>
                                 <ActivityTypeIcon type={e.type}/>

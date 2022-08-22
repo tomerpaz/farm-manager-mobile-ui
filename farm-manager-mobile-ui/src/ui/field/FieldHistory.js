@@ -4,7 +4,7 @@ import ImageIcon from '@mui/icons-material/Image';
 import { useSelector } from 'react-redux';
 import { ChevronLeftOutlined, ChevronRightOutlined } from '@mui/icons-material';
 import { selectLang } from '../../features/auth/authSlice';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useGetActivitiesFieldQuery, useGetActivitiesFlatQuery } from '../../features/activities/activitiesApiSlice';
 import Loading from '../../components/Loading';
 import ListPager from '../../components/ui/ListPager';
@@ -13,6 +13,7 @@ import ActivityTypeIcon from '../../icons/ActivityTypeIcon';
 const FieldHistory = () => {
   const [page, setPage] = useState(0);
   const { fieldId } = useParams()
+  const navigate = useNavigate();
 
   const height = window.window.innerHeight - 270;
 
@@ -55,7 +56,7 @@ const FieldHistory = () => {
       return activities.map(e =>
 
         <Fragment key={e.id}>
-          <ListItem >
+          <ListItem onClick={() => navigate(`/activity/fh/${e.uuid}`)}>
             <ListItemAvatar>
               <Avatar sx={{ bgcolor: 'white' }}>
                 <ActivityTypeIcon type={e.type} />

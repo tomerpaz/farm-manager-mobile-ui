@@ -11,6 +11,7 @@ import MainTabs from './ui/tabs/MainTabs';
 import Field from './ui/field/Field';
 import DataRoutes from './components/routes/DataRoutes';
 import TokenRoutes from './components/routes/TokenRoutes';
+import Activity from './ui/activity/Activity';
 
 
 
@@ -41,6 +42,9 @@ export const DEFAULT_ROUTE = "/tabs/map";
 
 
 function App() {
+  const dir = 'ltr'//;'rtl'
+  document.body.dir = dir;
+  theme.direction = dir ;
   return (
     <ThemeProvider theme={theme}>
       <Routes>
@@ -52,6 +56,8 @@ function App() {
                 <Route index element={<Navigate to={DEFAULT_ROUTE} replace />} />
                 <Route path='/tabs/*' element={<MainTabs />} />
                 <Route path='/field/:src/:fieldId/*' element={<Field />} />
+                <Route path='/activity/:src/:activityId' element={<Activity />} />
+
               </Route>
             </Route>
             {/* </Route> */}
