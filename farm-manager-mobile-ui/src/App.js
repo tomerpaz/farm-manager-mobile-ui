@@ -6,11 +6,11 @@ import ProtectedRoutes from './router/ProtectedRoutes';
 import PublicRoutes from './router/PublicRoutes';
 
 import Layout from './components/Layout';
-import UserRoutes from './components/UserRoutes';
 import MainTabs from './ui/tabs/MainTabs';
 import Field from './ui/field/Field';
-import DataRoutes from './components/routes/DataRoutes';
 import Activity from './ui/activity/Activity';
+import DataRoutes from './router/DataRoutes';
+import UserRoutes from './router/UserRoutes';
 
 
 

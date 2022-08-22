@@ -1,7 +1,7 @@
 import { Outlet } from 'react-router-dom'
-import { useGetUserDataQuery } from '../../features/auth/authApiSlice'
-import { useGetFieldsByYearQuery } from '../../features/fields/fieldsApiSlice'
-import Loading from '../Loading'
+import Loading from '../components/Loading'
+import { useGetUserDataQuery } from '../features/auth/authApiSlice'
+import { useGetFieldsByYearQuery } from '../features/fields/fieldsApiSlice'
 const DataRoutes = () => {
     // const dispatch = useDispatch()
     // const fields = useSelector(selectFields);

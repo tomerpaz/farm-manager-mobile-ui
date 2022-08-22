@@ -51,6 +51,7 @@ const Field = () => {
   const value = paths.findIndex(getIndex) > 0 ? paths.findIndex(getIndex) : 0;
 
 
+  const sidePadding = pathname.includes("/history") ? 0 : 1;
 
   return (
     <Box >
@@ -69,7 +70,7 @@ const Field = () => {
           title={<Typography variant='h6'>{field.name}</Typography> }
           subheader={<Typography color='secondary' variant='subtitle1'>{field.startDate}</Typography>}
         />
-        <CardContent sx={{  paddingTop: 0 }}>
+        <CardContent sx={{  paddingTop: 0, paddingLeft: sidePadding, paddingRight: sidePadding }}>
 
 
           {pathname.includes("/info") && <FieldInfo />}
