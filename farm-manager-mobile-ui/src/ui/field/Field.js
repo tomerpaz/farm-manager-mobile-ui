@@ -19,12 +19,13 @@ import { getFruitIcon } from '../../icons/FruitIconUtil';
 import { useFieldsById } from '../../features/fields/fieldsApiSlice';
 import { selectLang } from '../../features/auth/authSlice';
 import { useGetUserDataQuery } from '../../features/auth/authApiSlice';
+import { displayFieldArea, displayFieldName } from '../FarmUtil';
 
 const Field = () => {
   const { pathname } = useLocation();
   const { fieldId, src } = useParams()
 
-  const text =  useSelector(selectLang)
+  const text = useSelector(selectLang)
   const { data: user } = useGetUserDataQuery()
   const field = useFieldsById(user.year, Number(fieldId))
 
@@ -56,7 +57,7 @@ const Field = () => {
   return (
     <Box >
       <Card sx={{ height: height }}>
-        <CardHeader sx={{  padding: 1 }}
+        <CardHeader sx={{ padding: 1 }}
           avatar={
             <Avatar sx={{ backgroundColor: 'white' }}>
               {getFruitIcon(field.cropEngName)}
@@ -67,16 +68,34 @@ const Field = () => {
               <CloseOutlined />
             </IconButton>
           }
-          title={<Typography variant='h6'>{field.name}</Typography> }
-          subheader={<Typography color='secondary' variant='subtitle1'>{field.startDate}</Typography>}
+          title={
+            <Box display={'flex'} flexDirection={'row'} justifyContent={'space-between'}>
+              <Typography variant='h6'>
+                {displayFieldName(field)}
+              </Typography>
+              <Typography variant='h6'>
+                {displayFieldArea(field, user.areaUnit, text)}
+              </Typography>
+            </Box>
+          }
+          subheader={
+            <Box component={"span"} display={'flex'} flexDirection={'row'} justifyContent={'space-between'}>
+              <Typography color='secondary' variant='subtitle1' component={"span"}>
+                {`${field.cropName},${field.varietyName}`}
+              </Typography>
+              <Typography color='secondary' variant='subtitle1' component={"span"}>
+                {`${field.startDate}`}
+              </Typography>
+            </Box>
+          }
         />
-        <CardContent sx={{  paddingTop: 0, paddingLeft: sidePadding, paddingRight: sidePadding }}>
+        <CardContent sx={{ paddingTop: 0, paddingLeft: sidePadding, paddingRight: sidePadding }}>
 
 
-          {pathname.includes("/info") && <FieldInfo />}
+          {pathname.includes("/info") && <FieldInfo field={field} />}
           {pathname.includes("/dash") && <FieldDashboard />}
           {pathname.includes("/history") && <FieldHistory />}
-          {pathname.includes("/imagery") && <FieldImagery />}
+          {pathname.includes("/imagery") && <FieldImagery field={field} />}
 
         </CardContent>
       </Card>

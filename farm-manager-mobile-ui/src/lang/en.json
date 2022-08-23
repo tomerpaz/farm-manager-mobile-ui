@@ -11,7 +11,16 @@
     "scouting": "Scouting",
     "harvest": "Harvest",
     "market": "Merketing",
-    "irrigation": "Irrigation"
+    "irrigation": "Irrigation",
+    "note": "Note",
+    "endDate": "End",
+    "density": "Density",
+    "season": "Season",
+    "maturity": "Maturity",
+    "site": "Site",
+    "parentField": "Parent Field",
+    "plantSpacing": "Plant Spacing",
+    "rowSpacing": "Row Spacing"
 
   }
   

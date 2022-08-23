@@ -11,10 +11,11 @@ import { useSelector } from 'react-redux';
 import { selectLang } from '../../../features/auth/authSlice';
 import { useFields } from '../../../features/fields/fieldsApiSlice';
 import { useGetUserDataQuery } from '../../../features/auth/authApiSlice';
+import { displayFieldArea, displayFieldName } from '../../FarmUtil';
 
 
 function renderRow(props) {
-    const { index, style, field, areaUnit } = props;
+    const { index, style, field, areaUnit, text } = props;
 
     const cropEngName = field.cropEngName
     return (
@@ -36,10 +37,10 @@ function renderRow(props) {
                     <ListItemText primary={
                         <Box display={'flex'} flexDirection={'row'} justifyContent={'space-between'}>
                             <Typography>
-                                {`${field.name}`}
+                                {displayFieldName(field)}
                             </Typography>
                             <Typography>
-                                {`${field.area} ${areaUnit}`}
+                                {displayFieldArea(field, areaUnit, text)}
                             </Typography>
                         </Box>
                     }
@@ -111,7 +112,7 @@ export default function FieldList(props) {
                 itemCount={fields.length}
                 overscanCount={5}
             >
-                {(props) => renderRow({ ...props, field: fields[props.index], areaUnit: text[user.areaUnit] })}
+                {(props) => renderRow({ ...props, field: fields[props.index], areaUnit: user.areaUnit,  text: text })}
 
             </FixedSizeList>
         </Box>

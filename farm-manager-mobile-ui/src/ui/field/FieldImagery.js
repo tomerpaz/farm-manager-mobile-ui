@@ -7,7 +7,7 @@ import ColorPalette from './ColorPalette'
 import FieldMap from './FieldMap'
 import { useGetUserDataQuery } from '../../features/auth/authApiSlice';
 
-const FieldImagery = () => {
+const FieldImagery = ({field}) => {
 
 
     const [view, setView] = useState('ndvi');
@@ -23,7 +23,6 @@ const FieldImagery = () => {
 
     console.log('imageryKey',imageryKey);
 
-    const field = useFieldsById(user.year, Number(fieldId))
    
     const height = (window.window.innerHeight - 350);
 
@@ -35,9 +34,6 @@ const FieldImagery = () => {
             {field.polygon && <FieldMap field={field} height={height} />}
 
             <ColorPalette type={palette}></ColorPalette>
-
-
-
                 <Box marginTop={1}
                     display={'flex'} flex={1} alignItems={'center'} justifyContent={'space-between'} 
                 >
