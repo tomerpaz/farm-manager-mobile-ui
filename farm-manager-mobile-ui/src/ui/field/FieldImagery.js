@@ -6,6 +6,8 @@ import { useFieldsById } from '../../features/fields/fieldsApiSlice'
 import ColorPalette from './ColorPalette'
 import FieldMap from './FieldMap'
 import { useGetUserDataQuery } from '../../features/auth/authApiSlice';
+import { useSelector } from 'react-redux'
+import { selectLang } from '../../features/auth/authSlice'
 
 const FieldImagery = ({field}) => {
 
@@ -13,6 +15,7 @@ const FieldImagery = ({field}) => {
     const [view, setView] = useState('ndvi');
     const [palette, setPalette] = useState(3);
 
+    const text =  useSelector(selectLang)
 
     const { fieldId } = useParams()
 
@@ -26,7 +29,7 @@ const FieldImagery = ({field}) => {
    
     const height = (window.window.innerHeight - 350);
 
-    const dir = 'ltr'
+    const dir = text.dir
     const selectedDate = new Date().toLocaleDateString('en-GB', { day: "2-digit", month: "2-digit", year: "2-digit" })
 
     return (

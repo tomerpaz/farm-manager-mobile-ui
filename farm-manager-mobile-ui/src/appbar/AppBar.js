@@ -209,10 +209,10 @@ const AppBar = () => {
   );
 
   if (!user) {
-    return <Box sx={{ flexGrow: 1 }}>
-      <MuiAppBar position="static" elevation={0}>
+    return <Box sx={{  flexGrow: 1 }}>
+      <MuiAppBar dir='ltr' position="static" elevation={0}>
         <Toolbar>
-          <Typography
+          <Typography 
             variant="h6"
             noWrap
             component="div"

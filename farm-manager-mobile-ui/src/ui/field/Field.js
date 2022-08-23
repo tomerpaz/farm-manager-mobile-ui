@@ -6,11 +6,11 @@ import CardHeader from '@mui/material/CardHeader';
 import CardContent from '@mui/material/CardContent';
 import Avatar from '@mui/material/Avatar';
 
-import { Box, IconButton, Paper, Typography } from '@mui/material';
+import { Box, Button, IconButton, Paper, Typography } from '@mui/material';
 import { useParams, Link, useLocation, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import Loading from '../../components/Loading';
-import { CloseOutlined, DashboardOutlined, InfoOutlined, SatelliteAltOutlined } from '@mui/icons-material';
+import { CancelPresentation, CancelPresentationOutlined, CloseOutlined, DashboardOutlined, DisabledByDefault, HighlightOffOutlined, HighlightOffRounded, InfoOutlined, SatelliteAltOutlined } from '@mui/icons-material';
 import FieldInfo from './FieldInfo';
 import FieldDashboard from './FieldDashboard';
 import FieldHistory from './FieldHistory';
@@ -64,9 +64,9 @@ const Field = () => {
             </Avatar>
           }
           action={
-            <IconButton aria-label="settings" onClick={() => navigate(`/tabs/${src}`)}>
-              <CloseOutlined />
-            </IconButton>
+              <IconButton color='secondary'  aria-label="settings" onClick={() => navigate(`/tabs/${src}`)}>
+                <HighlightOffRounded sx={{marginTop: 1,  fontSize: 35 }}  />
+              </IconButton>
           }
           title={
             <Box display={'flex'} flexDirection={'row'} justifyContent={'space-between'}>
@@ -103,23 +103,23 @@ const Field = () => {
       <BottomNavigation value={value}
         showLabels>
         <BottomNavigationAction
-          label="Info"
+          label={text.details}
           to={`/field/${src}/${fieldId}/info`} component={Link}
           icon={<InfoOutlined />}
         />
         <BottomNavigationAction
-          label="Dashboard"
+          label={text.dashboard}
           to={`/field/${src}/${fieldId}/dash`} component={Link}
           icon={<DashboardOutlined />}
         />
         <BottomNavigationAction
-          label="Recents"
+          label={text.activities}
           to={`/field/${src}/${fieldId}/history`} component={Link}
           icon={<RestoreIcon />}
         />
         <BottomNavigationAction
           disabled={field.imageryId === null}
-          label="Imagery"
+          label={text.satellite}
           to={`/field/${src}/${fieldId}/imagery`} component={Link}
           icon={<SatelliteAltOutlined />}
         />

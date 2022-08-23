@@ -106,6 +106,7 @@ export default function FieldList(props) {
             sx={{ width: '100%', height: height, bgcolor: 'background.paper' }}
         >
             <FixedSizeList
+            direction={text.dir}
                 height={height}
 
                 itemSize={70}

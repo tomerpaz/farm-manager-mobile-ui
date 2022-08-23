@@ -11,6 +11,9 @@ import Field from './ui/field/Field';
 import Activity from './ui/activity/Activity';
 import DataRoutes from './router/DataRoutes';
 import UserRoutes from './router/UserRoutes';
+import LocaleApplication from './components/LocaleApplication';
+import { selectLang } from './features/auth/authSlice';
+import { useSelector } from 'react-redux';
 
 
 
@@ -41,29 +44,34 @@ export const DEFAULT_ROUTE = "/tabs/map";
 
 
 function App() {
-  const dir = 'ltr'//;'rtl'
+
+  const { dir } = useSelector(selectLang)
+
+  // const dir = 'ltr'//;'rtl'
   document.body.dir = dir;
-  theme.direction = dir ;
+  theme.direction = dir;
   return (
     <ThemeProvider theme={theme}>
-      <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route path="/" element={<ProtectedRoutes />}>
-            <Route path="/" element={<UserRoutes />}>
-              <Route path="/" element={<DataRoutes />}>
-                <Route index element={<Navigate to={DEFAULT_ROUTE} replace />} />
-                <Route path='/tabs/*' element={<MainTabs />} />
-                <Route path='/field/:src/:fieldId/*' element={<Field />} />
-                <Route path='/activity/:src/:activityId' element={<Activity />} />
+      <LocaleApplication>
+        <Routes>
+          <Route path="/" element={<Layout />}>
+            <Route path="/" element={<ProtectedRoutes />}>
+              <Route path="/" element={<UserRoutes />}>
+                <Route path="/" element={<DataRoutes />}>
+                  <Route index element={<Navigate to={DEFAULT_ROUTE} replace />} />
+                  <Route path='/tabs/*' element={<MainTabs />} />
+                  <Route path='/field/:src/:fieldId/*' element={<Field />} />
+                  <Route path='/activity/:src/:activityId' element={<Activity />} />
+                </Route>
               </Route>
             </Route>
+            <Route path="/" element={<PublicRoutes />}>
+              <Route path="/login" element={<Login />} />
+            </Route>
           </Route>
-          <Route path="/" element={<PublicRoutes />}>
-            <Route path="/login" element={<Login />} />
-          </Route>
-        </Route>
-        <Route path="*" element={<Navigate to={DEFAULT_ROUTE} replace />} />
-      </Routes>
+          <Route path="*" element={<Navigate to={DEFAULT_ROUTE} replace />} />
+        </Routes>
+      </LocaleApplication>
     </ThemeProvider>
   );
 }

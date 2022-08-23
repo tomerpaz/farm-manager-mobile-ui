@@ -20,7 +20,19 @@
     "site": "Site",
     "parentField": "Parent Field",
     "plantSpacing": "Plant Spacing",
-    "rowSpacing": "Row Spacing"
+    "rowSpacing": "Row Spacing",
+    "activities": "Activities",
+    "map": "Map",
+    "fields": "Fields",
+    "satellite": "Satellite",
+    "details": "Details",
+    "dashboard": "Dashboard"
+
+
+
+
+
+
 
   }
   

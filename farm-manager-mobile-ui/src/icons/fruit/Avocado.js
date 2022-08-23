@@ -2,7 +2,7 @@ import React from 'react';
 import { SvgIcon } from '@mui/material';
 
 
-export default function( props )
+const Avocado  = ( props ) =>
 {
     return(
         <SvgIcon viewBox="0 0 76.025 76.025"   {...props}>
@@ -29,3 +29,4 @@ export default function( props )
         </SvgIcon>
     )
 }
+export default Avocado;

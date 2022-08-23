@@ -6,6 +6,26 @@
     "variety": "זן",
     "dunam": "דונם",
     "hectare": "הקטר",
-    "acre": "אקר"
+    "acre": "אקר",
+    "spray": "ריסוס",
+    "scouting": "ניטור מזיקים",
+    "harvest": "קטיף",
+    "market": "שיווק",
+    "irrigation": "השקיה",
+    "note": "הערה",
+    "endDate": "סיום",
+    "density": "עומר",
+    "season": "עונה",
+    "maturity": "בגרות",
+    "site": "אתר",
+    "parentField": "חלקת אם",
+    "plantSpacing": "מרווח בין שתילים",
+    "rowSpacing": "מרווח בין שורות",
+    "activities": "פעולות",
+    "map": "מפה",
+    "fields": "חלקות",
+    "satellite": "לווין",
+    "details": "פרטים",
+    "dashboard": "דשבורד"
+
 }
-  

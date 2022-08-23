@@ -8,29 +8,39 @@ import Loading from '../components/Loading'
 import he from "../lang/he.json";
 import en from "../lang/en.json";
 
+
+const getUserLang = (lang) =>{
+   if( lang === 'he'){
+    return he;
+   }
+
+   return en;
+
+}
+
 const UserRoutes = () => {
 
     const dispatch = useDispatch()
 
-
+    
     const { data: user, isLoading, isSuccess, isError, error } = useGetUserDataQuery()
-    // console.log('UserRoutes',user, isLoading, isSuccess, isError, error);
+   // console.log('UserRoutes',user, isLoading, isSuccess, isError, error);
 
 
     useEffect(() => {
 
-        // console.log(he);
+       // console.log(he);
         if (isSuccess) {
             // console.log(data.lang)
 
-            dispatch(setLang(en));
+            dispatch(setLang(getUserLang(user.lang)));
+            
+        } 
+    }, [ user, isLoading, isSuccess, isError])
 
-        }
-    }, [user, isLoading, isSuccess, isError])
-
-    if (isError) {
+    if(isError){
         console.log(error)
-        return <Login />
+        return <Login/>
     }
     return user ? <Outlet /> : <Loading />
 

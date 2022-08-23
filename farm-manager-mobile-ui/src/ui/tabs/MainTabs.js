@@ -12,9 +12,12 @@ import FieldList from './fields/FieldList';
 import { DEFAULT_ROUTE } from "../../App";
 import { selectFields } from '../../features/fields/fieldSlice';
 import ActivitiesList from './activities/ActivitiesList';
+import { selectLang } from '../../features/auth/authSlice';
+import { useSelector } from 'react-redux';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
+
 
 
     // const [getFields] = useGetFieldsQuery;
@@ -77,6 +80,8 @@ const MainTabs = () => {
 
     const { pathname } = useLocation();
 
+    const text = useSelector(selectLang)
+
     const paths = ['/tabs/map', '/tabs/fields', '/tabs/activities', 130, 44];
 
     const getIndex = ((element) => element === pathname);
@@ -119,9 +124,9 @@ const MainTabs = () => {
                     variant="fullWidth"
                 >
                     {/* <Tab label="Inbox" value="/inbox/:id" to="/inbox/1" component={Link} /> */}
-                    <Tab label="MAP" to={DEFAULT_ROUTE} component={Link}   {...a11yProps(0)} />
-                    <Tab label="Fields" to="/tabs/fields" component={Link} {...a11yProps(1)} />
-                    <Tab label="activities" to="/tabs/activities" component={Link}  {...a11yProps(2)} />
+                    <Tab label={text.map} to={DEFAULT_ROUTE} component={Link}   {...a11yProps(0)} />
+                    <Tab label={text.fields} to="/tabs/fields" component={Link} {...a11yProps(1)} />
+                    <Tab label={text.activities} to="/tabs/activities" component={Link}  {...a11yProps(2)} />
                     {/* <Tab label="Item One" {...a11yProps(0)} />
                     <Tab label="Item Two" {...a11yProps(1)} />
                     <Tab label="Item Three" {...a11yProps(2)} /> */}
