@@ -16,7 +16,9 @@ export const authApiSlice = apiSlice.injectEndpoints({
             }),
             invalidatesTags: [
                 { type: 'Field', id: "LIST" },
-                { type: 'User', id: "User" }
+                { type: 'User', id: "User" },
+                { type: 'Activities', id: "LIST" },
+                { type: 'FieldActivities', id: "LIST" }
             ]
         }),
         getUser: builder.mutation({

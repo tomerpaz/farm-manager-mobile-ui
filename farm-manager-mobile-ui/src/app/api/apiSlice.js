@@ -47,7 +47,7 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
     // }
     if (result?.error?.status === 401) {
         api.dispatch(api.util.resetApiState())
-        // api.dispatch( api.utils.invalidateTags))
+        api.dispatch( api.utils.invalidateTags(['Field', 'Activities', 'User', 'FieldActivities']))
 
         api.dispatch(logOut())
     }
