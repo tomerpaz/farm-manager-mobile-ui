@@ -23,7 +23,7 @@ const FieldInfo = ({ field }) => {
 
     const src = 'map'
 
-    console.log(field);
+   // console.log(field);
     return (
         <Box display={'flex'} flex={1} alignItems={'stretch'} justifyContent={'space-between'} flexDirection={'column'}>
             {field.polygon && <FieldMap field={field} height={height} />}

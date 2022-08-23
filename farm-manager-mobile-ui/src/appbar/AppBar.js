@@ -18,7 +18,7 @@ import MoreIcon from '@mui/icons-material/MoreVert';
 import Logout from '@mui/icons-material/Logout';
 
 import { useNavigate } from 'react-router-dom';
-import { logOut } from '../features/auth/authSlice';
+import { logOut, selectLang } from '../features/auth/authSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { useGetUserDataQuery } from '../features/auth/authApiSlice';
 
@@ -65,6 +65,10 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 const AppBar = () => {
+
+  const text = useSelector(selectLang)
+
+
   const [anchorEl, setAnchorEl] = useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
 
@@ -162,7 +166,7 @@ const AppBar = () => {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      <MenuItem>
+      {/* <MenuItem>
         <IconButton size="large" aria-label="show 4 new mails" color="inherit">
           <Badge badgeContent={4} color="error">
             <MailIcon />
@@ -193,7 +197,7 @@ const AppBar = () => {
           <AccountCircle />
         </IconButton>
         <p>Profile</p>
-      </MenuItem>
+      </MenuItem> */}
       <MenuItem onClick={handleLogout}>
         <IconButton
           size="large"
@@ -203,7 +207,7 @@ const AppBar = () => {
           <Logout />
         </IconButton>
 
-        <p>Logout</p>
+        <p>{text.logout}</p>
       </MenuItem>
     </Menu>
   );
@@ -280,7 +284,7 @@ const AppBar = () => {
           </Search>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-            <IconButton size="large" aria-label="show 4 new mails" color="inherit">
+            {/* <IconButton size="large" aria-label="show 4 new mails" color="inherit">
               <Badge badgeContent={4} color="error">
                 <MailIcon />
               </Badge>
@@ -293,7 +297,7 @@ const AppBar = () => {
               <Badge badgeContent={17} color="error">
                 <NotificationsIcon />
               </Badge>
-            </IconButton>
+            </IconButton> */}
             <IconButton
               onClick={handleLogout}
               size="large"
@@ -302,7 +306,7 @@ const AppBar = () => {
             >
               <Logout />
             </IconButton>
-            <IconButton
+            {/* <IconButton
               size="large"
               edge="end"
               aria-label="account of current user"
@@ -312,8 +316,8 @@ const AppBar = () => {
               color="inherit"
             >
               <AccountCircle />
-            </IconButton>
-          </Box>
+            </IconButton>*/}
+          </Box> 
           <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
             <IconButton
               size="large"
