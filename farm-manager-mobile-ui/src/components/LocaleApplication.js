@@ -12,8 +12,13 @@ import enLocale from 'date-fns/locale/en-GB';
 // import frLocale from 'date-fns/locale/fr';
 import { selectLang } from '../features/auth/authSlice';
 import { useSelector } from 'react-redux';
+import { prefixer } from 'stylis';
 
-
+// Create rtl cache
+// const cacheRtl = createCache({
+//   key: 'muirtl',
+//   stylisPlugins: [prefixer, rtlPlugin],
+// });
 
 const localeMap = {
     en: enLocale,
@@ -29,13 +34,12 @@ function getFnsLocale(lang) {
     if (result) {
         return result;
     }
-
     return enLocale; // default
 }
 
 const LocaleApplication = (props) => {
 
-    const {lang,dir} = useSelector(selectLang)
+    const { lang, dir } = useSelector(selectLang)
 
     const [cacheRtl, setCacheRtl] = useState(null);
     const [fnsLocaleValue, setFnsLocaleValue] = useState(getFnsLocale(lang));
@@ -44,7 +48,7 @@ const LocaleApplication = (props) => {
         if (dir === 'rtl') {
             setCacheRtl(createCache({
                 key: 'muirtl',
-                stylisPlugins: [rtlPlugin],
+                stylisPlugins: [prefixer, rtlPlugin],
             }));
         } else {
             setCacheRtl(null);
@@ -58,22 +62,11 @@ const LocaleApplication = (props) => {
 
 
 
-    if (cacheRtl) {
-        return (
-            <CacheProvider value={cacheRtl}>
-                <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={fnsLocaleValue}  {...props}>
-                   
-                </LocalizationProvider>
-            </CacheProvider>
-        )
-    } else {
-        return (
+    return cacheRtl ?
+        <CacheProvider value={cacheRtl}>
             <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={fnsLocaleValue}  {...props} />
-               
-           
-        )
-    }
-
+        </CacheProvider> :
+        <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={fnsLocaleValue}  {...props} />
 
 }
 export default LocaleApplication;
