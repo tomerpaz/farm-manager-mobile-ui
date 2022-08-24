@@ -62,13 +62,23 @@ const ActivitiesList = () => {
             return activities.map(e =>
 
                 <Fragment key={e.uuid}>
-                    <ListItem onClick={()=>navigate(`/activity/al/${e.uuid}`)}>
+                    <ListItem onClick={() => navigate(`/activity/al/${e.uuid}`)}>
                         <ListItemAvatar>
                             <Avatar sx={{ bgcolor: 'white' }}>
-                                <ActivityTypeIcon type={e.type}/>
+                                <ActivityTypeIcon type={e.type} />
                             </Avatar>
                         </ListItemAvatar>
-                        <ListItemText primary={activityDescription(e) + ' ' + e.fieldDesc} secondary={e.execution} />
+                        <ListItemText primary={
+                            <Box display={'flex'} flexDirection={'row'} flex={1} justifyContent={'space-between'}>
+                                <Typography >
+                                    {`${activityDescription(e)} ${e.fieldDesc}`}
+                                </Typography>
+                                <Typography>
+                                    {`${e.reference}`}
+                                </Typography>
+                            </Box>
+
+                        } secondary={e.execution} />
                     </ListItem>
                     <Divider />
                 </Fragment>

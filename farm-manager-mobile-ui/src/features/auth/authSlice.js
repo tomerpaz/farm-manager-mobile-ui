@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit"
 
 const authSlice = createSlice({
     name: 'auth',
-    initialState: { lang: {lang: 'en', dir: 'rtl'} , token: null},
+    initialState: { lang: {lang: 'en', dir: 'rtl'} , token: null, fieldFilter: ''},
     reducers: {
         setCredentials: (state, action) => {
             // const { token } = action.payload

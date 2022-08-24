@@ -11,6 +11,8 @@ import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
+import SearchOffIcon from '@mui/icons-material/SearchOff';
+
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import MailIcon from '@mui/icons-material/Mail';
 import NotificationsIcon from '@mui/icons-material/Notifications';
@@ -44,10 +46,11 @@ const SearchIconWrapper = styled('div')(({ theme }) => ({
   padding: theme.spacing(0, 2),
   height: '100%',
   position: 'absolute',
-  pointerEvents: 'none',
+  pointerEvents: 'all',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
+  zIndex: 3
 }));
 
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
@@ -277,7 +280,7 @@ const AppBar = () => {
           </Typography>
           <Search>
             <SearchIconWrapper>
-              <SearchIcon />
+              <SearchIcon onClick={e=>console.log('click')}/>
             </SearchIconWrapper>
             <StyledInputBase />
 

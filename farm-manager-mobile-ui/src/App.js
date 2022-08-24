@@ -8,12 +8,12 @@ import PublicRoutes from './router/PublicRoutes';
 import Layout from './components/Layout';
 import MainTabs from './ui/tabs/MainTabs';
 import Field from './ui/field/Field';
-import Activity from './ui/activity/Activity';
 import DataRoutes from './router/DataRoutes';
 import UserRoutes from './router/UserRoutes';
 import LocaleApplication from './components/LocaleApplication';
 import { selectLang } from './features/auth/authSlice';
 import { useSelector } from 'react-redux';
+import ActivityView from './ui/activity/view/ActivityView';
 
 
 
@@ -61,7 +61,7 @@ function App() {
                   <Route index element={<Navigate to={DEFAULT_ROUTE} replace />} />
                   <Route path='/tabs/*' element={<MainTabs />} />
                   <Route path='/field/:src/:fieldId/*' element={<Field />} />
-                  <Route path='/activity/:src/:activityId' element={<Activity />} />
+                  <Route path='/activity/:src/:activityId' element={<ActivityView />} />
                 </Route>
               </Route>
             </Route>

@@ -23,11 +23,10 @@ const baseQuery = fetchBaseQuery({
         return headers
     }
 })
-function sleep(time) {
-    return new Promise((resolve) => setTimeout(resolve, time));
-}
+
 const baseQueryWithReauth = async (args, api, extraOptions) => {
 
+    console.log(args)
     let result = await baseQuery(args, api, extraOptions)
 
     // if (result?.error?.status === 401) {
@@ -46,7 +45,7 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
     //     }
     // }
     if (result?.error?.status === 401) {
-        api.dispatch(api.util.resetApiState())
+      //  api.dispatch(api.util.resetApiState())
         api.dispatch( api.utils.invalidateTags(['Field', 'Activities', 'User', 'FieldActivities']))
 
         api.dispatch(logOut())
