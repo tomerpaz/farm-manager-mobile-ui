@@ -30,7 +30,37 @@
     "logout": "Logout",
     "date": "Date",
     "resources": "Reources",
-    "activity": "Activity"
+    "activity": "Activity",
+    "alias": "Alias",
+    "name": "Name",
+    "qty": "Qty",
+    "unit": "Unit",
+    "type": "Type",
+    "day": "Day",
+    "hour": "Hour",
+    "container": "Container",
+    "m3": "M3",
+    "kg": "KG",
+    "lit": "LIT",
+    "worker": "Worker",
+    "contractor": "Contractor",
+    "pesticide": "Pesticide",
+    "fertilizer": "Fertilizer",
+    "waterSource": "Water Source",
+    "water_source": "Water Source",
+    "workerGroup": "Worker Group",
+    "worker_group": "Worker Group",
+    "equipment": "Equipment",
+    "sprayer": "Sprayer",
+    "product": "Product",
+    "year": "Year",
+    "days": "Days"
+
+
+
+
+
+
 
 
 

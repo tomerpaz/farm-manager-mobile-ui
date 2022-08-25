@@ -20,6 +20,7 @@ import { useFieldsById } from '../../features/fields/fieldsApiSlice';
 import { selectLang } from '../../features/auth/authSlice';
 import { useGetUserDataQuery } from '../../features/auth/authApiSlice';
 import { displayFieldArea, displayFieldName } from '../FarmUtil';
+import { useEffect } from 'react';
 
 const Field = () => {
   const { pathname } = useLocation();
@@ -30,7 +31,6 @@ const Field = () => {
   const field = useFieldsById(user.year, Number(fieldId))
 
   const navigate = useNavigate()
-
 
   if (!field) {
     return <Loading />

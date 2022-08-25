@@ -19,17 +19,14 @@ const ActivityView = () => {
   console.log('data', activity);
   if (isLoading) return <Loading />
 
-
-
   if (activity && isSuccess) {
     return (
       <Box margin={1}>
         <ActivityHeaderView activity={activity} />
         <FieldsView activity={activity} />
         <ResourcesView activity={activity} />
-
         {activity.note &&
-          <Box>
+          <Box margin={1}>
             <Typography variant='h6'>
               {text.note}
             </Typography>

@@ -5,9 +5,9 @@ import { logOut } from '../../features/auth/authSlice'
 
 
 const baseQuery = fetchBaseQuery({
-     baseUrl: 'http://localhost:8080',
+    //  baseUrl: 'http://localhost:8080',
 
-    //   baseUrl: 'https://api.manager.farm',
+        baseUrl: 'https://api.manager.farm',
     // credentials: 'include',
     prepareHeaders: (headers, { getState }) => {
         //const token = getState().auth.token;
@@ -45,8 +45,13 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
     //     }
     // }
     if (result?.error?.status === 401) {
+        if(api.util && api.util.resetApiState){
+            api.dispatch( api.utils.resetApiState())
+        }
       //  api.dispatch(api.util.resetApiState())
-        api.dispatch( api.utils.invalidateTags(['Field', 'Activities', 'User', 'FieldActivities']))
+        // if(api.util && api.util.invalidateTags){
+        //     api.dispatch( api.utils.invalidateTags(['Field', 'Activities', 'User', 'FieldActivities']))
+        // }
 
         api.dispatch(logOut())
     }

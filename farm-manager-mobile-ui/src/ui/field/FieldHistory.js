@@ -62,7 +62,16 @@ const FieldHistory = () => {
                 <ActivityTypeIcon type={e.type} />
               </Avatar>
             </ListItemAvatar>
-            <ListItemText primary={activityDescription(e)} secondary={e.execution} />
+            <ListItemText primary={
+              < Box display={'flex'} flexDirection={'row'} flex={1} justifyContent={'space-between'}>
+                <Typography >
+                  {`${activityDescription(e)}`}
+                </Typography>
+                <Typography>
+                  {`${e.reference}`}
+                </Typography>
+              </Box>
+            } secondary={e.execution} />
           </ListItem>
           <Divider />
         </Fragment>

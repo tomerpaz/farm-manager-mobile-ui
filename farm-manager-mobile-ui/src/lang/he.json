@@ -30,7 +30,32 @@
     "logout": "יציאה",
     "date": "תאריך",
     "resources": "משאבים",
-    "activity": "פעולה"
+    "activity": "פעולה",
+    "alias": "כינוי",    
+    "name": "שם",
+    "qty": "כמות",
+    "unit": "יחידה",
+    "type": "סוג",
+    "day": "יום",
+    "hour": "שעה",
+    "container": "מיכל",
+    "m3": "קוב",
+    "kg": "ק\"ג",
+    "lit": "ליטר",
+    "worker": "עובד",
+    "contractor": "קבלן",
+    "pesticide": "חומר הדברה",
+    "fertilizer": "דשן",
+    "waterSource": "מקור מים",
+    "workerGroup": "קב' עובדים",
+    "water_source": "מקור מים",
+    "worker_group": "קב' עובדים",
+    "equipment": "ציוד",
+    "sprayer": "מרסס",
+    "product": "מוצר",
+    "year": "שנה",
+    "days": "ימים"
+
 
 
 
