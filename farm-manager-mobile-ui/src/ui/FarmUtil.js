@@ -1,9 +1,11 @@
-import { useSelector } from "react-redux";
-import { useGetUserDataQuery } from "../features/auth/authApiSlice";
-import { selectLang } from "../features/auth/authSlice";
-
-const GENERAL = 'GENERAL';
-const GENERAL_PLAN = 'GENERAL_PLAN';
+export const GENERAL = 'GENERAL';
+export const GENERAL_PLAN = 'GENERAL_PLAN';
+export const SPRAY = 'SPRAY';
+export const SPRAY_PLAN = 'SPRAY_PLAN';
+export const MARKET = 'MARKET';
+export const HARVEST = 'HARVEST';
+export const SCOUT = 'SCOUT';
+export const IRRIGATION = 'IRRIGATION';
 
 const CONTACROR = 'CONTACROR';
 
@@ -57,6 +59,9 @@ export const getResourceUsageUnit = (resource, activityDef) => {
 }
 
 export const getActivityTypeText = (type, text) => {
+    if(SCOUT === type){
+        return text.scouting;
+    }
     return [GENERAL, GENERAL_PLAN].includes(type) ? text.activity : text[type.toLowerCase()];
 
 }

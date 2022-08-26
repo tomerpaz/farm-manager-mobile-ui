@@ -2,30 +2,16 @@ import PropTypes from 'prop-types';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
-import Fab from '@mui/material/Fab';
-import AddIcon from '@mui/icons-material/Add';
-import ActivityForm from '../../activity/ActivityForm'
 import FieldsMap from './map/FieldsMap';
-import { Link, Route, Routes, useLocation, matchPath } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import FieldList from './fields/FieldList';
-
 import { DEFAULT_ROUTE } from "../../App";
-import { selectFields } from '../../features/fields/fieldSlice';
 import ActivitiesList from './activities/ActivitiesList';
 import { selectLang } from '../../features/auth/authSlice';
 import { useSelector } from 'react-redux';
-
+import ActionSpeedDial from '../../components/ui/ActionSpeedDial';
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
-
-
-
-    // const [getFields] = useGetFieldsQuery;
-
-    // console.log('getFields',getFields)
-
-
-
 
     return (
         <div
@@ -50,23 +36,6 @@ TabPanel.propTypes = {
     value: PropTypes.number.isRequired,
 };
 
-
-const fabStyle = {
-    position: 'absolute',
-    bottom: 80,
-    right: 24,
-};
-
-
-function FloatingActionButtons() {
-    return (
-        <Fab color="primary" aria-label="add" sx={fabStyle}>
-            <AddIcon />
-        </Fab>
-    );
-}
-
-
 function a11yProps(index) {
     return {
         id: `simple-tab-${index}`,
@@ -74,76 +43,38 @@ function a11yProps(index) {
     };
 }
 
-
-
 const MainTabs = () => {
 
     const { pathname } = useLocation();
-
     const text = useSelector(selectLang)
-
     const paths = ['/tabs/map', '/tabs/fields', '/tabs/activities', 130, 44];
-
     const getIndex = ((element) => element === pathname);
-
-
-    // const {
-    //     data,
-    //     isLoading,
-    //     isSuccess,
-    //     isError,
-    //     error
-    // } = useGetFieldsByYearQuery(user.year)
-
-
-    // if(!data){
-    //     return <div>Loding</div>
-    // }
-
-    // const fields = data.ids.map(id=>data.entities[id]);
-
-    //   console.log('fields',fields)
-
-
     const value = paths.findIndex(getIndex) > 0 ? paths.findIndex(getIndex) : 0;
-
-
-    //    console.log('value', value)
-
-
 
     return (
         <Box display={'flex'} flex={1} flexDirection={'column'}>
-
-
             <Box alignItems={'stretch'} display={'flex'} flex={1} flexDirection={'column'} sx={{ borderBottom: 1, borderColor: 'divider' }}>
-
                 <Tabs value={value} aria-label="basic tabs example"
                     // indicatorColor="secondary"
                     textColor="inherit"
                     variant="fullWidth"
                 >
-                    {/* <Tab label="Inbox" value="/inbox/:id" to="/inbox/1" component={Link} /> */}
                     <Tab label={text.map} to={DEFAULT_ROUTE} component={Link}   {...a11yProps(0)} />
                     <Tab label={text.fields} to="/tabs/fields" component={Link} {...a11yProps(1)} />
                     <Tab label={text.activities} to="/tabs/activities" component={Link}  {...a11yProps(2)} />
-                    {/* <Tab label="Item One" {...a11yProps(0)} />
-                    <Tab label="Item Two" {...a11yProps(1)} />
-                    <Tab label="Item Three" {...a11yProps(2)} /> */}
                 </Tabs>
             </Box>
             <TabPanel component={'div'} value={value} index={0}>
                 <FieldsMap />
-                <FloatingActionButtons />
+                <ActionSpeedDial plan={false} />
             </TabPanel>
             <TabPanel value={value} index={1}>
                 <FieldList />
-                <FloatingActionButtons />
+                <ActionSpeedDial plan={false} />
             </TabPanel>
             <TabPanel value={value} index={2}>
                 <ActivitiesList />
-                <FloatingActionButtons />
-
+                <ActionSpeedDial bottom={80} plan={false} />
             </TabPanel>
         </Box>
     );
