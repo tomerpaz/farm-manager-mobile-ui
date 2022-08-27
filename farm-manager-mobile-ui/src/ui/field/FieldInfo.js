@@ -7,6 +7,7 @@ import { useGetUserDataQuery } from '../../features/auth/authApiSlice';
 import { useSelector } from 'react-redux'
 import { selectLang } from '../../features/auth/authSlice';
 import InfoLine from './InfoLine'
+import ActionSpeedDial from '../../components/ui/ActionSpeedDial'
 
 const FieldInfo = ({ field }) => {
 
@@ -23,7 +24,7 @@ const FieldInfo = ({ field }) => {
 
     const src = 'map'
 
-   // console.log(field);
+    // console.log(field);
     return (
         <Box display={'flex'} flex={1} alignItems={'stretch'} justifyContent={'space-between'} flexDirection={'column'}>
             {field.polygon && <FieldMap field={field} height={height} />}
@@ -33,19 +34,14 @@ const FieldInfo = ({ field }) => {
             <InfoLine value={field.endDate} title={text.endDate} />
             <InfoLine value={field.tag1Name} title={field.tag1Type} />
             <InfoLine value={field.tag2Name} title={field.tag2Type} />
-            <InfoLine value={field.maturity} title={text.maturity} />            
+            <InfoLine value={field.maturity} title={text.maturity} />
             <InfoLine value={field.density} title={text.density} />
             <InfoLine value={field.plantSpacing} title={text.plantSpacing} />
             <InfoLine value={field.rowSpacing} title={text.rowSpacing} />
             <InfoLine value={field.note} title={text.note} />
 
+            {/* <ActionSpeedDial bottom={310} plan={false} /> */}
 
-
-            {/* <Typography variant="body2" color="text.secondary">
-                This impressive paella is a perfect party dish and a fun meal to cook
-                together with your guests. Add 1 cup of frozen peas along with the mussels,
-                if you like.
-            </Typography> */}
         </Box>
     )
 }

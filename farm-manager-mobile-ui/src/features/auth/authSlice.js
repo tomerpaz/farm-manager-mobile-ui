@@ -13,6 +13,7 @@ const authSlice = createSlice({
             state.lang = action.payload
         },
         logOut: (state, action) => {
+            console.log('authSlice.logOut()')
             localStorage.removeItem('token')
             state.token = null
 

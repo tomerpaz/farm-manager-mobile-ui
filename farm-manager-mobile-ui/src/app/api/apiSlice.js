@@ -46,6 +46,7 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
     //     }
     // }
     if (result?.status === 401) {
+        console.log('result?.status === 401')
 
         api.dispatch(logOut())
 
@@ -59,6 +60,20 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
 
     }
     if (result?.error?.status === 401) {
+        console.log('result?.error?.status === 401')
+
+        api.dispatch(logOut())
+        if(api.util && api.util.resetApiState){
+            api.dispatch( api.utils.resetApiState())
+        }
+      //  api.dispatch(api.util.resetApiState())
+        // if(api.util && api.util.invalidateTags){
+        //     api.dispatch( api.utils.invalidateTags(['Field', 'Activities', 'User', 'FieldActivities']))
+        // }
+
+    }
+    if (result?.error?.data?.status === 401) {
+        console.log('result?.error?.data?.status === 401')
         api.dispatch(logOut())
         if(api.util && api.util.resetApiState){
             api.dispatch( api.utils.resetApiState())

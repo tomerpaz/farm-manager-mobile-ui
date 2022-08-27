@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { Outlet } from 'react-router-dom'
 import { useGetUserDataQuery } from '../features/auth/authApiSlice'
-import { setLang } from '../features/auth/authSlice'
+import { logOut, setLang } from '../features/auth/authSlice'
 import Login from '../features/auth/Login'
 import Loading from '../components/Loading'
 import he from "../lang/he.json";
@@ -39,8 +39,9 @@ const UserRoutes = () => {
     }, [ user, isLoading, isSuccess, isError])
 
     if(isError){
-        console.log(error)
-        return <Login/>
+        console.log('UserRoutes isError: ',error)
+        dispatch(logOut());
+        // return <Login msg={error}/>
     }
     return user ? <Outlet /> : <Loading />
 

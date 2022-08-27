@@ -1,4 +1,4 @@
-import { Box, Button, InputAdornment, TextField } from "@mui/material"
+import { Box, Button, InputAdornment, TextField, Typography } from "@mui/material"
 import { useNavigate } from "react-router-dom";
 import { useForm, Controller, useWatch } from "react-hook-form";
 import AccountCircle from '@mui/icons-material/AccountCircle';
@@ -18,7 +18,6 @@ const Login = (props) => {
 
     // const dispatch = useDispatch()
 
-      
     const navigate = useNavigate()
 
     const [login] = useLoginMutation()
@@ -36,7 +35,7 @@ const Login = (props) => {
         try {
             const loginData = await login(e).unwrap()
             localStorage.setItem('token', loginData.token)
-           // dispatch(setCredentials(loginData.token))
+            // dispatch(setCredentials(loginData.token))
             navigate(DEFAULT_ROUTE)
         } catch (err) {
 
@@ -79,7 +78,6 @@ const Login = (props) => {
             onSubmit={handleSubmit(onSubmit)}
 
         >
-
             <Box
                 marginTop={15}
                 flex={1}
