@@ -15,13 +15,13 @@ const FieldsView = ({ activity }) => {
 
     const text = useSelector(selectLang)
     const { data: user } = useGetUserDataQuery()
-    const [expendFields, setExpendFields] = useState(false);
+    const [expend, setExpend] = useState(false);
 
     if (isArrayEmpty(activity.resources)) {
         return <Fragment />
     }
 
-    const resources = (expendFields && activity.resources.length > TRASHHOLD) ? activity.resources : activity.resources.slice(0, TRASHHOLD);
+    const resources = (expend && activity.resources.length > TRASHHOLD) ? activity.resources : activity.resources.slice(0, TRASHHOLD);
 
     return (
         <Box marginTop={1}>
@@ -30,8 +30,8 @@ const FieldsView = ({ activity }) => {
                     {text.resources}
                 </Typography >
                 {activity.resources.length > TRASHHOLD &&
-                    <IconButton sx={{ marginLeft: 1, marginRight: 1 }} onClick={() => setExpendFields(!expendFields)}>
-                        <Badge badgeContent={activity.fields.length} color="primary">
+                    <IconButton sx={{ marginLeft: 1, marginRight: 1 }} onClick={() => setExpend(!expend)}>
+                        <Badge badgeContent={activity.resources.length} color="primary">
                             <Menu color="action" />
                         </Badge>
                     </IconButton>

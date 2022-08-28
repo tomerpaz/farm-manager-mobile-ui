@@ -1,5 +1,6 @@
 import { Box } from '@mui/material';
 import { PieChart, Pie, Cell, ResponsiveContainer,BarChart , Bar } from 'recharts';
+import WaterBarchart from './dash/WaterBarchart';
 
 const data = [
     { name: 'Group A', value: 400 },
@@ -91,12 +92,13 @@ const FieldDashboard = () =>{
                         </Pie>
                     </PieChart>
                 </ResponsiveContainer>
+                <WaterBarchart />
 
-                <ResponsiveContainer width="100%" height={300}>
+                {/* <ResponsiveContainer width="100%" height={300}>
                     <BarChart width={150} height={40} data={data2}>
                         <Bar dataKey="uv" fill="#8884d8" />
                     </BarChart>
-                </ResponsiveContainer>
+                </ResponsiveContainer> */}
             </Box>
 
         );
