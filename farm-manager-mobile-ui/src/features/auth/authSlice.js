@@ -2,10 +2,9 @@ import { createSlice } from "@reduxjs/toolkit"
 
 const authSlice = createSlice({
     name: 'auth',
-    initialState: { lang: {lang: 'en', dir: 'rtl'} , token: null, fieldFilter: ''},
+    initialState: { lang: {lang: 'en', dir: 'rtl'} , token: localStorage.getItem('token'), fieldFilter: ''},
     reducers: {
         setCredentials: (state, action) => {
-            // const { token } = action.payload
             localStorage.setItem('token', action.payload)
             state.token = action.payload
         },
@@ -13,7 +12,6 @@ const authSlice = createSlice({
             state.lang = action.payload
         },
         logOut: (state, action) => {
-            console.log('authSlice.logOut()')
             localStorage.removeItem('token')
             state.token = null
 

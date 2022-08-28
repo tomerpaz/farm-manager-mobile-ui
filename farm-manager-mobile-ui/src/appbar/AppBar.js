@@ -20,7 +20,7 @@ import MoreIcon from '@mui/icons-material/MoreVert';
 import Logout from '@mui/icons-material/Logout';
 
 import { useNavigate } from 'react-router-dom';
-import { logOut, selectLang } from '../features/auth/authSlice';
+import { logOut, selectCurrentToken, selectLang } from '../features/auth/authSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { useGetUserDataQuery } from '../features/auth/authApiSlice';
 
@@ -82,7 +82,7 @@ const AppBar = () => {
 
   //const { data: user } = useGetUserDataQuery()
 
-  const user = localStorage.getItem('token');
+	const token = useSelector(selectCurrentToken);
 
   const [filterAnchorEl, setFilterAnchorEl] = useState(null);
 
@@ -215,7 +215,7 @@ const AppBar = () => {
     </Menu>
   );
 
-  if (!user) {
+  if (!token) {
     return <Box sx={{  flexGrow: 1 }}>
       <MuiAppBar dir='ltr' position="static" elevation={0}>
         <Toolbar>

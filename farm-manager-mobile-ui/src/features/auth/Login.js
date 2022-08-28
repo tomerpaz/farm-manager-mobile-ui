@@ -16,7 +16,7 @@ const Login = (props) => {
 
 
 
-    // const dispatch = useDispatch()
+    const dispatch = useDispatch()
 
     const navigate = useNavigate()
 
@@ -34,8 +34,7 @@ const Login = (props) => {
         // console.log(e)
         try {
             const loginData = await login(e).unwrap()
-            localStorage.setItem('token', loginData.token)
-            // dispatch(setCredentials(loginData.token))
+            dispatch(setCredentials(loginData.token))
             navigate(DEFAULT_ROUTE)
         } catch (err) {
 

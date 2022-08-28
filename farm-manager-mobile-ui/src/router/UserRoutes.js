@@ -21,28 +21,15 @@ const getUserLang = (lang) =>{
 const UserRoutes = () => {
 
     const dispatch = useDispatch()
-
     
     const { data: user, isLoading, isSuccess, isError, error } = useGetUserDataQuery()
-   // console.log('UserRoutes',user, isLoading, isSuccess, isError, error);
-
 
     useEffect(() => {
-
-       // console.log(he);
         if (isSuccess) {
-            // console.log(data.lang)
-
             dispatch(setLang(getUserLang(user.lang)));
-            
         } 
     }, [ user, isLoading, isSuccess, isError])
 
-    if(isError){
-        console.log('UserRoutes isError: ',error)
-        dispatch(logOut());
-        // return <Login msg={error}/>
-    }
     return user ? <Outlet /> : <Loading />
 
 }

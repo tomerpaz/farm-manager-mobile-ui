@@ -1,8 +1,11 @@
 import React from "react"
+import { useSelector } from "react-redux"
 import { Navigate, Outlet } from "react-router-dom"
+import { selectCurrentToken } from "../features/auth/authSlice"
 
 const ProtectedRoutes = () => {
-	const token = localStorage.getItem("token")
+	
+	const token = useSelector(selectCurrentToken)
 	return token ? <Outlet /> : <Navigate to="/login" />
 }
 
