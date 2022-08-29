@@ -37,16 +37,8 @@ const FieldHistory = () => {
 
 
   const activityDescription = (e) => {
-    // if(!text[e.type]){
-    //     console.log(e.type)
-    // }
-
     return e.activityDef ? e.activityDef.name : text[e.type.toLowerCase()];
   }
-
-  //console.log('FieldHistory',data)
-
-
 
   const renderRows = () => {
     if (isSuccess && data) {
