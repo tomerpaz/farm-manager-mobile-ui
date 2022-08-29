@@ -33,7 +33,7 @@ const ActionSpeedDial = ({ plan, bottom }) => {
 
 
   return (
-    <Box sx={{ height: 330, flexGrow: 1 }}>
+    <Box >
       <Backdrop open={open} />
       <SpeedDial
         ariaLabel="Activity tooltip example"
