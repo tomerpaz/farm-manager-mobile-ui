@@ -20,7 +20,7 @@ import MoreIcon from '@mui/icons-material/MoreVert';
 import Logout from '@mui/icons-material/Logout';
 
 import { useNavigate } from 'react-router-dom';
-import { logOut, selectCurrentToken, selectLang } from '../features/auth/authSlice';
+import { logOut, selectCurrentToken, selectLang } from '../features/app/appSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { useGetUserDataQuery } from '../features/auth/authApiSlice';
 

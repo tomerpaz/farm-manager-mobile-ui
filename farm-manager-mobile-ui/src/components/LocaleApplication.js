@@ -10,7 +10,7 @@ import enLocale from 'date-fns/locale/en-GB';
 // import ptLocale from 'date-fns/locale/pt';
 // import nlLocale from 'date-fns/locale/nl';
 // import frLocale from 'date-fns/locale/fr';
-import { selectLang } from '../features/auth/authSlice';
+import { selectLang } from '../features/app/appSlice';
 import { useSelector } from 'react-redux';
 import { prefixer } from 'stylis';
 

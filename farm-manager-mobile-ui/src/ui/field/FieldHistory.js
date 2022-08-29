@@ -3,7 +3,7 @@ import { Avatar, List, ListItem, ListItemText, ListItemAvatar, Box, Button, Typo
 import ImageIcon from '@mui/icons-material/Image';
 import { useSelector } from 'react-redux';
 import { ChevronLeftOutlined, ChevronRightOutlined } from '@mui/icons-material';
-import { selectLang } from '../../features/auth/authSlice';
+import { selectLang } from '../../features/app/appSlice';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useGetActivitiesFieldQuery, useGetActivitiesFlatQuery } from '../../features/activities/activitiesApiSlice';
 import Loading from '../../components/Loading';

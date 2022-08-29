@@ -17,7 +17,7 @@ import FieldHistory from './FieldHistory';
 import FieldImagery from './FieldImagery';
 import { getFruitIcon } from '../../icons/FruitIconUtil';
 import { useFieldsById } from '../../features/fields/fieldsApiSlice';
-import { selectLang } from '../../features/auth/authSlice';
+import { selectLang } from '../../features/app/appSlice';
 import { useGetUserDataQuery } from '../../features/auth/authApiSlice';
 import { displayFieldArea, displayFieldName } from '../FarmUtil';
 import { useEffect } from 'react';

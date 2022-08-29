@@ -4,7 +4,7 @@ import ImageIcon from '@mui/icons-material/Image';
 import { useSelector } from 'react-redux';
 import { getActivitiesState, useGetActivitiesFlatQuery } from '../../../features/activities/activitiesApiSlice';
 import { ChevronLeftOutlined, ChevronRightOutlined } from '@mui/icons-material';
-import { selectLang } from '../../../features/auth/authSlice';
+import { selectLang } from '../../../features/app/appSlice';
 import ListPager from '../../../components/ui/ListPager';
 import Loading from '../../../components/Loading';
 import ActivityTypeIcon from '../../../icons/ActivityTypeIcon';

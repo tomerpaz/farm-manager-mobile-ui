@@ -3,7 +3,7 @@ import { Badge, Box, IconButton, TableRow, Table, TableBody, TableCell, TableCon
 import { Fragment, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useGetUserDataQuery } from '../../../features/auth/authApiSlice'
-import { selectLang } from '../../../features/auth/authSlice'
+import { selectLang } from '../../../features/app/appSlice'
 import { isArrayEmpty } from '../../FarmUtil'
 import { SECONDARY_LIGHT } from '../../../App'
 

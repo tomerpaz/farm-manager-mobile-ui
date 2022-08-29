@@ -1,7 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit'
 import fieldReducer from '../features/fields/fieldSlice'
 import { apiSlice } from './api/apiSlice'
-import authReducer from '../features/auth/authSlice'
+import appReducer from '../features/app/appSlice'
 
 // export default configureStore({
 //   reducer: {
@@ -13,8 +13,8 @@ import authReducer from '../features/auth/authSlice'
 export default configureStore({
   reducer: {
       [apiSlice.reducerPath]: apiSlice.reducer,
-      auth: authReducer,
-      field: fieldReducer,
+      app: appReducer,
+      // field: fieldReducer,
   },
   middleware: getDefaultMiddleware =>
       getDefaultMiddleware().concat(apiSlice.middleware),

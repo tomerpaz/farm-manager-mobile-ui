@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { logOut } from '../../features/auth/authSlice'
+import { logOut } from '../../features/app/appSlice'
 
 
 
@@ -10,7 +10,7 @@ const baseQuery = fetchBaseQuery({
     baseUrl: 'https://api.manager.farm',
     // credentials: 'include',
     prepareHeaders: (headers, { getState }) => {
-        const token = getState().auth.token;
+        const token = getState().app.token;
 
         //const token = localStorage.getItem('token');
         if (token) {

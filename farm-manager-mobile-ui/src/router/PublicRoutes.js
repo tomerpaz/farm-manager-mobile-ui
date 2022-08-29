@@ -2,7 +2,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import {Navigate, Outlet} from 'react-router-dom'
 import { DEFAULT_ROUTE } from '../App';
-import { selectCurrentToken } from '../features/auth/authSlice';
+import { selectCurrentToken } from '../features/app/appSlice';
 
 const  PublicRoutes = () =>{
 	const token = useSelector(selectCurrentToken);

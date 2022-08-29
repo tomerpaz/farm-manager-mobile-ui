@@ -7,7 +7,7 @@ import ColorPalette from './ColorPalette'
 import FieldMap from './FieldMap'
 import { useGetUserDataQuery } from '../../features/auth/authApiSlice';
 import { useSelector } from 'react-redux'
-import { selectLang } from '../../features/auth/authSlice'
+import { selectLang } from '../../features/app/appSlice'
 import { asShortStringDate, isArrayEmpty, newDate, subtractDays, toUTCDate } from '../FarmUtil'
 import Loading from '../../components/Loading'
 

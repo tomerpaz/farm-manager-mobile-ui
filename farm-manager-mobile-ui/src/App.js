@@ -11,7 +11,7 @@ import Field from './ui/field/Field';
 import DataRoutes from './router/DataRoutes';
 import UserRoutes from './router/UserRoutes';
 import LocaleApplication from './components/LocaleApplication';
-import { selectLang } from './features/auth/authSlice';
+import { selectLang } from './features/app/appSlice';
 import { useSelector } from 'react-redux';
 import ActivityView from './ui/activity/view/ActivityView';
 

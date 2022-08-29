@@ -11,7 +11,7 @@ import ShareIcon from '@mui/icons-material/Share';
 import ActivityTypeIcon from '../../icons/ActivityTypeIcon';
 import { GENERAL, getActivityTypeText, HARVEST, IRRIGATION, SPRAY, MARKET, SCOUT } from '../../ui/FarmUtil';
 import { useSelector } from 'react-redux';
-import { selectLang } from '../../features/auth/authSlice';
+import { selectLang } from '../../features/app/appSlice';
 
 const activities = [GENERAL, IRRIGATION, SPRAY, SCOUT,  HARVEST, MARKET]
 

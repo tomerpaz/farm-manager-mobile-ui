@@ -9,7 +9,7 @@ import LogoLeaf from "../../icons/LogoLeaf";
 import { useLoginMutation } from "./authApiSlice";
 import { DEFAULT_ROUTE } from "../../App";
 import { useEffect } from "react";
-import { setCredentials } from "./authSlice";
+import { setCredentials } from "../app/appSlice";
 import { useDispatch } from "react-redux";
 
 const Login = (props) => {
@@ -34,7 +34,7 @@ const Login = (props) => {
         // console.log(e)
         try {
             const loginData = await login(e).unwrap()
-            dispatch(setCredentials(loginData.token))
+            dispatch(setCredentials(loginData))
             navigate(DEFAULT_ROUTE)
         } catch (err) {
 

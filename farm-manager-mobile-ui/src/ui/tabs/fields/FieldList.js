@@ -8,7 +8,7 @@ import { Divider, ListItemAvatar, Avatar, BottomNavigation, BottomNavigationActi
 import { Link } from 'react-router-dom';
 import { getFruitIcon } from '../../../icons/FruitIconUtil';
 import { useSelector } from 'react-redux';
-import { selectLang } from '../../../features/auth/authSlice';
+import { selectLang } from '../../../features/app/appSlice';
 import { useFields } from '../../../features/fields/fieldsApiSlice';
 import { useGetUserDataQuery } from '../../../features/auth/authApiSlice';
 import { displayFieldArea, displayFieldName } from '../../FarmUtil';

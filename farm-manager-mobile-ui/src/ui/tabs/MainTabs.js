@@ -7,7 +7,7 @@ import { Link, useLocation } from 'react-router-dom';
 import FieldList from './fields/FieldList';
 import { DEFAULT_ROUTE } from "../../App";
 import ActivitiesList from './activities/ActivitiesList';
-import { selectLang } from '../../features/auth/authSlice';
+import { selectLang } from '../../features/app/appSlice';
 import { useSelector } from 'react-redux';
 import ActionSpeedDial from '../../components/ui/ActionSpeedDial';
 function TabPanel(props) {
