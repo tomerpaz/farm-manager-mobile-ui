@@ -10,9 +10,9 @@ const baseQuery = fetchBaseQuery({
     baseUrl: 'https://api.manager.farm',
     // credentials: 'include',
     prepareHeaders: (headers, { getState }) => {
-        //const token = getState().auth.token;
+        const token = getState().auth.token;
 
-        const token = localStorage.getItem('token');
+        //const token = localStorage.getItem('token');
         if (token) {
 
             headers.set("X-Authorization", `Bearer ${token}`)

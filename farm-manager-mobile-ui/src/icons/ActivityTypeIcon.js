@@ -3,7 +3,7 @@ import Harvest from '@mui/icons-material/NaturePeople';
 import Irrigation from '@mui/icons-material/Opacity';
 import Spray from '@mui/icons-material/BugReport';
 import Market from '@mui/icons-material/AttachMoney';
-import Scout from '@mui/icons-material/BugReport';
+import Scout from '@mui/icons-material/PestControl';
 import { SECONDARY_MAIN } from '../App';
 
 const ActivityTypeIcon = ({ type }) => {
