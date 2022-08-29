@@ -59,7 +59,9 @@ function App() {
               <Route path="/" element={<UserRoutes />}>
                 <Route path="/" element={<DataRoutes />}>
                   <Route index element={<Navigate to={DEFAULT_ROUTE} replace />} />
+                  <Route path='/tabs/activities/:page' element={<MainTabs />} />
                   <Route path='/tabs/*' element={<MainTabs />} />
+                  <Route path='/field/:src/:fieldId/history/:page' element={<Field />} />
                   <Route path='/field/:src/:fieldId/*' element={<Field />} />
                   <Route path='/activity/:src/:activityId' element={<ActivityView />} />
                 </Route>

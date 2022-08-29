@@ -3,7 +3,7 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import FieldsMap from './map/FieldsMap';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useParams } from 'react-router-dom';
 import FieldList from './fields/FieldList';
 import { DEFAULT_ROUTE } from "../../App";
 import ActivitiesList from './activities/ActivitiesList';
@@ -46,8 +46,11 @@ function a11yProps(index) {
 const MainTabs = () => {
 
     const { pathname } = useLocation();
+    const { page } = useParams()
+
+    console.log('pathname',pathname)
     const text = useSelector(selectLang)
-    const paths = ['/tabs/map', '/tabs/fields', '/tabs/activities', 130, 44];
+    const paths = ['/tabs/map', '/tabs/fields', `/tabs/activities/${page}`, 130, 44];
     const getIndex = ((element) => element === pathname);
     const value = paths.findIndex(getIndex) > 0 ? paths.findIndex(getIndex) : 0;
 
@@ -61,7 +64,7 @@ const MainTabs = () => {
                 >
                     <Tab label={text.map} to={DEFAULT_ROUTE} component={Link}   {...a11yProps(0)} />
                     <Tab label={text.fields} to="/tabs/fields" component={Link} {...a11yProps(1)} />
-                    <Tab label={text.activities} to="/tabs/activities" component={Link}  {...a11yProps(2)} />
+                    <Tab label={text.activities} to="/tabs/activities/0" component={Link}  {...a11yProps(2)} />
                 </Tabs>
             </Box>
             <TabPanel component={'div'} value={value} index={0}>

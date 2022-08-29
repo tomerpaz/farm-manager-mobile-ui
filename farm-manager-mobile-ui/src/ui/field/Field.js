@@ -114,7 +114,7 @@ const Field = () => {
         />
         <BottomNavigationAction
           label={text.activities}
-          to={`/field/${src}/${fieldId}/history`} component={Link}
+          to={`/field/${src}/${fieldId}/history/0`} component={Link}
           icon={<RestoreIcon />}
         />
         <BottomNavigationAction

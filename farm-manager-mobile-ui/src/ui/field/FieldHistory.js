@@ -11,8 +11,7 @@ import ListPager from '../../components/ui/ListPager';
 import ActivityTypeIcon from '../../icons/ActivityTypeIcon';
 
 const FieldHistory = () => {
-  const [page, setPage] = useState(0);
-  const { fieldId } = useParams()
+  const { fieldId, page, src } = useParams()
   const navigate = useNavigate();
 
   const height = window.window.innerHeight - 270;
@@ -86,7 +85,7 @@ const FieldHistory = () => {
         {renderRows()}
 
       </List>
-      <ListPager dir={dir} page={page} totalPages={data.totalPages} setPage={setPage} />
+      <ListPager dir={dir} page={Number(page)} totalPages={data.totalPages} setPage={(value) => navigate(`/field/${src}/${fieldId}/history/${value}`)} />
     </Box>
   )
 }
