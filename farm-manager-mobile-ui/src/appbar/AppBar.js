@@ -23,6 +23,7 @@ import { useNavigate } from 'react-router-dom';
 import { logOut, selectCurrentToken, selectLang } from '../features/app/appSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { useGetUserDataQuery } from '../features/auth/authApiSlice';
+import AppBarDialog from './AppBarDialog';
 
 
 const Search = styled('div')(({ theme }) => ({
@@ -76,6 +77,9 @@ const AppBar = () => {
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
 
   const [drawerAnchorEl, setDrawerAnchorEl] = useState(null);
+
+
+  const [dialogOpen, setDialogOpen] = useState(false);
 
 
   const dispatch = useDispatch()
@@ -233,27 +237,7 @@ const AppBar = () => {
     </Box>
   }
 
-  const renderDrawer =
-    (
-
-      // <SwipeableDrawer
-      //   anchor={drawerAnchorEl}
-      //   open={isDrawerOpen}
-      //   onClose={handleDrawerClose}
-      //   onOpen={handleDrawerOpen}
-      // >
-      // <div>HI</div>
-      // </SwipeableDrawer>
-
-      <SwipeableDrawer sx={{width: '100%'}}
-        anchor={'left'}
-        open={isDrawerOpen}
-        onClose={handleDrawerClose}
-        onOpen={handleDrawerOpen}
-      >
-       <div>JI</div>
-      </SwipeableDrawer>
-    )
+  
 
 
   return (
@@ -265,7 +249,7 @@ const AppBar = () => {
             edge="start"
             color="inherit"
             aria-label="open drawer"
-            onClick={handleDrawerOpen}
+            onClick={()=>setDialogOpen(true)}
             sx={{ mr: 2 }}
           >
             <MenuIcon />
@@ -337,7 +321,7 @@ const AppBar = () => {
       </MuiAppBar>
       {renderMobileMenu}
       {renderMenu}
-      {/* {renderDrawer} */}
+      <AppBarDialog open={dialogOpen} handleClose={()=>setDialogOpen(false)} />
     </Box>
   );
 }
