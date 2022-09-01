@@ -7,14 +7,14 @@ import { logOut, selectLang } from '../../features/app/appSlice';
 import { useGetUserDataQuery } from '../../features/auth/authApiSlice';
 import { useFieldsById } from '../../features/fields/fieldsApiSlice';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
+import TelegramIcon from '@mui/icons-material/Telegram';
+
+const ShareLocationMenu = ({ field }) => {
 
 
-const ShareLocationMenu = ({field}) => {
 
 
-
-
- //   console.log(navigator.appVersion);
+    //   console.log(navigator.appVersion);
     const [anchorEl, setAnchorEl] = React.useState(null);
 
     const handleMenu = (event) => {
@@ -27,7 +27,7 @@ const ShareLocationMenu = ({field}) => {
 
 
 
-    console.log('field',field);
+    console.log('field', field);
 
     return (
 
@@ -57,18 +57,7 @@ const ShareLocationMenu = ({field}) => {
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
             >
-                {/* <MenuItem onClick={() => console.log('Google Maps')}>
-                    <IconButton
-                        size="large"
-                        aria-label="log out"
-                        color="inherit"
-                    >
-                        <ShareLocation />
-                    </IconButton>
-
-                    {'Google'}
-                </MenuItem> */}
-                <MenuItem onClick={()=> window.open('whatsapp://send?text=This is WhatsApp sharing example using button')}>
+                <MenuItem onClick={() => window.open('whatsapp://send?text=This is WhatsApp sharing example using button')}>
                     <IconButton
                         size="large"
                         aria-label="log out"
@@ -79,41 +68,22 @@ const ShareLocationMenu = ({field}) => {
 
                     {'Whatsapp'}
                 </MenuItem>
+                <MenuItem onClick={() => console.log('Google Maps')}>
+                    <IconButton
+                        size="large"
+                        aria-label="log out"
+                        color="inherit"
+                    >
+                        <TelegramIcon />
+                    </IconButton>
+
+                    {'Telegram'}
+                </MenuItem>
             </Menu>
         </Box>)
 }
 
 export default ShareLocationMenu
+//tg://msg_url?url={url}&text={text}
 
 
-/*
-  <IconButton
-                size="large"
-                aria-label="account of current user"
-                aria-controls="menu-appbar"
-                aria-haspopup="true"
-                onClick={handleMenu}
-                color="inherit"
-              >
-                <AccountCircle />
-              </IconButton>
-              <Menu
-                id="menu-appbar"
-                anchorEl={anchorEl}
-                anchorOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                open={Boolean(anchorEl)}
-                onClose={handleClose}
-              >
-                <MenuItem onClick={handleClose}>Profile</MenuItem>
-                <MenuItem onClick={handleClose}>My account</MenuItem>
-              </Menu>
-
-*/

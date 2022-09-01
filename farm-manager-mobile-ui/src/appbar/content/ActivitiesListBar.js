@@ -13,7 +13,7 @@ const ActivitiesListBar = () => {
                     color="inherit"
                     aria-label="open drawer"
                     onClick={() => console.log('click')}
-                    sx={{ mr: 2 }}
+                    sx={{ mr: 1 }}
                 >
                     <FilterAlt />
                 </IconButton>

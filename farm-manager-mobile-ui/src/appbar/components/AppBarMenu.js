@@ -69,7 +69,7 @@ const AppBarMenu = () => {
                         <Logout />
                     </IconButton>
 
-                    <p>{text.logout}</p>
+                    {text.logout}
                 </MenuItem>
             </Menu>
         </Box>)

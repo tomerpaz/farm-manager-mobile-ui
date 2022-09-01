@@ -245,8 +245,8 @@ const AppBar = () => {
         {pathname.includes('/tabs/activities/') && <ActivitiesListBar />}
         {pathname.includes('/activity/') && <ActivityViewBar />}
         {pathname.includes(`/field/${src}/${fieldId}/dash`) && <FieldViewBar />}
-        {pathname.includes(`/field/${src}/${fieldId}/info`) && <FieldViewBar />}
-        {pathname.includes(`/field/${src}/${fieldId}/imagery`) && <FieldViewBar />}
+        {pathname.includes(`/field/${src}/${fieldId}/info`) && <FieldViewBar layers={true}/>}
+        {pathname.includes(`/field/${src}/${fieldId}/imagery`) && <FieldViewBar layers={true}/>}
         {pathname.includes(`/field/${src}/${fieldId}/history`) && <ActivitiesListBar />}
 
 
