@@ -11,6 +11,7 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import CloseIcon from '@mui/icons-material/Close';
 import Slide from '@mui/material/Slide';
+import DoneIcon from '@mui/icons-material/Done';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -33,7 +34,7 @@ export default function AppBarDialog({open, handleClose}) {
         onClose={handleClose}
         TransitionComponent={Transition}
       >
-        <AppBar sx={{ position: 'relative' }}>
+        <AppBar sx={{ position: 'relative' }} elevation={0}>
           <Toolbar>
             <IconButton
               edge="start"
@@ -44,11 +45,19 @@ export default function AppBarDialog({open, handleClose}) {
               <CloseIcon />
             </IconButton>
             <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-              Sound
+              {/* Filter */}
             </Typography>
-            <Button autoFocus color="inherit" onClick={handleClose}>
+            {/* <Button autoFocus color="inherit" onClick={handleClose}>
               save
-            </Button>
+            </Button> */}
+            <IconButton
+              edge="start"
+              color="inherit"
+          
+              aria-label="done"
+            >
+              <DoneIcon />
+            </IconButton>
           </Toolbar>
         </AppBar>
         <List>

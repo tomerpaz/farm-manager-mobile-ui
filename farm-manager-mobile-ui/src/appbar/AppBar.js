@@ -19,11 +19,18 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import Logout from '@mui/icons-material/Logout';
 
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { logOut, selectCurrentToken, selectLang } from '../features/app/appSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { useGetUserDataQuery } from '../features/auth/authApiSlice';
 import AppBarDialog from './AppBarDialog';
+import PublicBar from './content/PublicBar';
+import MapBar from './content/MapBar';
+import FieldsBar from './content/FieldsBar';
+import ActivitiesListBar from './content/ActivitiesListBar';
+import ActivityViewBar from './content/ActivityViewBar';
+import FieldViewBar from './content/FieldViewBar';
+
 
 
 const Search = styled('div')(({ theme }) => ({
@@ -71,7 +78,10 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 const AppBar = () => {
 
   const text = useSelector(selectLang)
+  const { pathname } = useLocation();
+  const { fieldId, src } = useParams()
 
+  console.log('AppBar.pathname', pathname)
 
   const [anchorEl, setAnchorEl] = useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
@@ -86,7 +96,7 @@ const AppBar = () => {
 
   //const { data: user } = useGetUserDataQuery()
 
-	const token = useSelector(selectCurrentToken);
+  const token = useSelector(selectCurrentToken);
 
   const [filterAnchorEl, setFilterAnchorEl] = useState(null);
 
@@ -220,110 +230,123 @@ const AppBar = () => {
   );
 
   if (!token) {
-    return <Box sx={{  flexGrow: 1 }}>
-      <MuiAppBar dir='ltr' position="static" elevation={0}>
-        <Toolbar>
-          <Typography 
-            variant="h6"
-            noWrap
-            component="div"
-          // sx={{ display: { xs: 'none', sm: 'block' } }}
-          >
-            Farm Manager
-          </Typography>
-        </Toolbar>
-      </MuiAppBar>
-
+    return <Box sx={{ flexGrow: 1 }}>
+      <PublicBar />
     </Box>
   }
 
-  
 
+
+  const RenderBar = () => {
+    return (
+      <>
+        {pathname.includes('/tabs/map') && <MapBar />}
+        {pathname.includes('/tabs/fields') && <FieldsBar />}
+        {pathname.includes('/tabs/activities/') && <ActivitiesListBar />}
+        {pathname.includes('/activity/') && <ActivityViewBar />}
+        {pathname.includes(`/field/${src}/${fieldId}/dash`) && <FieldViewBar />}
+        {pathname.includes(`/field/${src}/${fieldId}/info`) && <FieldViewBar />}
+        {pathname.includes(`/field/${src}/${fieldId}/imagery`) && <FieldViewBar />}
+        {pathname.includes(`/field/${src}/${fieldId}/history`) && <ActivitiesListBar />}
+
+
+
+
+
+      </>
+
+    )
+  }
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <MuiAppBar position="static" elevation={0}>
-        <Toolbar>
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="open drawer"
-            onClick={()=>setDialogOpen(true)}
-            sx={{ mr: 2 }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography
-            variant="h6"
-            noWrap
-            component="div"
-            sx={{ display: { xs: 'none', sm: 'block' } }}
-          >
-            Farm Manager
-          </Typography>
-          <Search>
-            <SearchIconWrapper>
-              <SearchIcon onClick={e=>console.log('click')}/>
-            </SearchIconWrapper>
-            <StyledInputBase />
-
-          </Search>
-          <Box sx={{ flexGrow: 1 }} />
-          <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-            {/* <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-              <Badge badgeContent={4} color="error">
-                <MailIcon />
-              </Badge>
-            </IconButton>
-            <IconButton
-              size="large"
-              aria-label="show 17 new notifications"
-              color="inherit"
-            >
-              <Badge badgeContent={17} color="error">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton> */}
-            <IconButton
-              onClick={handleLogout}
-              size="large"
-              aria-label="log out"
-              color="inherit"
-            >
-              <Logout />
-            </IconButton>
-            {/* <IconButton
-              size="large"
-              edge="end"
-              aria-label="account of current user"
-              aria-controls={menuId}
-              aria-haspopup="true"
-              onClick={handleProfileMenuOpen}
-              color="inherit"
-            >
-              <AccountCircle />
-            </IconButton>*/}
-          </Box> 
-          <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
-            <IconButton
-              size="large"
-              aria-label="show more"
-              aria-controls={mobileMenuId}
-              aria-haspopup="true"
-              onClick={handleMobileMenuOpen}
-              color="inherit"
-            >
-              <MoreIcon />
-            </IconButton>
-          </Box>
-        </Toolbar>
-      </MuiAppBar>
-      {renderMobileMenu}
-      {renderMenu}
-      <AppBarDialog open={dialogOpen} handleClose={()=>setDialogOpen(false)} />
+      <RenderBar />
     </Box>
-  );
+  )
+  // return (
+  //   <Box sx={{ flexGrow: 1 }}>
+  //     <MuiAppBar position="static" elevation={0}>
+  //       <Toolbar>
+  //         <IconButton
+  //           size="large"
+  //           edge="start"
+  //           color="inherit"
+  //           aria-label="open drawer"
+  //           onClick={() => setDialogOpen(true)}
+  //           sx={{ mr: 2 }}
+  //         >
+  //           <MenuIcon />
+  //         </IconButton>
+  //         <Typography
+  //           variant="h6"
+  //           noWrap
+  //           component="div"
+  //           sx={{ display: { xs: 'none', sm: 'block' } }}
+  //         >
+  //           Farm Manager
+  //         </Typography>
+  //         <Search>
+  //           <SearchIconWrapper>
+  //             <SearchIcon onClick={e => console.log('click')} />
+  //           </SearchIconWrapper>
+  //           <StyledInputBase />
+
+  //         </Search>
+  //         <Box sx={{ flexGrow: 1 }} />
+  //         <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+  //           {/* <IconButton size="large" aria-label="show 4 new mails" color="inherit">
+  //             <Badge badgeContent={4} color="error">
+  //               <MailIcon />
+  //             </Badge>
+  //           </IconButton>
+  //           <IconButton
+  //             size="large"
+  //             aria-label="show 17 new notifications"
+  //             color="inherit"
+  //           >
+  //             <Badge badgeContent={17} color="error">
+  //               <NotificationsIcon />
+  //             </Badge>
+  //           </IconButton> */}
+  //           <IconButton
+  //             onClick={handleLogout}
+  //             size="large"
+  //             aria-label="log out"
+  //             color="inherit"
+  //           >
+  //             <Logout />
+  //           </IconButton>
+  //           {/* <IconButton
+  //             size="large"
+  //             edge="end"
+  //             aria-label="account of current user"
+  //             aria-controls={menuId}
+  //             aria-haspopup="true"
+  //             onClick={handleProfileMenuOpen}
+  //             color="inherit"
+  //           >
+  //             <AccountCircle />
+  //           </IconButton>*/}
+  //         </Box>
+  //         <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
+  //           <IconButton
+  //             size="large"
+  //             aria-label="show more"
+  //             aria-controls={mobileMenuId}
+  //             aria-haspopup="true"
+  //             onClick={handleMobileMenuOpen}
+  //             color="inherit"
+  //           >
+  //             <MoreIcon />
+  //           </IconButton>
+  //         </Box>
+  //       </Toolbar>
+  //     </MuiAppBar>
+  //     {renderMobileMenu}
+  //     {renderMenu}
+  //     <AppBarDialog open={dialogOpen} handleClose={() => setDialogOpen(false)} />
+  //   </Box>
+  // );
 }
 
 export default AppBar;
