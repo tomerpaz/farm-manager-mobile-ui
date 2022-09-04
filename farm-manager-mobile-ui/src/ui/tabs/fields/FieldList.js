@@ -8,7 +8,7 @@ import { Divider, ListItemAvatar, Avatar, BottomNavigation, BottomNavigationActi
 import { Link } from 'react-router-dom';
 import { getFruitIcon } from '../../../icons/FruitIconUtil';
 import { useSelector } from 'react-redux';
-import { selectLang } from '../../../features/app/appSlice';
+import { selectCurrentYear, selectLang } from '../../../features/app/appSlice';
 import { useFields } from '../../../features/fields/fieldsApiSlice';
 import { useGetUserDataQuery } from '../../../features/auth/authApiSlice';
 import { displayFieldArea, displayFieldName } from '../../FarmUtil';
@@ -67,9 +67,12 @@ export default function FieldList(props) {
     const height = window.window.innerHeight - 110;
 
 
+    
     const { data: user } = useGetUserDataQuery()
 
-    const fields = useFields(user.year)
+    const year = useSelector(selectCurrentYear);
+
+    const fields = useFields(year)
 
     const text =  useSelector(selectLang)
 

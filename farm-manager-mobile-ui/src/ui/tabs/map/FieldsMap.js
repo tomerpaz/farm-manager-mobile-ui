@@ -3,8 +3,10 @@ import { useState } from "react";
 import GeoLocation from "../../../components/GeoLocation";
 import { useNavigate } from "react-router-dom";
 import { Box } from "@mui/material";
-import { selectFieldsData, useFields, useGetFieldsByYearQuery } from "../../../features/fields/fieldsApiSlice";
+import { useFields } from "../../../features/fields/fieldsApiSlice";
 import { useGetUserDataQuery } from '../../../features/auth/authApiSlice'
+import { selectCurrentYear } from "../../../features/app/appSlice";
+import { useSelector } from "react-redux";
 
 
 
@@ -13,8 +15,9 @@ const FieldsMap = (props) => {
     const [map, setSetMap] = useState(0);
 
     const { data: user } = useGetUserDataQuery()
+    const year = useSelector(selectCurrentYear);
 
-    const fields = useFields(user.year)
+    const fields = useFields(year)
 
 
     let navigate = useNavigate();

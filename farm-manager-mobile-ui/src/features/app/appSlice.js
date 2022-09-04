@@ -1,11 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit"
+import { newDate } from "../../ui/FarmUtil";
 
 const appSlice = createSlice({
     name: 'auth',
-    initialState: { lang: {lang: 'en', dir: 'rtl'} , 
+    initialState: { lang: {lang: 'en', dir: 'rtl', } , 
     token: localStorage.getItem('token'), 
     refreshToken: localStorage.getItem('refreshToken'), 
-    fieldFilter: '', currentYear: null},
+    fieldFilter: '', currentYear: newDate().getFullYear()},
     reducers: {
         setCredentials: (state, action) => {
             const {token, refreshToken} = action.payload;
@@ -36,5 +37,5 @@ export default appSlice.reducer
 
 export const selectCurrentToken = (state) => state.app.token
 export const selectLang = (state) => state.app.lang
-export const selectCurrentYear = (state) => state.app.year
+export const selectCurrentYear = (state) => state.app.currentYear
 

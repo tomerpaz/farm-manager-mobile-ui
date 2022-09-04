@@ -6,35 +6,36 @@ import CardHeader from '@mui/material/CardHeader';
 import CardContent from '@mui/material/CardContent';
 import Avatar from '@mui/material/Avatar';
 
-import { Box, Button, IconButton, Paper, Typography } from '@mui/material';
+import { Box, IconButton, Typography } from '@mui/material';
 import { useParams, Link, useLocation, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import Loading from '../../components/Loading';
-import { CancelPresentation, CancelPresentationOutlined, CloseOutlined, DashboardOutlined, DisabledByDefault, HighlightOffOutlined, HighlightOffRounded, InfoOutlined, SatelliteAltOutlined } from '@mui/icons-material';
+import { DashboardOutlined,HighlightOffRounded, InfoOutlined, SatelliteAltOutlined } from '@mui/icons-material';
 import FieldInfo from './FieldInfo';
 import FieldDashboard from './FieldDashboard';
 import FieldHistory from './FieldHistory';
 import FieldImagery from './FieldImagery';
 import { getFruitIcon } from '../../icons/FruitIconUtil';
 import { useFieldsById } from '../../features/fields/fieldsApiSlice';
-import { selectLang } from '../../features/app/appSlice';
+import { selectCurrentYear, selectLang } from '../../features/app/appSlice';
 import { useGetUserDataQuery } from '../../features/auth/authApiSlice';
 import { displayFieldArea, displayFieldName } from '../FarmUtil';
-import { useEffect } from 'react';
 
 const Field = () => {
   const { pathname } = useLocation();
   const { fieldId, src } = useParams()
-
   const text = useSelector(selectLang)
   const { data: user } = useGetUserDataQuery()
-  const field = useFieldsById(user.year, Number(fieldId))
-
+  const year = useSelector(selectCurrentYear)
+  const field = useFieldsById(year, Number(fieldId))
   const navigate = useNavigate()
 
   if (!field) {
     return <Loading />
   }
+
+
+  console.log(field);
 
   const paths = [`/field/${src}/${fieldId}/info`,
   `/field/${src}/${fieldId}/dash`,

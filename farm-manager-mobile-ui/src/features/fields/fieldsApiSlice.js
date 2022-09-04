@@ -80,6 +80,8 @@ export function useFields(year) {
 
 export function useFieldsById(year, id) {
     const { data } = useGetFieldsByYearQuery(year)
-    return data.entities[id]
+    if(data && data.entities){
+        return data.entities[id]
+    } else return null;
 }
 

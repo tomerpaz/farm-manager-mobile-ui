@@ -1,11 +1,11 @@
+import { useSelector } from 'react-redux'
 import { Outlet } from 'react-router-dom'
 import Loading from '../components/Loading'
-import { useGetUserDataQuery } from '../features/auth/authApiSlice'
+import { selectCurrentYear } from '../features/app/appSlice'
 import { useGetFieldsByYearQuery } from '../features/fields/fieldsApiSlice'
+
 const DataRoutes = () => {
-    // const dispatch = useDispatch()
-    // const fields = useSelector(selectFields);
-    const { data: user } = useGetUserDataQuery()
+    const year = useSelector(selectCurrentYear);
 
     const {
         data,
@@ -13,7 +13,7 @@ const DataRoutes = () => {
         isSuccess,
         isError,
         error
-    } = useGetFieldsByYearQuery(user.year)
+    } = useGetFieldsByYearQuery(year)
 
     return data ? <Outlet /> : <Loading />
 }

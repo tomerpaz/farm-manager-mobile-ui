@@ -1,21 +1,13 @@
-import { Share, ShareLocation } from '@mui/icons-material';
+import { useState } from 'react';
 import { Box, IconButton, Menu, MenuItem } from '@mui/material'
-import React, { useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate, useParams } from 'react-router-dom';
-import { logOut, selectLang } from '../../features/app/appSlice';
-import { useGetUserDataQuery } from '../../features/auth/authApiSlice';
-import { useFieldsById } from '../../features/fields/fieldsApiSlice';
+import { Share } from '@mui/icons-material';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import TelegramIcon from '@mui/icons-material/Telegram';
 
-const ShareLocationMenu = ({ field }) => {
+const ShareLocationMenu = ({ lat, lng }) => {
 
 
-
-
-    //   console.log(navigator.appVersion);
-    const [anchorEl, setAnchorEl] = React.useState(null);
+    const [anchorEl, setAnchorEl] = useState(null);
 
     const handleMenu = (event) => {
         setAnchorEl(event.currentTarget);
@@ -25,9 +17,7 @@ const ShareLocationMenu = ({ field }) => {
         setAnchorEl(null);
     };
 
-
-
-    console.log('field', field);
+    const msg = encodeURIComponent(`Maps:\nhttps://www.google.com/maps/search/?api=1&query=${lat},${lng}\n\nWaze:\nhttps://waze.com/ul?q=&ll=${lat},${lng}&navigate=yes`);
 
     return (
 
@@ -57,7 +47,7 @@ const ShareLocationMenu = ({ field }) => {
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
             >
-                <MenuItem onClick={() => window.open('whatsapp://send?text=This is WhatsApp sharing example using button')}>
+                <MenuItem onClick={() => window.open(`whatsapp://send?text=${msg}`)}>
                     <IconButton
                         size="large"
                         aria-label="log out"
@@ -65,10 +55,9 @@ const ShareLocationMenu = ({ field }) => {
                     >
                         <WhatsAppIcon />
                     </IconButton>
-
                     {'Whatsapp'}
                 </MenuItem>
-                <MenuItem onClick={() => console.log('Google Maps')}>
+                <MenuItem onClick={() => window.open(`tg://msg?text=${msg}`)}>
                     <IconButton
                         size="large"
                         aria-label="log out"
@@ -76,7 +65,6 @@ const ShareLocationMenu = ({ field }) => {
                     >
                         <TelegramIcon />
                     </IconButton>
-
                     {'Telegram'}
                 </MenuItem>
             </Menu>
@@ -84,6 +72,4 @@ const ShareLocationMenu = ({ field }) => {
 }
 
 export default ShareLocationMenu
-//tg://msg_url?url={url}&text={text}
-
 
