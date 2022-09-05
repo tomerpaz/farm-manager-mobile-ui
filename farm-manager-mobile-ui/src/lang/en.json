@@ -54,7 +54,9 @@
     "sprayer": "Sprayer",
     "product": "Product",
     "year": "Year",
-    "days": "Days"
+    "days": "Days",
+    "fromDate": "From Date",
+    "toDate": "To Date"
 
 
 

@@ -3,15 +3,18 @@ import { newDate } from "../../ui/FarmUtil";
 
 const appSlice = createSlice({
     name: 'auth',
-    initialState: { lang: {lang: 'en', dir: 'rtl', } , 
-    token: localStorage.getItem('token'), 
-    refreshToken: localStorage.getItem('refreshToken'), 
-    fieldFilter: '', currentYear: newDate().getFullYear(),
-    appBarDialogOpen: false,
-},
+    initialState: {
+        lang: { lang: 'en', dir: 'rtl', },
+        token: localStorage.getItem('token'),
+        refreshToken: localStorage.getItem('refreshToken'),
+        fieldFreeTextFilter: '',
+        activityFreeTextFilter: '',
+        fieldFilter: '', currentYear: newDate().getFullYear(),
+        appBarDialogOpen: false,
+    },
     reducers: {
         setCredentials: (state, action) => {
-            const {token, refreshToken} = action.payload;
+            const { token, refreshToken } = action.payload;
             localStorage.setItem('token', token);
             localStorage.setItem('refreshToken', refreshToken);
             state.token = token;
@@ -33,10 +36,17 @@ const appSlice = createSlice({
         setAppBarDialogOpen: (state, action) => {
             state.appBarDialogOpen = action.payload
         },
+        setFieldFreeTextFilter: (state, action) => {
+            state.fieldFreeTextFilter = action.payload
+        },
+        setActivityFreeTextFilter: (state, action) => {
+            state.activityFreeTextFilter = action.payload
+        },
+        
     },
 })
 
-export const { setCredentials, logOut, setLang, setCurrentYear, setAppBarDialogOpen } = appSlice.actions
+export const { setCredentials, logOut, setLang, setCurrentYear, setAppBarDialogOpen, setFieldFreeTextFilter, setActivityFreeTextFilter } = appSlice.actions
 
 export default appSlice.reducer
 
@@ -44,4 +54,7 @@ export const selectCurrentToken = (state) => state.app.token
 export const selectLang = (state) => state.app.lang
 export const selectCurrentYear = (state) => state.app.currentYear
 export const selectAppBarDialogOpen = (state) => state.app.appBarDialogOpen
+export const selectFieldFreeTextFilter = (state) => state.app.fieldFreeTextFilter
+export const selectActivityFreeTextFilter = (state) => state.app.activityFreeTextFilter
+
 

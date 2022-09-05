@@ -1,7 +1,7 @@
 import { FilterAlt,  MoreVert } from '@mui/icons-material'
 import { AppBar, IconButton, Toolbar } from '@mui/material'
-import { useDispatch } from 'react-redux'
-import { setAppBarDialogOpen } from '../../features/app/appSlice'
+import { useDispatch, useSelector } from 'react-redux'
+import { selectFieldFreeTextFilter, setAppBarDialogOpen, setFieldFreeTextFilter } from '../../features/app/appSlice'
 import AppBarMenu from '../components/AppBarMenu'
 import AppBarSearch from '../components/AppBarSearch'
 
@@ -21,7 +21,7 @@ const FieldsBar = () => {
                 >
                     <FilterAlt/>
                 </IconButton>
-                <AppBarSearch />
+                <AppBarSearch value={useSelector(selectFieldFreeTextFilter)} onChange={(e) => dispatch(setFieldFreeTextFilter(e))} />
                 <AppBarMenu />
             </Toolbar>
         </AppBar>

@@ -74,7 +74,7 @@ const FieldsMap = (props) => {
                     )}
                 </MapContainer>
             </Box>
-            <FieldsFilter />
+            {fields && <FieldsFilter fields={fields} />}
         </Box>
     )
 }

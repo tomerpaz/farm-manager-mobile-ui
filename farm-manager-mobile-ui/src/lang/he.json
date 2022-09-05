@@ -54,7 +54,10 @@
     "sprayer": "מרסס",
     "product": "מוצר",
     "year": "שנה",
-    "days": "ימים"
+    "days": "ימים",
+    "fromDate": "מתאריך",
+    "toDate": "עד תאריך"
+
 
 
 

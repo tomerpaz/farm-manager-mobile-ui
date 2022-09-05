@@ -120,7 +120,7 @@ export default function FieldList(props) {
                 {(props) => renderRow({ ...props, field: fields[props.index], areaUnit: user.areaUnit,  text: text })}
 
             </FixedSizeList>
-            <FieldsFilter />
+            {fields && <FieldsFilter fields={fields} />}
         </Box>
     );
 }

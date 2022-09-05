@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { AppBar, Box, Dialog, Divider, IconButton, InputAdornment, List, ListItem, ListItemText, Slide, TextField, Toolbar, Typography } from '@mui/material'
-import { selectAppBarDialogOpen, setAppBarDialogOpen } from '../../features/app/appSlice';
+import { selectAppBarDialogOpen, selectLang, setAppBarDialogOpen } from '../../features/app/appSlice';
 import CloseIcon from '@mui/icons-material/Close';
 import DoneIcon from '@mui/icons-material/Done';
 import { useDispatch, useSelector } from 'react-redux';
@@ -16,6 +16,7 @@ const ActivitiesFilter = () => {
     const dispatch = useDispatch()
 
     const { fieldId } = useParams()
+    const text = useSelector(selectLang)
 
     const open = useSelector(selectAppBarDialogOpen)
 
@@ -76,33 +77,30 @@ const ActivitiesFilter = () => {
                         InputProps={{
                             endAdornment: <InputAdornment position="end"><IconButton edge="end" onClick={() => setFrom(null)}><CloseIcon></CloseIcon></IconButton></InputAdornment>,
                         }}
-                        label="From"
+                        label={text.fromDate}
                         closeOnSelect
                         //  clearable={true}
                         clearText="Clear"
                         showToolbar={false}
-                        // inputFormat="MM/dd/yyyy"
                         value={from}
                         onChange={setFrom}
-                        renderInput={(params) => <TextField
-
-                            size={'small'} {...params}
-                        />}
+                        renderInput={(params) => <TextField size={'small'} {...params} />}
                     />
                     <Box marginLeft={1} />
                     <MobileDatePicker
                         InputProps={{
                             endAdornment: <InputAdornment position="end"><IconButton edge="end" onClick={() => setTo(null)}><CloseIcon></CloseIcon></IconButton></InputAdornment>,
                         }}
-                        label="To"
-                        // inputFormat="MM/dd/yyyy"
+                        label={text.toDate}
+                        closeOnSelect
                         value={to}
+                        showToolbar={false}
                         onChange={setTo}
                         renderInput={(params) => <TextField size={'small'} {...params} />}
                     />
                 </ListItem>
                 <Divider />
-                <ListItem button>
+                {/* <ListItem button>
                     <ListItemText primary="Phone ringtone" secondary="Titania" />
                 </ListItem>
                 <Divider />
@@ -111,7 +109,7 @@ const ActivitiesFilter = () => {
                         primary="Default notification ringtone"
                         secondary="Tethys"
                     />
-                </ListItem>
+                </ListItem> */}
             </List>
         </Dialog>
     )
