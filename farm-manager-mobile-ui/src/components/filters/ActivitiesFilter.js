@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react'
-import { AppBar, Dialog, Divider, IconButton, List, ListItem, ListItemText, Slide, Toolbar, Typography } from '@mui/material'
+import { AppBar, Box, Dialog, Divider, IconButton, InputAdornment, List, ListItem, ListItemText, Slide, TextField, Toolbar, Typography } from '@mui/material'
 import { selectAppBarDialogOpen, setAppBarDialogOpen } from '../../features/app/appSlice';
 import CloseIcon from '@mui/icons-material/Close';
 import DoneIcon from '@mui/icons-material/Done';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
+import { MobileDatePicker } from '@mui/x-date-pickers';
 
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -17,6 +18,13 @@ const ActivitiesFilter = () => {
     const { fieldId } = useParams()
 
     const open = useSelector(selectAppBarDialogOpen)
+
+
+    const [from, setFrom] = React.useState(null);
+
+    const [to, setTo] = React.useState(null);
+
+
 
     useEffect(() => {
         return () => dispatch(setAppBarDialogOpen(false));
@@ -63,6 +71,37 @@ const ActivitiesFilter = () => {
                 </Toolbar>
             </AppBar>
             <List>
+                <ListItem>
+                    <MobileDatePicker
+                        InputProps={{
+                            endAdornment: <InputAdornment position="end"><IconButton edge="end" onClick={() => setFrom(null)}><CloseIcon></CloseIcon></IconButton></InputAdornment>,
+                        }}
+                        label="From"
+                        closeOnSelect
+                        //  clearable={true}
+                        clearText="Clear"
+                        showToolbar={false}
+                        // inputFormat="MM/dd/yyyy"
+                        value={from}
+                        onChange={setFrom}
+                        renderInput={(params) => <TextField
+
+                            size={'small'} {...params}
+                        />}
+                    />
+                    <Box marginLeft={1} />
+                    <MobileDatePicker
+                        InputProps={{
+                            endAdornment: <InputAdornment position="end"><IconButton edge="end" onClick={() => setTo(null)}><CloseIcon></CloseIcon></IconButton></InputAdornment>,
+                        }}
+                        label="To"
+                        // inputFormat="MM/dd/yyyy"
+                        value={to}
+                        onChange={setTo}
+                        renderInput={(params) => <TextField size={'small'} {...params} />}
+                    />
+                </ListItem>
+                <Divider />
                 <ListItem button>
                     <ListItemText primary="Phone ringtone" secondary="Titania" />
                 </ListItem>
