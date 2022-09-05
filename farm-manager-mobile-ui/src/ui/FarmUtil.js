@@ -106,3 +106,24 @@ export function asShortStringDate(time) {
     }
     return null;
 }
+
+export function isMatchFreeTextFilter(field, freeText) {
+
+    if (field.name.includes(freeText)) {
+        return true;
+    } else if (field.siteName.includes(freeText)) {
+        return true;
+    } else if (field.alias?.includes(freeText)) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+export function filterFields(fields, freeText) {
+    if (isStringEmpty(freeText)) {
+        return fields;
+    } else {
+        return fields.filter(e => isMatchFreeTextFilter(e, freeText));
+    }
+}

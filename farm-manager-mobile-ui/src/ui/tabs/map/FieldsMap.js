@@ -1,13 +1,14 @@
 import { MapContainer, TileLayer, Polygon } from "react-leaflet";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import GeoLocation from "../../../components/GeoLocation";
 import { useNavigate } from "react-router-dom";
 import { Box } from "@mui/material";
 import { useFields } from "../../../features/fields/fieldsApiSlice";
 import { useGetUserDataQuery } from '../../../features/auth/authApiSlice'
-import { selectAppBarDialogOpen, selectCurrentYear } from "../../../features/app/appSlice";
+import { selectAppBarDialogOpen, selectCurrentYear, selectFieldFreeTextFilter } from "../../../features/app/appSlice";
 import { useSelector } from "react-redux";
 import FieldsFilter from "../../../components/filters/FieldsFilter";
+import { filterFields, isArrayEmpty, isStringEmpty } from "../../FarmUtil";
 
 
 
@@ -18,20 +19,40 @@ const FieldsMap = (props) => {
     const { data: user } = useGetUserDataQuery()
     const year = useSelector(selectCurrentYear);
 
+    const fields = useFields(year).filter(f => f.polygon);
+    const freeText = useSelector(selectFieldFreeTextFilter);
+
+    const [center, setCenter] = useState([user.lng, user.lat]);
+
+    const displayFields = filterFields(fields, freeText);
 
 
-    const fields = useFields(year)
+    useEffect(() => {
+        const c = (fields.length === displayFields.length) || isArrayEmpty(displayFields) ? [user.lng, user.lat] : [displayFields[0].lat, displayFields[0].lng];
+        // setCenter(c);
+        if (map && c) {
+            map.setView(c, user.zoom);
+        }
+    }, [freeText])
 
+
+    // useEffect(() => {
+    //     console.log('center changed')
+
+    // }, [center])
 
     let navigate = useNavigate();
 
     const height = window.window.innerHeight - 110;
 
+
+    console.log('center', center);
+
     return (
         <Box display={'flex'} flex={1} alignItems={'stretch'} flexDirection={'column'} justifyContent={'space-between'}>
 
             <Box flex={1} style={{ height: '100%' }} id="map" dir='ltr' >
-                <MapContainer style={{ height: height, width: '100%' }} center={[user.lng, user.lat]} zoom={user.zoom} scrollWheelZoom={false}
+                <MapContainer style={{ height: height, width: '100%' }} center={center} zoom={user.zoom} scrollWheelZoom={false}
                     ref={setSetMap}
                 >
                     <TileLayer
@@ -45,7 +66,7 @@ const FieldsMap = (props) => {
                         </Popup>
                     </Marker> */}
                     <GeoLocation />
-                    {fields.filter(f => f.polygon).map(f =>
+                    {displayFields.map(f =>
                         <Polygon field={f} key={f.id}
                             color={f.color}
                             fillColor={f.color}
