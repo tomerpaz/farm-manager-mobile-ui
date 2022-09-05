@@ -1,29 +1,7 @@
-import { useState } from 'react';
-import { styled, alpha } from '@mui/material/styles';
-import { AppBar as MuiAppBar, Drawer, SwipeableDrawer } from '@mui/material';
 import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import InputBase from '@mui/material/InputBase';
-import Badge from '@mui/material/Badge';
-import MenuItem from '@mui/material/MenuItem';
-import Menu from '@mui/material/Menu';
-import MenuIcon from '@mui/icons-material/Menu';
-import SearchIcon from '@mui/icons-material/Search';
-import SearchOffIcon from '@mui/icons-material/SearchOff';
-
-import AccountCircle from '@mui/icons-material/AccountCircle';
-import MailIcon from '@mui/icons-material/Mail';
-import NotificationsIcon from '@mui/icons-material/Notifications';
-import MoreIcon from '@mui/icons-material/MoreVert';
-import Logout from '@mui/icons-material/Logout';
-
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { logOut, selectCurrentToken, selectLang } from '../features/app/appSlice';
-import { useDispatch, useSelector } from 'react-redux';
-import { useGetUserDataQuery } from '../features/auth/authApiSlice';
-import AppBarDialog from './AppBarDialog';
+import { useLocation, useParams } from 'react-router-dom';
+import { selectCurrentToken } from '../features/app/appSlice';
+import { useSelector } from 'react-redux';
 import PublicBar from './content/PublicBar';
 import MapBar from './content/MapBar';
 import FieldsBar from './content/FieldsBar';
@@ -31,211 +9,17 @@ import ActivitiesListBar from './content/ActivitiesListBar';
 import ActivityViewBar from './content/ActivityViewBar';
 import FieldViewBar from './content/FieldViewBar';
 
-
-
-const Search = styled('div')(({ theme }) => ({
-  position: 'relative',
-  borderRadius: theme.shape.borderRadius,
-  backgroundColor: alpha(theme.palette.common.white, 0.15),
-  '&:hover': {
-    backgroundColor: alpha(theme.palette.common.white, 0.25),
-  },
-  marginRight: theme.spacing(2),
-  marginLeft: 0,
-  width: '100%',
-  [theme.breakpoints.up('sm')]: {
-    marginLeft: theme.spacing(3),
-    width: 'auto',
-  },
-}));
-
-
-const SearchIconWrapper = styled('div')(({ theme }) => ({
-  padding: theme.spacing(0, 2),
-  height: '100%',
-  position: 'absolute',
-  pointerEvents: 'all',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  zIndex: 3
-}));
-
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  color: 'inherit',
-  '& .MuiInputBase-input': {
-    padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
-    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-    transition: theme.transitions.create('width'),
-    width: '800%',
-    [theme.breakpoints.up('md')]: {
-      width: '20ch',
-    },
-  },
-}));
-
 const AppBar = () => {
 
-  const text = useSelector(selectLang)
   const { pathname } = useLocation();
   const { fieldId, src } = useParams()
-
-  console.log('AppBar.pathname', pathname)
-
-  const [anchorEl, setAnchorEl] = useState(null);
-  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
-
-  const [drawerAnchorEl, setDrawerAnchorEl] = useState(null);
-
-
-  const [dialogOpen, setDialogOpen] = useState(false);
-
-
-  const dispatch = useDispatch()
-
-  //const { data: user } = useGetUserDataQuery()
-
   const token = useSelector(selectCurrentToken);
-
-  const [filterAnchorEl, setFilterAnchorEl] = useState(null);
-
-
-  const isMenuOpen = Boolean(anchorEl);
-  const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
-  const isFilterOpen = Boolean(filterAnchorEl);
-  const isDrawerOpen = Boolean(drawerAnchorEl);
-
-
-  let navigate = useNavigate();
-
-  const handleDrawerOpen = (event) => {
-    setDrawerAnchorEl(event.currentTarget);
-  };
-
-  const handleDrawerClose = () => {
-    setDrawerAnchorEl(null);
-  };
-
-
-  const handleProfileMenuOpen = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleMobileMenuClose = () => {
-    setMobileMoreAnchorEl(null);
-  };
-
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-    handleMobileMenuClose();
-  };
-
-  const handleMobileMenuOpen = (event) => {
-    setMobileMoreAnchorEl(event.currentTarget);
-  };
-
-
-  const handleLogout = () => {
-    setAnchorEl(null);
-    handleMobileMenuClose();
-    dispatch(logOut());
-
-    navigate("/login");
-  };
-
-  const menuId = 'primary-search-account-menu';
-  const renderMenu = (
-    <Menu
-      anchorEl={anchorEl}
-      anchorOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
-      }}
-      id={menuId}
-      keepMounted
-      transformOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
-      }}
-      open={isMenuOpen}
-      onClose={handleMenuClose}
-    >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
-    </Menu>
-  );
-
-  const mobileMenuId = 'primary-search-account-menu-mobile';
-  const renderMobileMenu = (
-    <Menu
-      anchorEl={mobileMoreAnchorEl}
-      anchorOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
-      }}
-      id={mobileMenuId}
-      keepMounted
-      transformOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
-      }}
-      open={isMobileMenuOpen}
-      onClose={handleMobileMenuClose}
-    >
-      {/* <MenuItem>
-        <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-          <Badge badgeContent={4} color="error">
-            <MailIcon />
-          </Badge>
-        </IconButton>
-        <p>Messages</p>
-      </MenuItem>
-      <MenuItem>
-        <IconButton
-          size="large"
-          aria-label="show 17 new notifications"
-          color="inherit"
-        >
-          <Badge badgeContent={17} color="error">
-            <NotificationsIcon />
-          </Badge>
-        </IconButton>
-        <p>Notifications</p>
-      </MenuItem>
-      <MenuItem onClick={handleProfileMenuOpen}>
-        <IconButton
-          size="large"
-          aria-label="account of current user"
-          aria-controls="primary-search-account-menu"
-          aria-haspopup="true"
-          color="inherit"
-        >
-          <AccountCircle />
-        </IconButton>
-        <p>Profile</p>
-      </MenuItem> */}
-      <MenuItem onClick={handleLogout}>
-        <IconButton
-          size="large"
-          aria-label="log out"
-          color="inherit"
-        >
-          <Logout />
-        </IconButton>
-
-        <p>{text.logout}</p>
-      </MenuItem>
-    </Menu>
-  );
 
   if (!token) {
     return <Box sx={{ flexGrow: 1 }}>
       <PublicBar />
     </Box>
   }
-
-
 
   const RenderBar = () => {
     return (
@@ -245,11 +29,10 @@ const AppBar = () => {
         {pathname.includes('/tabs/activities/') && <ActivitiesListBar />}
         {pathname.includes('/activity/') && <ActivityViewBar />}
         {pathname.includes(`/field/${src}/${fieldId}/dash`) && <FieldViewBar />}
-        {pathname.includes(`/field/${src}/${fieldId}/info`) && <FieldViewBar layers={true}/>}
-        {pathname.includes(`/field/${src}/${fieldId}/imagery`) && <FieldViewBar layers={true}/>}
+        {pathname.includes(`/field/${src}/${fieldId}/info`) && <FieldViewBar layers={true} />}
+        {pathname.includes(`/field/${src}/${fieldId}/imagery`) && <FieldViewBar layers={true} />}
         {pathname.includes(`/field/${src}/${fieldId}/history`) && <ActivitiesListBar />}
       </>
-
     )
   }
 
@@ -258,90 +41,6 @@ const AppBar = () => {
       <RenderBar />
     </Box>
   )
-  // return (
-  //   <Box sx={{ flexGrow: 1 }}>
-  //     <MuiAppBar position="static" elevation={0}>
-  //       <Toolbar>
-  //         <IconButton
-  //           size="large"
-  //           edge="start"
-  //           color="inherit"
-  //           aria-label="open drawer"
-  //           onClick={() => setDialogOpen(true)}
-  //           sx={{ mr: 2 }}
-  //         >
-  //           <MenuIcon />
-  //         </IconButton>
-  //         <Typography
-  //           variant="h6"
-  //           noWrap
-  //           component="div"
-  //           sx={{ display: { xs: 'none', sm: 'block' } }}
-  //         >
-  //           Farm Manager
-  //         </Typography>
-  //         <Search>
-  //           <SearchIconWrapper>
-  //             <SearchIcon onClick={e => console.log('click')} />
-  //           </SearchIconWrapper>
-  //           <StyledInputBase />
-
-  //         </Search>
-  //         <Box sx={{ flexGrow: 1 }} />
-  //         <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-  //           {/* <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-  //             <Badge badgeContent={4} color="error">
-  //               <MailIcon />
-  //             </Badge>
-  //           </IconButton>
-  //           <IconButton
-  //             size="large"
-  //             aria-label="show 17 new notifications"
-  //             color="inherit"
-  //           >
-  //             <Badge badgeContent={17} color="error">
-  //               <NotificationsIcon />
-  //             </Badge>
-  //           </IconButton> */}
-  //           <IconButton
-  //             onClick={handleLogout}
-  //             size="large"
-  //             aria-label="log out"
-  //             color="inherit"
-  //           >
-  //             <Logout />
-  //           </IconButton>
-  //           {/* <IconButton
-  //             size="large"
-  //             edge="end"
-  //             aria-label="account of current user"
-  //             aria-controls={menuId}
-  //             aria-haspopup="true"
-  //             onClick={handleProfileMenuOpen}
-  //             color="inherit"
-  //           >
-  //             <AccountCircle />
-  //           </IconButton>*/}
-  //         </Box>
-  //         <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
-  //           <IconButton
-  //             size="large"
-  //             aria-label="show more"
-  //             aria-controls={mobileMenuId}
-  //             aria-haspopup="true"
-  //             onClick={handleMobileMenuOpen}
-  //             color="inherit"
-  //           >
-  //             <MoreIcon />
-  //           </IconButton>
-  //         </Box>
-  //       </Toolbar>
-  //     </MuiAppBar>
-  //     {renderMobileMenu}
-  //     {renderMenu}
-  //     <AppBarDialog open={dialogOpen} handleClose={() => setDialogOpen(false)} />
-  //   </Box>
-  // );
 }
 
 export default AppBar;
