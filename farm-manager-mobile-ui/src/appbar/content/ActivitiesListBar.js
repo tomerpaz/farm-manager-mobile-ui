@@ -1,9 +1,13 @@
 import { FilterAlt } from '@mui/icons-material'
 import { AppBar, IconButton, Toolbar } from '@mui/material'
+import { useDispatch } from 'react-redux'
+import { setAppBarDialogOpen } from '../../features/app/appSlice'
 import AppBarMenu from '../components/AppBarMenu'
 import AppBarSearch from '../components/AppBarSearch'
 
 const ActivitiesListBar = () => {
+    const dispatch = useDispatch()
+
     return (
         <AppBar position="static" elevation={0}>
             <Toolbar>
@@ -12,7 +16,7 @@ const ActivitiesListBar = () => {
                     edge="start"
                     color="inherit"
                     aria-label="open drawer"
-                    onClick={() => console.log('click')}
+                    onClick={() =>  dispatch(setAppBarDialogOpen(true))}
                     sx={{ mr: 1 }}
                 >
                     <FilterAlt />

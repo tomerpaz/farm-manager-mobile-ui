@@ -7,6 +7,7 @@ import ListPager from '../../../components/ui/ListPager';
 import Loading from '../../../components/Loading';
 import ActivityTypeIcon from '../../../icons/ActivityTypeIcon';
 import { useNavigate, useParams } from 'react-router-dom';
+import ActivitiesFilter from '../../../components/filters/ActivitiesFilter';
 
 const ActivitiesList = () => {
 
@@ -74,7 +75,7 @@ const ActivitiesList = () => {
                 {renderRows()}
             </List>
             <ListPager dir={dir} page={Number(page)} totalPages={data.totalPages} setPage={(value) => navigate(`/tabs/activities/${value}`)} />
-
+            <ActivitiesFilter />
         </Box>
     )
 }

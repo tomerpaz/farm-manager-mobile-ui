@@ -12,6 +12,7 @@ import { selectCurrentYear, selectLang } from '../../../features/app/appSlice';
 import { useFields } from '../../../features/fields/fieldsApiSlice';
 import { useGetUserDataQuery } from '../../../features/auth/authApiSlice';
 import { displayFieldArea, displayFieldName } from '../../FarmUtil';
+import FieldsFilter from '../../../components/filters/FieldsFilter';
 
 
 function renderRow(props) {
@@ -119,6 +120,7 @@ export default function FieldList(props) {
                 {(props) => renderRow({ ...props, field: fields[props.index], areaUnit: user.areaUnit,  text: text })}
 
             </FixedSizeList>
+            <FieldsFilter />
         </Box>
     );
 }

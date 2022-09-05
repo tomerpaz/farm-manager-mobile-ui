@@ -28,8 +28,6 @@ const UserRoutes = () => {
         if (isSuccess) {
             dispatch(setLang(getUserLang(user.lang)));
             dispatch(setCurrentYear(user.year));
-
-            
         } 
     }, [ user, isLoading, isSuccess, isError])
 

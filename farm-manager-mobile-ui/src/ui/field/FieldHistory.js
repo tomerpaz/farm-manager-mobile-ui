@@ -9,6 +9,7 @@ import { useGetActivitiesFieldQuery, useGetActivitiesFlatQuery } from '../../fea
 import Loading from '../../components/Loading';
 import ListPager from '../../components/ui/ListPager';
 import ActivityTypeIcon from '../../icons/ActivityTypeIcon';
+import ActivitiesFilter from '../../components/filters/ActivitiesFilter';
 
 const FieldHistory = () => {
   const { fieldId, page, src } = useParams()
@@ -78,6 +79,7 @@ const FieldHistory = () => {
 
       </List>
       <ListPager dir={dir} page={Number(page)} totalPages={data.totalPages} setPage={(value) => navigate(`/field/${src}/${fieldId}/history/${value}`)} />
+      <ActivitiesFilter />
     </Box>
   )
 }

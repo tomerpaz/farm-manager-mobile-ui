@@ -6,7 +6,9 @@ const appSlice = createSlice({
     initialState: { lang: {lang: 'en', dir: 'rtl', } , 
     token: localStorage.getItem('token'), 
     refreshToken: localStorage.getItem('refreshToken'), 
-    fieldFilter: '', currentYear: newDate().getFullYear()},
+    fieldFilter: '', currentYear: newDate().getFullYear(),
+    appBarDialogOpen: false,
+},
     reducers: {
         setCredentials: (state, action) => {
             const {token, refreshToken} = action.payload;
@@ -28,14 +30,18 @@ const appSlice = createSlice({
         setCurrentYear: (state, action) => {
             state.currentYear = action.payload
         },
+        setAppBarDialogOpen: (state, action) => {
+            state.appBarDialogOpen = action.payload
+        },
     },
 })
 
-export const { setCredentials, logOut, setLang, setCurrentYear } = appSlice.actions
+export const { setCredentials, logOut, setLang, setCurrentYear, setAppBarDialogOpen } = appSlice.actions
 
 export default appSlice.reducer
 
 export const selectCurrentToken = (state) => state.app.token
 export const selectLang = (state) => state.app.lang
 export const selectCurrentYear = (state) => state.app.currentYear
+export const selectAppBarDialogOpen = (state) => state.app.appBarDialogOpen
 

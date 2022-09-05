@@ -5,8 +5,9 @@ import { useNavigate } from "react-router-dom";
 import { Box } from "@mui/material";
 import { useFields } from "../../../features/fields/fieldsApiSlice";
 import { useGetUserDataQuery } from '../../../features/auth/authApiSlice'
-import { selectCurrentYear } from "../../../features/app/appSlice";
+import { selectAppBarDialogOpen, selectCurrentYear } from "../../../features/app/appSlice";
 import { useSelector } from "react-redux";
+import FieldsFilter from "../../../components/filters/FieldsFilter";
 
 
 
@@ -16,6 +17,8 @@ const FieldsMap = (props) => {
 
     const { data: user } = useGetUserDataQuery()
     const year = useSelector(selectCurrentYear);
+
+
 
     const fields = useFields(year)
 
@@ -71,6 +74,7 @@ const FieldsMap = (props) => {
                     )}
                 </MapContainer>
             </Box>
+            <FieldsFilter />
         </Box>
     )
 }

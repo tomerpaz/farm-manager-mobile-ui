@@ -23,7 +23,7 @@ import { displayFieldArea, displayFieldName } from '../FarmUtil';
 
 const Field = () => {
   const { pathname } = useLocation();
-  const { fieldId, src } = useParams()
+  const { fieldId, page,src } = useParams()
   const text = useSelector(selectLang)
   const { data: user } = useGetUserDataQuery()
   const year = useSelector(selectCurrentYear)
@@ -39,9 +39,8 @@ const Field = () => {
 
   const paths = [`/field/${src}/${fieldId}/info`,
   `/field/${src}/${fieldId}/dash`,
-  `/field/${src}/${fieldId}/history`,
+  `/field/${src}/${fieldId}/history/${page}`,
   `/field/${src}/${fieldId}/imagery`
-
   ];
 
   const getIndex = ((element) => element === pathname);

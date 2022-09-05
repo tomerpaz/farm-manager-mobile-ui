@@ -37,7 +37,6 @@ const FieldViewBar = ({ layers }) => {
                     </IconButton>}
                 </Box>
                 <AppBarMenu />
-
             </Toolbar>
         </AppBar>
     )
