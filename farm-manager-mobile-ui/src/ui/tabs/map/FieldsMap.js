@@ -1,4 +1,4 @@
-import { MapContainer, TileLayer, Polygon } from "react-leaflet";
+import { MapContainer, TileLayer, Polygon, useMapEvents } from "react-leaflet";
 import { useEffect, useState } from "react";
 import GeoLocation from "../../../components/GeoLocation";
 import { useNavigate } from "react-router-dom";
@@ -23,23 +23,40 @@ const FieldsMap = (props) => {
     const freeText = useSelector(selectFieldFreeTextFilter);
 
     const [center, setCenter] = useState([user.lng, user.lat]);
+    const [zoom, setZoom] = useState(user.zoom);
 
     const displayFields = filterFields(fields, freeText);
 
 
+    function HandleMapEvents(e) {
+        const m = useMapEvents({
+            zoomend: () => {
+                setZoom(m.getZoom())
+            },
+            // dragend: (e) => {
+            //     setCenter(e.target.getCenter())
+            // },
+            // click: (e) => {
+            //     change('lng', e.latlng.lng.toFixed(5));
+            //     change('lat', e.latlng.lat.toFixed(5));
+            // }
+        })
+        return <div></div>
+    }
+
     useEffect(() => {
         const c = (fields.length === displayFields.length) || isArrayEmpty(displayFields) ? [user.lng, user.lat] : [displayFields[0].lat, displayFields[0].lng];
-        // setCenter(c);
-        if (map && c) {
-            map.setView(c, user.zoom);
-        }
+        setCenter(c);
     }, [freeText])
 
 
-    // useEffect(() => {
-    //     console.log('center changed')
+    useEffect(() => {
+        console.log('center changed')
+        if (map && center) {
+            map.setView(center, zoom);
+        }
 
-    // }, [center])
+    }, [center])
 
     let navigate = useNavigate();
 
@@ -52,7 +69,7 @@ const FieldsMap = (props) => {
         <Box display={'flex'} flex={1} alignItems={'stretch'} flexDirection={'column'} justifyContent={'space-between'}>
 
             <Box flex={1} style={{ height: '100%' }} id="map" dir='ltr' >
-                <MapContainer style={{ height: height, width: '100%' }} center={center} zoom={user.zoom} scrollWheelZoom={false}
+                <MapContainer style={{ height: height, width: '100%' }} center={center} zoom={zoom} scrollWheelZoom={false}
                     ref={setSetMap}
                 >
                     <TileLayer
@@ -93,7 +110,9 @@ const FieldsMap = (props) => {
 
                         </Polygon>
                     )}
+                    <HandleMapEvents />
                 </MapContainer>
+
             </Box>
             {fields && <FieldsFilter fields={fields} />}
         </Box>
