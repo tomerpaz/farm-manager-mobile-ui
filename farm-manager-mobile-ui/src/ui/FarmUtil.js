@@ -59,7 +59,7 @@ export const getResourceUsageUnit = (resource, activityDef) => {
 }
 
 export const getActivityTypeText = (type, text) => {
-    if(SCOUT === type){
+    if (SCOUT === type) {
         return text.scouting;
     }
     return [GENERAL, GENERAL_PLAN].includes(type) ? text.activity : text[type.toLowerCase()];
@@ -97,7 +97,7 @@ export function subtractYear(date, years) {
 
 export function subtractDays(date, days) {
     return new Date(date - (1000 * 60 * 60 * 24 * days))
-   
+
 }
 
 export function asShortStringDate(time) {
@@ -114,6 +114,10 @@ export function isMatchFreeTextFilter(field, freeText) {
     } else if (field.siteName.includes(freeText)) {
         return true;
     } else if (field.alias?.includes(freeText)) {
+        return true;
+    } else if (field.cropName.includes(freeText)) {
+        return true;
+    } else if (field.varietyName.includes(freeText)) {
         return true;
     } else {
         return false;
