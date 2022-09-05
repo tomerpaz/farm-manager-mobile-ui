@@ -10,6 +10,7 @@ import Loading from '../../components/Loading';
 import ListPager from '../../components/ui/ListPager';
 import ActivityTypeIcon from '../../icons/ActivityTypeIcon';
 import ActivitiesFilter from '../../components/filters/ActivitiesFilter';
+import { parseDate } from '../FarmUtil';
 
 const FieldHistory = () => {
   const { fieldId, page, src } = useParams()
@@ -63,7 +64,7 @@ const FieldHistory = () => {
                   {`${e.reference}`}
                 </Typography>
               </Box>
-            } secondary={e.execution} />
+            } secondary={parseDate(e.execution)} />
           </ListItem>
           <Divider />
         </Fragment>

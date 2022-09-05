@@ -19,7 +19,7 @@ import { getFruitIcon } from '../../icons/FruitIconUtil';
 import { useFieldsById } from '../../features/fields/fieldsApiSlice';
 import { selectCurrentYear, selectLang } from '../../features/app/appSlice';
 import { useGetUserDataQuery } from '../../features/auth/authApiSlice';
-import { displayFieldArea, displayFieldName } from '../FarmUtil';
+import { displayFieldArea, displayFieldName, parseDate } from '../FarmUtil';
 
 const Field = () => {
   const { pathname } = useLocation();
@@ -84,7 +84,7 @@ const Field = () => {
                 {`${field.cropName},${field.varietyName}`}
               </Typography>
               <Typography color='secondary' variant='subtitle1' component={"span"}>
-                {`${field.startDate}`}
+                {`${parseDate(field.startDate)}`}
               </Typography>
             </Box>
           }

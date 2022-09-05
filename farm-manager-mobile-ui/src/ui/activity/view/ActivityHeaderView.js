@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { selectLang } from '../../../features/app/appSlice'
 import ActivityTypeIcon from '../../../icons/ActivityTypeIcon'
-import { getActivityTypeText, isArrayEmpty } from '../../FarmUtil'
+import { getActivityTypeText, isArrayEmpty, parseDate } from '../../FarmUtil'
 import InfoLine from '../../field/InfoLine'
 
 const ActivityHeaderView = ({ activity }) => {
@@ -32,7 +32,7 @@ const ActivityHeaderView = ({ activity }) => {
         {activity.activityDef && <Typography variant="subtitle1" color="text.secondary">{activity.activityDef.name}</Typography>}
         {activity.crop && <Typography variant="subtitle1" color="text.secondary">{activity.crop.name}</Typography>}
 
-        <Typography variant='subtitle1' color="text.secondary">{activity.execution}</Typography>
+        <Typography variant='subtitle1' color="text.secondary">{parseDate(activity.execution)}</Typography>
       </Box>
       <Box  display={'flex'} flex={1} alignItems={'center'} justifyContent={'space-between'} flexDirection={'row'} >
          {activity.year && <Typography variant="subtitle1" color="text.secondary">{activity.year}</Typography>}

@@ -8,6 +8,7 @@ import Loading from '../../../components/Loading';
 import ActivityTypeIcon from '../../../icons/ActivityTypeIcon';
 import { useNavigate, useParams } from 'react-router-dom';
 import ActivitiesFilter from '../../../components/filters/ActivitiesFilter';
+import { parseDate } from '../../FarmUtil';
 
 const ActivitiesList = () => {
 
@@ -61,7 +62,7 @@ const ActivitiesList = () => {
                                 </Typography>
                             </Box>
 
-                        } secondary={e.execution} />
+                        } secondary={parseDate(e.execution)} />
                     </ListItem>
                     <Divider />
                 </Fragment>

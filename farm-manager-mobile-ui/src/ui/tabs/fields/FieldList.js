@@ -11,7 +11,7 @@ import { useSelector } from 'react-redux';
 import { selectCurrentYear, selectFieldFreeTextFilter, selectLang } from '../../../features/app/appSlice';
 import { useFields } from '../../../features/fields/fieldsApiSlice';
 import { useGetUserDataQuery } from '../../../features/auth/authApiSlice';
-import { displayFieldArea, displayFieldName, filterFields } from '../../FarmUtil';
+import { displayFieldArea, displayFieldName, filterFields, parseDate } from '../../FarmUtil';
 import FieldsFilter from '../../../components/filters/FieldsFilter';
 
 
@@ -51,7 +51,7 @@ function renderRow(props) {
                                     {`${field.cropName},${field.varietyName}`}
                                 </Typography>
                                 <Typography component={"span"}>
-                                    {`${field.startDate}`}
+                                    {`${parseDate(field.startDate)}`}
                                 </Typography>
                             </Box>
                         }

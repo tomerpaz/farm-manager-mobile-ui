@@ -107,6 +107,13 @@ export function asShortStringDate(time) {
     return null;
 }
 
+export function parseDate(date) {
+    if (date !== null) {
+        return asShortStringDate(Date.parse(date));
+    }
+    return null;
+}
+
 export function isMatchFreeTextFilter(field, freeText) {
 
     if (field.name.includes(freeText)) {
