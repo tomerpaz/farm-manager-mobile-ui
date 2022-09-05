@@ -8,10 +8,10 @@ import { Divider, ListItemAvatar, Avatar, BottomNavigation, BottomNavigationActi
 import { Link } from 'react-router-dom';
 import { getFruitIcon } from '../../../icons/FruitIconUtil';
 import { useSelector } from 'react-redux';
-import { selectCurrentYear, selectLang } from '../../../features/app/appSlice';
+import { selectCurrentYear, selectFieldFreeTextFilter, selectLang } from '../../../features/app/appSlice';
 import { useFields } from '../../../features/fields/fieldsApiSlice';
 import { useGetUserDataQuery } from '../../../features/auth/authApiSlice';
-import { displayFieldArea, displayFieldName } from '../../FarmUtil';
+import { displayFieldArea, displayFieldName, filterFields } from '../../FarmUtil';
 import FieldsFilter from '../../../components/filters/FieldsFilter';
 
 
@@ -77,6 +77,10 @@ export default function FieldList(props) {
 
     const text =  useSelector(selectLang)
 
+    const freeText = useSelector(selectFieldFreeTextFilter);
+
+    const displayFields = filterFields(fields, freeText);
+
     // const renderRow = (props) => {
     //     const { index, style } = props;
     //     return (
@@ -114,10 +118,10 @@ export default function FieldList(props) {
                 height={height}
 
                 itemSize={70}
-                itemCount={fields.length}
+                itemCount={displayFields.length}
                 overscanCount={5}
             >
-                {(props) => renderRow({ ...props, field: fields[props.index], areaUnit: user.areaUnit,  text: text })}
+                {(props) => renderRow({ ...props, field: displayFields[props.index], areaUnit: user.areaUnit,  text: text })}
 
             </FixedSizeList>
             {fields && <FieldsFilter fields={fields} />}
