@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { Box } from "@mui/material";
 import { useFields } from "../../../features/fields/fieldsApiSlice";
 import { useGetUserDataQuery } from '../../../features/auth/authApiSlice'
-import { selectAppBarDialogOpen, selectCurrentYear, selectFieldFreeTextFilter } from "../../../features/app/appSlice";
+import { selectCurrentYear, selectFieldFreeTextFilter } from "../../../features/app/appSlice";
 import { useSelector } from "react-redux";
 import FieldsFilter from "../../../components/filters/FieldsFilter";
 import { filterFields, isArrayEmpty, isStringEmpty } from "../../FarmUtil";
@@ -22,7 +22,7 @@ const FieldsMap = (props) => {
     const fields = useFields(year).filter(f => f.polygon);
     const freeText = useSelector(selectFieldFreeTextFilter);
 
-    const [center, setCenter] = useState([user.lng, user.lat]);
+    const [center, setCenter] = useState([user.lat, user.lng]);
     const [zoom, setZoom] = useState(user.zoom);
 
     const displayFields = filterFields(fields, freeText);
@@ -45,7 +45,7 @@ const FieldsMap = (props) => {
     }
 
     useEffect(() => {
-        const c = (fields.length === displayFields.length) || isArrayEmpty(displayFields) ? [user.lng, user.lat] : [displayFields[0].lat, displayFields[0].lng];
+        const c = (fields.length === displayFields.length) || isArrayEmpty(displayFields) ? [user.lat, user.lng] : [displayFields[0].lat, displayFields[0].lng];
         setCenter(c);
     }, [freeText])
 
