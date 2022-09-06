@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react'
 import { AppBar, Box, Dialog, Divider, IconButton, InputAdornment, List, ListItem, ListItemText, Slide, TextField, Toolbar, Typography } from '@mui/material'
-import { selectAppBarDialogOpen, selectLang, setAppBarDialogOpen } from '../../features/app/appSlice';
+import { selectAppBarDialogOpen, selectEndDateFilter, selectLang, selectStartDateFilter, setAppBarDialogOpen, setEndDateFilter, setStartDateFilter } from '../../features/app/appSlice';
 import CloseIcon from '@mui/icons-material/Close';
 import DoneIcon from '@mui/icons-material/Done';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { MobileDatePicker } from '@mui/x-date-pickers';
+import { dateToString } from '../../ui/FarmUtil';
 
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -21,9 +22,14 @@ const ActivitiesFilter = () => {
     const open = useSelector(selectAppBarDialogOpen)
 
 
-    const [from, setFrom] = React.useState(null);
+    const startDateFilter = useSelector(selectStartDateFilter);
+    const endDateFilter = useSelector(selectEndDateFilter);
 
-    const [to, setTo] = React.useState(null);
+    
+
+    const [from, setFrom] = React.useState(startDateFilter);
+
+    const [to, setTo] = React.useState(endDateFilter);
 
 
 
@@ -35,8 +41,15 @@ const ActivitiesFilter = () => {
         dispatch(setAppBarDialogOpen(false))
     }
 
+    const handleOk = () => {
+        dispatch(setStartDateFilter(dateToString(from)))
+        dispatch(setEndDateFilter(dateToString(to)))
+        dispatch(setAppBarDialogOpen(false))
+    }
 
-    console.log('ActivitiesFilter.fielId', fieldId)
+
+    console.log('startDateFilter', startDateFilter);
+    console.log('endDateFilter', endDateFilter);
 
     return (
         <Dialog
@@ -64,7 +77,7 @@ const ActivitiesFilter = () => {
                     <IconButton
                         edge="start"
                         color="inherit"
-                        onClick={handleClose}
+                        onClick={handleOk}
                         aria-label="done"
                     >
                         <DoneIcon />

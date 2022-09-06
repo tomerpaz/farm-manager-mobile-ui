@@ -107,6 +107,16 @@ export function asShortStringDate(time) {
     return null;
 }
 
+
+export function dateToString(date) {
+    if (date && date instanceof Date && !isNaN(date.valueOf())) {
+        return date.toLocaleDateString('en-GB', { day: "2-digit", month: "2-digit", year: "2-digit" })
+    }
+    return date;
+}
+
+
+
 export function parseDate(date) {
     if (date !== null) {
         return asShortStringDate(Date.parse(date));

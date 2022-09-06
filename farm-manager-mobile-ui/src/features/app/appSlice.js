@@ -11,6 +11,8 @@ const appSlice = createSlice({
         activityFreeTextFilter: '',
         fieldFilter: '', currentYear: newDate().getFullYear(),
         appBarDialogOpen: false,
+        startDateFilter: null,
+        endDateFilter: null,
     },
     reducers: {
         setCredentials: (state, action) => {
@@ -42,11 +44,18 @@ const appSlice = createSlice({
         setActivityFreeTextFilter: (state, action) => {
             state.activityFreeTextFilter = action.payload
         },
+        setStartDateFilter: (state, action) => {
+            state.startDateFilter = action.payload
+        },
+        setEndDateFilter: (state, action) => {
+            state.endDateFilter = action.payload
+        },
         
     },
 })
 
-export const { setCredentials, logOut, setLang, setCurrentYear, setAppBarDialogOpen, setFieldFreeTextFilter, setActivityFreeTextFilter } = appSlice.actions
+export const { setCredentials, logOut, setLang, setCurrentYear, setAppBarDialogOpen, setFieldFreeTextFilter, setActivityFreeTextFilter,
+    setStartDateFilter, setEndDateFilter } = appSlice.actions
 
 export default appSlice.reducer
 
@@ -56,5 +65,7 @@ export const selectCurrentYear = (state) => state.app.currentYear
 export const selectAppBarDialogOpen = (state) => state.app.appBarDialogOpen
 export const selectFieldFreeTextFilter = (state) => state.app.fieldFreeTextFilter
 export const selectActivityFreeTextFilter = (state) => state.app.activityFreeTextFilter
+export const selectStartDateFilter = (state) => state.app.startDateFilter
+export const selectEndDateFilter = (state) => state.app.endDateFilter
 
 
