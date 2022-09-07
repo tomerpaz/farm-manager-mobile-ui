@@ -1,16 +1,14 @@
-import React, { Fragment, useState } from 'react'
-import { Avatar, List, ListItem, ListItemText, ListItemAvatar, Box, Button, Typography, Divider } from '@mui/material';
-import ImageIcon from '@mui/icons-material/Image';
+import React, { Fragment } from 'react'
+import { Avatar, List, ListItem, ListItemText, ListItemAvatar, Box, Typography, Divider } from '@mui/material';
 import { useSelector } from 'react-redux';
-import { ChevronLeftOutlined, ChevronRightOutlined } from '@mui/icons-material';
-import { selectLang } from '../../features/app/appSlice';
+import { selectActivityFreeTextFilter, selectActivityTypeFilter, selectEndDateFilter, selectLang, selectStartDateFilter } from '../../features/app/appSlice';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useGetActivitiesFieldQuery, useGetActivitiesFlatQuery } from '../../features/activities/activitiesApiSlice';
+import { useGetActivitiesFieldQuery } from '../../features/activities/activitiesApiSlice';
 import Loading from '../../components/Loading';
 import ListPager from '../../components/ui/ListPager';
 import ActivityTypeIcon from '../../icons/ActivityTypeIcon';
 import ActivitiesFilter from '../../components/filters/ActivitiesFilter';
-import { parseDate } from '../FarmUtil';
+import { buildActiviyFilter, parseDate } from '../FarmUtil';
 
 const FieldHistory = () => {
   const { fieldId, page, src } = useParams()
@@ -24,13 +22,20 @@ const FieldHistory = () => {
   const dir = 'desc';
   const text = useSelector(selectLang)
 
+  const startDateFilter = useSelector(selectStartDateFilter);
+  const endDateFilter = useSelector(selectEndDateFilter);
+  const activityTypeFilter = useSelector(selectActivityTypeFilter);
+  const activityFreeTextFilter = useSelector(selectActivityFreeTextFilter);    
+  const filter = buildActiviyFilter(startDateFilter,endDateFilter, activityTypeFilter, activityFreeTextFilter);
+
+  console.log('FieldHistory',filter)
   const {
     data,
     isLoading,
     isSuccess,
     isError,
     error
-  } = useGetActivitiesFieldQuery({ fieldId, page, maxResult, isPlan, orderBy, dir })
+  } = useGetActivitiesFieldQuery({ fieldId, page, maxResult, isPlan, orderBy, dir, filter })
 
 
   if (!data || isLoading) {

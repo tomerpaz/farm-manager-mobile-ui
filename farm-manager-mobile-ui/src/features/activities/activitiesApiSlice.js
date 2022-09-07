@@ -32,7 +32,7 @@ export const activityApiSlice = apiSlice.injectEndpoints({
             ]
         }),
         getActivitiesField: builder.query({
-            query: (args) => `/api/farm/activities/field/${args.fieldId}/${args.page}/${args.maxResult}/${args.isPlan}/${args.orderBy}/${args.dir}`,
+            query: (args) => `/api/farm/activities/field/${args.fieldId}/${args.page}/${args.maxResult}/${args.isPlan}/${args.orderBy}/${args.dir}?filter=${args.filter}`,
             // transformResponse: responseData => {
 
             //     return fieldActivitiesAdapter.setAll(fieldActivityinitialState, responseData)

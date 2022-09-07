@@ -174,3 +174,20 @@ export function filterFields(fields, freeText) {
         return fields.filter(e => isMatchFreeTextFilter(e, freeText));
     }
 }
+
+export const buildActiviyFilter = (start, end, activityType, freeText) => {
+    const filter = [];
+    if(!isStringEmpty(start)){
+        filter.push(`start_${start.replaceAll('-','')}`)
+    }
+    if(!isStringEmpty(end)){
+        filter.push(`end_${end.replaceAll('-','')}`)
+    }
+    if(!isStringEmpty(activityType)){
+        filter.push(`activityType_${activityType}`)
+    }
+    if(!isStringEmpty(freeText)){
+        filter.push(`freeText_${freeText}`)
+    }
+    return filter;
+}
