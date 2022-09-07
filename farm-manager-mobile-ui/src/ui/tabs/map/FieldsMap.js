@@ -5,10 +5,10 @@ import { useNavigate } from "react-router-dom";
 import { Box } from "@mui/material";
 import { useFields } from "../../../features/fields/fieldsApiSlice";
 import { useGetUserDataQuery } from '../../../features/auth/authApiSlice'
-import { selectCurrentYear, selectFieldFreeTextFilter } from "../../../features/app/appSlice";
+import { selectCurrentYear, selectFieldBaseFieldFilter, selectFieldFreeTextFilter, selectFieldSiteFilter } from "../../../features/app/appSlice";
 import { useSelector } from "react-redux";
 import FieldsFilter from "../../../components/filters/FieldsFilter";
-import { filterFields, isArrayEmpty, isStringEmpty } from "../../FarmUtil";
+import { filterFields, isArrayEmpty } from "../../FarmUtil";
 
 
 
@@ -21,11 +21,13 @@ const FieldsMap = (props) => {
 
     const fields = useFields(year).filter(f => f.polygon);
     const freeText = useSelector(selectFieldFreeTextFilter);
-
+    const fieldSiteFilter = useSelector(selectFieldSiteFilter)
+    const fieldBaseFieldFilter = useSelector(selectFieldBaseFieldFilter)
+  
     const [center, setCenter] = useState([user.lat, user.lng]);
     const [zoom, setZoom] = useState(user.zoom);
 
-    const displayFields = filterFields(fields, freeText);
+    const displayFields = filterFields(fields, freeText, fieldSiteFilter, fieldBaseFieldFilter);
 
 
     function HandleMapEvents(e) {
@@ -47,7 +49,7 @@ const FieldsMap = (props) => {
     useEffect(() => {
         const c = (fields.length === displayFields.length) || isArrayEmpty(displayFields) ? [user.lat, user.lng] : [displayFields[0].lat, displayFields[0].lng];
         setCenter(c);
-    }, [freeText])
+    }, [freeText, fieldSiteFilter, fieldBaseFieldFilter])
 
 
     useEffect(() => {

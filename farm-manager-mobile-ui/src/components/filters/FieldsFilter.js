@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react'
 import { AppBar, Dialog, Divider, FormControl, IconButton, InputLabel, List, ListItem, ListItemText, MenuItem, Select, Slide, TextField, Toolbar, Typography } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux';
-import { selectAppBarDialogOpen, selectLang, setAppBarDialogOpen } from '../../features/app/appSlice';
+import { selectAppBarDialogOpen, selectFieldBaseFieldFilter, selectFieldSiteFilter, selectLang, setAppBarDialogOpen, setFieldBaseFieldFilter, setFieldSiteFilter } from '../../features/app/appSlice';
 import CloseIcon from '@mui/icons-material/Close';
 import DoneIcon from '@mui/icons-material/Done';
+import { FilterAltOff } from '@mui/icons-material';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -17,10 +18,17 @@ const FieldsFilter = ({ fields, }) => {
 
     const open = useSelector(selectAppBarDialogOpen)
 
+    const fieldSiteFilter = useSelector(selectFieldSiteFilter)
+    const fieldBaseFieldFilter = useSelector(selectFieldBaseFieldFilter)
+   
+    const noFilter = fieldSiteFilter === 0 && fieldBaseFieldFilter === 0;
 
-    const [site, setSite] = React.useState('');
-    const [baseField, setBaseField] = React.useState('');
 
+    const clearFilters = () => {
+        dispatch(setFieldSiteFilter(0));
+        dispatch(setFieldBaseFieldFilter(0));
+        
+    }
 
     useEffect(() => {
         return () => dispatch(setAppBarDialogOpen(false));
@@ -42,14 +50,16 @@ const FieldsFilter = ({ fields, }) => {
         >
             <AppBar sx={{ position: 'relative' }} elevation={0}>
                 <Toolbar>
-                    <IconButton
+                    {!noFilter && <IconButton
+                        size="large"
                         edge="start"
                         color="inherit"
-                        onClick={handleClose}
-                        aria-label="close"
+                        aria-label="open filter"
+                        onClick={clearFilters}
+                        sx={{ mr: 1 }}
                     >
-                        <CloseIcon />
-                    </IconButton>
+                        <FilterAltOff />
+                    </IconButton>}
                     <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
                         {/* Filter */}
                     </Typography>
@@ -71,10 +81,10 @@ const FieldsFilter = ({ fields, }) => {
                         fullWidth
                         size='small'
                         label={text.site}
-                        value={site}
-                        onChange={e => setSite(e.target.value)}
-                    >
-                        <MenuItem value="">
+                        value={fieldSiteFilter}
+                        onChange={e =>  dispatch(setFieldSiteFilter(Number(e.target.value)))}
+                    > 
+                        <MenuItem value={0}>
                             <em></em>
                         </MenuItem>
                         {sites.map((option) => (
@@ -92,10 +102,10 @@ const FieldsFilter = ({ fields, }) => {
                         fullWidth
                         size='small'
                         label={text.field}
-                        value={baseField}
-                        onChange={e => setBaseField(e.target.value)}
+                        value={fieldBaseFieldFilter}
+                        onChange={e =>  dispatch(setFieldBaseFieldFilter(Number(e.target.value)))}
                     >
-                        <MenuItem value="">
+                        <MenuItem value={0}>
                             <em></em>
                         </MenuItem>
                         {baseFields.map((option) => (

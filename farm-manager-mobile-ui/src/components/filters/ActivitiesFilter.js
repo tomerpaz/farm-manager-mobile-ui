@@ -31,14 +31,10 @@ const ActivitiesFilter = () => {
 
     const noFilter = isStringEmpty(startDateFilter) && isStringEmpty(endDateFilter) && isStringEmpty(activityTypeFilter)
 
-
-    const [to, setTo] = React.useState(endDateFilter);
-
     const clearFilters = () => {
         dispatch(setStartDateFilter(null));
         dispatch(setEndDateFilter(null));
         dispatch(setActivityTypeFilter(''))
-
     }
 
     useEffect(() => {
@@ -61,14 +57,6 @@ const ActivitiesFilter = () => {
         >
             <AppBar sx={{ position: 'relative' }} elevation={0}>
                 <Toolbar>
-                    {/* <IconButton
-                        edge="start"
-                        color="inherit"
-                        onClick={handleClose}
-                        aria-label="close"
-                    >
-                        <CloseIcon />
-                    </IconButton> */}
                     {!noFilter && <IconButton
                         size="large"
                         edge="start"
@@ -82,9 +70,7 @@ const ActivitiesFilter = () => {
                     <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
                         {/* Filter */}
                     </Typography>
-                    {/* <Button autoFocus color="inherit" onClick={handleClose}>
-          save
-        </Button> */}
+
                     <IconButton
                         edge="start"
                         color="inherit"

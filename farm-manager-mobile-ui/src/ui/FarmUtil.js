@@ -11,13 +11,13 @@ export const IRRIGATION_PLAN = 'IRRIGATION_PLAN';
 const CONTACROR = 'CONTACROR';
 
 
-const GROWER_ACTIVITY_TYPES = [GENERAL,SPRAY,IRRIGATION,HARVEST,SCOUT, MARKET]
+const GROWER_ACTIVITY_TYPES = [GENERAL, SPRAY, IRRIGATION, HARVEST, SCOUT, MARKET]
 
-const GROWER_PLAN_TYPES = [GENERAL_PLAN,SPRAY,SPRAY_PLAN,IRRIGATION_PLAN]
+const GROWER_PLAN_TYPES = [GENERAL_PLAN, SPRAY, SPRAY_PLAN, IRRIGATION_PLAN]
 
 
-export function getActivityTypes(role, isPlan){
-    if(isPlan){
+export function getActivityTypes(role, isPlan) {
+    if (isPlan) {
         return GROWER_PLAN_TYPES
     } else {
         return GROWER_ACTIVITY_TYPES;
@@ -167,26 +167,32 @@ export function isMatchFreeTextFilter(field, freeText) {
     }
 }
 
-export function filterFields(fields, freeText) {
-    if (isStringEmpty(freeText)) {
-        return fields;
-    } else {
-        return fields.filter(e => isMatchFreeTextFilter(e, freeText));
+export function filterFields(fields, freeText, fieldSiteFilter, fieldBaseFieldFilter) {
+    let result = fields;
+    if (!isStringEmpty(freeText)) {
+        result = fields.filter(e => isMatchFreeTextFilter(e, freeText));
     }
+    if (fieldSiteFilter !== 0) {
+        result = result.filter(e => fieldSiteFilter === e.siteId);
+    }
+    if (fieldBaseFieldFilter !== 0) {
+        result = result.filter(e => fieldBaseFieldFilter === e.baseFieldId);
+    }
+    return result;
 }
 
 export const buildActiviyFilter = (start, end, activityType, freeText) => {
     const filter = [];
-    if(!isStringEmpty(start)){
-        filter.push(`start_${start.replaceAll('-','')}`)
+    if (!isStringEmpty(start)) {
+        filter.push(`start_${start.replaceAll('-', '')}`)
     }
-    if(!isStringEmpty(end)){
-        filter.push(`end_${end.replaceAll('-','')}`)
+    if (!isStringEmpty(end)) {
+        filter.push(`end_${end.replaceAll('-', '')}`)
     }
-    if(!isStringEmpty(activityType)){
+    if (!isStringEmpty(activityType)) {
         filter.push(`activityType_${activityType}`)
     }
-    if(!isStringEmpty(freeText)){
+    if (!isStringEmpty(freeText)) {
         filter.push(`freeText_${freeText}`)
     }
     return filter;

@@ -8,7 +8,7 @@ import { Divider, ListItemAvatar, Avatar, BottomNavigation, BottomNavigationActi
 import { Link } from 'react-router-dom';
 import { getFruitIcon } from '../../../icons/FruitIconUtil';
 import { useSelector } from 'react-redux';
-import { selectCurrentYear, selectFieldFreeTextFilter, selectLang } from '../../../features/app/appSlice';
+import { selectCurrentYear, selectFieldBaseFieldFilter, selectFieldFreeTextFilter, selectFieldSiteFilter, selectLang } from '../../../features/app/appSlice';
 import { useFields } from '../../../features/fields/fieldsApiSlice';
 import { useGetUserDataQuery } from '../../../features/auth/authApiSlice';
 import { displayFieldArea, displayFieldName, filterFields, parseDate } from '../../FarmUtil';
@@ -78,8 +78,10 @@ export default function FieldList(props) {
     const text =  useSelector(selectLang)
 
     const freeText = useSelector(selectFieldFreeTextFilter);
-
-    const displayFields = filterFields(fields, freeText);
+    const fieldSiteFilter = useSelector(selectFieldSiteFilter)
+    const fieldBaseFieldFilter = useSelector(selectFieldBaseFieldFilter)
+  
+    const displayFields = filterFields(fields, freeText, fieldSiteFilter, fieldBaseFieldFilter);
 
     // const renderRow = (props) => {
     //     const { index, style } = props;
