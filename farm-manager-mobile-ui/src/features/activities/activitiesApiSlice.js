@@ -21,7 +21,7 @@ export const activityApiSlice = apiSlice.injectEndpoints({
     endpoints: builder => ({
         getActivitiesFlat: builder.query({
 
-            query: (args) => `/api/farm/activities/flat/${args.page}/${args.maxResult}/${args.isPlan}/${args.orderBy}/${args.dir}`,
+            query: (args) => `/api/farm/activities/flat/${args.page}/${args.maxResult}/${args.isPlan}/${args.orderBy}/${args.dir}?filter=${args.filter}`,
             // transformResponse: responseData => {
 
             //     return activitiesAdapter.setAll(initialState, responseData.content)

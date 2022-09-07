@@ -13,6 +13,7 @@ const appSlice = createSlice({
         appBarDialogOpen: false,
         startDateFilter: null,
         endDateFilter: null,
+        activityTypeFilter: '',
     },
     reducers: {
         setCredentials: (state, action) => {
@@ -31,31 +32,28 @@ const appSlice = createSlice({
             state.token = null
             state.refreshToken = null;
 
-        },
-        setCurrentYear: (state, action) => {
+        }, setCurrentYear: (state, action) => {
             state.currentYear = action.payload
-        },
-        setAppBarDialogOpen: (state, action) => {
+        }, setAppBarDialogOpen: (state, action) => {
             state.appBarDialogOpen = action.payload
-        },
-        setFieldFreeTextFilter: (state, action) => {
+        }, setFieldFreeTextFilter: (state, action) => {
             state.fieldFreeTextFilter = action.payload
-        },
-        setActivityFreeTextFilter: (state, action) => {
+        }, setActivityFreeTextFilter: (state, action) => {
             state.activityFreeTextFilter = action.payload
-        },
-        setStartDateFilter: (state, action) => {
+        }, setStartDateFilter: (state, action) => {
             state.startDateFilter = action.payload
-        },
-        setEndDateFilter: (state, action) => {
+        }, setEndDateFilter: (state, action) => {
             state.endDateFilter = action.payload
+        }, setActivityTypeFilter: (state, action) => {
+            state.activityTypeFilter = action.payload
         },
-        
+
+
     },
 })
 
 export const { setCredentials, logOut, setLang, setCurrentYear, setAppBarDialogOpen, setFieldFreeTextFilter, setActivityFreeTextFilter,
-    setStartDateFilter, setEndDateFilter } = appSlice.actions
+    setStartDateFilter, setEndDateFilter, setActivityTypeFilter } = appSlice.actions
 
 export default appSlice.reducer
 
@@ -67,5 +65,5 @@ export const selectFieldFreeTextFilter = (state) => state.app.fieldFreeTextFilte
 export const selectActivityFreeTextFilter = (state) => state.app.activityFreeTextFilter
 export const selectStartDateFilter = (state) => state.app.startDateFilter
 export const selectEndDateFilter = (state) => state.app.endDateFilter
-
+export const selectActivityTypeFilter = (state) => state.app.activityTypeFilter
 

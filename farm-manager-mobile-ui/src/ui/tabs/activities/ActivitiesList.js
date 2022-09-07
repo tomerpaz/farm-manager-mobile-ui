@@ -2,13 +2,31 @@ import React, { Fragment, useState } from 'react'
 import { Avatar, List, ListItem, ListItemText, ListItemAvatar, Box, Button, Typography, Divider } from '@mui/material';
 import { useSelector } from 'react-redux';
 import { useGetActivitiesFlatQuery } from '../../../features/activities/activitiesApiSlice';
-import { selectLang } from '../../../features/app/appSlice';
+import { selectActivityTypeFilter, selectEndDateFilter, selectLang, selectStartDateFilter } from '../../../features/app/appSlice';
 import ListPager from '../../../components/ui/ListPager';
 import Loading from '../../../components/Loading';
 import ActivityTypeIcon from '../../../icons/ActivityTypeIcon';
 import { useNavigate, useParams } from 'react-router-dom';
 import ActivitiesFilter from '../../../components/filters/ActivitiesFilter';
-import { parseDate } from '../../FarmUtil';
+import { isStringEmpty, parseDate } from '../../FarmUtil';
+
+
+const buildActiviyFilter = (start, end, activityType) => {
+    const filter = [];
+    if(!isStringEmpty(start)){
+        filter.push(`start_${start.replaceAll('-','')}`)
+
+    }
+    if(!isStringEmpty(end)){
+        filter.push(`end_${end.replaceAll('-','')}`)
+    }
+    if(!isStringEmpty(activityType)){
+        filter.push(`activityType_${activityType}`)
+    }
+    return filter;
+}
+
+
 
 const ActivitiesList = () => {
 
@@ -22,13 +40,22 @@ const ActivitiesList = () => {
     const orderBy = 'execution';
     const dir = 'desc';
 
+
+    const startDateFilter = useSelector(selectStartDateFilter);
+    const endDateFilter = useSelector(selectEndDateFilter);
+    const activityTypeFilter = useSelector(selectActivityTypeFilter);
+
+    
+    const filter = buildActiviyFilter(startDateFilter,endDateFilter, activityTypeFilter);
+    console.log('filter pp',filter);
+
     const {
         data,
         isLoading,
         isSuccess,
         isError,
         error
-    } = useGetActivitiesFlatQuery({ page, maxResult, isPlan, orderBy, dir })
+    } = useGetActivitiesFlatQuery({ page, maxResult, isPlan, orderBy, dir , filter})
 
     const text = useSelector(selectLang)
 

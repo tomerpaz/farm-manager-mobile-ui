@@ -4,11 +4,25 @@ export const SPRAY = 'SPRAY';
 export const SPRAY_PLAN = 'SPRAY_PLAN';
 export const MARKET = 'MARKET';
 export const HARVEST = 'HARVEST';
-export const SCOUT = 'SCOUT';
+export const SCOUT = 'SCOUTING';
 export const IRRIGATION = 'IRRIGATION';
+export const IRRIGATION_PLAN = 'IRRIGATION_PLAN';
 
 const CONTACROR = 'CONTACROR';
 
+
+const GROWER_ACTIVITY_TYPES = [GENERAL,SPRAY,IRRIGATION,HARVEST,SCOUT, MARKET]
+
+const GROWER_PLAN_TYPES = [GENERAL_PLAN,SPRAY,SPRAY_PLAN,IRRIGATION_PLAN]
+
+
+export function getActivityTypes(role, isPlan){
+    if(isPlan){
+        return GROWER_PLAN_TYPES
+    } else {
+        return GROWER_ACTIVITY_TYPES;
+    }
+}
 
 export const displayFieldName = (field) => {
     return field.alias ? `${field.name}, ${field.alias}` : field.name;
@@ -113,6 +127,18 @@ export function dateToString(date) {
         return date.toLocaleDateString('en-GB', { day: "2-digit", month: "2-digit", year: "2-digit" })
     }
     return date;
+}
+
+export function asLocalDate(date, hyphen) {
+    if (date && date instanceof Date) {
+        var yyyy = date.getFullYear().toString();
+        var mm = (date.getMonth() + 1).toString(); // getMonth() is zero-based         
+        var dd = date.getDate().toString();
+        const space = hyphen ? "-" : "";
+        return yyyy + space + (mm[1] ? mm : "0" + mm[0]) + space + (dd[1] ? dd : "0" + dd[0]);
+    } else {
+        return date;
+    }
 }
 
 
