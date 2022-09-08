@@ -26,17 +26,17 @@ const renderCustomizedLabel = (props) => {
 export default function WaterBarchart({data, text, waterUnit}) {
     // areaUnit={text[user.waterUnit]}
     return (
-        <ResponsiveContainer width="100%" height={250}>
+        <ResponsiveContainer width="100%" height={230}>
 
             <BarChart
 
-                width={150} height={40}
+                // width={150} height={40}
                 data={data}
                 margin={{
-                    top: 20,
+                    top: 10,
                     // right: 30,
                     // left: 20,
-                    bottom: 20
+                    bottom: 18
                 }}
             >
                 <defs>

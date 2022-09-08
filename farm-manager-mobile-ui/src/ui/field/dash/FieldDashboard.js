@@ -15,7 +15,7 @@ import Loading from '../../../components/Loading';
 
 
 const elevation = 4;
-const cardHeaderPadding = 1.5;
+const cardHeaderPadding = 1;
 
 const FieldDashboard = ({ setUseHeight }) => {
 
@@ -29,7 +29,7 @@ const FieldDashboard = ({ setUseHeight }) => {
 
   const year = useSelector(selectCurrentYear)
 
-  
+
 
   useEffect(() => {
     setUseHeight(!expandedPesticides && !expandedFertilizers)
@@ -42,12 +42,12 @@ const FieldDashboard = ({ setUseHeight }) => {
     isSuccess,
     isError,
     error
-} = useGetFieldDashBoardQuery({ fieldId, year})
+  } = useGetFieldDashBoardQuery({ fieldId, year })
 
 
-if(isLoading){
-  return <Loading/>
-}
+  if (isLoading) {
+    return <Loading />
+  }
   console.log(data)
 
   return (
@@ -59,8 +59,8 @@ if(isLoading){
               avatar={<Avatar sx={{ bgcolor: orange[500] }}>
                 <NaturePeople />
               </Avatar>}
-              title={`${formatNumber(data.weightTotal)} ${text[user.weightUnit]}`}
-              subheader={`${formatNumber(data.weightPerAreaUnit)}   ${text[user.weightUnit]}/${text[user.areaUnit]}`}
+              title={<Typography whiteSpace={'nowrap'} variant='body2'>{`${formatNumber(data.weightTotal)} ${text[user.weightUnit]}`}</Typography>}
+              subheader={<Typography whiteSpace={'nowrap'} variant='body2'>{`${formatNumber(data.weightPerAreaUnit)}   ${text[user.weightUnit]}/${text[user.areaUnit]}`}</Typography>}
             />
           </Card>
         </Grid>
@@ -71,7 +71,7 @@ if(isLoading){
                 {user.currency}
               </Avatar>}
               title={`${formatNumber(data.expenseTotal)}`}
-              subheader={`${formatNumber(data.expensePerAreaUnit)}/${text[user.areaUnit]}`}
+              subheader={<Typography whiteSpace={'nowrap'} variant='body2'>{`${formatNumber(data.expensePerAreaUnit)}/${text[user.areaUnit]}`}</Typography>}
             />
           </Card>
         </Grid>
@@ -79,7 +79,7 @@ if(isLoading){
           <Card elevation={elevation} >
             <CardHeader sx={{ padding: cardHeaderPadding }}
               avatar={<Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">N</Avatar>}
-              title={`${data.nperAreaUnit} /`}
+              title={<Typography whiteSpace={'nowrap'} variant='body2'>{`${data.nperAreaUnit} /`}</Typography>}
               subheader={text[user.areaUnit]}
             />
           </Card>
@@ -88,7 +88,7 @@ if(isLoading){
           <Card elevation={elevation}>
             <CardHeader sx={{ padding: cardHeaderPadding }}
               avatar={<Avatar sx={{ bgcolor: green[500] }} aria-label="recipe">P</Avatar>}
-              title={`${data.pperAreaUnit} /`}
+              title={<Typography whiteSpace={'nowrap'} variant='body2'>{`${data.pperAreaUnit} /`}</Typography>}
               subheader={text[user.areaUnit]}
             />
           </Card>
@@ -97,7 +97,7 @@ if(isLoading){
           <Card elevation={elevation}>
             <CardHeader sx={{ padding: cardHeaderPadding }}
               avatar={<Avatar sx={{ bgcolor: blue[500] }} aria-label="recipe">K</Avatar>}
-              title={`${data.kperAreaUnit} /`}
+              title={<Typography whiteSpace={'nowrap'} variant='body2'>{`${data.kperAreaUnit} /`}</Typography>}
               subheader={text[user.areaUnit]}
             />
           </Card>
