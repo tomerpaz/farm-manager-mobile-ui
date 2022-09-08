@@ -6,16 +6,24 @@ import { useParams } from 'react-router-dom'
 import { selectCurrentYear } from '../../features/app/appSlice'
 import { useFieldsById } from '../../features/fields/fieldsApiSlice'
 import { useSelector } from 'react-redux'
+import SelectYearMenu from '../components/SelectYearMenu'
+import { useGetUserDataQuery } from '../../features/auth/authApiSlice'
 
-const FieldViewBar = ({ layers }) => {
+const FieldViewBar = ({ layers, share, years }) => {
 
     const { fieldId, src } = useParams()
 
 
-     const year = useSelector(selectCurrentYear)
+     const currentYear = useSelector(selectCurrentYear)
   
-     console.log('year',year)
-     const field = useFieldsById(year, Number(fieldId))
+
+     const { data: user } = useGetUserDataQuery()
+
+
+     const noFilter =  user && user.year === currentYear;
+ 
+
+     const field = useFieldsById(currentYear, Number(fieldId))
 
 
     const lat = field ? field.lat : null;
@@ -24,7 +32,9 @@ const FieldViewBar = ({ layers }) => {
         <AppBar position="static" elevation={0}>
             <Toolbar sx={{ justifyContent: 'space-between' }}>
                 <Box display={'flex'} flexDirection={'row'}>
-                   {lat && lng && <ShareLocationMenu lat={lat} lng={lng}/>}
+                   {share && lat && lng && <ShareLocationMenu lat={lat} lng={lng}/>}
+                   {years &&  <SelectYearMenu />}
+
                     {layers && <IconButton
                         size="large"
                         edge="start"

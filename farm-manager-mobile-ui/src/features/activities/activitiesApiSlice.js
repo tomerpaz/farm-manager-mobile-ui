@@ -1,5 +1,4 @@
 import {
-    createSelector,
     createEntityAdapter
 } from "@reduxjs/toolkit";
 import { apiSlice } from "../../app/api/apiSlice";
@@ -7,10 +6,7 @@ import { apiSlice } from "../../app/api/apiSlice";
 
 
 export const activitiesAdapter = createEntityAdapter({
-     selectId: e => e.uuid,
-    //     console.log(e,a)
-
-    //    return e.uuid},
+    selectId: e => e.uuid,
     sortComparer: (e) => e.execution,
 })
 const initialState = activitiesAdapter.getInitialState()
@@ -42,10 +38,11 @@ export const activityApiSlice = apiSlice.injectEndpoints({
                 // console.log('arg', arg)
 
                 return [
-               
-                { type: 'FieldActivities', id: "LIST" },
-                ...result.content.map(e => ({ type: 'FieldActivities', id: e.id }))
-            ]}
+
+                    { type: 'FieldActivities', id: "LIST" },
+                    ...result.content.map(e => ({ type: 'FieldActivities', id: e.id }))
+                ]
+            }
         }),
         getActivityById: builder.query({
             query: (uuid) => `/api/farm/activity/${uuid}`,
@@ -58,11 +55,11 @@ export const activityApiSlice = apiSlice.injectEndpoints({
             //     // console.log('arg', arg)
 
             //     return [
-               
+
             //     { type: 'SelectedActivity', id: "LIST" },
             // ]}
         })
-        
+
     })
 })
 

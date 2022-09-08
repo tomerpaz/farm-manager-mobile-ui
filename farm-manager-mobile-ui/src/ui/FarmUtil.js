@@ -197,3 +197,18 @@ export const buildActiviyFilter = (start, end, activityType, freeText) => {
     }
     return filter;
 }
+
+export const formatNumber = (value) => {
+
+    if (!isNaN(value)) {
+        return value.toLocaleString('en-US')
+    } 
+    return value;
+}
+
+const thisYear =  newDate().getFullYear();
+const yearOptions = [thisYear + 2, thisYear + 1, thisYear , thisYear -1, thisYear - 2, thisYear - 3];
+export const getYearArray = () => {
+    return yearOptions;
+}
+

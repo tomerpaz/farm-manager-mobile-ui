@@ -12,7 +12,7 @@ import { useSelector } from 'react-redux';
 import Loading from '../../components/Loading';
 import { DashboardOutlined,HighlightOffRounded, InfoOutlined, SatelliteAltOutlined } from '@mui/icons-material';
 import FieldInfo from './FieldInfo';
-import FieldDashboard from './FieldDashboard';
+import FieldDashboard from './dash/FieldDashboard';
 import FieldHistory from './FieldHistory';
 import FieldImagery from './FieldImagery';
 import { getFruitIcon } from '../../icons/FruitIconUtil';
@@ -20,6 +20,9 @@ import { useFieldsById } from '../../features/fields/fieldsApiSlice';
 import { selectCurrentYear, selectLang } from '../../features/app/appSlice';
 import { useGetUserDataQuery } from '../../features/auth/authApiSlice';
 import { displayFieldArea, displayFieldName, parseDate } from '../FarmUtil';
+import { useState } from 'react';
+
+const height = (window.window.innerHeight - 120);
 
 const Field = () => {
   const { pathname } = useLocation();
@@ -29,6 +32,10 @@ const Field = () => {
   const year = useSelector(selectCurrentYear)
   const field = useFieldsById(year, Number(fieldId))
   const navigate = useNavigate()
+
+
+  const [ userHeight, setUseHeight] = useState(true);
+
 
   if (!field) {
     return <Loading />
@@ -46,17 +53,19 @@ const Field = () => {
   const getIndex = ((element) => element === pathname);
 
 
-  const height = (window.window.innerHeight - 120);
+  
 
 
   const value = paths.findIndex(getIndex) > 0 ? paths.findIndex(getIndex) : 0;
 
+  const isHistory  = pathname.includes("/history") ? true : false;
 
-  const sidePadding = pathname.includes("/history") ? 0 : 1;
+  const sidePadding = isHistory ? 0 : 1;
 
+  const sx = isHistory ? { height: height} :  { minHeight: height};
   return (
     <Box >
-      <Card sx={{ height: height }}>
+      <Card sx={sx}>
         <CardHeader sx={{ padding: 1 }}
           avatar={
             <Avatar sx={{ backgroundColor: 'white' }}>
@@ -93,7 +102,7 @@ const Field = () => {
 
 
           {pathname.includes("/info") && <FieldInfo field={field} />}
-          {pathname.includes("/dash") && <FieldDashboard />}
+          {pathname.includes("/dash") && <FieldDashboard setUseHeight={setUseHeight} />}
           {pathname.includes("/history") && <FieldHistory />}
           {pathname.includes("/imagery") && <FieldImagery field={field} />}
 

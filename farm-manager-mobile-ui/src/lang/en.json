@@ -56,7 +56,10 @@
     "year": "Year",
     "days": "Days",
     "fromDate": "From Date",
-    "toDate": "To Date"
+    "toDate": "To Date",
+    "pesticides": "Pesticides",
+    "fertilizers": "Fertilizers",
+    "month": "Month"
 
 
 

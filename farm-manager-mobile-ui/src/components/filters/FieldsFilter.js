@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react'
 import { AppBar, Dialog, Divider, FormControl, IconButton, InputLabel, List, ListItem, ListItemText, MenuItem, Select, Slide, TextField, Toolbar, Typography } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux';
-import { selectAppBarDialogOpen, selectFieldBaseFieldFilter, selectFieldSiteFilter, selectLang, setAppBarDialogOpen, setFieldBaseFieldFilter, setFieldSiteFilter } from '../../features/app/appSlice';
-import CloseIcon from '@mui/icons-material/Close';
+import { selectAppBarDialogOpen, selectCurrentYear, selectFieldBaseFieldFilter, selectFieldSiteFilter, selectLang, setAppBarDialogOpen, setCurrentYear, setFieldBaseFieldFilter, setFieldSiteFilter } from '../../features/app/appSlice';
 import DoneIcon from '@mui/icons-material/Done';
 import { FilterAltOff } from '@mui/icons-material';
+import { getYearArray } from '../../ui/FarmUtil';
+import { useGetUserDataQuery } from '../../features/auth/authApiSlice';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -20,14 +21,18 @@ const FieldsFilter = ({ fields, }) => {
 
     const fieldSiteFilter = useSelector(selectFieldSiteFilter)
     const fieldBaseFieldFilter = useSelector(selectFieldBaseFieldFilter)
-   
-    const noFilter = fieldSiteFilter === 0 && fieldBaseFieldFilter === 0;
+    const currentYear = useSelector(selectCurrentYear)
+    const { data: user } = useGetUserDataQuery()
+
+    const noFilter = fieldSiteFilter === 0 && fieldBaseFieldFilter === 0  && user.year === currentYear;
 
 
     const clearFilters = () => {
         dispatch(setFieldSiteFilter(0));
         dispatch(setFieldBaseFieldFilter(0));
-        
+        dispatch(setCurrentYear(user.year));
+
+
     }
 
     useEffect(() => {
@@ -76,14 +81,31 @@ const FieldsFilter = ({ fields, }) => {
             <List>
                 <ListItem >
                     <TextField
+                        id="outlined-select-year"
+                        select
+                        fullWidth
+                        size='small'
+                        label={text.year}
+                        value={currentYear}
+                        onChange={e => dispatch(setCurrentYear(Number(e.target.value)))}
+                    >
+                        {getYearArray().map((option) => (
+                            <MenuItem key={option} value={option}>
+                                {option}
+                            </MenuItem>
+                        ))}
+                    </TextField>
+                </ListItem>
+                <ListItem >
+                    <TextField
                         id="outlined-select-site"
                         select
                         fullWidth
                         size='small'
                         label={text.site}
                         value={fieldSiteFilter}
-                        onChange={e =>  dispatch(setFieldSiteFilter(Number(e.target.value)))}
-                    > 
+                        onChange={e => dispatch(setFieldSiteFilter(Number(e.target.value)))}
+                    >
                         <MenuItem value={0}>
                             <em></em>
                         </MenuItem>
@@ -103,7 +125,7 @@ const FieldsFilter = ({ fields, }) => {
                         size='small'
                         label={text.field}
                         value={fieldBaseFieldFilter}
-                        onChange={e =>  dispatch(setFieldBaseFieldFilter(Number(e.target.value)))}
+                        onChange={e => dispatch(setFieldBaseFieldFilter(Number(e.target.value)))}
                     >
                         <MenuItem value={0}>
                             <em></em>

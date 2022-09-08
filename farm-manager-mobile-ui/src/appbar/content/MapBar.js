@@ -1,7 +1,8 @@
 import { FilterAlt, Layers } from '@mui/icons-material'
 import { AppBar, IconButton, Toolbar } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
-import { selectFieldBaseFieldFilter, selectFieldFreeTextFilter, selectFieldSiteFilter, setAppBarDialogOpen, setFieldFreeTextFilter } from '../../features/app/appSlice'
+import { selectCurrentYear, selectFieldBaseFieldFilter, selectFieldFreeTextFilter, selectFieldSiteFilter, setAppBarDialogOpen, setFieldFreeTextFilter } from '../../features/app/appSlice'
+import { useGetUserDataQuery } from '../../features/auth/authApiSlice'
 import AppBarMenu from '../components/AppBarMenu'
 import AppBarSearch from '../components/AppBarSearch'
 
@@ -13,7 +14,10 @@ const MapBar = () => {
     const fieldSiteFilter = useSelector(selectFieldSiteFilter)
     const fieldBaseFieldFilter = useSelector(selectFieldBaseFieldFilter)
 
-    const noFilter = fieldSiteFilter === 0 && fieldBaseFieldFilter === 0;
+    const currentYear = useSelector(selectCurrentYear)
+    const { data: user } = useGetUserDataQuery()
+
+    const noFilter = fieldSiteFilter === 0 && fieldBaseFieldFilter === 0  && user && user.year === currentYear;
 
 
     return (
