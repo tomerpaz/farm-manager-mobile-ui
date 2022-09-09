@@ -2,13 +2,14 @@ import { ChevronLeftOutlined, ChevronRightOutlined } from '@mui/icons-material'
 import { Box, Button, Typography, useTheme } from '@mui/material'
 import React from 'react'
 
-const ListPager = ({dir, page, totalPages, setPage}) => {
+const ListPager = ({bottom, page, totalPages, setPage}) => {
     
     const {direction} = useTheme();
 
     return (
-        <Box margin={1}
-            display={'flex'} flex={1} alignItems={'center'} justifyContent={'space-between'}
+        <Box 
+        sx={{ position: 'fixed', bottom: bottom, left: 0, right: 0 }}
+        margin={1} display={'flex'} flex={1} alignItems={'center'} justifyContent={'space-between'}
         >
             <Button size='large' disabled={totalPages === 0 || page === 0} onClick={() => setPage(page - 1)} color='secondary' variant="outlined" disableElevation>
                 {direction === 'rtl' ? <ChevronRightOutlined /> : <ChevronLeftOutlined />}

@@ -84,7 +84,7 @@ const FieldHistory = () => {
         {renderRows()}
 
       </List>
-      <ListPager dir={dir} page={Number(page)} totalPages={data.totalPages} setPage={(value) => navigate(`/field/${src}/${fieldId}/history/${value}`)} />
+      <ListPager bottom={60} dir={dir} page={Number(page)} totalPages={data.totalPages} setPage={(value) => navigate(`/field/${src}/${fieldId}/history/${value}`)} />
       <ActivitiesFilter />
     </Box>
   )

@@ -1,6 +1,5 @@
 import { useState } from 'react';
-import { Box, IconButton, Menu, MenuItem } from '@mui/material'
-import { FilterAlt } from '@mui/icons-material';
+import { Box, Button, Menu, MenuItem } from '@mui/material'
 import { selectFieldDashboardYear, selectCurrentYear, setFieldDashboardYear, setCurrentYear } from '../../features/app/appSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { getYearArray } from '../../ui/FarmUtil';
@@ -43,16 +42,15 @@ const SelectYearMenu = () => {
     return (
 
         <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
-            <IconButton
+            <Button
                 size="large"
                 aria-label="account of current user"
-                // aria-controls="menu-appbar"
                 aria-haspopup="true"
                 onClick={handleMenu}
                 color="inherit"
             >
-                <FilterAlt sx={{ color: noFilter ? null : 'blue' }} />
-            </IconButton>
+                {currentDashboardYear}
+            </Button>
             <Menu
                 id="menu-appbar"
                 anchorEl={anchorEl}
