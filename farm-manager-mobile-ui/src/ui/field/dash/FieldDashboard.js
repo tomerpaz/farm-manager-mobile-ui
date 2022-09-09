@@ -12,6 +12,8 @@ import { formatNumber } from '../../FarmUtil';
 import { useGetFieldDashBoardQuery } from '../../../features/dashboard/dashboardApiSlice';
 import { useParams } from 'react-router-dom';
 import Loading from '../../../components/Loading';
+import FieldFertilizerTable from './FieldFertilizerTable';
+import FieldPesticdeTable from './FieldPesticdeTable';
 
 
 const elevation = 4;
@@ -122,10 +124,7 @@ const FieldDashboard = () => {
             />
             <Collapse in={expandedPesticides} timeout="auto" unmountOnExit>
               <CardContent>
-                <Typography paragraph>
-                  Pesticides Table
-                </Typography>
-
+              <FieldPesticdeTable pesticides={data.pesticides} />
               </CardContent>
             </Collapse>
           </Card>
@@ -143,9 +142,7 @@ const FieldDashboard = () => {
             />
             <Collapse in={expandedFertilizers} timeout="auto" unmountOnExit>
               <CardContent>
-                <Typography paragraph>
-                  Fertilizers Table
-                </Typography>
+                <FieldFertilizerTable fertilizers={data.fertilizers} />
               </CardContent>
             </Collapse>
           </Card>

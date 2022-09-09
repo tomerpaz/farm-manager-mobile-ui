@@ -16,6 +16,9 @@ const GROWER_ACTIVITY_TYPES = [GENERAL, SPRAY, IRRIGATION, HARVEST, SCOUT, MARKE
 const GROWER_PLAN_TYPES = [GENERAL_PLAN, SPRAY, SPRAY_PLAN, IRRIGATION_PLAN]
 
 
+export const tableHeaderSx = { fontWeight: 'bold', padding: 1 };
+export const tableCellSx = { padding: 1 };
+
 export function getActivityTypes(role, isPlan) {
     if (isPlan) {
         return GROWER_PLAN_TYPES
@@ -141,6 +144,12 @@ export function asLocalDate(date, hyphen) {
     }
 }
 
+
+export const daysDiff = (date_1, date_2) =>{
+    let difference = date_1.getTime() - date_2.getTime();
+    let TotalDays = Math.ceil(difference / (1000 * 3600 * 24));
+    return TotalDays;
+}
 
 
 export function parseDate(date) {
