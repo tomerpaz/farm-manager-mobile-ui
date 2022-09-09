@@ -16,9 +16,6 @@ const SelectYearMenu = () => {
 
     const field = useFieldsById(currentYear, Number(fieldId))
 
-    const noFilter = currentDashboardYear === currentYear;
-
-
     const [anchorEl, setAnchorEl] = useState(null);
 
     const handleMenu = (event) => {
@@ -67,8 +64,8 @@ const SelectYearMenu = () => {
                 onClose={handleClose}
             >
                 {getYearArray().map((option) => (
-                    <MenuItem sx={{ fontWeight: option === currentYear ? 'bolder' : null
-                        , color: (option !== currentYear && option === currentDashboardYear) ? 'blue' : null
+                    <MenuItem sx={{
+                        fontWeight: option === currentDashboardYear ? 'bolder' : null
                     }} key={option} value={option} onClick={() => handleChange(option)}>
                         {option}
                     </MenuItem>
