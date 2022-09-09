@@ -3,10 +3,8 @@ import { selectLang } from '../../../features/app/appSlice'
 import { tableHeaderSx, tableCellSx, getUnitText, formatNumber, parseDate } from '../../FarmUtil';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material'
 
-
 const FieldFertilizerTable = ({ fertilizers }) => {
     const text = useSelector(selectLang)
-
     return (
         <TableContainer >
             <Table size="small" sx={{ margin: 0, padding: 0 }} aria-label="a dense table">
@@ -20,9 +18,7 @@ const FieldFertilizerTable = ({ fertilizers }) => {
                 </TableHead>
                 <TableBody>
                     {fertilizers.map((row, index) =>
-                        <TableRow
-                            key={index}
->
+                        <TableRow key={index}>
                             <TableCell sx={tableCellSx} >{row.resource.name}</TableCell>
                             <TableCell sx={tableCellSx}>{getUnitText(row.resource.usageUnit, null, text)}</TableCell>
                             <TableCell sx={tableCellSx}>{formatNumber(row.qty)}</TableCell>
@@ -34,5 +30,4 @@ const FieldFertilizerTable = ({ fertilizers }) => {
         </TableContainer>
     )
 }
-
 export default FieldFertilizerTable
