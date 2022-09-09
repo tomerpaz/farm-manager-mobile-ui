@@ -45,7 +45,7 @@ const FieldDashboard = () => {
   console.log(data)
 
   return (
-    <Box sx={{ width: '100%', height: '100%' }}>
+    <Box sx={{ width: '100%', height: '100%', paddingBottom: 5 }}>
       <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 1, md: 1 }}>
         <Grid item xs={6}>
           <Card elevation={elevation}>

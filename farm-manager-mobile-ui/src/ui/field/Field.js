@@ -5,8 +5,7 @@ import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardContent from '@mui/material/CardContent';
 import Avatar from '@mui/material/Avatar';
-
-import { Box, IconButton, Paper, Typography } from '@mui/material';
+import { Box, IconButton, Typography } from '@mui/material';
 import { useParams, Link, useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Loading from '../../components/Loading';
@@ -17,12 +16,12 @@ import FieldHistory from './FieldHistory';
 import FieldImagery from './FieldImagery';
 import { getFruitIcon } from '../../icons/FruitIconUtil';
 import { useFieldsById } from '../../features/fields/fieldsApiSlice';
-import {  selectCurrentYear, selectLang, setFieldDashboardYear } from '../../features/app/appSlice';
+import { selectCurrentYear, selectLang, setFieldDashboardYear } from '../../features/app/appSlice';
 import { useGetUserDataQuery } from '../../features/auth/authApiSlice';
 import { displayFieldArea, displayFieldName, parseDate } from '../FarmUtil';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
-const height = (window.window.innerHeight - 120);
+const height = (window.window.innerHeight - 100);
 
 const Field = () => {
   const dispatch = useDispatch()
@@ -37,15 +36,11 @@ const Field = () => {
 
   useEffect(() => {
     return () => dispatch(setFieldDashboardYear(year));
-}, [])
-  
+  }, [])
 
   if (!field) {
     return <Loading />
   }
-
-
-  console.log(field);
 
   const paths = [`/field/${src}/${fieldId}/info`,
   `/field/${src}/${fieldId}/dash`,
@@ -56,16 +51,10 @@ const Field = () => {
   const getIndex = ((element) => element === pathname);
 
 
-
-
-
   const value = paths.findIndex(getIndex) > 0 ? paths.findIndex(getIndex) : 0;
-
   const isHistory = pathname.includes("/history") ? true : false;
-
   const sidePadding = isHistory ? 0 : 1;
 
-  // const sx = isHistory ? { height: height } : { minHeight: height };
   return (
     <Box >
       <Card sx={{ minHeight: height }}>
@@ -102,41 +91,36 @@ const Field = () => {
           }
         />
         <CardContent sx={{ paddingTop: 0, paddingLeft: sidePadding, paddingRight: sidePadding }}>
-
-
           {pathname.includes("/info") && <FieldInfo field={field} />}
           {pathname.includes("/dash") && <FieldDashboard />}
           {pathname.includes("/history") && <FieldHistory />}
           {pathname.includes("/imagery") && <FieldImagery field={field} />}
-
         </CardContent>
       </Card>
-
-
-        <BottomNavigation sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} value={value}
-          showLabels>
-          <BottomNavigationAction
-            label={text.details}
-            to={`/field/${src}/${fieldId}/info`} component={Link}
-            icon={<InfoOutlined />}
-          />
-          <BottomNavigationAction
-            label={text.dashboard}
-            to={`/field/${src}/${fieldId}/dash`} component={Link}
-            icon={<DashboardOutlined />}
-          />
-          <BottomNavigationAction
-            label={text.activities}
-            to={`/field/${src}/${fieldId}/history/0`} component={Link}
-            icon={<RestoreIcon />}
-          />
-          <BottomNavigationAction
-            disabled={field.imageryId === null}
-            label={text.satellite}
-            to={`/field/${src}/${fieldId}/imagery`} component={Link}
-            icon={<SatelliteAltOutlined />}
-          />
-        </BottomNavigation>
+      <BottomNavigation sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} value={value}
+        showLabels>
+        <BottomNavigationAction
+          label={text.details}
+          to={`/field/${src}/${fieldId}/info`} component={Link}
+          icon={<InfoOutlined />}
+        />
+        <BottomNavigationAction
+          label={text.dashboard}
+          to={`/field/${src}/${fieldId}/dash`} component={Link}
+          icon={<DashboardOutlined />}
+        />
+        <BottomNavigationAction
+          label={text.activities}
+          to={`/field/${src}/${fieldId}/history/0`} component={Link}
+          icon={<RestoreIcon />}
+        />
+        <BottomNavigationAction
+          disabled={field.imageryId === null}
+          label={text.satellite}
+          to={`/field/${src}/${fieldId}/imagery`} component={Link}
+          icon={<SatelliteAltOutlined />}
+        />
+      </BottomNavigation>
     </Box >
 
   );
