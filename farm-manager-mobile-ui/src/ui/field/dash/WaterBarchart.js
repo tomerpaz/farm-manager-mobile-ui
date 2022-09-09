@@ -1,4 +1,5 @@
 import { BarChart, Bar, LabelList, XAxis, ResponsiveContainer, Area, AreaChart, YAxis, CartesianGrid, Tooltip } from "recharts";
+import { isArrayEmpty } from "../../FarmUtil";
 
 const COLOR = '#1c84c6';
 
@@ -25,6 +26,9 @@ const renderCustomizedLabel = (props) => {
 
 export default function WaterBarchart({data, text, waterUnit}) {
     // areaUnit={text[user.waterUnit]}
+    if(isArrayEmpty(data)){
+        return <></>
+    }
     return (
         <ResponsiveContainer width="100%" height={230}>
 
@@ -33,7 +37,7 @@ export default function WaterBarchart({data, text, waterUnit}) {
                 // width={150} height={40}
                 data={data}
                 margin={{
-                    top: 10,
+                    top: 18,
                     // right: 30,
                     // left: 20,
                     bottom: 18

@@ -1,21 +1,23 @@
 import { useState } from 'react';
 import { Box, IconButton, Menu, MenuItem } from '@mui/material'
 import { FilterAlt } from '@mui/icons-material';
-import { selectCurrentYear, setCurrentYear } from '../../features/app/appSlice';
+import { selectFieldDashboardYear, selectCurrentYear, setFieldDashboardYear, setCurrentYear } from '../../features/app/appSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { getYearArray } from '../../ui/FarmUtil';
-import { useGetUserDataQuery } from '../../features/auth/authApiSlice';
+import { useParams } from 'react-router-dom';
+import { useFieldsById } from '../../features/fields/fieldsApiSlice';
 
 const SelectYearMenu = () => {
 
     const dispatch = useDispatch()
 
     const currentYear = useSelector(selectCurrentYear)
+    const currentDashboardYear = useSelector(selectFieldDashboardYear)
+    const { fieldId } = useParams()
 
-    const { data: user } = useGetUserDataQuery()
+    const field = useFieldsById(currentYear, Number(fieldId))
 
-
-    const noFilter = user && user.year === currentYear;
+    const noFilter = currentDashboardYear === currentYear;
 
 
     const [anchorEl, setAnchorEl] = useState(null);
@@ -29,10 +31,13 @@ const SelectYearMenu = () => {
     };
 
     const handleChange = (year) => {
-        dispatch(setCurrentYear(year))
+        dispatch(setFieldDashboardYear(year))
         setAnchorEl(null);
     };
 
+    if (!field || !field.plantation) {
+        return <></>
+    }
 
 
     return (
@@ -64,12 +69,12 @@ const SelectYearMenu = () => {
                 onClose={handleClose}
             >
                 {getYearArray().map((option) => (
-                    <MenuItem sx={{ fontWeight: option === currentYear ? 'bolder' : null }} key={option} value={option} onClick={() => handleChange(option)}>
+                    <MenuItem sx={{ fontWeight: option === currentYear ? 'bolder' : null
+                        , color: (option !== currentYear && option === currentDashboardYear) ? 'blue' : null
+                    }} key={option} value={option} onClick={() => handleChange(option)}>
                         {option}
                     </MenuItem>
                 ))}
-
-
             </Menu>
         </Box>)
 }

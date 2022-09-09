@@ -9,7 +9,9 @@ const appSlice = createSlice({
         refreshToken: localStorage.getItem('refreshToken'),
         fieldFreeTextFilter: '',
         activityFreeTextFilter: '',
-        fieldFilter: '', currentYear: newDate().getFullYear(),
+        fieldFilter: '', 
+        currentYear: newDate().getFullYear(),
+        fieldDashboardYear: newDate().getFullYear(),
         appBarDialogOpen: false,
         startDateFilter: null,
         endDateFilter: null,
@@ -35,6 +37,7 @@ const appSlice = createSlice({
             state.refreshToken = null;
         }, setCurrentYear: (state, action) => {
             state.currentYear = action.payload
+            state.fieldDashboardYear = action.payload          
         }, setAppBarDialogOpen: (state, action) => {
             state.appBarDialogOpen = action.payload
         }, setFieldFreeTextFilter: (state, action) => {
@@ -54,11 +57,14 @@ const appSlice = createSlice({
             state.fieldBaseFieldFilter = action.payload;
             state.fieldSiteFilter = 0;
         },
+        setFieldDashboardYear: (state, action) => {
+            state.fieldDashboardYear = action.payload          
+        },
     },
 })
 
 export const { setCredentials, logOut, setLang, setCurrentYear, setAppBarDialogOpen, setFieldFreeTextFilter, setActivityFreeTextFilter,
-    setStartDateFilter, setEndDateFilter, setActivityTypeFilter, setFieldSiteFilter, setFieldBaseFieldFilter } = appSlice.actions
+    setStartDateFilter, setEndDateFilter, setActivityTypeFilter, setFieldSiteFilter, setFieldBaseFieldFilter, setFieldDashboardYear } = appSlice.actions
 
 export default appSlice.reducer
 
@@ -73,3 +79,4 @@ export const selectEndDateFilter = (state) => state.app.endDateFilter
 export const selectActivityTypeFilter = (state) => state.app.activityTypeFilter
 export const selectFieldSiteFilter = (state) => state.app.fieldSiteFilter
 export const selectFieldBaseFieldFilter = (state) => state.app.fieldBaseFieldFilter
+export const selectFieldDashboardYear = (state) => state.app.fieldDashboardYear

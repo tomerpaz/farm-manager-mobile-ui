@@ -2,9 +2,9 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { logOut } from '../../features/app/appSlice'
 
 
-//export const FARM_MANAGER = 'http://localhost:8080'
+export const FARM_MANAGER = 'http://localhost:8080'
 
-export const FARM_MANAGER = 'https://api.manager.farm'
+//export const FARM_MANAGER = 'https://api.manager.farm'
 
 
 const baseQuery = fetchBaseQuery({
