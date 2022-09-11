@@ -1,6 +1,7 @@
 import React from 'react'
 import { Box } from '@mui/material'
 import { MapContainer, Polygon, TileLayer } from 'react-leaflet'
+import SatelliteMapProvider from '../../components/map/SatelliteMapProvider'
 
 const FieldMap = ({ field, height, tile, setMap }) => {
     return (
@@ -8,11 +9,7 @@ const FieldMap = ({ field, height, tile, setMap }) => {
             <MapContainer style={{ height: height, width: '100%' }} center={[field.lat, field.lng]} zoom={field.zoom} scrollWheelZoom={false}
                 ref={setMap}
             >
-                <TileLayer
-                    attribution='Farm Manager'
-                    url='https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
-                    maxZoom={18}
-                />
+                <SatelliteMapProvider />
                 {tile && <TileLayer
                     attribution='Farm Manager'
                     url={tile}

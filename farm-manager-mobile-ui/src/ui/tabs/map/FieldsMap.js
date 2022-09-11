@@ -9,6 +9,7 @@ import { selectCurrentYear, selectFieldBaseFieldFilter, selectFieldFreeTextFilte
 import { useSelector } from "react-redux";
 import FieldsFilter from "../../../components/filters/FieldsFilter";
 import { filterFields, getFillColor, getOpacity, isArrayEmpty } from "../../FarmUtil";
+import SatelliteMapProvider from "../../../components/map/SatelliteMapProvider";
 
 
 
@@ -75,16 +76,8 @@ const FieldsMap = (props) => {
                 <MapContainer style={{ height: height, width: '100%' }} center={center} zoom={zoom} scrollWheelZoom={false}
                     ref={setSetMap}
                 >
-                    <TileLayer
-                        attribution='Farm Manager'
-                        url='https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
-                        maxZoom={18}
-                    />
-                    {/* <Marker position={position}>
-                        <Popup>
-                            A pretty CSS3 popup. <br /> Easily customizable.
-                        </Popup>
-                    </Marker> */}
+
+                    <SatelliteMapProvider/>
                     <GeoLocation />
                     {displayFields.map(f =>
                         <Polygon field={f} key={f.id}
