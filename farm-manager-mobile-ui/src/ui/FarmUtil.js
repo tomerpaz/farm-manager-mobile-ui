@@ -27,6 +27,10 @@ export function getActivityTypes(role, isPlan) {
     }
 }
 
+export const maxLenghtStr = (str, maxLenght) => {
+    return !isStringEmpty(str) || str.lenght  > maxLenght ? str.slice(0,maxLenght) : str
+}
+
 export const displayFieldName = (field) => {
     return field.alias ? `${field.name}, ${field.alias}` : field.name;
 }
@@ -47,7 +51,6 @@ export const getUnitText = (unit, areaUnit, text) => {
     const result = text[value];
     if (isStringEmpty(result)) {
         console.log('Translate: ', value)
-
         return '';
     } else return result;
 }

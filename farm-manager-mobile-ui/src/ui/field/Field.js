@@ -18,7 +18,7 @@ import { getFruitIcon } from '../../icons/FruitIconUtil';
 import { useFieldsById } from '../../features/fields/fieldsApiSlice';
 import { selectCurrentYear, selectLang, setFieldDashboardYear } from '../../features/app/appSlice';
 import { useGetUserDataQuery } from '../../features/auth/authApiSlice';
-import { displayFieldArea, displayFieldName, parseDate } from '../FarmUtil';
+import { displayFieldArea, displayFieldName, maxLenghtStr, parseDate } from '../FarmUtil';
 import { useEffect } from 'react';
 
 const height = (window.window.innerHeight - 100);
@@ -71,18 +71,18 @@ const Field = () => {
           }
           title={
             <Box display={'flex'} flexDirection={'row'} justifyContent={'space-between'}>
-              <Typography variant='h6'>
-                {displayFieldName(field)}
+              <Typography noWrap variant='h6'>
+                {maxLenghtStr(displayFieldName(field),20)}
               </Typography>
-              <Typography variant='h6'>
+              <Typography noWrap variant='h6'>
                 {displayFieldArea(field, user.areaUnit, text)}
               </Typography>
             </Box>
           }
           subheader={
             <Box component={"span"} display={'flex'} flexDirection={'row'} justifyContent={'space-between'}>
-              <Typography color='secondary' variant='subtitle1' component={"span"}>
-                {`${field.cropName},${field.varietyName}`}
+              <Typography noWrap color='secondary' variant='subtitle1' component={"span"}>
+                { maxLenghtStr(`${field.cropName},${field.varietyName}`,22)}
               </Typography>
               <Typography color='secondary' variant='subtitle1' component={"span"}>
                 {`${parseDate(field.startDate)}`}
