@@ -60,7 +60,10 @@
     "pesticides": "Pesticides",
     "fertilizers": "Fertilizers",
     "month": "Month",
-    "dosage": "Dosage"
+    "dosage": "Dosage",
+    "inactive": "Inactive",
+    "active": "Active",
+    "all": "All"
 
 
 

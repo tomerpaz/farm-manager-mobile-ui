@@ -1,7 +1,7 @@
 import { FilterAlt,  MoreVert } from '@mui/icons-material'
 import { AppBar, IconButton, Toolbar } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
-import { selectCurrentYear, selectFieldBaseFieldFilter, selectFieldFreeTextFilter, selectFieldSiteFilter, setAppBarDialogOpen, setFieldFreeTextFilter } from '../../features/app/appSlice'
+import { selectCurrentYear, selectFieldBaseFieldFilter, selectFieldFreeTextFilter, selectFieldSiteFilter, selectFieldsViewStatus, setAppBarDialogOpen, setFieldFreeTextFilter } from '../../features/app/appSlice'
 import { useGetUserDataQuery } from '../../features/auth/authApiSlice'
 import AppBarMenu from '../components/AppBarMenu'
 import AppBarSearch from '../components/AppBarSearch'
@@ -12,9 +12,10 @@ const FieldsBar = () => {
     const fieldSiteFilter = useSelector(selectFieldSiteFilter)
     const fieldBaseFieldFilter = useSelector(selectFieldBaseFieldFilter)
     const currentYear = useSelector(selectCurrentYear)
+    const fieldsViewStatus = useSelector(selectFieldsViewStatus)
     const { data: user } = useGetUserDataQuery()
 
-    const noFilter = fieldSiteFilter === 0 && fieldBaseFieldFilter === 0  && user && user.year === currentYear;
+    const noFilter = fieldSiteFilter === 0 && fieldBaseFieldFilter === 0  && user && user.year === currentYear && user.fieldsViewStatus === fieldsViewStatus;;
 
     return (
         <AppBar position="static" elevation={0}>

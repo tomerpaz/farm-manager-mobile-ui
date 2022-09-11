@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react'
-import { AppBar, Dialog, Divider, FormControl, IconButton, InputLabel, List, ListItem, ListItemText, MenuItem, Select, Slide, TextField, Toolbar, Typography } from '@mui/material'
+import { AppBar, Box, Dialog, Divider, FormControl, IconButton, InputLabel, List, ListItem, ListItemText, MenuItem, Select, Slide, TextField, Toolbar, Typography } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux';
-import { selectAppBarDialogOpen, selectCurrentYear, selectFieldBaseFieldFilter, selectFieldSiteFilter, selectLang, setAppBarDialogOpen, setCurrentYear, setFieldBaseFieldFilter, setFieldSiteFilter } from '../../features/app/appSlice';
+import { selectAppBarDialogOpen, selectCurrentYear, selectFieldBaseFieldFilter, selectFieldSiteFilter, selectFieldsViewStatus, selectLang, setAppBarDialogOpen, setCurrentYear, setFieldBaseFieldFilter, setFieldSiteFilter, setFieldsViewStatus } from '../../features/app/appSlice';
 import DoneIcon from '@mui/icons-material/Done';
 import { FilterAltOff } from '@mui/icons-material';
-import { getYearArray } from '../../ui/FarmUtil';
+import { ACTIVE, ALL, getYearArray, INACTIVE } from '../../ui/FarmUtil';
 import { useGetUserDataQuery } from '../../features/auth/authApiSlice';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -24,13 +24,17 @@ const FieldsFilter = ({ fields, }) => {
     const currentYear = useSelector(selectCurrentYear)
     const { data: user } = useGetUserDataQuery()
 
-    const noFilter = fieldSiteFilter === 0 && fieldBaseFieldFilter === 0  && user.year === currentYear;
+
+    const fieldsViewStatus = useSelector(selectFieldsViewStatus)
+
+    const noFilter = fieldSiteFilter === 0 && fieldBaseFieldFilter === 0 && user.year === currentYear && user.fieldsViewStatus === fieldsViewStatus;
 
 
     const clearFilters = () => {
         dispatch(setFieldSiteFilter(0));
         dispatch(setFieldBaseFieldFilter(0));
         dispatch(setCurrentYear(user.year));
+        dispatch(setFieldsViewStatus(user.fieldsViewStatus));
 
 
     }
@@ -95,6 +99,27 @@ const FieldsFilter = ({ fields, }) => {
                             </MenuItem>
                         ))}
                     </TextField>
+                    <Box paddingLeft={1} />
+                    <TextField
+                        id="outlined-select-status"
+                        select
+                        fullWidth
+                        size='small'
+                        label={text.status}
+                        value={fieldsViewStatus}
+                        onChange={e => dispatch(setFieldsViewStatus(e.target.value))}
+                    >
+                        <MenuItem value={ALL}>
+                            {text.all}
+                        </MenuItem>
+                        <MenuItem value={ACTIVE}>
+                            {text.active}
+                        </MenuItem>
+                        <MenuItem value={INACTIVE}>
+                            {text.inactive}
+                        </MenuItem>
+                    </TextField>
+
                 </ListItem>
                 <ListItem >
                     <TextField

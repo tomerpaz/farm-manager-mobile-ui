@@ -18,6 +18,7 @@ const appSlice = createSlice({
         activityTypeFilter: '',
         fieldSiteFilter: 0,
         fieldBaseFieldFilter: 0,
+        fieldsViewStatus: 'all', 
     },
     reducers: {
         setCredentials: (state, action) => {
@@ -60,11 +61,14 @@ const appSlice = createSlice({
         setFieldDashboardYear: (state, action) => {
             state.fieldDashboardYear = action.payload          
         },
+        setFieldsViewStatus: (state, action) => {
+            state.fieldsViewStatus = action.payload          
+        },
     },
 })
 
 export const { setCredentials, logOut, setLang, setCurrentYear, setAppBarDialogOpen, setFieldFreeTextFilter, setActivityFreeTextFilter,
-    setStartDateFilter, setEndDateFilter, setActivityTypeFilter, setFieldSiteFilter, setFieldBaseFieldFilter, setFieldDashboardYear } = appSlice.actions
+    setStartDateFilter, setEndDateFilter, setActivityTypeFilter, setFieldSiteFilter, setFieldBaseFieldFilter, setFieldDashboardYear, setFieldsViewStatus } = appSlice.actions
 
 export default appSlice.reducer
 
@@ -80,3 +84,4 @@ export const selectActivityTypeFilter = (state) => state.app.activityTypeFilter
 export const selectFieldSiteFilter = (state) => state.app.fieldSiteFilter
 export const selectFieldBaseFieldFilter = (state) => state.app.fieldBaseFieldFilter
 export const selectFieldDashboardYear = (state) => state.app.fieldDashboardYear
+export const selectFieldsViewStatus = (state) => state.app.fieldsViewStatus

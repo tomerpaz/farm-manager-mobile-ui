@@ -176,7 +176,11 @@ export function isMatchFreeTextFilter(field, freeText) {
     }
 }
 
-export function filterFields(fields, freeText, fieldSiteFilter, fieldBaseFieldFilter) {
+export const ACTIVE = 'active';
+export const INACTIVE = 'inactive';
+export const ALL = 'all';
+
+export function filterFields(fields, freeText, fieldSiteFilter, fieldBaseFieldFilter, fieldsViewStatus) {
     let result = fields;
     if (!isStringEmpty(freeText)) {
         result = fields.filter(e => isMatchFreeTextFilter(e, freeText));
@@ -186,6 +190,13 @@ export function filterFields(fields, freeText, fieldSiteFilter, fieldBaseFieldFi
     }
     if (fieldBaseFieldFilter !== 0) {
         result = result.filter(e => fieldBaseFieldFilter === e.baseFieldId);
+    }
+    if ([ACTIVE, INACTIVE].includes(fieldsViewStatus)) {
+        if(ACTIVE === fieldsViewStatus){
+            result = fields.filter(e => e.endDate === null );
+        } else {
+            result = fields.filter(e => e.endDate !== null );
+        }
     }
     return result;
 }
@@ -219,5 +230,18 @@ const thisYear =  newDate().getFullYear();
 const yearOptions = [thisYear + 2, thisYear + 1, thisYear , thisYear -1, thisYear - 2, thisYear - 3];
 export const getYearArray = () => {
     return yearOptions;
+}
+
+
+export function getOpacity(field) {
+    return field.endDate ? 1 : 0.3;
+}
+
+export function getFillColor(field) {
+    if (field.endDate) {
+        return '#FFFFFF';
+    } else {
+        return field.color;
+    }
 }
 

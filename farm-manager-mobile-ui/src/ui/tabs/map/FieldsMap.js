@@ -5,10 +5,10 @@ import { useNavigate } from "react-router-dom";
 import { Box } from "@mui/material";
 import { useFields } from "../../../features/fields/fieldsApiSlice";
 import { useGetUserDataQuery } from '../../../features/auth/authApiSlice'
-import { selectCurrentYear, selectFieldBaseFieldFilter, selectFieldFreeTextFilter, selectFieldSiteFilter } from "../../../features/app/appSlice";
+import { selectCurrentYear, selectFieldBaseFieldFilter, selectFieldFreeTextFilter, selectFieldSiteFilter, selectFieldsViewStatus } from "../../../features/app/appSlice";
 import { useSelector } from "react-redux";
 import FieldsFilter from "../../../components/filters/FieldsFilter";
-import { filterFields, isArrayEmpty } from "../../FarmUtil";
+import { filterFields, getFillColor, getOpacity, isArrayEmpty } from "../../FarmUtil";
 
 
 
@@ -23,11 +23,12 @@ const FieldsMap = (props) => {
     const freeText = useSelector(selectFieldFreeTextFilter);
     const fieldSiteFilter = useSelector(selectFieldSiteFilter)
     const fieldBaseFieldFilter = useSelector(selectFieldBaseFieldFilter)
-  
+    const fieldsViewStatus = useSelector(selectFieldsViewStatus)
+
     const [center, setCenter] = useState([user.lat, user.lng]);
     const [zoom, setZoom] = useState(user.zoom);
 
-    const displayFields = filterFields(fields, freeText, fieldSiteFilter, fieldBaseFieldFilter);
+    const displayFields = filterFields(fields, freeText, fieldSiteFilter, fieldBaseFieldFilter, fieldsViewStatus);
 
 
     function HandleMapEvents(e) {
@@ -88,7 +89,8 @@ const FieldsMap = (props) => {
                     {displayFields.map(f =>
                         <Polygon field={f} key={f.id}
                             color={f.color}
-                            fillColor={f.color}
+                            fillColor={getFillColor(f)}
+                            fillOpacity={getOpacity(f)}
                             eventHandlers={{
                                 click: () => {
                                     navigate(`/field/map/${f.id}/info`)

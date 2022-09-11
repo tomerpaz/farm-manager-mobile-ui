@@ -60,5 +60,8 @@
     "pesticides": "חומרי הדברה",
     "fertilizers": "דשנים",
     "month": "חודש",
-    "dosage": "מינון"
+    "dosage": "מינון",
+    "inactive": "לא פעיל",
+    "active": "פעיל",
+    "all": "הכל"
 }
