@@ -1,28 +1,25 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { logOut } from '../../features/app/appSlice'
+import { logOut, setCredentials } from '../../features/app/appSlice'
 
 
- export const FARM_MANAGER = 'http://localhost:8080'
+// export const FARM_MANAGER = 'http://localhost:8080'
 
-// export const FARM_MANAGER = 'https://api.manager.farm'
+export const FARM_MANAGER = 'https://api.manager.farm'
 
 
 const baseQuery = fetchBaseQuery({
-    //baseUrl: 'http://localhost:8080',
-
     baseUrl: FARM_MANAGER,
     // credentials: 'include',
-    prepareHeaders: (headers, { getState }) => {
-        const token = getState().app.token;
+    prepareHeaders: (headers, { getState,  }) => {
+        console.log('token',getState().app.token)
+        console.log('refreshToken',getState().app.refreshToken)
 
-        //const token = localStorage.getItem('token');
+        const token = getState().app.token ? getState().app.token : getState().app.refreshToken;
         if (token) {
-
             headers.set("X-Authorization", `Bearer ${token}`)
         }
         headers.set("Content-Type", 'application/json')
         headers.set('X-Requested-With', 'XMLHttpRequest')
-
         return headers
     }
 })
@@ -31,47 +28,31 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
 
     let result = await baseQuery(args, api, extraOptions)
 
-    // if (result?.error?.status === 401) {
-    //     console.log('sending refresh token')
-    //     // send refresh token to get new access token 
-    //     const refreshResult = await baseQuery('/api/auth/token', api, extraOptions)
-    //     if (refreshResult?.data) {
-    //         const user = api.getState().auth.user
-    //         // store the new token 
-    //         api.dispatch(setCredentials({ ...refreshResult.data, user }))
-    //         // retry the original query with new access token 
-    //         result = await baseQuery(args, api, extraOptions)
-
-    //     } else {
-    //         api.dispatch(logOut())
-    //     }
-    // }
-    if (result?.status === 401) {
-        console.log('result?.status === 401')
-
-        api.dispatch(logOut())
-
-        if(api.util && api.util.resetApiState){
-            api.dispatch( api.utils.resetApiState())
-        }
-    }
     if (result?.error?.status === 401) {
-        console.log('result?.error?.status === 401')
 
-        api.dispatch(logOut())
-        if(api.util && api.util.resetApiState){
-            api.dispatch( api.utils.resetApiState())
+        const refreshToken = api.getState().app.refreshToken;
+
+        api.dispatch(setCredentials({ token: null, refreshToken }))
+
+        console.log('sending refresh token')
+
+        const refreshResult = await baseQuery('/api/auth/token', api, extraOptions)
+
+        if (refreshResult?.data) {
+            const refreshToken = api.getState().app.refreshToken;
+            const token = refreshResult.data.token;
+            // // store the new token 
+            api.dispatch(setCredentials({ token, refreshToken }))
+            // // retry the original query with new access token 
+            result = await baseQuery(args, api, extraOptions)
+        } else {
+            api.dispatch(logOut())
+            if (api.util && api.util.resetApiState) {
+                api.dispatch(api.utils.resetApiState())
+            }
         }
-
-
     }
-    if (result?.error?.data?.status === 401) {
-        console.log('result?.error?.data?.status === 401')
-        api.dispatch(logOut())
-        if(api.util && api.util.resetApiState){
-            api.dispatch( api.utils.resetApiState())
-        }
-    }
+
     return result
 }
 

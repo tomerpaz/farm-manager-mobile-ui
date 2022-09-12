@@ -66,7 +66,7 @@ const MainTabs = () => {
                     <Tab label={text.map} to={DEFAULT_ROUTE} component={Link}   {...a11yProps(0)} />
                     <Tab label={text.fields} to="/tabs/fields" component={Link} {...a11yProps(1)} />
                     <Tab label={text.activities} to="/tabs/activities/0" component={Link}  {...a11yProps(2)} />
-                    {user && <Tab label={text.plans} to="/tabs/plans/0" component={Link}  {...a11yProps(2)} />}
+                    {/* {user && <Tab label={text.plans} to="/tabs/plans/0" component={Link}  {...a11yProps(2)} />} */}
                 </Tabs>
             </Box>
             <TabPanel component={'div'} value={value} index={0}>

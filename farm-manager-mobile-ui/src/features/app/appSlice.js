@@ -25,7 +25,11 @@ const appSlice = createSlice({
     reducers: {
         setCredentials: (state, action) => {
             const { token, refreshToken } = action.payload;
-            localStorage.setItem('token', token);
+            if(token){
+                localStorage.setItem('token', token);
+            } else {
+                localStorage.removeItem('token')
+            }
             localStorage.setItem('refreshToken', refreshToken);
             state.token = token;
             state.refreshToken = refreshToken;
