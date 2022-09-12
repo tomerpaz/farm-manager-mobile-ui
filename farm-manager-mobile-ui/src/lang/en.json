@@ -63,7 +63,13 @@
     "dosage": "Dosage",
     "inactive": "Inactive",
     "active": "Active",
-    "all": "All"
+    "all": "All",
+    "plans": "Plans",
+    "spray_plan": "Spray Plan",
+    "irrigation_plan": "Irrigation Plan",
+    "general_plan": "Activity Plan"
+
+
 
 
 

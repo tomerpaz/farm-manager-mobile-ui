@@ -8,7 +8,7 @@ import Loading from '../../components/Loading';
 import ListPager from '../../components/ui/ListPager';
 import ActivityTypeIcon from '../../icons/ActivityTypeIcon';
 import ActivitiesFilter from '../../components/filters/ActivitiesFilter';
-import { buildActiviyFilter, parseDate } from '../FarmUtil';
+import { activityDescription, buildActiviyFilter, parseDate } from '../FarmUtil';
 
 const FieldHistory = () => {
   const { fieldId, page, src } = useParams()
@@ -43,10 +43,6 @@ const FieldHistory = () => {
   }
 
 
-  const activityDescription = (e) => {
-    return e.activityDef ? e.activityDef.name : text[e.type.toLowerCase()];
-  }
-
   const renderRows = () => {
     if (isSuccess && data) {
       const activities = data.content;
@@ -63,7 +59,7 @@ const FieldHistory = () => {
             <ListItemText primary={
               < Box display={'flex'} flexDirection={'row'} flex={1} justifyContent={'space-between'}>
                 <Typography >
-                  {`${activityDescription(e)}`}
+                  {`${activityDescription(e, text)}`}
                 </Typography>
                 <Typography>
                   {`${e.reference}`}

@@ -2,32 +2,35 @@ import React, { Fragment } from 'react'
 import { Avatar, List, ListItem, ListItemText, ListItemAvatar, Box, Button, Typography, Divider } from '@mui/material';
 import { useSelector } from 'react-redux';
 import { useGetActivitiesFlatQuery } from '../../../features/activities/activitiesApiSlice';
-import { selectActivityFreeTextFilter, selectActivityTypeFilter, selectEndDateFilter, selectLang, selectStartDateFilter } from '../../../features/app/appSlice';
+import { selectActivityFreeTextFilter, selectActivityPlanTypeFilter, selectActivityTypeFilter, selectEndDateFilter, selectLang, selectStartDateFilter } from '../../../features/app/appSlice';
 import ListPager from '../../../components/ui/ListPager';
 import Loading from '../../../components/Loading';
 import ActivityTypeIcon from '../../../icons/ActivityTypeIcon';
 import { useNavigate, useParams } from 'react-router-dom';
 import ActivitiesFilter from '../../../components/filters/ActivitiesFilter';
-import { buildActiviyFilter, parseDate } from '../../FarmUtil';
+import { activityDescription, buildActiviyFilter, parseDate } from '../../FarmUtil';
 
 
 
-const ActivitiesList = () => {
+const ActivitiesList = ({plans}) => {
     const { page } = useParams()
     const navigate = useNavigate();
 
     const height = window.window.innerHeight - 180;
     const maxResult = 20;
-    const isPlan = false;
+    const isPlan = plans;
     const orderBy = 'execution';
     const dir = 'desc';
 
 
     const startDateFilter = useSelector(selectStartDateFilter);
     const endDateFilter = useSelector(selectEndDateFilter);
-    const activityTypeFilter = useSelector(selectActivityTypeFilter);
+
+    const typeFilter = useSelector(isPlan ? selectActivityPlanTypeFilter : selectActivityTypeFilter);
+
+
     const activityFreeTextFilter = useSelector(selectActivityFreeTextFilter);    
-    const filter = buildActiviyFilter(startDateFilter,endDateFilter, activityTypeFilter, activityFreeTextFilter);
+    const filter = buildActiviyFilter(startDateFilter,endDateFilter, typeFilter, activityFreeTextFilter);
 
     const {
         data,
@@ -44,9 +47,7 @@ const ActivitiesList = () => {
         return <Loading />
     }
 
-    const activityDescription = (e) => {
-        return e.activityDef ? e.activityDef.name : text[e.type.toLowerCase()];
-    }
+
 
     const renderRows = () => {
         if (isSuccess) {
@@ -62,7 +63,7 @@ const ActivitiesList = () => {
                         <ListItemText primary={
                             <Box display={'flex'} flexDirection={'row'} flex={1} justifyContent={'space-between'}>
                                 <Typography >
-                                    {`${activityDescription(e)} ${e.fieldDesc}`}
+                                    {`${activityDescription(e, text)} ${e.fieldDesc}`}
                                 </Typography>
                                 <Typography>
                                     {`${e.reference}`}

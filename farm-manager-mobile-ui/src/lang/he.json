@@ -63,5 +63,10 @@
     "dosage": "מינון",
     "inactive": "לא פעיל",
     "active": "פעיל",
-    "all": "הכל"
+    "all": "הכל",
+    "plans": "תכנון",
+    "spray_plan": "תכנון ריסוס",
+    "irrigation_plan": "תכנון השקיה",
+    "general_plan": "תכנון פעולה"
+
 }

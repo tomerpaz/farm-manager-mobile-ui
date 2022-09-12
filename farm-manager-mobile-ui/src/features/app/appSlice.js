@@ -9,16 +9,18 @@ const appSlice = createSlice({
         refreshToken: localStorage.getItem('refreshToken'),
         fieldFreeTextFilter: '',
         activityFreeTextFilter: '',
-        fieldFilter: '', 
+        fieldFilter: '',
         currentYear: newDate().getFullYear(),
         fieldDashboardYear: newDate().getFullYear(),
         appBarDialogOpen: false,
         startDateFilter: null,
         endDateFilter: null,
         activityTypeFilter: '',
+        activityPlanTypeFilter: '',
+        activityPlanStatusFilter: '',
         fieldSiteFilter: 0,
         fieldBaseFieldFilter: 0,
-        fieldsViewStatus: 'all', 
+        fieldsViewStatus: 'all',
     },
     reducers: {
         setCredentials: (state, action) => {
@@ -38,7 +40,7 @@ const appSlice = createSlice({
             state.refreshToken = null;
         }, setCurrentYear: (state, action) => {
             state.currentYear = action.payload
-            state.fieldDashboardYear = action.payload          
+            state.fieldDashboardYear = action.payload
         }, setAppBarDialogOpen: (state, action) => {
             state.appBarDialogOpen = action.payload
         }, setFieldFreeTextFilter: (state, action) => {
@@ -51,6 +53,10 @@ const appSlice = createSlice({
             state.endDateFilter = action.payload
         }, setActivityTypeFilter: (state, action) => {
             state.activityTypeFilter = action.payload
+        }, setActivityPlanTypeFilter: (state, action) => {
+            state.activityPlanTypeFilter = action.payload
+        }, setActivityPlanStatusFilter: (state, action) => {
+            state.activityPlanStatusFilter = action.payload
         }, setFieldSiteFilter: (state, action) => {
             state.fieldSiteFilter = action.payload
             state.fieldBaseFieldFilter = 0;
@@ -59,16 +65,17 @@ const appSlice = createSlice({
             state.fieldSiteFilter = 0;
         },
         setFieldDashboardYear: (state, action) => {
-            state.fieldDashboardYear = action.payload          
+            state.fieldDashboardYear = action.payload
         },
         setFieldsViewStatus: (state, action) => {
-            state.fieldsViewStatus = action.payload          
+            state.fieldsViewStatus = action.payload
         },
     },
 })
 
 export const { setCredentials, logOut, setLang, setCurrentYear, setAppBarDialogOpen, setFieldFreeTextFilter, setActivityFreeTextFilter,
-    setStartDateFilter, setEndDateFilter, setActivityTypeFilter, setFieldSiteFilter, setFieldBaseFieldFilter, setFieldDashboardYear, setFieldsViewStatus } = appSlice.actions
+    setStartDateFilter, setEndDateFilter, setActivityTypeFilter, setFieldSiteFilter, setFieldBaseFieldFilter, setFieldDashboardYear, setFieldsViewStatus,
+    setActivityPlanStatusFilter, setActivityPlanTypeFilter } = appSlice.actions
 
 export default appSlice.reducer
 
@@ -81,6 +88,7 @@ export const selectActivityFreeTextFilter = (state) => state.app.activityFreeTex
 export const selectStartDateFilter = (state) => state.app.startDateFilter
 export const selectEndDateFilter = (state) => state.app.endDateFilter
 export const selectActivityTypeFilter = (state) => state.app.activityTypeFilter
+export const selectActivityPlanTypeFilter = (state) => state.app.activityPlanTypeFilter
 export const selectFieldSiteFilter = (state) => state.app.fieldSiteFilter
 export const selectFieldBaseFieldFilter = (state) => state.app.fieldBaseFieldFilter
 export const selectFieldDashboardYear = (state) => state.app.fieldDashboardYear

@@ -1,23 +1,22 @@
-import { FilterAlt, FilterAltOff } from '@mui/icons-material'
+import { FilterAlt } from '@mui/icons-material'
 import { AppBar, IconButton, Toolbar } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
-import { selectActivityFreeTextFilter, selectActivityTypeFilter, selectEndDateFilter, selectStartDateFilter, setActivityFreeTextFilter, setAppBarDialogOpen, setEndDateFilter, setStartDateFilter } from '../../features/app/appSlice'
+import { useLocation } from 'react-router-dom'
+import { selectActivityFreeTextFilter, selectActivityPlanTypeFilter, selectActivityTypeFilter, selectEndDateFilter, selectStartDateFilter, setActivityFreeTextFilter, setAppBarDialogOpen, setEndDateFilter, setStartDateFilter } from '../../features/app/appSlice'
 import { isStringEmpty } from '../../ui/FarmUtil'
 import AppBarMenu from '../components/AppBarMenu'
 import AppBarSearch from '../components/AppBarSearch'
 
-const ActivitiesListBar = () => {
+const ActivitiesListBar = ({plans}) => {
     const dispatch = useDispatch()
-
+    const { pathname } = useLocation();
 
     const startDateFilter = useSelector(selectStartDateFilter);
     const endDateFilter = useSelector(selectEndDateFilter);
-    const activityTypeFilter = useSelector(selectActivityTypeFilter);
+    const isPlan = pathname && pathname.includes('plans');
+    const typeFilter = useSelector(isPlan ? selectActivityPlanTypeFilter : selectActivityTypeFilter);
 
-    const noFilter = isStringEmpty(startDateFilter) && isStringEmpty(endDateFilter) && isStringEmpty(activityTypeFilter)
-
-
-
+    const noFilter = isStringEmpty(startDateFilter) && isStringEmpty(endDateFilter) && isStringEmpty(typeFilter)
 
     return (
         <AppBar position="static" elevation={0}>

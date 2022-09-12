@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react'
 import { AppBar, Box, Dialog, Divider, IconButton, InputAdornment, List, ListItem, ListItemText, MenuItem, Slide, TextField, Toolbar, Typography } from '@mui/material'
-import { selectActivityTypeFilter, selectAppBarDialogOpen, selectEndDateFilter, selectLang, selectStartDateFilter, setActivityTypeFilter, setAppBarDialogOpen, setEndDateFilter, setStartDateFilter } from '../../features/app/appSlice';
+import { selectActivityPlanTypeFilter, selectActivityTypeFilter, selectAppBarDialogOpen, selectEndDateFilter, selectLang, selectStartDateFilter, setActivityPlanTypeFilter, setActivityTypeFilter, setAppBarDialogOpen, setEndDateFilter, setStartDateFilter } from '../../features/app/appSlice';
 import CloseIcon from '@mui/icons-material/Close';
 import DoneIcon from '@mui/icons-material/Done';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import { MobileDatePicker } from '@mui/x-date-pickers';
 import { asLocalDate, getActivityTypes, getActivityTypeText, isStringEmpty } from '../../ui/FarmUtil';
 import { FilterAltOff } from '@mui/icons-material';
@@ -16,7 +16,11 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 const ActivitiesFilter = () => {
 
     const dispatch = useDispatch()
-    const isPlan = false;
+    const { pathname } = useLocation();
+
+    const isPlan = pathname.includes('plans');
+    const typeFilter = useSelector(isPlan ? selectActivityPlanTypeFilter : selectActivityTypeFilter);
+
     const role = null;
 
 
@@ -27,14 +31,18 @@ const ActivitiesFilter = () => {
 
     const startDateFilter = useSelector(selectStartDateFilter);
     const endDateFilter = useSelector(selectEndDateFilter);
-    const activityTypeFilter = useSelector(selectActivityTypeFilter);
 
-    const noFilter = isStringEmpty(startDateFilter) && isStringEmpty(endDateFilter) && isStringEmpty(activityTypeFilter)
+    const noFilter = isStringEmpty(startDateFilter) && isStringEmpty(endDateFilter) && isStringEmpty(typeFilter)
 
     const clearFilters = () => {
         dispatch(setStartDateFilter(null));
         dispatch(setEndDateFilter(null));
-        dispatch(setActivityTypeFilter(''))
+        if (isPlan) {
+            dispatch(setActivityPlanTypeFilter(''))
+
+        } else {
+            dispatch(setActivityTypeFilter(''))
+        }
     }
 
     useEffect(() => {
@@ -45,7 +53,13 @@ const ActivitiesFilter = () => {
         dispatch(setAppBarDialogOpen(false))
     }
 
-
+    const handleTypeChange = (value) => {
+        if (isPlan) {
+            dispatch(setActivityPlanTypeFilter(value))
+        } else {
+            dispatch(setActivityTypeFilter(value))
+        }
+    }
 
 
     return (
@@ -93,7 +107,7 @@ const ActivitiesFilter = () => {
                         clearText="Clear"
                         showToolbar={false}
                         value={startDateFilter}
-                        onChange={(e)=>dispatch(setStartDateFilter(asLocalDate(e, true)))}
+                        onChange={(e) => dispatch(setStartDateFilter(asLocalDate(e, true)))}
                         renderInput={(params) => <TextField size={'small'} {...params} />}
                     />
                     <Box marginLeft={1} />
@@ -105,7 +119,7 @@ const ActivitiesFilter = () => {
                         closeOnSelect
                         value={endDateFilter}
                         showToolbar={false}
-                        onChange={(e)=>dispatch(setEndDateFilter(asLocalDate(e, true)))}
+                        onChange={(e) => dispatch(setEndDateFilter(asLocalDate(e, true)))}
                         renderInput={(params) => <TextField size={'small'} {...params} />}
                     />
                 </ListItem>
@@ -118,8 +132,8 @@ const ActivitiesFilter = () => {
                         fullWidth
                         size='small'
                         label={text.type}
-                        value={activityTypeFilter}
-                        onChange={e => dispatch(setActivityTypeFilter(e.target.value))}
+                        value={typeFilter}
+                        onChange={e => handleTypeChange(e.target.value)}
                     >
                         <MenuItem value="">
                             <em></em>
@@ -130,7 +144,7 @@ const ActivitiesFilter = () => {
                             </MenuItem>
                         ))}
                     </TextField>
-                    
+
                 </ListItem>
                 <Divider />
                 {/* <ListItem button>

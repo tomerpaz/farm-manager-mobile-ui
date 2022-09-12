@@ -2,9 +2,9 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { logOut } from '../../features/app/appSlice'
 
 
-// export const FARM_MANAGER = 'http://localhost:8080'
+ export const FARM_MANAGER = 'http://localhost:8080'
 
-export const FARM_MANAGER = 'https://api.manager.farm'
+// export const FARM_MANAGER = 'https://api.manager.farm'
 
 
 const baseQuery = fetchBaseQuery({
@@ -29,14 +29,12 @@ const baseQuery = fetchBaseQuery({
 
 const baseQueryWithReauth = async (args, api, extraOptions) => {
 
-    console.log(args)
     let result = await baseQuery(args, api, extraOptions)
-    console.log('result',result)
 
     // if (result?.error?.status === 401) {
     //     console.log('sending refresh token')
     //     // send refresh token to get new access token 
-    //     const refreshResult = await baseQuery('/refresh', api, extraOptions)
+    //     const refreshResult = await baseQuery('/api/auth/token', api, extraOptions)
     //     if (refreshResult?.data) {
     //         const user = api.getState().auth.user
     //         // store the new token 
@@ -56,11 +54,6 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
         if(api.util && api.util.resetApiState){
             api.dispatch( api.utils.resetApiState())
         }
-      //  api.dispatch(api.util.resetApiState())
-        // if(api.util && api.util.invalidateTags){
-        //     api.dispatch( api.utils.invalidateTags(['Field', 'Activities', 'User', 'FieldActivities']))
-        // }
-
     }
     if (result?.error?.status === 401) {
         console.log('result?.error?.status === 401')
@@ -69,10 +62,7 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
         if(api.util && api.util.resetApiState){
             api.dispatch( api.utils.resetApiState())
         }
-      //  api.dispatch(api.util.resetApiState())
-        // if(api.util && api.util.invalidateTags){
-        //     api.dispatch( api.utils.invalidateTags(['Field', 'Activities', 'User', 'FieldActivities']))
-        // }
+
 
     }
     if (result?.error?.data?.status === 401) {
@@ -81,11 +71,6 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
         if(api.util && api.util.resetApiState){
             api.dispatch( api.utils.resetApiState())
         }
-      //  api.dispatch(api.util.resetApiState())
-        // if(api.util && api.util.invalidateTags){
-        //     api.dispatch( api.utils.invalidateTags(['Field', 'Activities', 'User', 'FieldActivities']))
-        // }
-
     }
     return result
 }

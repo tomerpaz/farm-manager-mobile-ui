@@ -13,7 +13,7 @@ const CONTACROR = 'CONTACROR';
 
 const GROWER_ACTIVITY_TYPES = [GENERAL, SPRAY, IRRIGATION, HARVEST, SCOUT, MARKET]
 
-const GROWER_PLAN_TYPES = [GENERAL_PLAN, SPRAY, SPRAY_PLAN, IRRIGATION_PLAN]
+const GROWER_PLAN_TYPES = [GENERAL_PLAN, SPRAY_PLAN, IRRIGATION_PLAN]
 
 
 export const tableHeaderSx = { fontWeight: 'bold', padding: 0.5 };
@@ -26,6 +26,10 @@ export function getActivityTypes(role, isPlan) {
         return GROWER_ACTIVITY_TYPES;
     }
 }
+
+export const activityDescription = (e, text) => {
+    return e.activityDef ? e.activityDef.name : text[e.type.toLowerCase()];
+  }
 
 export const maxLenghtStr = (str, maxLenght) => {
     return !isStringEmpty(str) || str.lenght  > maxLenght ? str.slice(0,maxLenght) : str
@@ -82,7 +86,7 @@ export const getActivityTypeText = (type, text) => {
     if (SCOUT === type) {
         return text.scouting;
     }
-    return [GENERAL, GENERAL_PLAN].includes(type) ? text.activity : text[type.toLowerCase()];
+    return [GENERAL].includes(type) ? text.activity : text[type.toLowerCase()];
 
 }
 
