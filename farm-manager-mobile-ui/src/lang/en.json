@@ -67,7 +67,18 @@
     "plans": "Plans",
     "spray_plan": "Spray Plan",
     "irrigation_plan": "Irrigation Plan",
-    "general_plan": "Activity Plan"
+    "general_plan": "Activity Plan",
+    "fieldSize": "Field Size",
+    "fieldNote": "Field Note",
+    "executed": "Executed",
+    "cost":"Cost",
+    "resourceNote": "Resource Note",
+    "disinfectant": "Disinfectant",
+    "accessory": "Accessory",
+    "warehouse": "Warehouse"
+
+
+
 
 
 

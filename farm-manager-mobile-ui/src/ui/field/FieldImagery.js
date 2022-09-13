@@ -63,7 +63,7 @@ const FieldImagery = ({ field }) => {
 
             console.log('useEffect.selectedView');
 
-            setTile(data[selectedView].tile[view].replace("http:", "https:") + '&paletteid=' + palette);
+            setTile(data[selectedView]?.tile[view]?.replace("http:", "https:") + '&paletteid=' + palette);
             setViewDate(asShortStringDate(new Date(data[selectedView].dt * 1000)));
             setViewClouds(data[selectedView].cl);
         } else {

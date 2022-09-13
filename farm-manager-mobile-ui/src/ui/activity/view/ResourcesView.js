@@ -6,12 +6,11 @@ import { useGetUserDataQuery } from '../../../features/auth/authApiSlice'
 import { selectLang } from '../../../features/app/appSlice'
 import { getResourceTypeText, getUnitText, isArrayEmpty } from '../../FarmUtil'
 import { SECONDARY_LIGHT } from '../../../App'
+import { cellSxLink, headerSx, cellSx } from './FieldsView'
 
-const headerSx = { fontWeight: 'bold', padding: 1 };
-const cellSx = { padding: 1 };
 const TRASHHOLD = 6;
 
-const FieldsView = ({ activity }) => {
+const ResourceView = ({ activity }) => {
 
     const text = useSelector(selectLang)
     const { data: user } = useGetUserDataQuery()
@@ -41,17 +40,19 @@ const FieldsView = ({ activity }) => {
                 <Table size="small" sx={{ margin: 0, padding: 0 }} aria-label="a dense table">
                     <TableHead>
                         <TableRow  >
-                            <TableCell sx={headerSx} >{text.type}</TableCell>
                             <TableCell sx={headerSx} >{text.name}</TableCell>
+                            <TableCell sx={headerSx} >{text.type}</TableCell>
                             <TableCell sx={headerSx}>{text.qty}</TableCell>
                             <TableCell sx={headerSx}>{text.unit}</TableCell>
+                            <TableCell sx={headerSx}>{text.cost}</TableCell>
+
                             {/* <TableCell sx={headerSx}>{text.variety}</TableCell>
                             <TableCell sx={headerSx}>{text[user.areaUnit]}</TableCell> */}
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {resources.map((row, index) =>
-                            <Row key={index} index={index} row={row} text={text} areaUnit={user.areaUnit} activityDef={activity.activityDef} />
+                            <Row key={index} index={index} row={row} text={text} areaUnit={user.areaUnit} currency={user.currency} activityDef={activity.activityDef} />
                         )}
                     </TableBody>
                 </Table>
@@ -61,18 +62,20 @@ const FieldsView = ({ activity }) => {
 }
 
 function Row(props) {
-    const { row, index, text, areaUnit, activityDef } = props;
+    const { row, index, text, areaUnit, activityDef , currency} = props;
     const [open, setOpen] = useState(false);
 
+    console.log('row',row)
     return (
         <Fragment>
             <TableRow onClick={() => setOpen(!open)}
                 key={index}
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                <TableCell sx={cellSxLink} >{row.resource.name}</TableCell>
                 <TableCell sx={cellSx} >{getResourceTypeText(row.resource.type, text)}</TableCell>
-                <TableCell sx={cellSx} >{row.resource.name}</TableCell>
                 <TableCell sx={cellSx}>{row.qty}</TableCell>
-                <TableCell sx={cellSx}>{ getUnitText(row.resource.usageUnit, areaUnit, text)}</TableCell>
+                <TableCell sx={cellSx}>{getUnitText(row.resource.usageUnit, areaUnit, text)}</TableCell>
+                <TableCell sx={cellSx}>{row.qty}</TableCell>
                 {/* getUnitText = (unit, areaUnit, text) */}
             </TableRow>
             <TableRow sx={{ backgroundColor: SECONDARY_LIGHT }}>
@@ -81,17 +84,15 @@ function Row(props) {
                         <Table size="small" aria-label="extra">
                             <TableHead>
                                 <TableRow>
-                                    <TableCell>{text.site}</TableCell>
-                                    <TableCell>{text.note}</TableCell>
-                                    <TableCell >{text.note}</TableCell>
-                                    <TableCell >{text.note}</TableCell>
+                                    <TableCell>{`${text.unit} ${currency}`}</TableCell>
+                                    <TableCell >{text.warehouse}</TableCell>
+                                    <TableCell>{text.resourceNote}</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
                                 <TableRow >
-                                    <TableCell component="th" scope="row">
-                                        {row.resource.siteName}
-                                    </TableCell>
+                                    <TableCell>{row.tariff}</TableCell>
+                                    <TableCell>{row.warehouse?.name}</TableCell>
                                     <TableCell>{row.fieldNote}</TableCell>
                                 </TableRow>
                             </TableBody>
@@ -102,4 +103,4 @@ function Row(props) {
         </Fragment>
     );
 }
-export default FieldsView
+export default ResourceView

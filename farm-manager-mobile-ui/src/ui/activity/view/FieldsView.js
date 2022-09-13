@@ -4,11 +4,13 @@ import { Fragment, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useGetUserDataQuery } from '../../../features/auth/authApiSlice'
 import { selectLang } from '../../../features/app/appSlice'
-import { isArrayEmpty } from '../../FarmUtil'
+import { isArrayEmpty, parseDate } from '../../FarmUtil'
 import { SECONDARY_LIGHT } from '../../../App'
 
-const headerSx = { fontWeight: 'bold', padding: 1 };
-const cellSx = { padding: 1 };
+export const headerSx = { fontWeight: 'bold', padding: 1 };
+export const cellSx = { padding: 1 };
+export const cellSxLink = { padding: 1, color: 'blue' };
+
 const TRASHHOLD = 3;
 
 const FieldsView = ({ activity }) => {
@@ -63,12 +65,13 @@ function Row(props) {
     const { row, index, text } = props;
     const [open, setOpen] = useState(false);
 
+    // console.log('filed row' ,row)
     return (
         <Fragment>
             <TableRow onClick={() => setOpen(!open)}
                 key={index}
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                <TableCell sx={cellSx} >{row.field.name}</TableCell>
+                <TableCell sx={cellSxLink} >{row.field.name}</TableCell>
                 <TableCell sx={cellSx}>{row.field.alias}</TableCell>
                 <TableCell sx={cellSx} >{row.field.cropName}</TableCell>
                 <TableCell sx={cellSx}>{row.field.varietyName}</TableCell>
@@ -80,18 +83,22 @@ function Row(props) {
                         <Table size="small" aria-label="extra">
                             <TableHead>
                                 <TableRow>
-                                    <TableCell>{text.site}</TableCell>
-                                    <TableCell>{text.note}</TableCell>
-                                    <TableCell >{text.note}</TableCell>
-                                    <TableCell >{text.note}</TableCell>
+                                    <TableCell>{text.fieldSize}</TableCell>
+                                    <TableCell>{text.year}</TableCell>
+                                    <TableCell>{text.fieldNote}</TableCell>
+                                    <TableCell>{text.executed}</TableCell>
+
                                 </TableRow>
                             </TableHead>
                             <TableBody>
                                 <TableRow >
-                                    <TableCell component="th" scope="row">
+                                    {/* <TableCell component="th" scope="row">
                                         {row.field.siteName}
-                                    </TableCell>
+                                    </TableCell> */}
+                                    <TableCell>{row.field.area}</TableCell>
+                                    <TableCell>{row.year}</TableCell>
                                     <TableCell>{row.fieldNote}</TableCell>
+                                    <TableCell>{parseDate(row.actualExecution)}</TableCell>
                                 </TableRow>
                             </TableBody>
                         </Table>

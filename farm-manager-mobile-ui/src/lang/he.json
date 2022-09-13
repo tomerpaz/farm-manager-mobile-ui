@@ -67,6 +67,13 @@
     "plans": "תכנון",
     "spray_plan": "תכנון ריסוס",
     "irrigation_plan": "תכנון השקיה",
-    "general_plan": "תכנון פעולה"
-
+    "general_plan": "תכנון פעולה",
+    "fieldSize": "גודל חלקה",
+    "fieldNote": "הערה לחלקה",
+    "executed": "בוצע",
+    "cost": "עלות",
+    "resourceNote": "הערה למשאב",
+    "disinfectant": "חומר חיטוי",
+    "accessory": "אביזר",
+    "warehouse": "מחסן"
 }
