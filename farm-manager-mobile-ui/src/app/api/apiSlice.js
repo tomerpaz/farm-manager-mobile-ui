@@ -2,7 +2,8 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { logOut, setCredentials } from '../../features/app/appSlice'
 
 
-// export const FARM_MANAGER = 'http://localhost:8080'
+
+//export const FARM_MANAGER = 'http://localhost:8080'
 
 export const FARM_MANAGER = 'https://api.manager.farm'
 
@@ -11,10 +12,8 @@ const baseQuery = fetchBaseQuery({
     baseUrl: FARM_MANAGER,
     // credentials: 'include',
     prepareHeaders: (headers, { getState,  }) => {
-        console.log('token',getState().app.token)
-        console.log('refreshToken',getState().app.refreshToken)
 
-        const token = getState().app.token ? getState().app.token : getState().app.refreshToken;
+        const token = 'refresh' === getState().app.token ? getState().app.refreshToken : getState().app.token;
         if (token) {
             headers.set("X-Authorization", `Bearer ${token}`)
         }
@@ -32,7 +31,7 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
 
         const refreshToken = api.getState().app.refreshToken;
 
-        api.dispatch(setCredentials({ token: null, refreshToken }))
+        api.dispatch(setCredentials({ token: 'refresh', refreshToken }))
 
         console.log('sending refresh token')
 
