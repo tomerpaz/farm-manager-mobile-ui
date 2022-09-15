@@ -1,3 +1,5 @@
+import { grey } from "@mui/material/colors";
+
 export const GENERAL = 'GENERAL';
 export const GENERAL_PLAN = 'GENERAL_PLAN';
 export const SPRAY = 'SPRAY';
@@ -18,6 +20,11 @@ const GROWER_PLAN_TYPES = [GENERAL_PLAN, SPRAY_PLAN, IRRIGATION_PLAN]
 
 export const tableHeaderSx = { fontWeight: 'bold', padding: 0.5 };
 export const tableCellSx = { padding: 0.5 };
+
+
+export function getBottomNavigationSx(disabled){
+    return disabled ? {color: grey[400]} : null;
+}
 
 export function getActivityTypes(role, isPlan) {
     if (isPlan) {

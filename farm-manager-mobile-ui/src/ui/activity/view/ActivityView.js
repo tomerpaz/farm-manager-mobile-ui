@@ -41,25 +41,28 @@ const ActivityView = () => {
 
 
 
-        <BottomNavigation sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} value={0}
+        <BottomNavigation sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} value={-1}
           showLabels>
-          <BottomNavigationAction
+          <BottomNavigationAction sx={{color: 'lightGray'}}
+
             label={text.save}
             // to={`/field/${src}/${fieldId}/info`} component={Link}
             icon={<Save />}
           />
           <BottomNavigationAction
+            color='blue'
+            disabled={true}
             label={text.delete}
             // to={`/field/${src}/${fieldId}/dash`} component={Link}
             icon={<DeleteRounded />}
           />
-          <BottomNavigationAction
+          <BottomNavigationAction 
             label={text.duplicate}
             onClick={() => console.log(text.duplicate)}
             // to={`/field/${src}/${fieldId}/history/0`} component={Link}
-            icon={<ControlPointDuplicate />}
+            icon={<ControlPointDuplicate/>}
           />
-         {isPlan && <BottomNavigationAction
+          {isPlan && <BottomNavigationAction
             label={text.execute}
             onClick={() => console.log(text.duplicate)}
             // to={`/field/${src}/${fieldId}/history/0`} component={Link}

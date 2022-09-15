@@ -18,7 +18,7 @@ import { getFruitIcon } from '../../icons/FruitIconUtil';
 import { useFieldsById } from '../../features/fields/fieldsApiSlice';
 import { selectCurrentYear, selectLang, setFieldDashboardYear } from '../../features/app/appSlice';
 import { useGetUserDataQuery } from '../../features/auth/authApiSlice';
-import { displayFieldArea, displayFieldName, maxLenghtStr, parseDate } from '../FarmUtil';
+import { displayFieldArea, displayFieldName, getBottomNavigationSx, maxLenghtStr, parseDate } from '../FarmUtil';
 import { useEffect } from 'react';
 
 const height = (window.window.innerHeight - 100);
@@ -115,6 +115,7 @@ const Field = () => {
           icon={<RestoreIcon />}
         />
         <BottomNavigationAction
+          sx={getBottomNavigationSx(field.imageryId === null)}
           disabled={field.imageryId === null}
           label={text.satellite}
           to={`/field/${src}/${fieldId}/imagery`} component={Link}
