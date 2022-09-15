@@ -75,5 +75,10 @@
     "resourceNote": "הערה למשאב",
     "disinfectant": "חומר חיטוי",
     "accessory": "אביזר",
-    "warehouse": "מחסן"
+    "warehouse": "מחסן",
+    "plan": "תכנון",
+    "delete": "מחק",
+    "save": "שמור",
+    "duplicate": "שכפל",
+    "execute": "העבר לביצוע"
 }

@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react'
 import { AppBar, Box, Dialog, Divider, IconButton, InputAdornment, List, ListItem, ListItemText, MenuItem, Slide, TextField, Toolbar, Typography } from '@mui/material'
-import { selectActivityPlanTypeFilter, selectActivityTypeFilter, selectAppBarDialogOpen, selectEndDateFilter, selectLang, selectStartDateFilter, setActivityPlanTypeFilter, setActivityTypeFilter, setAppBarDialogOpen, setEndDateFilter, setStartDateFilter } from '../../features/app/appSlice';
+import { DEFAULT_ACTIVITY_STATUS, DEFAULT_PLAN_STATUS, selectActivityPlanStatusFilter, selectActivityPlanTypeFilter, selectActivityStatusFilter, selectActivityTypeFilter, selectAppBarDialogOpen, selectEndDateFilter, selectLang, selectStartDateFilter, setActivityPlanStatusFilter, setActivityPlanTypeFilter, setActivityStatusFilter, setActivityTypeFilter, setAppBarDialogOpen, setEndDateFilter, setStartDateFilter } from '../../features/app/appSlice';
 import CloseIcon from '@mui/icons-material/Close';
 import DoneIcon from '@mui/icons-material/Done';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useParams } from 'react-router-dom';
 import { MobileDatePicker } from '@mui/x-date-pickers';
-import { asLocalDate, getActivityTypes, getActivityTypeText, isStringEmpty } from '../../ui/FarmUtil';
+import { asLocalDate, getActivityStatuses, getActivityStatusText, getActivityTypes, getActivityTypeText, isStringEmpty, PLAN } from '../../ui/FarmUtil';
 import { FilterAltOff } from '@mui/icons-material';
 
 
@@ -21,6 +21,10 @@ const ActivitiesFilter = () => {
     const isPlan = pathname.includes('plans');
     const typeFilter = useSelector(isPlan ? selectActivityPlanTypeFilter : selectActivityTypeFilter);
 
+    const statusFilter = useSelector(isPlan ? selectActivityPlanStatusFilter : selectActivityStatusFilter);
+
+
+
     const role = null;
 
 
@@ -28,20 +32,26 @@ const ActivitiesFilter = () => {
     const text = useSelector(selectLang)
     const open = useSelector(selectAppBarDialogOpen)
 
+    const activityStatusFilter = useSelector(isPlan ? selectActivityPlanStatusFilter : selectActivityStatusFilter);
+
+    const isDefault = isPlan ? activityStatusFilter === DEFAULT_PLAN_STATUS : activityStatusFilter === DEFAULT_ACTIVITY_STATUS;
+
 
     const startDateFilter = useSelector(selectStartDateFilter);
     const endDateFilter = useSelector(selectEndDateFilter);
 
-    const noFilter = isStringEmpty(startDateFilter) && isStringEmpty(endDateFilter) && isStringEmpty(typeFilter)
+    const noFilter = isStringEmpty(startDateFilter) && isStringEmpty(endDateFilter) && isStringEmpty(typeFilter) && isDefault;
 
     const clearFilters = () => {
         dispatch(setStartDateFilter(null));
         dispatch(setEndDateFilter(null));
         if (isPlan) {
             dispatch(setActivityPlanTypeFilter(''))
-
+            dispatch(setActivityPlanStatusFilter(DEFAULT_PLAN_STATUS))
         } else {
             dispatch(setActivityTypeFilter(''))
+            dispatch(setActivityPlanStatusFilter(DEFAULT_ACTIVITY_STATUS))
+
         }
     }
 
@@ -58,6 +68,14 @@ const ActivitiesFilter = () => {
             dispatch(setActivityPlanTypeFilter(value))
         } else {
             dispatch(setActivityTypeFilter(value))
+        }
+    }
+
+    const handleStatusChange = (value) => {
+        if (isPlan) {
+            dispatch(setActivityPlanStatusFilter(value))
+        } else {
+            dispatch(setActivityStatusFilter(value))
         }
     }
 
@@ -125,27 +143,50 @@ const ActivitiesFilter = () => {
                 </ListItem>
                 <Divider />
 
-                <ListItem>
-                    <TextField
-                        id="outlined-select-activity-type"
-                        select
-                        fullWidth
-                        size='small'
-                        label={text.type}
-                        value={typeFilter}
-                        onChange={e => handleTypeChange(e.target.value)}
-                    >
-                        <MenuItem value="">
-                            <em></em>
-                        </MenuItem>
-                        {getActivityTypes(role, isPlan).map((type) => (
-                            <MenuItem key={type} value={type}>
-                                {getActivityTypeText(type, text)}
+                <Box display='flex' flexDirection={'row'}>
+                    <ListItem>
+                        <TextField
+                            id="outlined-select-activity-type"
+                            select
+                            fullWidth
+                            size='small'
+                            label={text.type}
+                            value={typeFilter}
+                            onChange={e => handleTypeChange(e.target.value)}
+                        >
+                            <MenuItem value="">
+                                <em></em>
                             </MenuItem>
-                        ))}
-                    </TextField>
+                            {getActivityTypes(role, isPlan).map((type) => (
+                                <MenuItem key={type} value={type}>
+                                    {getActivityTypeText(type, text)}
+                                </MenuItem>
+                            ))}
+                        </TextField>
+                        {isPlan && <Box paddingLeft={1} />}
 
-                </ListItem>
+                        {isPlan &&
+                            <TextField
+                                id="outlined-select-activity-type"
+                                select
+                                fullWidth
+                                size='small'
+                                label={text.status}
+                                value={statusFilter}
+                                onChange={e => handleStatusChange(e.target.value)}
+                            >
+                                {getActivityStatuses(role, isPlan).map((status) => (
+                                    <MenuItem key={status} value={status}>
+                                        {getActivityStatusText(status, text)}
+                                    </MenuItem>
+                                ))}
+                            </TextField>
+                        }
+                    </ListItem>
+
+
+                </Box>
+
                 <Divider />
                 {/* <ListItem button>
                     <ListItemText

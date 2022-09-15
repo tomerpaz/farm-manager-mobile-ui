@@ -1,5 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit"
-import { newDate } from "../../ui/FarmUtil";
+import { newDate, PLAN } from "../../ui/FarmUtil";
+
+export const DEFAULT_PLAN_STATUS = PLAN
+export const DEFAULT_ACTIVITY_STATUS = ''
 
 const appSlice = createSlice({
     name: 'auth',
@@ -17,15 +20,16 @@ const appSlice = createSlice({
         endDateFilter: null,
         activityTypeFilter: '',
         activityPlanTypeFilter: '',
-        activityPlanStatusFilter: '',
         fieldSiteFilter: 0,
         fieldBaseFieldFilter: 0,
         fieldsViewStatus: 'all',
+        activityStatusFilter: '',
+        activityPlanStatusFilter: DEFAULT_PLAN_STATUS,
     },
     reducers: {
         setCredentials: (state, action) => {
             const { token, refreshToken } = action.payload;
-            if(token){
+            if (token) {
                 localStorage.setItem('token', token);
             } else {
                 localStorage.removeItem('token')
@@ -74,12 +78,21 @@ const appSlice = createSlice({
         setFieldsViewStatus: (state, action) => {
             state.fieldsViewStatus = action.payload
         },
+
+        setActivityStatusFilter: (state, action) => {
+            state.activityStatusFilter = action.payload
+        },
+        setActivityPlanStatusFilter: (state, action) => {
+            state.activityPlanStatusFilter = action.payload
+        },
+
+
     },
 })
 
 export const { setCredentials, logOut, setLang, setCurrentYear, setAppBarDialogOpen, setFieldFreeTextFilter, setActivityFreeTextFilter,
     setStartDateFilter, setEndDateFilter, setActivityTypeFilter, setFieldSiteFilter, setFieldBaseFieldFilter, setFieldDashboardYear, setFieldsViewStatus,
-    setActivityPlanStatusFilter, setActivityPlanTypeFilter } = appSlice.actions
+    setActivityPlanStatusFilter, setActivityPlanTypeFilter, setActivityStatusFilter } = appSlice.actions
 
 export default appSlice.reducer
 
@@ -97,3 +110,5 @@ export const selectFieldSiteFilter = (state) => state.app.fieldSiteFilter
 export const selectFieldBaseFieldFilter = (state) => state.app.fieldBaseFieldFilter
 export const selectFieldDashboardYear = (state) => state.app.fieldDashboardYear
 export const selectFieldsViewStatus = (state) => state.app.fieldsViewStatus
+export const selectActivityStatusFilter = (state) => state.app.activityStatusFilter
+export const selectActivityPlanStatusFilter = (state) => state.app.activityPlanStatusFilter

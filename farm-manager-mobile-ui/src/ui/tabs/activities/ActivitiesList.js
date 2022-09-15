@@ -2,7 +2,7 @@ import React, { Fragment } from 'react'
 import { Avatar, List, ListItem, ListItemText, ListItemAvatar, Box, Button, Typography, Divider } from '@mui/material';
 import { useSelector } from 'react-redux';
 import { useGetActivitiesFlatQuery } from '../../../features/activities/activitiesApiSlice';
-import { selectActivityFreeTextFilter, selectActivityPlanTypeFilter, selectActivityTypeFilter, selectEndDateFilter, selectLang, selectStartDateFilter } from '../../../features/app/appSlice';
+import { selectActivityFreeTextFilter, selectActivityPlanStatusFilter, selectActivityPlanTypeFilter, selectActivityStatusFilter, selectActivityTypeFilter, selectEndDateFilter, selectLang, selectStartDateFilter } from '../../../features/app/appSlice';
 import ListPager from '../../../components/ui/ListPager';
 import Loading from '../../../components/Loading';
 import ActivityTypeIcon from '../../../icons/ActivityTypeIcon';
@@ -28,9 +28,10 @@ const ActivitiesList = ({plans}) => {
 
     const typeFilter = useSelector(isPlan ? selectActivityPlanTypeFilter : selectActivityTypeFilter);
 
+    const status = useSelector(isPlan ? selectActivityPlanStatusFilter : selectActivityStatusFilter);
 
     const activityFreeTextFilter = useSelector(selectActivityFreeTextFilter);    
-    const filter = buildActiviyFilter(startDateFilter,endDateFilter, typeFilter, activityFreeTextFilter);
+    const filter = buildActiviyFilter(startDateFilter,endDateFilter, typeFilter, activityFreeTextFilter, status);
 
     const {
         data,

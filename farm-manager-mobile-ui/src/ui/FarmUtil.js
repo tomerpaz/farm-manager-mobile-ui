@@ -17,7 +17,7 @@ const GROWER_PLAN_TYPES = [GENERAL_PLAN, SPRAY_PLAN, IRRIGATION_PLAN]
 
 
 export const tableHeaderSx = { fontWeight: 'bold', padding: 0.5 };
-export const tableCellSx = { padding: 0.5};
+export const tableCellSx = { padding: 0.5 };
 
 export function getActivityTypes(role, isPlan) {
     if (isPlan) {
@@ -27,12 +27,23 @@ export function getActivityTypes(role, isPlan) {
     }
 }
 
+export const PLAN = 'PLAN';
+export const EXECUTED = 'EXECUTED';
+
+export function getActivityStatuses(role, isPlan) {
+    if (isPlan) {
+        return [PLAN, EXECUTED]
+    } else {
+        return [];
+    }
+}
+
 export const activityDescription = (e, text) => {
     return e.activityDef ? e.activityDef.name : text[e.type.toLowerCase()];
-  }
+}
 
 export const maxLenghtStr = (str, maxLenght) => {
-    return !isStringEmpty(str) || str.lenght  > maxLenght ? str.slice(0,maxLenght) : str
+    return !isStringEmpty(str) || str.lenght > maxLenght ? str.slice(0, maxLenght) : str
 }
 
 export const displayFieldName = (field) => {
@@ -60,6 +71,22 @@ export const getUnitText = (unit, areaUnit, text) => {
 }
 
 export const getResourceTypeText = (type, text) => {
+    if (isStringEmpty(type)) {
+        return '';
+    }
+    const value = type.toLowerCase();
+
+    const result = text[value];
+    if (result) {
+        return result;
+    }
+    else {
+        console.log('Translate: ', value)
+        return '';
+    }
+}
+
+export const getActivityStatusText = (type, text) => {
     if (isStringEmpty(type)) {
         return '';
     }
@@ -152,7 +179,7 @@ export function asLocalDate(date, hyphen) {
 }
 
 
-export const daysDiff = (date_1, date_2) =>{
+export const daysDiff = (date_1, date_2) => {
     let difference = date_1.getTime() - date_2.getTime();
     let TotalDays = Math.ceil(difference / (1000 * 3600 * 24));
     return TotalDays;
@@ -199,16 +226,16 @@ export function filterFields(fields, freeText, fieldSiteFilter, fieldBaseFieldFi
         result = result.filter(e => fieldBaseFieldFilter === e.baseFieldId);
     }
     if ([ACTIVE, INACTIVE].includes(fieldsViewStatus)) {
-        if(ACTIVE === fieldsViewStatus){
-            result = fields.filter(e => e.endDate === null );
+        if (ACTIVE === fieldsViewStatus) {
+            result = fields.filter(e => e.endDate === null);
         } else {
-            result = fields.filter(e => e.endDate !== null );
+            result = fields.filter(e => e.endDate !== null);
         }
     }
     return result;
 }
 
-export const buildActiviyFilter = (start, end, activityType, freeText) => {
+export const buildActiviyFilter = (start, end, activityType, freeText, status) => {
     const filter = [];
     if (!isStringEmpty(start)) {
         filter.push(`start_${start.replaceAll('-', '')}`)
@@ -222,6 +249,9 @@ export const buildActiviyFilter = (start, end, activityType, freeText) => {
     if (!isStringEmpty(freeText)) {
         filter.push(`freeText_${freeText}`)
     }
+    if (!isStringEmpty(status)) {
+        filter.push(`status_${status}`)
+    }
     return filter;
 }
 
@@ -229,12 +259,12 @@ export const formatNumber = (value) => {
 
     if (!isNaN(value)) {
         return value.toLocaleString('en-US')
-    } 
+    }
     return value;
 }
 
-const thisYear =  newDate().getFullYear();
-const yearOptions = [thisYear + 2, thisYear + 1, thisYear , thisYear -1, thisYear - 2, thisYear - 3];
+const thisYear = newDate().getFullYear();
+const yearOptions = [thisYear + 2, thisYear + 1, thisYear, thisYear - 1, thisYear - 2, thisYear - 3];
 export const getYearArray = () => {
     return yearOptions;
 }
