@@ -83,7 +83,7 @@ const MainTabs = () => {
             </TabPanel>
             <TabPanel value={value} index={3}>
                 <ActivitiesList plans={true}/>
-                <ActionSpeedDial bottom={80} plan={false} />
+                <ActionSpeedDial bottom={80} plan={true} />
             </TabPanel>
         </Box>
     );
