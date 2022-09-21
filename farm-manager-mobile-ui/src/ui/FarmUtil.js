@@ -234,9 +234,9 @@ export function filterFields(fields, freeText, fieldSiteFilter, fieldBaseFieldFi
     }
     if ([ACTIVE, INACTIVE].includes(fieldsViewStatus)) {
         if (ACTIVE === fieldsViewStatus) {
-            result = fields.filter(e => e.endDate === null);
+            result = result.filter(e => e.endDate === null);
         } else {
-            result = fields.filter(e => e.endDate !== null);
+            result = result.filter(e => e.endDate !== null);
         }
     }
     return result;
