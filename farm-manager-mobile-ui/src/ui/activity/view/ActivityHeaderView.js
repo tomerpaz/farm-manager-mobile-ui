@@ -5,8 +5,7 @@ import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { selectLang } from '../../../features/app/appSlice'
 import ActivityTypeIcon from '../../../icons/ActivityTypeIcon'
-import { getActivityTypeText, isArrayEmpty, parseDate } from '../../FarmUtil'
-import InfoLine from '../../field/InfoLine'
+import { getActivityTypeText, parseDate } from '../../FarmUtil'
 
 const ActivityHeaderView = ({ activity }) => {
   const navigate = useNavigate()
