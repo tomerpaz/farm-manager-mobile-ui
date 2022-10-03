@@ -25,7 +25,7 @@ const UserRoutes = () => {
 
     useEffect(() => {
         if (isSuccess) {
-            console.log('user',user)
+            // console.log('user',user)
             dispatch(setLang(getUserLang(user.lang)));
             dispatch(setCurrentYear(user.year));
             dispatch(setFieldsViewStatus(user.fieldsViewStatus));

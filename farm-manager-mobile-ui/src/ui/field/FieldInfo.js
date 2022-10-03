@@ -23,8 +23,6 @@ const FieldInfo = ({ field }) => {
     const height = (window.window.innerHeight - 120) / 2;
 
     const src = 'map'
-
-    // console.log(field);
     return (
         <Box display={'flex'} flex={1} alignItems={'stretch'} justifyContent={'space-between'} flexDirection={'column'}>
             {field.polygon && <FieldMap field={field} height={height} />}
@@ -40,7 +38,7 @@ const FieldInfo = ({ field }) => {
             <InfoLine value={field.rowSpacing} title={text.rowSpacing} />
             <InfoLine value={field.note} title={text.note} />
 
-            {/* <ActionSpeedDial bottom={310} plan={false} /> */}
+            <ActionSpeedDial bottom={80} plan={false} />
 
         </Box>
     )

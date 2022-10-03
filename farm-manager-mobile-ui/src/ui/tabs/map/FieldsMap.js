@@ -55,7 +55,6 @@ const FieldsMap = (props) => {
 
 
     useEffect(() => {
-        console.log('center changed')
         if (map && center) {
             map.setView(center, zoom);
         }
@@ -65,9 +64,6 @@ const FieldsMap = (props) => {
     let navigate = useNavigate();
 
     const height = window.window.innerHeight - 110;
-
-
-    console.log('center', center);
 
     return (
         <Box display={'flex'} flex={1} alignItems={'stretch'} flexDirection={'column'} justifyContent={'space-between'}>

@@ -57,12 +57,7 @@ const FieldImagery = ({ field }) => {
     useEffect(() => {
 
         setRealod(true)
-        console.log('selectedViewdata: ', selectedView, data)
         if (selectedView !== null && data && data.length > selectedView) {
-            console.log(' data.length: ', data.length)
-
-            console.log('useEffect.selectedView');
-
             setTile(data[selectedView]?.tile[view]?.replace("http:", "https:") + '&paletteid=' + palette);
             setViewDate(asShortStringDate(new Date(data[selectedView].dt * 1000)));
             setViewClouds(data[selectedView].cl);

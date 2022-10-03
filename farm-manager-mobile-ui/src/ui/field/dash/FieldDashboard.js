@@ -42,7 +42,6 @@ const FieldDashboard = () => {
   if (isLoading) {
     return <Loading />
   }
-  console.log(data)
 
   return (
     <Box sx={{ width: '100%', height: '100%', paddingBottom: 5 }}>

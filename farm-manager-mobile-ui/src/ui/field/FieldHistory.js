@@ -28,7 +28,6 @@ const FieldHistory = () => {
   const activityFreeTextFilter = useSelector(selectActivityFreeTextFilter);
   const filter = buildActiviyFilter(startDateFilter, endDateFilter, activityTypeFilter, activityFreeTextFilter);
 
-  console.log('FieldHistory', filter)
   const {
     data,
     isLoading,
