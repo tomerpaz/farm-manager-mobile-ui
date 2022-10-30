@@ -21,7 +21,7 @@ const FieldsView = ({ activity }) => {
     const [expendFields, setExpendFields] = useState(false);
 
     const [selectedRow, setSelectedRow] = useState(null);
-
+ 
 
     console.log('selectedRow',selectedRow)
 
@@ -30,6 +30,7 @@ const FieldsView = ({ activity }) => {
     }
 
     const fields = (expendFields && activity.fields.length > TRASHHOLD) ? activity.fields : activity.fields.slice(0, TRASHHOLD);
+
 
     return (
         <Box>

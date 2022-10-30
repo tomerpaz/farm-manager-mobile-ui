@@ -80,5 +80,6 @@
     "delete": "מחק",
     "save": "שמור",
     "duplicate": "שכפל",
-    "execute": "העבר לביצוע"
+    "execute": "העבר לביצוע",
+    "cancel": "בטל"
 }

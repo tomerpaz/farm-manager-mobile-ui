@@ -59,9 +59,20 @@ const FieldDialog = ({ row, activity, onClose }) => {
   }, [row])
 
 
+  const onAction = (save) =>{
+    if(save){
+      console.log('Save...')
+      
+      onClose()
+    } else{
+      onClose()
+    }
+  }
+
+
   return (
 
-    <Dialog onClose={() => console.log('onClose')} open={open}>
+    <Dialog  open={open}>
       <DialogTitle>{`${text.field} ${fieldName}`}</DialogTitle>
 
       <DialogContent>
@@ -107,8 +118,8 @@ const FieldDialog = ({ row, activity, onClose }) => {
           />}
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose}>Cancel</Button>
-        <Button onClick={onClose}>OK</Button>
+        <Button onClick={()=>onAction(false)}>{text.cancel}</Button>
+        <Button onClick={()=>onAction(true)}>{text.save}</Button>
 
       </DialogActions>
 
