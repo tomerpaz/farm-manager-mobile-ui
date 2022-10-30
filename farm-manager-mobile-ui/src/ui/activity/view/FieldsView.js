@@ -6,6 +6,7 @@ import { useGetUserDataQuery } from '../../../features/auth/authApiSlice'
 import { selectLang } from '../../../features/app/appSlice'
 import { isArrayEmpty, parseDate } from '../../FarmUtil'
 import { SECONDARY_LIGHT } from '../../../App'
+import FieldDialog from './FieldDialog'
 
 export const headerSx = { fontWeight: 'bold', padding: 1 };
 export const cellSx = { padding: 1 };
@@ -18,6 +19,11 @@ const FieldsView = ({ activity }) => {
     const text = useSelector(selectLang)
     const { data: user } = useGetUserDataQuery()
     const [expendFields, setExpendFields] = useState(false);
+
+    const [selectedRow, setSelectedRow] = useState(null);
+
+
+    console.log('selectedRow',selectedRow)
 
     if (isArrayEmpty(activity.fields)) {
         return <Fragment />
@@ -52,23 +58,25 @@ const FieldsView = ({ activity }) => {
                     </TableHead>
                     <TableBody>
                         {fields.map((row, index) =>
-                            <Row key={index} index={index} row={row} text={text} />
+                            <Row key={index} index={index} row={row} text={text} onClick={setSelectedRow} />
                         )}
                     </TableBody>
                 </Table>
             </TableContainer>
+            <FieldDialog row={selectedRow} activity={activity} onClose={()=>setSelectedRow(null)}/>
+
         </Box>
     )
 }
 
 function Row(props) {
-    const { row, index, text } = props;
-    const [open, setOpen] = useState(false);
+    const { row, index, text , onClick} = props;
+  //  const [open, setOpen] = useState(false);
 
     // console.log('filed row' ,row)
     return (
         <Fragment>
-            <TableRow onClick={() => setOpen(!open)}
+            <TableRow onClick={() => onClick(index)}
                 key={index}
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                 <TableCell sx={cellSxLink} >{row.field.name}</TableCell>
@@ -77,7 +85,7 @@ function Row(props) {
                 <TableCell sx={cellSx}>{row.field.varietyName}</TableCell>
                 <TableCell sx={cellSx}>{row.activityArea.toFixed(2)}</TableCell>
             </TableRow>
-            <TableRow sx={{ backgroundColor: SECONDARY_LIGHT }}>
+            {/* <TableRow sx={{ backgroundColor: SECONDARY_LIGHT }}>
                 <TableCell style={{ padding: 0 }} colSpan={5}>
                     <Collapse in={open} timeout="auto" unmountOnExit>
                         <Table size="small" aria-label="extra">
@@ -92,9 +100,6 @@ function Row(props) {
                             </TableHead>
                             <TableBody>
                                 <TableRow >
-                                    {/* <TableCell component="th" scope="row">
-                                        {row.field.siteName}
-                                    </TableCell> */}
                                     <TableCell>{row.field.area}</TableCell>
                                     <TableCell>{row.year}</TableCell>
                                     <TableCell>{row.fieldNote}</TableCell>
@@ -104,7 +109,8 @@ function Row(props) {
                         </Table>
                     </Collapse>
                 </TableCell>
-            </TableRow>
+            </TableRow> */}
+
         </Fragment>
     );
 }
