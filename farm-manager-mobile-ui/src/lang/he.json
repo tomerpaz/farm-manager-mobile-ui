@@ -81,5 +81,17 @@
     "save": "שמור",
     "duplicate": "שכפל",
     "execute": "העבר לביצוע",
-    "cancel": "בטל"
+    "cancel": "בטל",
+    "windSpeedNone": "ללא רוח",
+    "windSpeedStrong": "רוח חזקה",
+    "windSpeedCalm": "רוח קלה",
+    "windSpeed": "מהירות רוח",
+    "total": "סה\"כ",
+    "sprayVolumehectare": "תרסיס להקטר",
+    "sprayVolumedunam": "תרסיס לדונם",
+    "sprayVolumeacre": "תרסיס לאקר",
+    "sprayerCapacity": "מיכל מרסס",
+    "sprayersCount": "מס' מרססים",
+    "totalSprayVolume": "סה\"כ נפח",
+    "speed": "מהירות"
 }

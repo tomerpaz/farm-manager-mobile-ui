@@ -31,6 +31,11 @@ const FieldsView = ({ activity }) => {
 
     const fields = (expendFields && activity.fields.length > TRASHHOLD) ? activity.fields : activity.fields.slice(0, TRASHHOLD);
 
+    const onFieldsDialogClose = (data) => {
+        console.log('data',data)
+        setSelectedRow(null)
+
+    }
 
     return (
         <Box>
@@ -64,7 +69,7 @@ const FieldsView = ({ activity }) => {
                     </TableBody>
                 </Table>
             </TableContainer>
-            <FieldDialog row={selectedRow} activity={activity} onClose={()=>setSelectedRow(null)}/>
+            <FieldDialog row={selectedRow} activity={activity} onClose={onFieldsDialogClose}/>
 
         </Box>
     )

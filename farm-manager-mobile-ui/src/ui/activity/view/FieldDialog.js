@@ -63,9 +63,9 @@ const FieldDialog = ({ row, activity, onClose }) => {
     if(save){
       console.log('Save...')
       
-      onClose()
+      onClose({fieldNote,actualExecution,qty,weight,activityArea})
     } else{
-      onClose()
+      onClose(null)
     }
   }
 

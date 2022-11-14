@@ -81,6 +81,18 @@
     "save": "Save",
     "duplicate": "Duplicate",
     "execute": "Execute",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "windSpeedNone": "No Wind",
+    "windSpeedStrong": "Strong Wind",
+    "windSpeedCalm": "Calm Wind",
+    "windSpeed": "Wind Speed",
+    "total": "Total",
+    "sprayVolumehectare": "Vol/Hectare",
+    "sprayVolumedunam": "Vol/Dunam",
+    "sprayVolumeacre": "Vol/Acre",
+    "sprayerCapacity": "Sprayer Capacity",
+    "sprayersCount": "Sprayer Count",
+    "totalSprayVolume": "Total Vol",
+    "speed": "Speed"
   }
   

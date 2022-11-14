@@ -3,7 +3,7 @@ import { logOut, setCredentials } from '../../features/app/appSlice'
 
 
 
-//export const FARM_MANAGER = 'http://localhost:8080'
+// export const FARM_MANAGER = 'http://localhost:8080'
 
 export const FARM_MANAGER = 'https://api.manager.farm'
 

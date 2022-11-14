@@ -9,6 +9,7 @@ import ResourcesView from './ResourcesView'
 import FieldsView from './FieldsView'
 import ActivityHeaderView from './ActivityHeaderView'
 import { ControlPointDuplicate, Delete, DeleteForever, DeleteOutline, DeleteRounded, Save, Task } from '@mui/icons-material'
+import TextFieldBase from '../../../components/ui/TextField'
 
 const ActivityView = () => {
 
@@ -29,21 +30,30 @@ const ActivityView = () => {
         <ActivityHeaderView activity={activity} />
         <FieldsView activity={activity} />
         <ResourcesView activity={activity} />
-        {activity.note &&
-          <Box margin={1}>
-            <Typography variant='h6'>
-              {text.note}
-            </Typography>
-            <Typography variant='body1'>
-              {activity.note}
-            </Typography>
-          </Box>}
+
+        <Box marginTop={1}>
+          {/* <Typography variant='h6'>
+            {text.note}
+          </Typography> */}
+          {/* <Typography variant='body1'>
+            {activity.note}
+          </Typography> */}
+          <TextFieldBase
+            value={activity.note ? activity.note : ''}
+            label={text.note}
+            onChange={e =>console.log(e.target.value)}
+            multiline={true}
+            maxRows={2}
+            minRows={2}
+            fullWidth
+          />
+        </Box>
 
 
 
         <BottomNavigation sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} value={-1}
           showLabels>
-          <BottomNavigationAction sx={{color: 'lightGray'}}
+          <BottomNavigationAction sx={{ color: 'lightGray' }}
 
             label={text.save}
             // to={`/field/${src}/${fieldId}/info`} component={Link}
@@ -56,11 +66,11 @@ const ActivityView = () => {
             // to={`/field/${src}/${fieldId}/dash`} component={Link}
             icon={<DeleteRounded />}
           />
-          <BottomNavigationAction 
+          <BottomNavigationAction
             label={text.duplicate}
             onClick={() => console.log(text.duplicate)}
             // to={`/field/${src}/${fieldId}/history/0`} component={Link}
-            icon={<ControlPointDuplicate/>}
+            icon={<ControlPointDuplicate />}
           />
           {isPlan && <BottomNavigationAction
             label={text.execute}
