@@ -7,6 +7,7 @@ import { selectLang } from '../../../features/app/appSlice'
 import { getResourceTypeText, getUnitText, isArrayEmpty } from '../../FarmUtil'
 import { SECONDARY_LIGHT } from '../../../App'
 import { cellSxLink, headerSx, cellSx } from './FieldsView'
+import ResourceDialog from './ResourceDialog'
 
 const TRASHHOLD = 6;
 
@@ -15,12 +16,19 @@ const ResourceView = ({ activity }) => {
     const text = useSelector(selectLang)
     const { data: user } = useGetUserDataQuery()
     const [expend, setExpend] = useState(false);
+    const [selectedRow, setSelectedRow] = useState(null);
 
     if (isArrayEmpty(activity.resources)) {
         return <Fragment />
     }
 
     const resources = (expend && activity.resources.length > TRASHHOLD) ? activity.resources : activity.resources.slice(0, TRASHHOLD);
+
+    const onResourceDialogClose = (data) => {
+        console.log('data',data)
+        setSelectedRow(null)
+
+    }
 
     return (
         <Box marginTop={1}>
@@ -52,53 +60,31 @@ const ResourceView = ({ activity }) => {
                     </TableHead>
                     <TableBody>
                         {resources.map((row, index) =>
-                            <Row key={index} index={index} row={row} text={text} areaUnit={user.areaUnit} currency={user.currency} activityDef={activity.activityDef} />
+                            <Row key={index} index={index} row={row} text={text} areaUnit={user.areaUnit} currency={user.currency} activityDef={activity.activityDef}
+                            onClick={setSelectedRow} />
                         )}
                     </TableBody>
                 </Table>
             </TableContainer>
+            <ResourceDialog row={selectedRow} activity={activity} areaUnit={user.areaUnit} onClose={onResourceDialogClose}/>
+
         </Box>
     )
 }
 
 function Row(props) {
-    const { row, index, text, areaUnit, activityDef , currency} = props;
-    const [open, setOpen] = useState(false);
-
-    console.log('row',row)
+    const { row, index, text, areaUnit, onClick, activityDef , currency} = props;
     return (
         <Fragment>
-            <TableRow onClick={() => setOpen(!open)}
+            <TableRow onClick={() => onClick(index)}
                 key={index}
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                 <TableCell sx={cellSxLink} >{row.resource.name}</TableCell>
                 <TableCell sx={cellSx} >{getResourceTypeText(row.resource.type, text)}</TableCell>
                 <TableCell sx={cellSx}>{row.qty}</TableCell>
                 <TableCell sx={cellSx}>{getUnitText(row.resource.usageUnit, areaUnit, text)}</TableCell>
-                <TableCell sx={cellSx}>{row.qty}</TableCell>
+                <TableCell sx={cellSx}>{row.totalCost}</TableCell>
                 {/* getUnitText = (unit, areaUnit, text) */}
-            </TableRow>
-            <TableRow sx={{ backgroundColor: SECONDARY_LIGHT }}>
-                <TableCell style={{ padding: 0 }} colSpan={5}>
-                    <Collapse in={open} timeout="auto" unmountOnExit>
-                        <Table size="small" aria-label="extra">
-                            <TableHead>
-                                <TableRow>
-                                    <TableCell>{`${text.unit} ${currency}`}</TableCell>
-                                    <TableCell >{text.warehouse}</TableCell>
-                                    <TableCell>{text.resourceNote}</TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                <TableRow >
-                                    <TableCell>{row.tariff}</TableCell>
-                                    <TableCell>{row.warehouse?.name}</TableCell>
-                                    <TableCell>{row.fieldNote}</TableCell>
-                                </TableRow>
-                            </TableBody>
-                        </Table>
-                    </Collapse>
-                </TableCell>
             </TableRow>
         </Fragment>
     );

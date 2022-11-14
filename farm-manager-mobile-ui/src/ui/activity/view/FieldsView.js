@@ -1,11 +1,10 @@
 import { Menu } from '@mui/icons-material'
-import { Badge, Box, IconButton, TableRow, Table, TableBody, TableCell, TableContainer, TableHead, Typography, Collapse } from '@mui/material'
+import { Badge, Box, IconButton, TableRow, Table, TableBody, TableCell, TableContainer, TableHead, Typography } from '@mui/material'
 import { Fragment, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useGetUserDataQuery } from '../../../features/auth/authApiSlice'
 import { selectLang } from '../../../features/app/appSlice'
 import { isArrayEmpty, parseDate } from '../../FarmUtil'
-import { SECONDARY_LIGHT } from '../../../App'
 import FieldDialog from './FieldDialog'
 
 export const headerSx = { fontWeight: 'bold', padding: 1 };
@@ -77,9 +76,6 @@ const FieldsView = ({ activity }) => {
 
 function Row(props) {
     const { row, index, text , onClick} = props;
-  //  const [open, setOpen] = useState(false);
-
-    // console.log('filed row' ,row)
     return (
         <Fragment>
             <TableRow onClick={() => onClick(index)}
@@ -91,32 +87,6 @@ function Row(props) {
                 <TableCell sx={cellSx}>{row.field.varietyName}</TableCell>
                 <TableCell sx={cellSx}>{row.activityArea.toFixed(2)}</TableCell>
             </TableRow>
-            {/* <TableRow sx={{ backgroundColor: SECONDARY_LIGHT }}>
-                <TableCell style={{ padding: 0 }} colSpan={5}>
-                    <Collapse in={open} timeout="auto" unmountOnExit>
-                        <Table size="small" aria-label="extra">
-                            <TableHead>
-                                <TableRow>
-                                    <TableCell>{text.fieldSize}</TableCell>
-                                    <TableCell>{text.year}</TableCell>
-                                    <TableCell>{text.fieldNote}</TableCell>
-                                    <TableCell>{text.executed}</TableCell>
-
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                <TableRow >
-                                    <TableCell>{row.field.area}</TableCell>
-                                    <TableCell>{row.year}</TableCell>
-                                    <TableCell>{row.fieldNote}</TableCell>
-                                    <TableCell>{parseDate(row.actualExecution)}</TableCell>
-                                </TableRow>
-                            </TableBody>
-                        </Table>
-                    </Collapse>
-                </TableCell>
-            </TableRow> */}
-
         </Fragment>
     );
 }

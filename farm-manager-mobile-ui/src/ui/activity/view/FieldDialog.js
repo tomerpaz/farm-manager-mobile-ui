@@ -1,26 +1,14 @@
-import * as React from 'react';
-import PropTypes from 'prop-types';
+import { useEffect, useState } from 'react';
 import Button from '@mui/material/Button';
-import Avatar from '@mui/material/Avatar';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemAvatar from '@mui/material/ListItemAvatar';
-import ListItemText from '@mui/material/ListItemText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
-import PersonIcon from '@mui/icons-material/Person';
-import AddIcon from '@mui/icons-material/Add';
-import Typography from '@mui/material/Typography';
-import { blue } from '@mui/material/colors';
-import { DialogActions, DialogContent, DialogContentText, TextField } from '@mui/material';
+import { DialogActions, DialogContent} from '@mui/material';
 import { useSelector } from 'react-redux';
 import { selectLang } from '../../../features/app/appSlice';
 import TextFieldBase from '../../../components/ui/TextField';
 import { displayFieldName, HARVEST, SPRAY, SPRAY_PLAN, GENERAL, GENERAL_PLAN, IRRIGATION, IRRIGATION_PLAN } from '../../FarmUtil';
 import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
 import { useGetUserDataQuery } from '../../../features/auth/authApiSlice';
-
-
 
 const FieldDialog = ({ row, activity, onClose }) => {
 
@@ -29,19 +17,18 @@ const FieldDialog = ({ row, activity, onClose }) => {
 
   const { data: user } = useGetUserDataQuery()
 
+  const [fieldNote, setFieldNote] = useState('');
+  const [field, setField] = useState('');
+  const [fieldName, setFieldName] = useState('');
+  const [open, setOpen] = useState(false);
+  const [actualExecution, setActualExecution] = useState('');
+  const [qty, setQty] = useState('');
+  const [weight, setWeight] = useState('');
+  const [activityType, setActivityType] = useState('');
+  const [activityArea, setActivityArea] = useState(0);
 
-  const [fieldNote, setFieldNote] = React.useState('');
-  const [field, setField] = React.useState('');
-  const [fieldName, setFieldName] = React.useState('');
-  const [open, setOpen] = React.useState(false);
-  const [actualExecution, setActualExecution] = React.useState('');
-  const [qty, setQty] = React.useState('');
-  const [weight, setWeight] = React.useState('');
-  const [activityType, setActivityType] = React.useState('');
-  const [activityArea, setActivityArea] = React.useState(0);
 
-
-  React.useEffect(() => {
+  useEffect(() => {
     setOpen(row !== null );
     if (row !== null) {
       const record = activity.fields[row];
@@ -120,9 +107,7 @@ const FieldDialog = ({ row, activity, onClose }) => {
       <DialogActions>
         <Button onClick={()=>onAction(false)}>{text.cancel}</Button>
         <Button onClick={()=>onAction(true)}>{text.save}</Button>
-
       </DialogActions>
-
     </Dialog>
   );
 

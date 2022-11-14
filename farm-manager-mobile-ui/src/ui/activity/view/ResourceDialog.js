@@ -1,84 +1,134 @@
-import * as React from 'react';
-import PropTypes from 'prop-types';
-import Avatar from '@mui/material/Avatar';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemAvatar from '@mui/material/ListItemAvatar';
-import ListItemText from '@mui/material/ListItemText';
+import { useEffect, useState } from 'react';
+import Button from '@mui/material/Button';
 import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
-import PersonIcon from '@mui/icons-material/Person';
-import AddIcon from '@mui/icons-material/Add';
-import { blue } from '@mui/material/colors';
+import { DialogActions, DialogContent, InputAdornment } from '@mui/material';
+import { useSelector } from 'react-redux';
+import { selectLang } from '../../../features/app/appSlice';
+import TextFieldBase from '../../../components/ui/TextField';
+import { displayFieldName, HARVEST, SPRAY, SPRAY_PLAN, GENERAL, GENERAL_PLAN, IRRIGATION, IRRIGATION_PLAN, getResourceTypeText, getUnitText, isStringEmpty } from '../../FarmUtil';
+import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
+import { useGetUserDataQuery } from '../../../features/auth/authApiSlice';
 
-const emails = ['username@gmail.com', 'user02@gmail.com'];
+const ResourceDialog = ({ row, activity, onClose, areaUnit }) => {
 
-function SimpleDialog(props) {
-  const { onClose, selectedValue, open } = props;
+  console.log('ResourceDialog activity', activity.fields[row])
+  const text = useSelector(selectLang)
 
-  const handleClose = () => {
-    onClose(selectedValue);
-  };
+  const { data: user } = useGetUserDataQuery()
 
-  const handleListItemClick = (value) => {
-    onClose(value);
-  };
+  const [resourceName, setResourceName] = useState('');
+  const [resourceType, setResourceType] = useState('');
+
+  const [open, setOpen] = useState(false);
+  const [weight, setWeight] = useState('');
+  const [activityType, setActivityType] = useState('');
+  const [resourceNote, setResourceNote] = useState(0);
+  const [qty, setQty] = useState('');
+  const [unit, setUnit] = useState('');
+  const [tariff, setTariff] = useState(0);
+  const [manualTariff, setManualTariff] = useState(false);
+
+  useEffect(() => {
+    setOpen(row !== null);
+    if (row !== null) {
+      const record = activity.resources[row];
+      console.log('record', record)
+
+      setResourceName(record.resource.name);
+      setResourceType(record.resource.type);
+      setQty(record.qty);
+      setUnit(record.resource.usageUnit);
+      setActivityType(activity.type);
+      setResourceNote(isStringEmpty(record.note) ? '' : record.note);
+      setTariff(record.tariff);
+      setManualTariff(record.manualTariff);
+
+      
+      // setActualExecution(record.actualExecution);
+
+      // setField(record.field);
+      // setFieldName(displayFieldName(record.field));
+      // setQty(record.qty);
+      // setWeight(record.weight);
+      // setActivityArea(record.activityArea);
+
+    }
+  }, [row])
+
+
+  const onAction = (save) => {
+    if (save) {
+      console.log('Save...')
+
+      onClose({ qty, resourceNote, tariff })
+    } else {
+      onClose(null)
+    }
+  }
+
 
   return (
-    <Dialog onClose={handleClose} open={open}>
-      <DialogTitle>Set backup account</DialogTitle>
-      <List sx={{ pt: 0 }}>
-        {emails.map((email) => (
-          <ListItem button onClick={() => handleListItemClick(email)} key={email}>
-            <ListItemAvatar>
-              <Avatar sx={{ bgcolor: blue[100], color: blue[600] }}>
-                <PersonIcon />
-              </Avatar>
-            </ListItemAvatar>
-            <ListItemText primary={email} />
-          </ListItem>
-        ))}
 
-        <ListItem autoFocus button onClick={() => handleListItemClick('addAccount')}>
-          <ListItemAvatar>
-            <Avatar>
-              <AddIcon />
-            </Avatar>
-          </ListItemAvatar>
-          <ListItemText primary="Add account" />
-        </ListItem>
-      </List>
+    <Dialog open={open}>
+      <DialogTitle>{`${getResourceTypeText(resourceType, text)}: ${resourceName}`}</DialogTitle>
+
+      <DialogContent>
+        {/* <DialogContentText>
+          {`${text.field} ${fieldName}`}
+        </DialogContentText> */}
+
+
+
+        <TextFieldBase
+          value={qty}
+          label={text.qty}
+          onChange={e => setQty(e.target.value)}
+          fullWidth
+          InputProps={{
+            endAdornment: <InputAdornment position="end">{getUnitText(unit, areaUnit, text)}</InputAdornment>,
+          }}
+          type="number"
+        />
+        <TextFieldBase
+          value={tariff}
+          label={text.unitCost}
+          onChange={e => setTariff(e.target.value)}
+          fullWidth
+          // InputProps={{
+          //   endAdornment: <InputAdornment position="end">{getUnitText(unit, areaUnit, text)}</InputAdornment>,
+          // }}
+          type="number"
+        />
+        <TextFieldBase
+          value={resourceNote}
+          label={text.resourceNote}
+          onChange={e => setResourceName(e.target.value)}
+          fullWidth
+        />
+        {[HARVEST].includes(activityType) &&
+          <TextFieldBase
+            value={weight}
+            label={`${text[user.weightUnit]}`}
+            onChange={e => setWeight(e.target.value)}
+            fullWidth
+            type="number"
+          />}
+        {/* {[SPRAY, SPRAY_PLAN, GENERAL, GENERAL_PLAN, IRRIGATION, IRRIGATION_PLAN].includes(activityType) &&
+          <TextFieldBase
+            value={activityArea}
+            label={`${text[user.areaUnit]}`}
+            onChange={e => setActivityArea(e.target.value)}
+            fullWidth
+            type="number"
+          />} */}
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={() => onAction(false)}>{text.cancel}</Button>
+        <Button onClick={() => onAction(true)}>{text.save}</Button>
+      </DialogActions>
     </Dialog>
   );
+
 }
-
-SimpleDialog.propTypes = {
-  onClose: PropTypes.func.isRequired,
-  open: PropTypes.bool.isRequired,
-  selectedValue: PropTypes.string.isRequired,
-};
-
-export default function ResourceDialog({isOpen}) {
-  const [open, setOpen] = React.useState(isOpen);
-  const [selectedValue, setSelectedValue] = React.useState(emails[1]);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = (value) => {
-    setOpen(false);
-    setSelectedValue(value);
-  };
-
-  return (
-    <div>
-
-      <SimpleDialog
-        selectedValue={selectedValue}
-        open={open}
-        onClose={handleClose}
-      />
-    </div>
-  );
-}
+export default ResourceDialog;

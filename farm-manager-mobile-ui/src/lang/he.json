@@ -93,5 +93,6 @@
     "sprayerCapacity": "מיכל מרסס",
     "sprayersCount": "מס' מרססים",
     "totalSprayVolume": "סה\"כ נפח",
-    "speed": "מהירות"
+    "speed": "מהירות",
+    "unitCost": "מחיר יח'"
 }
