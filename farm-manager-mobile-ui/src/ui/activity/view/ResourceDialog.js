@@ -103,7 +103,7 @@ const ResourceDialog = ({ row, activity, onClose, areaUnit }) => {
         <TextFieldBase
           value={resourceNote}
           label={text.resourceNote}
-          onChange={e => setResourceName(e.target.value)}
+          onChange={e => setResourceNote(e.target.value)}
           fullWidth
         />
         {[HARVEST].includes(activityType) &&
