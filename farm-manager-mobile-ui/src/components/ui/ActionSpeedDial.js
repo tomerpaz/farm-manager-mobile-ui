@@ -10,18 +10,25 @@ import { useSelector } from 'react-redux';
 import { selectLang } from '../../features/app/appSlice';
 
 
-const actions = (role, plan, text) =>
-  getActivityTypes(role, plan).map(e => {
+const actions = (role, map, plan, text) =>
+  getActivityTypes(role, map, plan).map(e => {
     return (
-      { icon: <ActivityTypeIcon type={e} />, name: getActivityTypeText(e.replaceAll('_PLAN', ""), text) }
+      { icon: <ActivityTypeIcon type={e} />, 
+      type: e,
+      name: getActivityTypeText(e.replaceAll('_PLAN', ""), text) }
     )
   })
 
 
-const ActionSpeedDial = ({ role, plan, bottom }) => {
+const ActionSpeedDial = ({ role, plan, map, bottom }) => {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
+  const handleAction = (e) => {
+    console.log(e.type);
+    setOpen(false);
+  }
 
   const text = useSelector(selectLang)
 
@@ -37,13 +44,13 @@ const ActionSpeedDial = ({ role, plan, bottom }) => {
         onOpen={handleOpen}
         open={open}
       >
-        {actions(role, plan, text).map((action) => (
+        {actions(role, map, plan, text).map((action) => (
           <SpeedDialAction
             key={action.name}
             icon={action.icon}
             tooltipTitle={action.name}
             tooltipOpen
-            onClick={handleClose}
+            onClick={()=>handleAction(action)}
           />
         ))}
       </SpeedDial>

@@ -12,8 +12,10 @@ export const IRRIGATION_PLAN = 'IRRIGATION_PLAN';
 
 const CONTACROR = 'CONTACROR';
 
+const GROWER_ACTIVITY_TYPES = [GENERAL, SPRAY, IRRIGATION, HARVEST, MARKET]
 
-const GROWER_ACTIVITY_TYPES = [GENERAL, SPRAY, IRRIGATION, HARVEST, /*SCOUT*/, MARKET]
+const GROWER_ACTIVITY_TYPES_MAP = [GENERAL, SPRAY, IRRIGATION, HARVEST, MARKET].concat(SCOUT)
+
 
 const GROWER_PLAN_TYPES = [GENERAL_PLAN, SPRAY_PLAN, IRRIGATION_PLAN]
 
@@ -30,8 +32,10 @@ export function getBottomNavigationSx(disabled){
     return disabled ? {color: grey[400]} : null;
 }
 
-export function getActivityTypes(role, isPlan) {
-    if (isPlan) {
+export function getActivityTypes(role, isMap, isPlan) {
+    if(isMap){
+        return GROWER_ACTIVITY_TYPES_MAP
+    } else if (isPlan) {
         return GROWER_PLAN_TYPES
     } else {
         return GROWER_ACTIVITY_TYPES;

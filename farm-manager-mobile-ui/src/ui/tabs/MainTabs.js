@@ -71,7 +71,7 @@ const MainTabs = () => {
             </Box>
             <TabPanel component={'div'} value={value} index={0}>
                 <FieldsMap />
-                <ActionSpeedDial plan={false} />
+                <ActionSpeedDial map={true} plan={false} />
             </TabPanel>
             <TabPanel value={value} index={1}>
                 <FieldList />
