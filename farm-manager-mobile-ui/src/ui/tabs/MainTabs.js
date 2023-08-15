@@ -9,7 +9,7 @@ import { DEFAULT_ROUTE } from "../../App";
 import ActivitiesList from './activities/ActivitiesList';
 import { selectLang } from '../../features/app/appSlice';
 import { useSelector } from 'react-redux';
-import ActionSpeedDial from '../../components/ui/ActionSpeedDial';
+import ActionFab from '../../components/ui/ActionFab';
 import { useGetUserDataQuery } from '../../features/auth/authApiSlice';
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -71,19 +71,19 @@ const MainTabs = () => {
             </Box>
             <TabPanel component={'div'} value={value} index={0}>
                 <FieldsMap />
-                <ActionSpeedDial map={true} plan={false} />
+                <ActionFab map={true} plan={false} />
             </TabPanel>
             <TabPanel value={value} index={1}>
                 <FieldList />
-                <ActionSpeedDial plan={false} />
+                <ActionFab plan={false} />
             </TabPanel>
             <TabPanel value={value} index={2}>
                 <ActivitiesList plans={false}/>
-                <ActionSpeedDial bottom={80} plan={false} />
+                <ActionFab bottom={80} plan={false} />
             </TabPanel>
             <TabPanel value={value} index={3}>
                 <ActivitiesList plans={true}/>
-                <ActionSpeedDial bottom={80} plan={true} />
+                <ActionFab bottom={80} plan={true} />
             </TabPanel>
         </Box>
     );

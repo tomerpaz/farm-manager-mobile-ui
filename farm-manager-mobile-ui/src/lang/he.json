@@ -94,5 +94,6 @@
     "sprayersCount": "מס' מרססים",
     "totalSprayVolume": "סה\"כ נפח",
     "speed": "מהירות",
-    "unitCost": "מחיר יח'"
+    "unitCost": "מחיר יח'",
+    "tapInFieldPosition": "לחץ על מיקום בחלקה"
 }

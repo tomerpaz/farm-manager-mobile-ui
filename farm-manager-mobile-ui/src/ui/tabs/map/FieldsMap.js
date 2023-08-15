@@ -1,15 +1,16 @@
-import { MapContainer, TileLayer, Polygon, useMapEvents } from "react-leaflet";
+import { MapContainer, TileLayer, Polygon, useMapEvents, Circle } from "react-leaflet";
 import { useEffect, useState } from "react";
 import GeoLocation from "../../../components/GeoLocation";
 import { useNavigate } from "react-router-dom";
 import { Box } from "@mui/material";
 import { useFields } from "../../../features/fields/fieldsApiSlice";
 import { useGetUserDataQuery } from '../../../features/auth/authApiSlice'
-import { selectCurrentYear, selectFieldBaseFieldFilter, selectFieldFreeTextFilter, selectFieldSiteFilter, selectFieldsViewStatus } from "../../../features/app/appSlice";
+import { selectActivityType, selectCurrentYear, selectFieldBaseFieldFilter, selectFieldFreeTextFilter, selectFieldSiteFilter, selectFieldsViewStatus } from "../../../features/app/appSlice";
 import { useSelector } from "react-redux";
 import FieldsFilter from "../../../components/filters/FieldsFilter";
-import { filterFields, getFillColor, getOpacity, isArrayEmpty } from "../../FarmUtil";
+import { filterFields, getFillColor, getOpacity, isArrayEmpty, isStringEmpty, SCOUT } from "../../FarmUtil";
 import SatelliteMapProvider from "../../../components/map/SatelliteMapProvider";
+import ScoutDialog from "../../scout/ScoutDialog";
 
 
 
@@ -22,9 +23,10 @@ const FieldsMap = (props) => {
 
     const fields = useFields(year).filter(f => f.polygon);
     const freeText = useSelector(selectFieldFreeTextFilter);
-    const fieldSiteFilter = useSelector(selectFieldSiteFilter)
-    const fieldBaseFieldFilter = useSelector(selectFieldBaseFieldFilter)
-    const fieldsViewStatus = useSelector(selectFieldsViewStatus)
+    const fieldSiteFilter = useSelector(selectFieldSiteFilter);
+    const fieldBaseFieldFilter = useSelector(selectFieldBaseFieldFilter);
+    const fieldsViewStatus = useSelector(selectFieldsViewStatus);
+    const activityType = useSelector(selectActivityType);
 
     const [center, setCenter] = useState([user.lat, user.lng]);
     const [zoom, setZoom] = useState(user.zoom);
@@ -61,6 +63,16 @@ const FieldsMap = (props) => {
 
     }, [center])
 
+    const mapCliecked = (e, f, type) => {
+        console.log('mapCliecked', type)
+        if (isStringEmpty(activityType)) {
+            navigate(`/field/map/${f.id}/info`)
+        } else {
+            console.log(e)
+        }
+
+    }
+
     let navigate = useNavigate();
 
     const height = window.window.innerHeight - 110;
@@ -73,7 +85,7 @@ const FieldsMap = (props) => {
                     ref={setSetMap}
                 >
 
-                    <SatelliteMapProvider/>
+                    <SatelliteMapProvider />
                     <GeoLocation />
                     {displayFields.map(f =>
                         <Polygon field={f} key={f.id}
@@ -81,8 +93,9 @@ const FieldsMap = (props) => {
                             fillColor={getFillColor(f)}
                             fillOpacity={getOpacity(f)}
                             eventHandlers={{
-                                click: () => {
-                                    navigate(`/field/map/${f.id}/info`)
+                                click: (e) => {
+                                    mapCliecked(e, f, 'polygon');
+                                    //navigate(`/field/map/${f.id}/info`)
                                 }
                             }}
                             //     fillOpacity={opacity}
@@ -103,11 +116,25 @@ const FieldsMap = (props) => {
 
                         </Polygon>
                     )}
+
+                    {displayFields.map(f =>
+
+<Circle eventHandlers={{
+                                click: (e) => {
+                                    mapCliecked(e, f, 'circle');
+                                    //navigate(`/field/map/${f.id}/info`)
+                                }
+                            }}key={f.id} center={[f.lat, f.lng]} radius={20} pathOptions={{ color: 'blue' }} />
+
+
+
+                    )}
                     <HandleMapEvents />
                 </MapContainer>
 
             </Box>
             {fields && <FieldsFilter fields={fields} />}
+            {/* <ScoutDialog open={activityType === SCOUT} /> */}
         </Box>
     )
 }

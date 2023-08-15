@@ -94,7 +94,8 @@
     "sprayersCount": "Sprayer Count",
     "totalSprayVolume": "Total Vol",
     "speed": "Speed",
-    "unitCost": "Unit Cost"
+    "unitCost": "Unit Cost",
+    "tapInFieldPosition": "Tap in field position"
 
   }
   

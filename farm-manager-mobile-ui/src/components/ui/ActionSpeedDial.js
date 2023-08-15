@@ -6,8 +6,8 @@ import SpeedDialIcon from '@mui/material/SpeedDialIcon';
 import SpeedDialAction from '@mui/material/SpeedDialAction';
 import ActivityTypeIcon from '../../icons/ActivityTypeIcon';
 import { getActivityTypeText, getActivityTypes } from '../../ui/FarmUtil';
-import { useSelector } from 'react-redux';
-import { selectLang } from '../../features/app/appSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectActivityType, selectLang, setActivityType } from '../../features/app/appSlice';
 
 
 const actions = (role, map, plan, text) =>
@@ -21,17 +21,18 @@ const actions = (role, map, plan, text) =>
 
 
 const ActionSpeedDial = ({ role, plan, map, bottom }) => {
+  const dispatch = useDispatch()
+
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
   const handleAction = (e) => {
-    console.log(e.type);
+    dispatch(setActivityType(e.type));
     setOpen(false);
   }
 
   const text = useSelector(selectLang)
-
 
   return (
     <Box >
