@@ -117,7 +117,7 @@ const FieldsMap = (props) => {
                         </Polygon>
                     )}
 
-                    {displayFields.map(f =>
+                    {/* {displayFields.map(f =>
 
 <Circle eventHandlers={{
                                 click: (e) => {
@@ -128,7 +128,7 @@ const FieldsMap = (props) => {
 
 
 
-                    )}
+                    )} */}
                     <HandleMapEvents />
                 </MapContainer>
 
