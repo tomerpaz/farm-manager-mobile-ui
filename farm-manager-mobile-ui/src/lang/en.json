@@ -95,7 +95,9 @@
     "totalSprayVolume": "Total Vol",
     "speed": "Speed",
     "unitCost": "Unit Cost",
-    "tapInFieldPosition": "Tap in field position"
-
+    "tapInFieldPosition": "Tap in field position",
+    "clear": "Clear",
+    "select": "Select",
+    "endHour": "endHour"
   }
   

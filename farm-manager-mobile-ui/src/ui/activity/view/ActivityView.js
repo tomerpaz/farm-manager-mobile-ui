@@ -8,12 +8,14 @@ import InfoLine from '../../field/InfoLine'
 import ResourcesView from './ResourcesView'
 import FieldsView from './FieldsView'
 import ActivityHeaderView from './ActivityHeaderView'
-import { ControlPointDuplicate, Delete, DeleteForever, DeleteOutline, DeleteRounded, Save, Task } from '@mui/icons-material'
+import { ControlPointDuplicate, Delete, DeleteForever, DeleteOutline, DeleteRounded, Save, Task, HighlightOffRounded } from '@mui/icons-material'
 import TextFieldBase from '../../../components/ui/TextField'
 
 const ActivityView = () => {
 
   const { activityId, src } = useParams()
+  const navigate = useNavigate()
+
   const text = useSelector(selectLang)
 
   const { data: activity, isLoading, isSuccess, isError, error } = useGetActivityByIdQuery(activityId)
@@ -41,7 +43,7 @@ const ActivityView = () => {
           <TextFieldBase
             value={activity.note ? activity.note : ''}
             label={text.note}
-            onChange={e =>console.log(e.target.value)}
+            onChange={e => console.log(e.target.value)}
             multiline={true}
             maxRows={2}
             minRows={2}
@@ -72,6 +74,7 @@ const ActivityView = () => {
             // to={`/field/${src}/${fieldId}/history/0`} component={Link}
             icon={<ControlPointDuplicate />}
           />
+
           {isPlan && <BottomNavigationAction
             label={text.execute}
             onClick={() => console.log(text.duplicate)}
@@ -84,6 +87,13 @@ const ActivityView = () => {
             to={`/field/${src}/${fieldId}/imagery`} component={Link}
             icon={<SatelliteAltOutlined />}
           /> */}
+          <BottomNavigationAction
+            color='blue'
+            label={text.cancel}
+            onClick={() => navigate(-1)}
+            // to={`/field/${src}/${fieldId}/dash`} component={Link}
+            icon={<HighlightOffRounded />}
+          />
         </BottomNavigation>
       </Box>
     )

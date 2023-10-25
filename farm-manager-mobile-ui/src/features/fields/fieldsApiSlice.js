@@ -29,7 +29,7 @@ export const fieldsApiSlice = apiSlice.injectEndpoints({
             query: (year) => `/api/farm/fields/${year}`,
             transformResponse: responseData => {
                 const fields = responseData.map(field => {
-                    if (field?.polygon) field.polygon = safeParseJson(field.polygon);
+                    if (field?.polygon) field.geoPoints = safeParseJson(field.polygon);
                     return field;
                 });
 

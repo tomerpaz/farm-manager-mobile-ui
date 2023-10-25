@@ -46,19 +46,20 @@ export const activityApiSlice = apiSlice.injectEndpoints({
         }),
         getActivityById: builder.query({
             query: (uuid) => `/api/farm/activity/${uuid}`,
-            // transformResponse: responseData => {
+        }),
 
-            //     return fieldActivitiesAdapter.setAll(fieldActivityinitialState, responseData)
-            // },
-            // providesTags: (result, error, arg) => {
-            //     // console.log('result',result)
-            //     // console.log('arg', arg)
-
-            //     return [
-
-            //     { type: 'SelectedActivity', id: "LIST" },
-            // ]}
-        })
+        createActivity: builder.mutation({
+            query: credentials => ({
+                url: '/api/farm/activity',
+                method: 'POST',
+                body: { ...credentials },
+                
+            }),
+            invalidatesTags: [
+                { type: 'Activities', id: "LIST" },
+                { type: 'FieldActivities', id: "LIST" }
+            ]
+        }),
 
     })
 })
@@ -66,7 +67,8 @@ export const activityApiSlice = apiSlice.injectEndpoints({
 export const {
     useGetActivitiesFlatQuery,
     useGetActivitiesFieldQuery,
-    useGetActivityByIdQuery
+    useGetActivityByIdQuery,
+    useCreateActivityMutation
 } = activityApiSlice
 
 

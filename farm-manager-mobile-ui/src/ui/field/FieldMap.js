@@ -13,12 +13,12 @@ const FieldMap = ({ field, height, tile, setMap }) => {
                 {tile && <TileLayer
                     attribution='Farm Manager'
                     url={tile}
-                    bounds={field.polygon}
+                    bounds={field.geoPoints}
                 />}
                 <Polygon
                     color={field.color}
                     fillColor={field.color}
-                    positions={field.polygon}>
+                    positions={field.geoPoints}>
                 </Polygon>
             </MapContainer>
         </Box>

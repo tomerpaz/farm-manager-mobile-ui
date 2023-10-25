@@ -5,9 +5,10 @@ import SpeedDial from '@mui/material/SpeedDial';
 import SpeedDialIcon from '@mui/material/SpeedDialIcon';
 import SpeedDialAction from '@mui/material/SpeedDialAction';
 import ActivityTypeIcon from '../../icons/ActivityTypeIcon';
-import { getActivityTypeText, getActivityTypes } from '../../ui/FarmUtil';
+import { SCOUT, getActivityTypeText, getActivityTypes } from '../../ui/FarmUtil';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectActivityType, selectLang, setActivityType } from '../../features/app/appSlice';
+import { useNavigate } from 'react-router-dom';
 
 
 const actions = (role, map, plan, text) =>
@@ -26,9 +27,15 @@ const ActionSpeedDial = ({ role, plan, map, bottom }) => {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const navigate = useNavigate()
 
+  
   const handleAction = (e) => {
+    console.log('new',e, 'map',map)
     dispatch(setActivityType(e.type));
+    if(SCOUT !== e.type){
+      navigate(`/activity/new/${e.type}`)
+    }
     setOpen(false);
   }
 

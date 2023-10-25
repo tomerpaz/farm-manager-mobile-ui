@@ -80,7 +80,7 @@
     "delete": "מחק",
     "save": "שמור",
     "duplicate": "שכפל",
-    "execute": "העבר לביצוע",
+    "execute": "לביצוע",
     "cancel": "בטל",
     "windSpeedNone": "ללא רוח",
     "windSpeedStrong": "רוח חזקה",
@@ -95,5 +95,8 @@
     "totalSprayVolume": "סה\"כ נפח",
     "speed": "מהירות",
     "unitCost": "מחיר יח'",
-    "tapInFieldPosition": "לחץ על מיקום בחלקה"
+    "tapInFieldPosition": "לחץ על מיקום בחלקה",
+    "clear": "נקה",
+    "select": "בחר",
+    "endHour": "שעת סיום"
 }

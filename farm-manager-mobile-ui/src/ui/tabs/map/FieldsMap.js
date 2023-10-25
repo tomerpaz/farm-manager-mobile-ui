@@ -21,7 +21,7 @@ const FieldsMap = (props) => {
     const { data: user } = useGetUserDataQuery()
     const year = useSelector(selectCurrentYear);
 
-    const fields = useFields(year).filter(f => f.polygon);
+    const fields = useFields(year).filter(f => f.geoPoints);
     const freeText = useSelector(selectFieldFreeTextFilter);
     const fieldSiteFilter = useSelector(selectFieldSiteFilter);
     const fieldBaseFieldFilter = useSelector(selectFieldBaseFieldFilter);
@@ -95,11 +95,11 @@ const FieldsMap = (props) => {
                             eventHandlers={{
                                 click: (e) => {
                                     mapCliecked(e, f, 'polygon');
-                                    //navigate(`/field/map/${f.id}/info`)
+                                    navigate(`/field/map/${f.id}/info`)
                                 }
                             }}
                             //     fillOpacity={opacity}
-                            positions={f.polygon}>
+                            positions={f.geoPoints}>
                             {/* // {index < MAX_PER_MAP && <MapTooltip textArr={textArr}>  </MapTooltip>}
                             // <Popup className={LEAFLET_POPUP_CLASS}>
                             //     <FieldCard

@@ -1,4 +1,5 @@
 import { grey } from "@mui/material/colors";
+import { parseISO } from "date-fns";
 
 export const GENERAL = 'GENERAL';
 export const GENERAL_PLAN = 'GENERAL_PLAN';
@@ -19,9 +20,12 @@ const GROWER_ACTIVITY_TYPES_MAP = [GENERAL, SPRAY, IRRIGATION, HARVEST, MARKET].
 
 const GROWER_PLAN_TYPES = [GENERAL_PLAN, SPRAY_PLAN, IRRIGATION_PLAN]
 
+export const CUSTOMER_TYPES = [HARVEST, MARKET]
+
 
 export const SPRAY_TYPES = [SPRAY, SPRAY_PLAN]
 export const IRRIGARION_TYPES = [IRRIGATION, IRRIGATION_PLAN]
+export const ACTIVITY_DEF_TYPES = [GENERAL, GENERAL_PLAN, HARVEST]
 
 
 export const tableHeaderSx = { fontWeight: 'bold', padding: 0.5 };
@@ -193,6 +197,10 @@ export function asLocalDate(date, hyphen) {
     }
 }
 
+export function parseISOOrNull(date) {
+    return date ? parseISO(date) : null;
+}
+
 
 export const daysDiff = (date_1, date_2) => {
     let difference = date_1.getTime() - date_2.getTime();
@@ -295,5 +303,9 @@ export function getFillColor(field) {
     } else {
         return field.color;
     }
+}
+
+export function getWinds(){
+    return ['windSpeedNone','windSpeedCalm','windSpeedStrong']
 }
 

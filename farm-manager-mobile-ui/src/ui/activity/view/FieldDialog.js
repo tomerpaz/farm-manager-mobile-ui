@@ -7,7 +7,9 @@ import { useSelector } from 'react-redux';
 import { selectLang } from '../../../features/app/appSlice';
 import TextFieldBase from '../../../components/ui/TextField';
 import { displayFieldName, HARVEST, SPRAY, SPRAY_PLAN, GENERAL, GENERAL_PLAN, IRRIGATION, IRRIGATION_PLAN } from '../../FarmUtil';
-import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
+//import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+
 import { useGetUserDataQuery } from '../../../features/auth/authApiSlice';
 
 const FieldDialog = ({ row, activity, onClose }) => {
@@ -72,12 +74,12 @@ const FieldDialog = ({ row, activity, onClose }) => {
           onChange={e => setFieldNote(e.target.value)}
           fullWidth
         />
-        <MobileDatePicker
+        <DatePicker
           label={text.executed}
           //     inputFormat="dd/MM/yyyy"
           value={actualExecution}
           onChange={setActualExecution}
-          renderInput={(params) => <TextFieldBase fullWidth {...params} />}
+          slotProps={{ textField: {  size: 'small', fullWidth: true, variant: 'outlined', margin: "dense"  } }}
         />
         {[HARVEST].includes(activityType) &&
           <TextFieldBase

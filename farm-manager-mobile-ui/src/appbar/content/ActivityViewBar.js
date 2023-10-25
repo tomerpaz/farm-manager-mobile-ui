@@ -73,7 +73,7 @@ const ActivityViewBar = () => {
                     onClick={() => doanlaodFile(lang,activityId, token)}
                     sx={{ mr: 2 }}
                 >
-                    <PictureAsPdfOutlined />
+                  {activityId  && <PictureAsPdfOutlined />}
                 </IconButton>
                 <AppBarMenu />
             </Toolbar>

@@ -14,6 +14,7 @@ import LocaleApplication from './components/LocaleApplication';
 import { selectLang } from './features/app/appSlice';
 import { useSelector } from 'react-redux';
 import ActivityView from './ui/activity/view/ActivityView';
+import NewActivity from './ui/activity/view/NewActivity';
 
 
 
@@ -37,6 +38,9 @@ const theme = createTheme({
       // This is green.A700 as hex.
       main: SECONDARY_MAIN,
     },
+    text: {
+      link: '#2196f3'
+    }
   },
 });
 
@@ -65,6 +69,8 @@ function App() {
                   <Route path='/field/:src/:fieldId/history/:page' element={<Field />} />
                   <Route path='/field/:src/:fieldId/*' element={<Field />} />
                   <Route path='/activity/:src/:activityId' element={<ActivityView />} />
+                  <Route path='/activity/new/:type' element={<NewActivity />} />
+
                 </Route>
               </Route>
             </Route>

@@ -6,8 +6,9 @@ import DoneIcon from '@mui/icons-material/Done';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useParams } from 'react-router-dom';
 import { MobileDatePicker } from '@mui/x-date-pickers';
-import { asLocalDate, getActivityStatuses, getActivityStatusText, getActivityTypes, getActivityTypeText, isStringEmpty, PLAN } from '../../ui/FarmUtil';
+import { asLocalDate, getActivityStatuses, getActivityStatusText, getActivityTypes, getActivityTypeText, isStringEmpty, parseISOOrNull, PLAN } from '../../ui/FarmUtil';
 import { FilterAltOff } from '@mui/icons-material';
+import { parseISO } from 'date-fns';
 
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -116,29 +117,29 @@ const ActivitiesFilter = () => {
             <List>
                 <ListItem>
                     <MobileDatePicker
-                        InputProps={{
-                            endAdornment: <InputAdornment position="end"><IconButton edge="end" onClick={() => dispatch(setStartDateFilter(null))}><CloseIcon></CloseIcon></IconButton></InputAdornment>,
-                        }}
                         label={text.fromDate}
                         closeOnSelect
-                        //  clearable={true}
-                        clearText="Clear"
+                        localeText={{cancelButtonLabel: text.cancel, 
+                            clearButtonLabel: text.clear  }}
+                            // okButtonLabel: text.save
+                  
                         showToolbar={false}
-                        value={startDateFilter}
+                        value={parseISOOrNull(startDateFilter)}
                         onChange={(e) => dispatch(setStartDateFilter(asLocalDate(e, true)))}
-                        renderInput={(params) => <TextField size={'small'} {...params} />}
+                        slotProps={{ textField: {size: 'small', variant: 'outlined' },
+                        actionBar: { actions: ["cancel","clear"] } }}
                     />
                     <Box marginLeft={1} />
                     <MobileDatePicker
-                        InputProps={{
-                            endAdornment: <InputAdornment position="end"><IconButton edge="end" onClick={() => dispatch(setEndDateFilter(null))}><CloseIcon></CloseIcon></IconButton></InputAdornment>,
-                        }}
                         label={text.toDate}
                         closeOnSelect
-                        value={endDateFilter}
-                        showToolbar={false}
+                        value={parseISOOrNull((endDateFilter))}
+                        showToolbar={true}
+                        localeText={{cancelButtonLabel: text.cancel, 
+                        clearButtonLabel: text.clear  }}
                         onChange={(e) => dispatch(setEndDateFilter(asLocalDate(e, true)))}
-                        renderInput={(params) => <TextField size={'small'} {...params} />}
+                        slotProps={{ textField: {size: 'small', variant: 'outlined' },
+                        actionBar: { actions: ["cancel","clear"] } }}
                     />
                 </ListItem>
                 <Divider />
