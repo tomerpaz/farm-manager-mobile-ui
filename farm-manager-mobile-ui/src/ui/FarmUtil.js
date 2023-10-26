@@ -144,7 +144,10 @@ export function isArrayEmpty(filterValue, filterNulls) {
     }
 }
 
-export function isStringEmpty(str) {
+export function isStringEmpty(str, print) {
+    if(print){
+        console.log('isStringEmpty',str, print)
+    }
     return (!str || /^\s*$/.test(str));
 }
 

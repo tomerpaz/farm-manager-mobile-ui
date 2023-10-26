@@ -12,6 +12,7 @@ const TextFieldBase = (props) => {
       //sx={sx}
       size="small"
       margin="dense"
+      color={props.error ? 'error' : null }
       onWheel={(e) => e.target.blur()}
       error={props.error}
       {...props}

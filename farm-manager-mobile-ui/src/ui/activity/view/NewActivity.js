@@ -39,7 +39,7 @@ const NewActivity = () => {
 
   return (
     <Box margin={1}>
-      <ActivityForm activity={{ type, plan: isPlan, execution: newDate(), activityDef: null, year: user.year, wind, customer: null, fields: [], resources: [] }} />
+      <ActivityForm activity={{ type, plan: isPlan, execution: newDate(), activityDef: null, year: user.year, wind, customer: null, fields: [], resources: [], note: null }} />
     </Box>
   )
 

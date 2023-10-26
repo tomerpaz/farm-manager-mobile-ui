@@ -11,6 +11,10 @@ import { useNavigate, useParams } from 'react-router-dom'
 import ActivityFields from './ActivityFields'
 import ActivityResources from './ActivityResources'
 import { useCreateActivityMutation } from '../../../features/activities/activitiesApiSlice'
+import { useGetCropsQuery } from '../../../features/crops/cropsApiSlice'
+import { CUSTOMER, useGetResourcesQuery } from '../../../features/resources/resourcesApiSlice'
+import Loading from '../../../components/Loading'
+import { useGetActivityDefsQuery } from '../../../features/activityDefs/activityDefsApiSlice'
 
 const ActivityForm = ({ activity }) => {
 
@@ -22,11 +26,30 @@ const ActivityForm = ({ activity }) => {
   
   const [createActivity] = useCreateActivityMutation()
 
-  const { control, register, handleSubmit, getValues } = useForm(
+  const { data: activityDefs, isSuccess: isActivityDefsSuccess } = useGetActivityDefsQuery()
+
+  const { data: crops, isSuccess: isCropsSuccess } = useGetCropsQuery()
+
+  const {
+    data: customers,
+    // isLoading,
+    isSuccess: isCustomersSuccess,
+    isError,
+    error
+  } = useGetResourcesQuery({ type: CUSTOMER })
+
+
+
+
+  const { control, register, handleSubmit, getValues,formState: { errors }, setValue } = useForm(
     {
       defaultValues: activity,
     }
   );
+
+  if (!isCropsSuccess || !isActivityDefsSuccess || !isCustomersSuccess) {
+    return <Loading/>
+  }
   const onSubmit = async (data) => {
     console.log('data',data);
 
@@ -55,8 +78,8 @@ const ActivityForm = ({ activity }) => {
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <ActivityHeaderView control={control} register={register} activity={activity} />
-        <ActivityFields control={control} register={register} activity={activity} getValues={getValues} />
+        <ActivityHeaderView control={control} register={register} activity={activity} errors={errors} crops={crops} activityDefs={activityDefs} customers={customers}/>
+        <ActivityFields control={control} register={register} activity={activity} getValues={getValues} errors={errors} setValue={setValue} />
         <ActivityResources control={control} register={register} activity={activity} />
         <TextFieldBase fullWidth multiline rows={4} />
 
@@ -66,14 +89,14 @@ const ActivityForm = ({ activity }) => {
           <BottomNavigationAction /*sx={{ color: 'lightGray' }}*/
             type="submit"
             label={text.save}
-            icon={<Save />}
+            icon={<Save fontSize='large'/>}
           />
           <BottomNavigationAction
             color='blue'
             label={text.cancel}
             onClick={() => navigate(-1)}
             // to={`/field/${src}/${fieldId}/dash`} component={Link}
-            icon={<HighlightOffRounded />}
+            icon={<HighlightOffRounded fontSize='large'/>}
           />
         </BottomNavigation>
       </form>

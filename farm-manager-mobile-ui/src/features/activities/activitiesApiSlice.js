@@ -2,6 +2,7 @@ import {
     createEntityAdapter
 } from "@reduxjs/toolkit";
 import { apiSlice } from "../../app/api/apiSlice";
+import { isStringEmpty } from "../../ui/FarmUtil";
 
 
 
@@ -49,10 +50,22 @@ export const activityApiSlice = apiSlice.injectEndpoints({
         }),
 
         createActivity: builder.mutation({
-            query: credentials => ({
+            query: args => ({
                 url: '/api/farm/activity',
-                method: 'POST',
-                body: { ...credentials },
+                method: 'POST' ,
+                body: { ...args },
+                
+            }),
+            invalidatesTags: [
+                { type: 'Activities', id: "LIST" },
+                { type: 'FieldActivities', id: "LIST" }
+            ]
+        }),
+        updateActivity: builder.mutation({
+            query: args => ({
+                url: '/api/farm/activity',
+                method: 'PUT' ,
+                body: { ...args },
                 
             }),
             invalidatesTags: [
@@ -68,7 +81,8 @@ export const {
     useGetActivitiesFlatQuery,
     useGetActivitiesFieldQuery,
     useGetActivityByIdQuery,
-    useCreateActivityMutation
+    useCreateActivityMutation,
+    useUpdateActivityMutation
 } = activityApiSlice
 
 
