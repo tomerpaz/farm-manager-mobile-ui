@@ -1,48 +1,35 @@
-import { BottomNavigation, BottomNavigationAction, Box, Divider, Typography } from '@mui/material'
+import { Box } from '@mui/material'
 import { useSelector } from 'react-redux'
-import { useNavigate, useParams } from 'react-router-dom'
-import Loading from '../../../components/Loading'
-import { useCreateActivityMutation, useGetActivityByIdQuery } from '../../../features/activities/activitiesApiSlice'
-import { selectLang } from '../../../features/app/appSlice'
-import InfoLine from '../../field/InfoLine'
-import ResourcesView from './ResourcesView'
-import FieldsView from './FieldsView'
-import ActivityHeaderView from './ActivityHeaderView'
-import { ControlPointDuplicate, Delete, DeleteForever, DeleteOutline, DeleteRounded, Save, Task, HighlightOffRounded } from '@mui/icons-material'
-import TextFieldBase from '../../../components/ui/TextField'
+import { useParams, useSearchParams } from 'react-router-dom'
+import { selectCurrentYear } from '../../../features/app/appSlice'
 import ActivityForm from '../form/ActivityForm'
 import { getWinds, newDate } from '../../FarmUtil'
 import { useGetUserDataQuery } from '../../../features/auth/authApiSlice'
+import { useFieldsById } from '../../../features/fields/fieldsApiSlice'
 
 const NewActivity = () => {
 
   const { type, src } = useParams()
-  const navigate = useNavigate()
+  let [searchParams, setSearchParams] = useSearchParams();
+
 
   const { data: user, isLoading } = useGetUserDataQuery()
-
-  const text = useSelector(selectLang)
-
-  // const { data: activity, isLoading, isSuccess, isError, error } = useGetActivityByIdQuery(activityId)
-
-  console.log('year', user.year);
-
-  // if (activity && isSuccess) {
+  const currentYear = useSelector(selectCurrentYear)
+  const fid = searchParams.get("fid");
+  const field = useFieldsById(currentYear, Number(fid));
 
   const isPlan = type.includes("_PLAN")
-
   const isSpray = type.includes("SPRAY")
-
   const wind = isSpray ? getWinds()[0] : null;
 
-
+  const fields = field ? [{ field, activityArea: field.area, fieldNote: null, actualExecution: null }] : [];
+  const activity = { type, plan: isPlan, execution: newDate(), activityDef: null, year: user.year, wind, customer: null, fields, resources: [], note: '', invoice: '' };
 
   return (
     <Box margin={1}>
-      <ActivityForm activity={{ type, plan: isPlan, execution: newDate(), activityDef: null, year: user.year, wind, customer: null, fields: [], resources: [], note: null }} />
+      <ActivityForm activity={activity} />
     </Box>
   )
-
 }
 
 export default NewActivity

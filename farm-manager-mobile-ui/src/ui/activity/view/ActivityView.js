@@ -10,6 +10,9 @@ import FieldsView from './FieldsView'
 import ActivityHeaderView from './ActivityHeaderView'
 import { ControlPointDuplicate, Delete, DeleteForever, DeleteOutline, DeleteRounded, Save, Task, HighlightOffRounded } from '@mui/icons-material'
 import TextFieldBase from '../../../components/ui/TextField'
+import { GENERAL, newDate } from '../../FarmUtil'
+import ActivityForm from '../form/ActivityForm'
+import { parseISO } from 'date-fns'
 
 const ActivityView = () => {
 
@@ -24,6 +27,22 @@ const ActivityView = () => {
   if (isLoading) return <Loading />
 
   if (activity && isSuccess) {
+
+
+    if (GENERAL === activity.type) {
+      console.log(activity)
+      const act = {...activity}
+      act.execution = parseISO(activity.execution);
+      act.note = act.note? act.note : '';
+      act.invoice = act.invoice? act.invoice : ''
+
+      return (
+        <Box margin={1}>
+         
+          <ActivityForm activity={act} />
+        </Box>
+      )
+    }
 
     const isPlan = activity.type.includes("_PLAN")
 

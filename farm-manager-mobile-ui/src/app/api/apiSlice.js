@@ -3,9 +3,9 @@ import { logOut, setCredentials } from '../../features/app/appSlice'
 
 
 
-//  export const FARM_MANAGER = 'http://localhost:8080'
+ export const FARM_MANAGER = 'http://localhost:8080'
 
-export const FARM_MANAGER = 'https://api.manager.farm'
+//export const FARM_MANAGER = 'https://api.manager.farm'
 
 
 const baseQuery = fetchBaseQuery({
@@ -58,7 +58,7 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
 export const apiSlice = createApi({
     reducerPath: 'api', // optional
     baseQuery: baseQueryWithReauth,
-    tagTypes: ['Field', 'Activities', 'User', 'FieldActivities', 'Dashboard','ActivityDefs', 'Crops'],
+    tagTypes: ['Field', 'Activities', 'User', 'FieldActivities', 'Dashboard','ActivityDefs', 'Crops','SelectedActivity'],
 
     endpoints: builder => ({})
 })

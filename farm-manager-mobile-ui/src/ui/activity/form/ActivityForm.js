@@ -1,4 +1,4 @@
-import { BottomNavigation, BottomNavigationAction, Box, Button, TextField, Typography } from '@mui/material'
+import { Alert, BottomNavigation, BottomNavigationAction, Box, Button, Snackbar, TextField, Typography } from '@mui/material'
 import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
 import { selectLang } from '../../../features/app/appSlice'
@@ -10,7 +10,7 @@ import { HighlightOffRounded, Save } from '@mui/icons-material'
 import { useNavigate, useParams } from 'react-router-dom'
 import ActivityFields from './ActivityFields'
 import ActivityResources from './ActivityResources'
-import { useCreateActivityMutation } from '../../../features/activities/activitiesApiSlice'
+import { useCreateActivityMutation, useUpdateActivityMutation } from '../../../features/activities/activitiesApiSlice'
 import { useGetCropsQuery } from '../../../features/crops/cropsApiSlice'
 import { CUSTOMER, useGetResourcesQuery } from '../../../features/resources/resourcesApiSlice'
 import Loading from '../../../components/Loading'
@@ -20,15 +20,13 @@ const ActivityForm = ({ activity }) => {
 
   const { type, src } = useParams()
   const navigate = useNavigate()
-
   const text = useSelector(selectLang)
-
-  
-  const [createActivity] = useCreateActivityMutation()
+  const [createActivity] = useCreateActivityMutation();
+  const [updateActivity] = useUpdateActivityMutation()
 
   const { data: activityDefs, isSuccess: isActivityDefsSuccess } = useGetActivityDefsQuery()
-
   const { data: crops, isSuccess: isCropsSuccess } = useGetCropsQuery()
+  const [showSnack, setShowSnack] = useState(false);
 
   const {
     data: customers,
@@ -38,27 +36,36 @@ const ActivityForm = ({ activity }) => {
     error
   } = useGetResourcesQuery({ type: CUSTOMER })
 
+  const { control, register, handleSubmit, getValues, formState: { errors }, setValue } = useForm({ defaultValues: activity, });
 
-
-
-  const { control, register, handleSubmit, getValues,formState: { errors }, setValue } = useForm(
-    {
-      defaultValues: activity,
-    }
-  );
+  // console.log('errors', errors);
 
   if (!isCropsSuccess || !isActivityDefsSuccess || !isCustomersSuccess) {
-    return <Loading/>
+    return <Loading />
   }
+
+  const afterSuccess = () => {
+    setShowSnack(false);
+    navigate(-1);
+  }
+
+
+  const saveActivity = (data) => {
+    if(data.uuid){
+      return updateActivity(data).unwrap();
+    } else {
+      createActivity(data).unwrap();
+    }
+  }
+
   const onSubmit = async (data) => {
-    console.log('data',data);
+    console.log('data', data);
 
     try {
-      const result = await createActivity(data).unwrap()
-      console.log('result', result);
-     // dispatch(setCredentials(loginData))
-     // navigate(DEFAULT_ROUTE)
-  } catch (err) {
+      const result = await saveActivity(data);
+      setShowSnack(true);
+     navigate(-1)
+    } catch (err) {
 
       console.log(err);
       // if (!err?.originalStatus) {
@@ -72,31 +79,48 @@ const ActivityForm = ({ activity }) => {
       //     setErrMsg('Login Failed');
       // }
       // errRef.current.focus();
-  }
+    }
 
   }
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <ActivityHeaderView control={control} register={register} activity={activity} errors={errors} crops={crops} activityDefs={activityDefs} customers={customers}/>
-        <ActivityFields control={control} register={register} activity={activity} getValues={getValues} errors={errors} setValue={setValue} />
-        <ActivityResources control={control} register={register} activity={activity} />
-        <TextFieldBase fullWidth multiline rows={4} />
+        <ActivityHeaderView control={control} register={register} activity={activity} errors={errors} crops={crops} activityDefs={activityDefs} customers={customers} />
+        <ActivityFields control={control} register={register} activity={activity} getValues={getValues} errors={errors} />
+        <ActivityResources control={control} register={register} activity={activity} errors={errors} />
+        <Box padding={1}>
+          <Controller
+            control={control}
+            name="note"
+            render={({ field }) => (
+              <TextField
+                id="activity-note"
+                size='small'
+                label={text.note} fullWidth multiline rows={4} {...field} />
+            )}
+          />
+        </Box>
 
+        <Snackbar open={showSnack} autoHideDuration={500} onClose={() => afterSuccess()}>
+          <Alert variant='filled' onClose={() => setShowSnack(false)} severity="success" sx={{ width: '100%' }}>
+            This is a success message!
+          </Alert>
+        </Snackbar>
 
         <BottomNavigation sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} value={-1}
           showLabels>
           <BottomNavigationAction /*sx={{ color: 'lightGray' }}*/
             type="submit"
-            label={text.save}
-            icon={<Save fontSize='large'/>}
+
+            label={<Typography>{text.save}</Typography>}
+            icon={<Save fontSize='large' />}
           />
           <BottomNavigationAction
             color='blue'
-            label={text.cancel}
+            label={<Typography>{text.cancel}</Typography>}
             onClick={() => navigate(-1)}
             // to={`/field/${src}/${fieldId}/dash`} component={Link}
-            icon={<HighlightOffRounded fontSize='large'/>}
+            icon={<HighlightOffRounded fontSize='large' />}
           />
         </BottomNavigation>
       </form>

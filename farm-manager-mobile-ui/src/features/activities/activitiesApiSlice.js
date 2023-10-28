@@ -2,8 +2,6 @@ import {
     createEntityAdapter
 } from "@reduxjs/toolkit";
 import { apiSlice } from "../../app/api/apiSlice";
-import { isStringEmpty } from "../../ui/FarmUtil";
-
 
 
 export const activitiesAdapter = createEntityAdapter({
@@ -23,10 +21,9 @@ export const activityApiSlice = apiSlice.injectEndpoints({
 
             //     return activitiesAdapter.setAll(initialState, responseData.content)
             // },
-            providesTags: (result, error, arg) => [
-                { type: 'Activities', id: "LIST" },
-                ...result.content.map(e => ({ type: 'Activities', id: e.uuid }))
-            ]
+
+            
+            providesTags: ['Activities']
         }),
         getActivitiesField: builder.query({
             query: (args) => `/api/farm/activities/field/${args.fieldId}/${args.page}/${args.maxResult}/${args.isPlan}/${args.orderBy}/${args.dir}?filter=${args.filter}`,
@@ -34,19 +31,28 @@ export const activityApiSlice = apiSlice.injectEndpoints({
 
             //     return fieldActivitiesAdapter.setAll(fieldActivityinitialState, responseData)
             // },
-            providesTags: (result, error, arg) => {
-                // console.log('result',result)
-                // console.log('arg', arg)
+            
+            providesTags: ['FieldActivities'],
 
-                return [
+            // providesTags: (result, error, arg) => {
 
-                    { type: 'FieldActivities', id: "LIST" },
-                    ...result.content.map(e => ({ type: 'FieldActivities', id: e.id }))
-                ]
-            }
+            //     return [
+
+            //         { type: 'FieldActivities', id: "LIST" },
+            //         ...result.content.map(e => ({ type: 'FieldActivities', id: e.id }))
+            //     ]
+            // }
+            
         }),
         getActivityById: builder.query({
             query: (uuid) => `/api/farm/activity/${uuid}`,
+            // transformResponse: responseData => {
+            //     const act = {...responseData}
+            //     act.execution = parseISOOrNull(responseData.execution);
+            //     return act;
+            // },
+           providesTags: ['SelectedActivity'],
+
         }),
 
         createActivity: builder.mutation({
@@ -56,10 +62,8 @@ export const activityApiSlice = apiSlice.injectEndpoints({
                 body: { ...args },
                 
             }),
-            invalidatesTags: [
-                { type: 'Activities', id: "LIST" },
-                { type: 'FieldActivities', id: "LIST" }
-            ]
+            invalidatesTags: ['Activities','SelectedActivity','FieldActivities']
+               
         }),
         updateActivity: builder.mutation({
             query: args => ({
@@ -68,10 +72,8 @@ export const activityApiSlice = apiSlice.injectEndpoints({
                 body: { ...args },
                 
             }),
-            invalidatesTags: [
-                { type: 'Activities', id: "LIST" },
-                { type: 'FieldActivities', id: "LIST" }
-            ]
+            invalidatesTags: ['Activities','SelectedActivity','FieldActivities']
+
         }),
 
     })

@@ -36,7 +36,7 @@ const ActivityFields = ({ activity, getValues, control, register, errors, setVal
     const handleClickOpen = () => {
         setOpen(true);
     };
-    
+
     const handleOpenEditRow = (index, row) => {
         setSelectedRow(row);
         setSelectedIndex(index);
@@ -57,7 +57,7 @@ const ActivityFields = ({ activity, getValues, control, register, errors, setVal
                 return {
                     field: e,
                     activityArea: e.area,
-                    fieldNote: null, 
+                    fieldNote: null,
                     actualExecution: null
                 }
             }
@@ -69,7 +69,7 @@ const ActivityFields = ({ activity, getValues, control, register, errors, setVal
     const getFields = () => {
         return (expendFields && fields.length > TRASHHOLD) ? fields : fields.slice(0, TRASHHOLD);
     }
-   // const fields = (expendFields && activity.fields.length > TRASHHOLD) ? activity.fields : activity.fields.slice(0, TRASHHOLD);
+    // const fields = (expendFields && activity.fields.length > TRASHHOLD) ? activity.fields : activity.fields.slice(0, TRASHHOLD);
 
     return (
         <Box margin={1} display={'flex'} flexDirection={'column'}>
@@ -77,12 +77,12 @@ const ActivityFields = ({ activity, getValues, control, register, errors, setVal
                 <Box>
                     <Button size='large' color={errors.fields ? 'error' : 'primary'} disableElevation={true} variant="contained" onClick={handleClickOpen}>{text.fields} </Button>
                     {fields.length > TRASHHOLD &&
-                    <IconButton sx={{ marginLeft: 1, marginRight: 1 }} onClick={() => setExpendFields(!expendFields)}>
-                        <Badge  badgeContent={fields.length} color="primary">
-                            <Menu fontSize='large'/>
-                        </Badge>
-                    </IconButton>
-                }
+                        <IconButton sx={{ marginLeft: 1, marginRight: 1 }} onClick={() => setExpendFields(!expendFields)}>
+                            <Badge badgeContent={fields.length} color="primary">
+                                <Menu fontSize='large' />
+                            </Badge>
+                        </IconButton>
+                    }
                 </Box>
                 <IconButton onClick={e => remove()}><Delete fontSize='large' /></IconButton>
             </Box>
@@ -102,7 +102,7 @@ const ActivityFields = ({ activity, getValues, control, register, errors, setVal
                     </TableHead>
                     <TableBody>
                         {getFields().map((row, index) =>
-                            <Row key={row.key} index={index} row={row} text={text} register={register} remove={remove} onClick={()=>handleOpenEditRow(index, row)} />
+                            <Row key={row.key} index={index} row={row} text={text} register={register} remove={remove} onClick={() => handleOpenEditRow(index, row)} />
                         )}
                     </TableBody>
                 </Table>
@@ -120,8 +120,8 @@ function Row(props) {
     //        {...register(`test.${index}.value`)} 
 
     return (
-        <Fragment>
-            <TableRow
+        <Fragment >
+            <TableRow 
                 key={index}
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                 <TableCell onClick={onClick} sx={cellSxLink} >{row.field.name}</TableCell>
@@ -130,10 +130,9 @@ function Row(props) {
                 <TableCell onClick={onClick} sx={cellSx}>{row.field.varietyName}</TableCell>
                 <TableCell onClick={onClick} sx={cellSx}>
                     <Box {...register(`field.${index}.activityArea`)}>
-                    {row.activityArea.toFixed(2)}
+                        {row.activityArea.toFixed(2)}
                     </Box>
-                    
-                    </TableCell>
+                </TableCell>
                 <TableCell width={1} sx={{ padding: 0, margin: 0 }}><IconButton margin={0} padding={0} onClick={e => remove(index)}><Delete fontSize='large' /></IconButton></TableCell>
 
 

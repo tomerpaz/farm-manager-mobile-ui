@@ -28,16 +28,38 @@ export const IRRIGARION_TYPES = [IRRIGATION, IRRIGATION_PLAN]
 export const ACTIVITY_DEF_TYPES = [GENERAL, GENERAL_PLAN, HARVEST]
 
 
+export const WORKER = 'WORKER';
+export const CONTRACTOR = 'CONTRACTOR';
+export const WORKER_GROUP = 'WORKER_GROUP';
+export const FERTILIZER = 'FERTILIZER';
+export const PESTICIDE = 'PESTICIDE';
+export const ENERGY = 'ENERGY';
+export const ACCESSORY = 'ACCESSORY';
+export const VARIETY = 'VARIETY';
+export const COMPOST = 'COMPOST';
+export const EQUIPMENT = 'EQUIPMENT';
+export const DISINFECTANT = 'DISINFECTANT';
+export const WATER = 'WATER';
+
+
+
+export const ACTIVITY_RESOURCES = [
+    { activity: GENERAL, types: [WORKER, CONTRACTOR, WORKER_GROUP, EQUIPMENT, PESTICIDE, FERTILIZER, ACCESSORY, VARIETY, COMPOST, DISINFECTANT,ENERGY] },
+    { activity: SPRAY, types: [WORKER, CONTRACTOR, WORKER_GROUP, EQUIPMENT, PESTICIDE, FERTILIZER] },
+    { activity: HARVEST, types: [WORKER, CONTRACTOR, WORKER_GROUP, EQUIPMENT, ACCESSORY] },
+    { activity: IRRIGATION, types: [WATER, FERTILIZER, PESTICIDE, WORKER, CONTRACTOR, WORKER_GROUP, ACCESSORY] }
+]
+
 export const tableHeaderSx = { fontWeight: 'bold', padding: 0.5 };
 export const tableCellSx = { padding: 0.5 };
 
 
-export function getBottomNavigationSx(disabled){
-    return disabled ? {color: grey[400]} : null;
+export function getBottomNavigationSx(disabled) {
+    return disabled ? { color: grey[400] } : null;
 }
 
 export function getActivityTypes(role, isMap, isPlan) {
-    if(isMap){
+    if (isMap) {
         return GROWER_ACTIVITY_TYPES_MAP
     } else if (isPlan) {
         return GROWER_PLAN_TYPES
@@ -145,8 +167,8 @@ export function isArrayEmpty(filterValue, filterNulls) {
 }
 
 export function isStringEmpty(str, print) {
-    if(print){
-        console.log('isStringEmpty',str, print)
+    if (print) {
+        console.log('isStringEmpty', str, print)
     }
     return (!str || /^\s*$/.test(str));
 }
@@ -308,7 +330,7 @@ export function getFillColor(field) {
     }
 }
 
-export function getWinds(){
-    return ['windSpeedNone','windSpeedCalm','windSpeedStrong']
+export function getWinds() {
+    return ['windSpeedNone', 'windSpeedCalm', 'windSpeedStrong']
 }
 

@@ -54,7 +54,6 @@ const MainTabs = () => {
     const value = paths.findIndex(getIndex) > 0 ? paths.findIndex(getIndex) : 0;
     const { data: user } = useGetUserDataQuery()
 
-
     return (
         <Box display={'flex'} flex={1} flexDirection={'column'}>
             <Box alignItems={'stretch'} display={'flex'} flex={1} flexDirection={'column'} sx={{ borderBottom: 1, borderColor: 'divider' }}>
@@ -66,7 +65,7 @@ const MainTabs = () => {
                     <Tab label={text.map} to={DEFAULT_ROUTE} component={Link}   {...a11yProps(0)} />
                     <Tab label={text.fields} to="/tabs/fields" component={Link} {...a11yProps(1)} />
                     <Tab label={text.activities} to="/tabs/activities/0" component={Link}  {...a11yProps(2)} />
-                    {user && <Tab label={text.plans} to="/tabs/plans/0" component={Link}  {...a11yProps(2)} />}
+                    {/* {user.usePlans && <Tab label={text.plans} to="/tabs/plans/0" component={Link}  {...a11yProps(2)} />} */}
                 </Tabs>
             </Box>
             <TabPanel component={'div'} value={value} index={0}>
@@ -81,10 +80,10 @@ const MainTabs = () => {
                 <ActivitiesList plans={false}/>
                 <ActionFab bottom={80} plan={false} />
             </TabPanel>
-            <TabPanel value={value} index={3}>
+            {/* {user.usePlans &&   <TabPanel value={value} index={3}>
                 <ActivitiesList plans={true}/>
                 <ActionFab bottom={80} plan={true} />
-            </TabPanel>
+            </TabPanel>} */}
         </Box>
     );
 }
