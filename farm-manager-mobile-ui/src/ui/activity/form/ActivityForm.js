@@ -1,7 +1,7 @@
 import { Alert, BottomNavigation, BottomNavigationAction, Box, Button, Snackbar, TextField, Typography } from '@mui/material'
 import React, { useState } from 'react'
-import { useSelector } from 'react-redux'
-import { selectLang } from '../../../features/app/appSlice'
+import { useDispatch, useSelector } from 'react-redux'
+import { selectLang, setSnackbar } from '../../../features/app/appSlice'
 import { parseDate } from '../../FarmUtil'
 import ActivityHeaderView from './ActivityHeaderView'
 import { useForm, Controller } from "react-hook-form";
@@ -30,6 +30,7 @@ const ActivityForm = ({ activity }) => {
   const { data: crops, isSuccess: isCropsSuccess } = useGetCropsQuery()
   const [showSnack, setShowSnack] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
+  const dispatch = useDispatch()
 
   const {
     data: customers,
@@ -46,12 +47,6 @@ const ActivityForm = ({ activity }) => {
   if (!isCropsSuccess || !isActivityDefsSuccess || !isCustomersSuccess) {
     return <Loading />
   }
-
-  const afterSuccess = () => {
-    setShowSnack(false);
-    navigate(-1);
-  }
-
 
   const saveActivity = (data) => {
     if (data.uuid) {
@@ -70,6 +65,8 @@ const ActivityForm = ({ activity }) => {
     if (value) {
       deleteActivity(activity.uuid);
       navigate(-1)
+      dispatch(setSnackbar({msg: text.recordDeleted}))
+
     }
   }
 
@@ -78,7 +75,7 @@ const ActivityForm = ({ activity }) => {
 
     try {
       const result = await saveActivity(data);
-      setShowSnack(true);
+      dispatch(setSnackbar({msg: data.uuid ? text.recordUpdated : text.recordCreated, severity: 'success'}))
       navigate(-1)
     } catch (err) {
 
@@ -115,13 +112,6 @@ const ActivityForm = ({ activity }) => {
             )}
           />
         </Box>
-
-        <Snackbar open={showSnack} autoHideDuration={500} onClose={() => afterSuccess()}>
-          <Alert variant='filled' onClose={() => setShowSnack(false)} severity="success" sx={{ width: '100%' }}>
-            This is a success message!
-          </Alert>
-        </Snackbar>
-
         <BottomNavigation sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} value={-1}
           showLabels>
           {activity.editable && <BottomNavigationAction /*sx={{ color: 'lightGray' }}*/

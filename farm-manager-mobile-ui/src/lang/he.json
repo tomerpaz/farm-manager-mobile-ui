@@ -101,5 +101,8 @@
     "endHour": "שעת סיום",
     "invoice": "חשבונית",
     "deleteFormTitle": "למחוק נתונים?",
-    "deleteFormBody": "הנתונים ימחקו לצמיתות"
+    "deleteFormBody": "הנתונים ימחקו לצמיתות",
+    "recordUpdated": "הרשומה עודכנה",
+    "recordCreated": "רשומה חדשה נוצרה",
+    "recordDeleted": "הרשומה נמחקה"
 }

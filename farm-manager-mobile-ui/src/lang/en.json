@@ -101,6 +101,9 @@
     "endHour": "endHour",
     "invoice": "Invoice",
     "deleteFormTitle":"Delete data?",
-    "deleteFormBody":"Data will be deleted permanently"
+    "deleteFormBody":"Data will be deleted permanently",
+    "recordUpdated": "Record Updated",
+    "recordCreated": "Record Created",
+    "recordDeleted": "Record deleted"
   }
   

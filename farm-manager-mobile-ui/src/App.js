@@ -11,10 +11,12 @@ import Field from './ui/field/Field';
 import DataRoutes from './router/DataRoutes';
 import UserRoutes from './router/UserRoutes';
 import LocaleApplication from './components/LocaleApplication';
-import { selectLang } from './features/app/appSlice';
-import { useSelector } from 'react-redux';
+import { selectLang, selectSnackbarMsg, selectSnackbarSeverity, setSnackbar } from './features/app/appSlice';
+import { useDispatch, useSelector } from 'react-redux';
 import ActivityView from './ui/activity/view/ActivityView';
 import NewActivity from './ui/activity/view/NewActivity';
+import { Alert, Snackbar } from '@mui/material';
+import { isStringEmpty } from './ui/FarmUtil';
 
 
 
@@ -51,6 +53,12 @@ function App() {
 
   const { dir } = useSelector(selectLang)
 
+  const snackbar = useSelector(selectSnackbarMsg)
+  const sevirity = useSelector(selectSnackbarSeverity)
+
+  const dispatch = useDispatch()
+
+  
   // const dir = 'ltr'//;'rtl'
   document.body.dir = dir;
   theme.direction = dir;
@@ -80,6 +88,11 @@ function App() {
           </Route>
           <Route path="*" element={<Navigate to={DEFAULT_ROUTE} replace />} />
         </Routes>
+        <Snackbar open={!isStringEmpty(snackbar)} autoHideDuration={1000} onClose={() => dispatch(setSnackbar('', ''))}>
+          <Alert variant='filled' onClose={() => dispatch(setSnackbar('', ''))} severity={isStringEmpty(sevirity)? 'success' : 'success'} sx={{ width: '100%' }}>
+            {snackbar}
+          </Alert>
+        </Snackbar>
       </LocaleApplication>
     </ThemeProvider>
   );
