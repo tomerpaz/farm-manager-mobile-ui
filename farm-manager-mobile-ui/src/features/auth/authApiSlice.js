@@ -14,11 +14,8 @@ export const authApiSlice = apiSlice.injectEndpoints({
                 method: 'POST',
                 body: { ...credentials }
             }),
-            invalidatesTags: [
+            invalidatesTags: ['User','Activities','FieldActivities',
                 { type: 'Field', id: "LIST" },
-                { type: 'User', id: "User" },
-                { type: 'Activities', id: "LIST" },
-                { type: 'FieldActivities', id: "LIST" }
             ]
         }),
         getUser: builder.mutation({
@@ -35,9 +32,7 @@ export const authApiSlice = apiSlice.injectEndpoints({
                 url: '/api/farm/user',
               
             }),
-            providesTags: (result, error, arg) => [
-                { type: 'User', id: "User" },
-            ]
+            providesTags:  ["User"]
         }),
     })
 })

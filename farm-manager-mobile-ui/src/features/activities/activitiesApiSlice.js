@@ -76,15 +76,33 @@ export const activityApiSlice = apiSlice.injectEndpoints({
 
         }),
 
+        deleteActivity: builder.mutation({
+            query(uuid) {
+              return {
+                url: `/api/farm/activity/${cccc(uuid)}`,
+                method: 'DELETE',
+              }
+            },
+           // invalidatesTags: (result, error, id) => [{ type: 'Posts', id }],
+           invalidatesTags: ['Activities', 'SelectedActivity', 'FieldActivities']
+
+          }),
+
     })
 })
+
+const cccc = (uuid) => {
+    console.log('delete uuid', uuid);
+    return uuid;
+}
 
 export const {
     useGetActivitiesFlatQuery,
     useGetActivitiesFieldQuery,
     useGetActivityByIdQuery,
     useCreateActivityMutation,
-    useUpdateActivityMutation
+    useUpdateActivityMutation,
+    useDeleteActivityMutation,
 } = activityApiSlice
 
 

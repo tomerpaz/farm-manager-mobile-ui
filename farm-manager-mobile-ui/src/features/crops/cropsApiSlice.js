@@ -16,14 +16,6 @@ export const cropsApiSlice = apiSlice.injectEndpoints({
 
             query: (args) => `/api/farm/crops`,
             providesTags: ['Crops']
-            // transformResponse: responseData => {
-
-            //     return activitiesAdapter.setAll(initialState, responseData.content)
-            // },
-            // providesTags: (result, error, arg) => [
-            //     { type: 'ActivityDefs', id: "LIST" },
-            //     ...result.content.map(e => ({ type: 'ActivityDefs', id: e.id }))
-            // ]
         }),
     
     })

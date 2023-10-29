@@ -32,8 +32,6 @@ export const fieldsApiSlice = apiSlice.injectEndpoints({
                     if (field?.polygon) field.geoPoints = safeParseJson(field.polygon);
                     return field;
                 });
-
-
                 return fieldsAdapter.setAll(initialState, fields)
             },
             providesTags: (result, error, arg) => [

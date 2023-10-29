@@ -6,11 +6,11 @@ import { parseDate } from '../../FarmUtil'
 import ActivityHeaderView from './ActivityHeaderView'
 import { useForm, Controller } from "react-hook-form";
 import TextFieldBase from '../../../components/ui/TextField'
-import { HighlightOffRounded, Save } from '@mui/icons-material'
+import { Cancel, Delete, HighlightOffRounded, Save } from '@mui/icons-material'
 import { useNavigate, useParams } from 'react-router-dom'
 import ActivityFields from './ActivityFields'
 import ActivityResources from './ActivityResources'
-import { useCreateActivityMutation, useUpdateActivityMutation } from '../../../features/activities/activitiesApiSlice'
+import { useCreateActivityMutation, useDeleteActivityMutation, useUpdateActivityMutation } from '../../../features/activities/activitiesApiSlice'
 import { useGetCropsQuery } from '../../../features/crops/cropsApiSlice'
 import { CUSTOMER, useGetResourcesQuery } from '../../../features/resources/resourcesApiSlice'
 import Loading from '../../../components/Loading'
@@ -23,6 +23,7 @@ const ActivityForm = ({ activity }) => {
   const text = useSelector(selectLang)
   const [createActivity] = useCreateActivityMutation();
   const [updateActivity] = useUpdateActivityMutation()
+  const [deleteActivity] = useDeleteActivityMutation()
 
   const { data: activityDefs, isSuccess: isActivityDefsSuccess } = useGetActivityDefsQuery()
   const { data: crops, isSuccess: isCropsSuccess } = useGetCropsQuery()
@@ -51,11 +52,16 @@ const ActivityForm = ({ activity }) => {
 
 
   const saveActivity = (data) => {
-    if(data.uuid){
+    if (data.uuid) {
       return updateActivity(data).unwrap();
     } else {
       createActivity(data).unwrap();
     }
+  }
+
+  const deleteAction = () => {
+    deleteActivity(activity.uuid);
+    navigate(-1)
   }
 
   const onSubmit = async (data) => {
@@ -64,7 +70,7 @@ const ActivityForm = ({ activity }) => {
     try {
       const result = await saveActivity(data);
       setShowSnack(true);
-     navigate(-1)
+      navigate(-1)
     } catch (err) {
 
       console.log(err);
@@ -109,19 +115,25 @@ const ActivityForm = ({ activity }) => {
 
         <BottomNavigation sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} value={-1}
           showLabels>
-          <BottomNavigationAction /*sx={{ color: 'lightGray' }}*/
+          { activity.editable && <BottomNavigationAction /*sx={{ color: 'lightGray' }}*/
             type="submit"
 
             label={<Typography>{text.save}</Typography>}
             icon={<Save fontSize='large' />}
-          />
+          />}
+          { activity.editable && activity.uuid && <BottomNavigationAction
+            label={<Typography>{text.delete}</Typography>}
+            onClick={deleteAction}
+            // to={`/field/${src}/${fieldId}/dash`} component={Link}
+            icon={<Delete fontSize='large' />}
+          />}
           <BottomNavigationAction
-            color='blue'
             label={<Typography>{text.cancel}</Typography>}
             onClick={() => navigate(-1)}
             // to={`/field/${src}/${fieldId}/dash`} component={Link}
-            icon={<HighlightOffRounded fontSize='large' />}
+            icon={<Cancel fontSize='large' />}
           />
+
         </BottomNavigation>
       </form>
     </>
