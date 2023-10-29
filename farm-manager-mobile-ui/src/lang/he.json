@@ -99,6 +99,7 @@
     "clear": "נקה",
     "select": "בחר",
     "endHour": "שעת סיום",
-    "invoice": "חשבונית"
-
+    "invoice": "חשבונית",
+    "deleteFormTitle": "למחוק נתונים?",
+    "deleteFormBody": "הנתונים ימחקו לצמיתות"
 }

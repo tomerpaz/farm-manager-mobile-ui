@@ -15,6 +15,7 @@ import { useGetCropsQuery } from '../../../features/crops/cropsApiSlice'
 import { CUSTOMER, useGetResourcesQuery } from '../../../features/resources/resourcesApiSlice'
 import Loading from '../../../components/Loading'
 import { useGetActivityDefsQuery } from '../../../features/activityDefs/activityDefsApiSlice'
+import ActionApprovalDialog from '../../../components/ui/ActionApprovalDialog'
 
 const ActivityForm = ({ activity }) => {
 
@@ -28,6 +29,7 @@ const ActivityForm = ({ activity }) => {
   const { data: activityDefs, isSuccess: isActivityDefsSuccess } = useGetActivityDefsQuery()
   const { data: crops, isSuccess: isCropsSuccess } = useGetCropsQuery()
   const [showSnack, setShowSnack] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
 
   const {
     data: customers,
@@ -60,8 +62,15 @@ const ActivityForm = ({ activity }) => {
   }
 
   const deleteAction = () => {
-    deleteActivity(activity.uuid);
-    navigate(-1)
+    setDeleteOpen(true)
+  }
+
+  const handleDelete = (value) => {
+    setDeleteOpen(false)
+    if (value) {
+      deleteActivity(activity.uuid);
+      navigate(-1)
+    }
   }
 
   const onSubmit = async (data) => {
@@ -115,15 +124,15 @@ const ActivityForm = ({ activity }) => {
 
         <BottomNavigation sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} value={-1}
           showLabels>
-          { activity.editable && <BottomNavigationAction /*sx={{ color: 'lightGray' }}*/
+          {activity.editable && <BottomNavigationAction /*sx={{ color: 'lightGray' }}*/
             type="submit"
 
             label={<Typography>{text.save}</Typography>}
             icon={<Save fontSize='large' />}
           />}
-          { activity.editable && activity.uuid && <BottomNavigationAction
+          {activity.editable && activity.uuid && <BottomNavigationAction
             label={<Typography>{text.delete}</Typography>}
-            onClick={deleteAction}
+            onClick={()=>setDeleteOpen(true)}
             // to={`/field/${src}/${fieldId}/dash`} component={Link}
             icon={<Delete fontSize='large' />}
           />}
@@ -135,6 +144,10 @@ const ActivityForm = ({ activity }) => {
           />
 
         </BottomNavigation>
+        <ActionApprovalDialog open={deleteOpen} handleClose={ handleDelete } 
+        title={text.deleteFormTitle} body={text.deleteFormBody} okText={text.delete} cancelText={text.cancel} />
+
+        
       </form>
     </>
   );
