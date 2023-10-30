@@ -11,9 +11,9 @@ import Loading from "../../components/Loading";
 import { useGetResourcesQuery } from "../../features/resources/resourcesApiSlice";
 import ListPager from "../../components/ui/ListPager";
 
-const filterResource = (e, filter) => {
+const filterResource = (e, filter, type) => {
     if (isStringEmpty(filter)) {
-        return true;
+        return type === e.type;
     } else {
         const val = filter.toLowerCase();
         return e.name.toLowerCase().includes(val) ||
@@ -52,6 +52,11 @@ const ResourcseSelectionDialog = ({ open, handleClose, resourceTypes }) => {
         setPage(0);
     }
 
+    const handleSeType = (value) => {
+        setType(value);
+        clear();
+    }
+
     useEffect(() => {
         clear();
     }, [type]);
@@ -59,7 +64,7 @@ const ResourcseSelectionDialog = ({ open, handleClose, resourceTypes }) => {
     const {
         data,
         isLoading,
-        // isSuccess,
+        isSuccess,
         // isError,
         // error
     } = useGetResourcesQuery({ type })
@@ -75,14 +80,14 @@ const ResourcseSelectionDialog = ({ open, handleClose, resourceTypes }) => {
         }
     }
 
-    const visableResources = data.filter(e => filterResource(e, filter));
+    const visableResources = data.filter(e => filterResource(e, filter, type));
     const visableSelectedResources = visableResources.filter(e => selectedResources.includes(e));
     const numSelected = visableSelectedResources.length;
     const rowCount = visableResources.length;
     const showPegination = rowCount > ROWS_PER_PAGE;
     const isFertilizer = type === FERTILIZER;
     const isVariety = type === VARIETY;
-    
+
     const onSelectAllClick = (e) => {
         if (e.target.checked) {
             const visableSelectedResourceIDs = visableSelectedResources.map(f => f.id);
@@ -117,7 +122,7 @@ const ResourcseSelectionDialog = ({ open, handleClose, resourceTypes }) => {
                         fullWidth
                         label={text.type}
                         value={type}
-                        onChange={e => setType(e.target.value)}
+                        onChange={e => handleSeType(e.target.value)}
                     >
                         {resourceTypes.map((e) => (
                             <MenuItem key={e} value={e}>
