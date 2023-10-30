@@ -7,6 +7,7 @@ import { cellSx, headerSx } from "../activity/view/FieldsView";
 import { useGetUserDataQuery } from "../../features/auth/authApiSlice";
 import { Search } from "@mui/icons-material";
 import { isStringEmpty } from "../FarmUtil";
+import ListPager from "../../components/ui/ListPager";
 
 const filterField = (field, filter) => {
     if (isStringEmpty(filter)) {
@@ -22,13 +23,19 @@ const filterField = (field, filter) => {
 };
 
 const isFieldSelected = (field, selectedFields) => {
-    return selectedFields.some(e=>e.id === field.id)
+    return selectedFields.some(e => e.id === field.id)
 };
+
+export const ROWS_PER_PAGE = 100;
 
 const FieldSelectionDialog = ({ fields, open, handleClose }) => {
     const text = useSelector(selectLang);
     // const { data: user } = useGetUserDataQuery()
     const [filter, setFilter] = useState('');
+
+    const [page, setPage] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(ROWS_PER_PAGE);
+
 
     const [selectFields, setSelectedFields] = useState([]);
 
@@ -36,25 +43,29 @@ const FieldSelectionDialog = ({ fields, open, handleClose }) => {
     const visableFields = fields.filter(e => filterField(e, filter));
     const visableSelectedFields = visableFields.filter(e => selectFields.includes(e));
     const numSelected = visableSelectedFields.length;
-
     const rowCount = visableFields.length;
+    const showPegination = rowCount > ROWS_PER_PAGE;
 
+    const handleSetFilter = (value) => {
+        setFilter(value);
+        setPage(0);
+    }
 
     const onSelectAllClick = (e) => {
-        if(e.target.checked){
-            const visableSelectedFieldIDs = visableSelectedFields.map(f=>f.id);
-            const visableNotSelectedFields = visableFields.filter(f=>!visableSelectedFieldIDs.includes(f.id));
+        if (e.target.checked) {
+            const visableSelectedFieldIDs = visableSelectedFields.map(f => f.id);
+            const visableNotSelectedFields = visableFields.filter(f => !visableSelectedFieldIDs.includes(f.id));
             setSelectedFields(selectFields.concat(visableNotSelectedFields));
         } else {
-            const visableFieldsIDs = visableFields.map(f=>f.id);
-            setSelectedFields(selectFields.filter(f=> !visableFieldsIDs.includes(f.id)));
+            const visableFieldsIDs = visableFields.map(f => f.id);
+            setSelectedFields(selectFields.filter(f => !visableFieldsIDs.includes(f.id)));
         }
     };
 
-    const onSelectRow = (e) =>{
-        if(isFieldSelected(e, selectFields)){
-            setSelectedFields(selectFields.filter(f=> e.id !== f.id));
-        }else {
+    const onSelectRow = (e) => {
+        if (isFieldSelected(e, selectFields)) {
+            setSelectedFields(selectFields.filter(f => e.id !== f.id));
+        } else {
             setSelectedFields(selectFields.concat([e]));
         }
     }
@@ -63,6 +74,8 @@ const FieldSelectionDialog = ({ fields, open, handleClose }) => {
     const onAction = (save) => {
         handleClose(save ? selectFields : null);
         setSelectedFields([])
+        setFilter('');
+        setPage(0);
     }
 
     return (
@@ -77,7 +90,7 @@ const FieldSelectionDialog = ({ fields, open, handleClose }) => {
                 <Box>
 
                     <TextFieldBase fullWidth={true} label={text.filter} value={filter}
-                        onChange={(e) => setFilter(e.target.value)}
+                        onChange={(e) => handleSetFilter(e.target.value)}
                         InputProps={{
                             startAdornment: <InputAdornment position="start"><Search /></InputAdornment>,
                         }}
@@ -110,19 +123,19 @@ const FieldSelectionDialog = ({ fields, open, handleClose }) => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {visableFields.map((row, index) =>
-                                <Row key={index} index={index} row={row} text={text} onClick={()=>onSelectRow(row, index)} isItemSelected={isFieldSelected(row, selectFields)} />
+                            {visableFields.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) =>
+                                <Row key={index} index={index} row={row} text={text} onClick={() => onSelectRow(row, index)} isItemSelected={isFieldSelected(row, selectFields)} />
                             )}
                         </TableBody>
                     </Table>
                 </TableContainer>
-                {/* <DialogContentText id="alert-dialog-description">
-                {fields.map(e=> <Box key={e.id}>{e.name}</Box>)}
-            </DialogContentText> */}
+                {showPegination && <ListPager bottom={50} page={Number(page)}
+                    totalPages={Math.ceil(rowCount / ROWS_PER_PAGE)} setPage={setPage} />}
+
             </DialogContent>
             <DialogActions sx={{ justifyContent: 'center' }}>
-                <Button size='large' variant='outlined' onClick={()=>onAction(false)}>{text.cancel}</Button>
-                <Button size='large' disableElevation={true} variant='contained' onClick={()=>onAction(true)} autoFocus>
+                <Button size='large' variant='outlined' onClick={() => onAction(false)}>{text.cancel}</Button>
+                <Button size='large' disableElevation={true} variant='contained' onClick={() => onAction(true)} autoFocus>
                     {text.save}
                 </Button>
             </DialogActions>

@@ -30,7 +30,6 @@ export const ROWS_PER_PAGE = 100;
 const ResourcseSelectionDialog = ({ open, handleClose, resourceTypes }) => {
     const text = useSelector(selectLang);
     const { data: user } = useGetUserDataQuery()
-    const { dir } = useSelector(selectLang)
 
     const [filter, setFilter] = useState('');
     const [type, setType] = useState(resourceTypes[0]);
