@@ -168,6 +168,8 @@ const ResourcseSelectionDialog = ({ open, handleClose, resourceTypes }) => {
                                 {isFertilizer &&
                                     <TableCell sx={headerSx}>{'SG'}</TableCell>
                                 }
+                                {isVariety && <TableCell sx={headerSx} >{text.crop}</TableCell>}
+
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -182,6 +184,7 @@ const ResourcseSelectionDialog = ({ open, handleClose, resourceTypes }) => {
                 </TableContainer>
                 {showPegination && <ListPager bottom={50} dir={dir} page={Number(page)}
                     totalPages={Math.ceil(visableResources.length / ROWS_PER_PAGE)} setPage={setPage} />}
+        
             </DialogContent>
             <DialogActions sx={{ justifyContent: 'center' }}>
                 <Button size='large' variant='outlined' onClick={() => onAction(false)}>{text.cancel}</Button>
@@ -189,7 +192,7 @@ const ResourcseSelectionDialog = ({ open, handleClose, resourceTypes }) => {
                     {text.save}
                 </Button>
             </DialogActions>
-        </Dialog>
+        </Dialog >
     )
 
 }
