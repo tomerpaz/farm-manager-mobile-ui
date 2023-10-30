@@ -1,4 +1,4 @@
-import { Box, Button, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, InputAdornment, MenuItem, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from "@mui/material";
+import { Box, Button, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, InputAdornment, MenuItem, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
 import TextFieldBase from "../../components/ui/TextField";
 import { useSelector } from "react-redux";
 import { selectLang } from "../../features/app/appSlice";
@@ -6,9 +6,10 @@ import { Fragment, useEffect, useState } from "react";
 import { cellSx, headerSx } from "../activity/view/FieldsView";
 import { useGetUserDataQuery } from "../../features/auth/authApiSlice";
 import { Search } from "@mui/icons-material";
-import { getResourceTypeText, isStringEmpty } from "../FarmUtil";
+import { FERTILIZER, VARIETY, getResourceTypeText, getUnitText, isStringEmpty } from "../FarmUtil";
 import Loading from "../../components/Loading";
 import { useGetResourcesQuery } from "../../features/resources/resourcesApiSlice";
+import ListPager from "../../components/ui/ListPager";
 
 const filterResource = (e, filter) => {
     if (isStringEmpty(filter)) {
@@ -16,7 +17,8 @@ const filterResource = (e, filter) => {
     } else {
         const val = filter.toLowerCase();
         return e.name.toLowerCase().includes(val) ||
-            e.code?.toLowerCase().includes(val)
+            e.code?.toLowerCase().includes(val) ||
+            e.identification?.toLowerCase().includes(val)
     }
 };
 
@@ -24,31 +26,46 @@ const isResourceSelected = (resource, selectedResources) => {
     return selectedResources.some(e => e.id === resource.id)
 };
 
+export const ROWS_PER_PAGE = 100;
 const ResourcseSelectionDialog = ({ open, handleClose, resourceTypes }) => {
     const text = useSelector(selectLang);
-    // const { data: user } = useGetUserDataQuery()
+    const { data: user } = useGetUserDataQuery()
+    const { dir } = useSelector(selectLang)
+
     const [filter, setFilter] = useState('');
     const [type, setType] = useState(resourceTypes[0]);
 
     const [selectedResources, setSelectedResources] = useState([]);
 
+    const [page, setPage] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(ROWS_PER_PAGE);
 
+
+    const clear = () => {
+        setFilter('');
+        setPage(0);
+        setRowsPerPage(ROWS_PER_PAGE)
+    }
+
+    const handleSetFilter = (value) => {
+        setFilter(value);
+        setPage(0);
+    }
 
     useEffect(() => {
-        setFilter('')
+        clear();
     }, [type]);
 
     const {
         data,
         isLoading,
-        isSuccess,
-        isError,
-        error
+        // isSuccess,
+        // isError,
+        // error
     } = useGetResourcesQuery({ type })
 
 
     if (isLoading) return <Loading />
-
 
     const onSelectRow = (e) => {
         if (isResourceSelected(e, selectedResources)) {
@@ -59,30 +76,28 @@ const ResourcseSelectionDialog = ({ open, handleClose, resourceTypes }) => {
     }
 
     const visableResources = data.filter(e => filterResource(e, filter));
-
     const visableSelectedResources = visableResources.filter(e => selectedResources.includes(e));
     const numSelected = visableSelectedResources.length;
-
     const rowCount = visableResources.length;
-
-
+    const showPegination = rowCount > ROWS_PER_PAGE;
+    const isFertilizer = type === FERTILIZER;
+    const isVariety = type === VARIETY;
+    
     const onSelectAllClick = (e) => {
-        if(e.target.checked){
-            const visableSelectedResourceIDs = visableSelectedResources.map(f=>f.id);
-            const visableNotSelectedResources = visableResources.filter(f=>!visableSelectedResourceIDs.includes(f.id));
+        if (e.target.checked) {
+            const visableSelectedResourceIDs = visableSelectedResources.map(f => f.id);
+            const visableNotSelectedResources = visableResources.filter(f => !visableSelectedResourceIDs.includes(f.id));
             setSelectedResources(selectedResources.concat(visableNotSelectedResources));
         } else {
-            const visableResourceIDs = visableResources.map(f=>f.id);
-            setSelectedResources(selectedResources.filter(f=> !visableResourceIDs.includes(f.id)));
+            const visableResourceIDs = visableResources.map(f => f.id);
+            setSelectedResources(selectedResources.filter(f => !visableResourceIDs.includes(f.id)));
         }
     };
 
-
-
     const onAction = (save) => {
         handleClose(save ? selectedResources : null);
-        setSelectedResources([])
-        //handleClose(save);
+        setSelectedResources([]);
+        clear();
     }
 
     return (
@@ -114,7 +129,7 @@ const ResourcseSelectionDialog = ({ open, handleClose, resourceTypes }) => {
                     <TextFieldBase fullWidth={true} label={text.filter} value={filter}
                         sx={{ margin: 1 }}
                         id="outlined-filter-resource-type"
-                        onChange={(e) => setFilter(e.target.value)}
+                        onChange={(e) => handleSetFilter(e.target.value)}
                         InputProps={{
                             startAdornment: <InputAdornment position="start"><Search /></InputAdornment>,
                         }}
@@ -142,16 +157,26 @@ const ResourcseSelectionDialog = ({ open, handleClose, resourceTypes }) => {
                                 <TableCell sx={headerSx} >{text.name}</TableCell>
                                 <TableCell sx={headerSx}>{text.unit}</TableCell>
 
+                                {isFertilizer &&
+                                    <TableCell sx={headerSx}>{'N-P-K'}</TableCell>
+                                }
+                                {isFertilizer &&
+                                    <TableCell sx={headerSx}>{'SG'}</TableCell>
+                                }
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {visableResources.map((row, index) =>
-                                <Row key={index} index={index} row={row} text={text} onClick={() => onSelectRow(row, index)} isItemSelected={isResourceSelected(row, selectedResources)} />
+                            {visableResources.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) =>
+                                <Row key={index} index={index} row={row} text={text}
+                                    onClick={() => onSelectRow(row, index)}
+                                    isItemSelected={isResourceSelected(row, selectedResources)}
+                                    user={user} isFertilizer={isFertilizer} isVariety={isVariety} />
                             )}
                         </TableBody>
                     </Table>
                 </TableContainer>
-
+                {showPegination && <ListPager bottom={50} dir={dir} page={Number(page)}
+                    totalPages={Math.ceil(visableResources.length / ROWS_PER_PAGE)} setPage={setPage} />}
             </DialogContent>
             <DialogActions sx={{ justifyContent: 'center' }}>
                 <Button size='large' variant='outlined' onClick={() => onAction(false)}>{text.cancel}</Button>
@@ -164,7 +189,7 @@ const ResourcseSelectionDialog = ({ open, handleClose, resourceTypes }) => {
 
 }
 function Row(props) {
-    const { row, index, text, onClick, isItemSelected } = props;
+    const { row, index, text, onClick, isItemSelected, user, isFertilizer, isVariety } = props;
     return (
         <Fragment>
             <TableRow style={{
@@ -182,8 +207,10 @@ function Row(props) {
                     />
                 </TableCell>
                 <TableCell sx={cellSx} >{row.name}</TableCell>
-                <TableCell sx={cellSx}>{row.usageUnit}</TableCell>
-
+                <TableCell sx={cellSx}>{getUnitText(row.usageUnit, user.areaUnit, text)}</TableCell>
+                {isFertilizer && <TableCell sx={cellSx} >{`${row.n}-${row.p}-${row.k} `}</TableCell>}
+                {isFertilizer && <TableCell sx={cellSx} >{row.specificGravity}</TableCell>}
+                {isVariety && <TableCell sx={cellSx} >{row.identification}</TableCell>}
             </TableRow>
         </Fragment>
     );

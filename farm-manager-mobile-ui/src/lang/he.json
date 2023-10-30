@@ -52,6 +52,8 @@
     "worker_group": "קב' עובדים",
     "equipment": "ציוד",
     "sprayer": "מרסס",
+    "compost": "זבל אורגני",
+    "energy": "אנרגיה",
     "product": "מוצר",
     "year": "שנה",
     "days": "ימים",
@@ -104,5 +106,6 @@
     "deleteFormBody": "הנתונים ימחקו לצמיתות",
     "recordUpdated": "הרשומה עודכנה",
     "recordCreated": "רשומה חדשה נוצרה",
-    "recordDeleted": "הרשומה נמחקה"
+    "recordDeleted": "הרשומה נמחקה",
+    "kwh": "קוט\"ש"
 }

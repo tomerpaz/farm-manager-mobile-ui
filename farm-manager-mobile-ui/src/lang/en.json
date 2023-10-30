@@ -52,6 +52,8 @@
     "worker_group": "Worker Group",
     "equipment": "Equipment",
     "sprayer": "Sprayer",
+    "compost": "Compostי",
+    "energy": "Energy",
     "product": "Product",
     "year": "Year",
     "days": "Days",
@@ -104,6 +106,8 @@
     "deleteFormBody":"Data will be deleted permanently",
     "recordUpdated": "Record Updated",
     "recordCreated": "Record Created",
-    "recordDeleted": "Record deleted"
+    "recordDeleted": "Record deleted",
+    "kwh": "Kwh"
+
   }
   

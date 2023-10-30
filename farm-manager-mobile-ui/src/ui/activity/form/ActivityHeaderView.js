@@ -1,16 +1,12 @@
-import { HighlightOffRounded, KeyboardBackspaceOutlined } from '@mui/icons-material'
-import { Avatar, Box, Divider, IconButton, Typography, Button, Autocomplete, Select, MenuItem, TextField } from '@mui/material'
-import React, { Fragment, useState } from 'react'
+import { Avatar, Box, Typography, Autocomplete, MenuItem, TextField } from '@mui/material'
+import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
-// import { useNavigate } from 'react-router-dom'
 import { selectLang } from '../../../features/app/appSlice'
 import ActivityTypeIcon from '../../../icons/ActivityTypeIcon'
-import { ACTIVITY_DEF_TYPES, CUSTOMER_TYPES, GENERAL, GENERAL_PLAN, getActivityTypeText, getWinds, getYearArray, HARVEST, IRRIGARION_TYPES, IRRIGATION, IRRIGATION_PLAN, MARKET, parseDate, SPRAY, SPRAY_PLAN, SPRAY_TYPES } from '../../FarmUtil'
-import { DatePicker, MobileDatePicker, TimePicker } from '@mui/x-date-pickers';
+import { CUSTOMER_TYPES, GENERAL, GENERAL_PLAN, getActivityTypeText, getWinds, getYearArray, HARVEST, IRRIGARION_TYPES, IRRIGATION, IRRIGATION_PLAN, MARKET, SPRAY, SPRAY_PLAN } from '../../FarmUtil'
+import { DatePicker, TimePicker } from '@mui/x-date-pickers';
 import { Controller } from 'react-hook-form'
 import TextFieldBase from '../../../components/ui/TextField'
-
-
 
 const HEADER_CONFIG = [
   { type: GENERAL, date: true, year: true, activity: true, activityType: GENERAL },
@@ -24,20 +20,10 @@ const HEADER_CONFIG = [
 ]
 
 const ActivityHeaderView = ({ activity, control, errors, customers, activityDefs, crops }) => {
-  // const navigate = useNavigate()
-
 
   const [crop, setCrop] = useState(null);
-
-
   const text = useSelector(selectLang)
-
-
   const config = HEADER_CONFIG.filter(e => activity.type === e.type)[0];
-
-
-
-  console.log('errors', errors.activityDef)
 
   return (
     <Box margin={1}>
@@ -58,8 +44,6 @@ const ActivityHeaderView = ({ activity, control, errors, customers, activityDefs
               id="outlined-select-year"
               select
               {...field}
-              // fullWidth
-
               size='small'
               label={text.year}
             >
@@ -87,9 +71,9 @@ const ActivityHeaderView = ({ activity, control, errors, customers, activityDefs
               }}
               // 
               slotProps={{
-                 textField: { size: 'small', variant: 'outlined', sx: { maxWidth: 150 } },
-                 actionBar: { actions: ["cancel" /*, "clear"*/] }
-                }}
+                textField: { size: 'small', variant: 'outlined', sx: { maxWidth: 150 } },
+                actionBar: { actions: ["cancel" /*, "clear"*/] }
+              }}
 
               {...field} />}
         />
@@ -120,23 +104,6 @@ const ActivityHeaderView = ({ activity, control, errors, customers, activityDefs
           />
         }
 
-
-
-        {/* <Autocomplete
-              disablePortal
-              options={activityDefs}
-              sx={{ width: 200 }}
-              size='small'
-              getOptionLabel={(option) => option ? option.name : ''}
-              // isOptionEqualToValue={(option, value) => value === undefined || option?.id?.toString() === (value?.id ?? value)?.toString()}
-              renderInput={(params) => <TextFieldBase {...params} label={text.activity} />}
-               />} */}
-
-
-
-
-        {/* <Typography variant='subtitle1' color="text.secondary">{parseDate(activity.execution)}</Typography>       */}
-
         {IRRIGARION_TYPES.includes(activity.type) && <Controller
           name="executionEnd"
           control={control}
@@ -146,12 +113,8 @@ const ActivityHeaderView = ({ activity, control, errors, customers, activityDefs
 
             {...field} />}
         />}
-        {/* {IRRIGARION_TYPES.includes(activity.type) && <Typography variant='subtitle1' color="text.secondary">{`${parseDate(activity.execution)} - ${parseDate(activity.executionEnd)}`}</Typography>} */}
-
       </Box>
       <Box display={'flex'} flex={1} alignItems={'center'} justifyContent={'space-between'} flexDirection={'row'} >
-        {/* {activity.year && <Typography variant="subtitle1" color="text.secondary">{activity.year}</Typography>} */}
-
         {config.crop &&
           <Autocomplete
             disablePortal
@@ -163,15 +126,8 @@ const ActivityHeaderView = ({ activity, control, errors, customers, activityDefs
             value={crop}
             sx={{ width: 150 }}
             renderInput={(params) => <TextFieldBase sx={{ marginTop: 0.5 }} {...params} label={text.crop} />}
-            // renderOption={(props, option) => (
-            //   <MenuItem key={option.id} value={option.id}>
-            //   {option.name}
-            // </MenuItem>
-            // )}
-
             renderOption={(props, option) => (
               <Box key={option.id} component="li" sx={{ '& > img': { mr: 2, flexShrink: 0 } }} {...props}>
-
                 {option.name}
               </Box>
             )}
@@ -201,30 +157,21 @@ const ActivityHeaderView = ({ activity, control, errors, customers, activityDefs
 
         {CUSTOMER_TYPES.includes(activity.type) &&
 
-
           <Controller
             name="customer.id"
             control={control}
-
             render={({ field: { ref, onChange, ...field } }) => <Autocomplete
               disablePortal
               onChange={(_, data) => onChange(data)}
               options={customers}
               sx={{ width: 300 }}
-              // fullWidth
               size='small'
               getOptionLabel={(option) => option ? option.name : ''}
               isOptionEqualToValue={(option, value) => (value === undefined) || option?.id?.toString() === (value?.id ?? value)?.toString()}
               renderInput={(params) => <TextFieldBase sx={{ marginTop: 0.5 }} {...params} label={text.cusomer} />}
               {...field} />}
           />}
-
-        {/* && <Typography variant="subtitle1" color="text.secondary">{activity.endHour}</Typography>} */}
-
-        {/* <Typography variant='subtitle1' color="text.secondary">{activity.execution}</Typography> */}
       </Box>
-      {/* <Divider /> */}
-
     </Box>)
 }
 
