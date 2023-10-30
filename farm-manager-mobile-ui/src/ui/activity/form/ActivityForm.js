@@ -1,4 +1,4 @@
-import { Alert, BottomNavigation, BottomNavigationAction, Box, Button, Snackbar, TextField, Typography } from '@mui/material'
+import { Alert, BottomNavigation, BottomNavigationAction, Box, Button, Divider, Snackbar, TextField, Typography } from '@mui/material'
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { selectLang, setSnackbar } from '../../../features/app/appSlice'
@@ -97,8 +97,10 @@ const ActivityForm = ({ activity }) => {
 
   }
   return (
-    <>
-      <form onSubmit={handleSubmit(onSubmit)}>
+
+    <Box sx={{ maxHeight: window.innerHeight - 130, overflow: 'auto' }}>
+      <Box margin={1}>      
+        <form onSubmit={handleSubmit(onSubmit)} >
         <ActivityHeaderView control={control} register={register} activity={activity} errors={errors} crops={crops} activityDefs={activityDefs} customers={customers} />
         <ActivityFields control={control} register={register} activity={activity} getValues={getValues} errors={errors} />
         <ActivityResources control={control} register={register} activity={activity} errors={errors} />
@@ -114,7 +116,7 @@ const ActivityForm = ({ activity }) => {
             )}
           />
         </Box>
-        <BottomNavigation sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} value={-1}
+        <BottomNavigation sx={{ position: 'fixed', bottom: 0, left: 0, right: 0, paddingTop: 2, borderTop: 1, borderTopColor: 'lightGray', backgroundColor: 'white', zIndex: 1000 }} value={-1}
           showLabels>
           {activity.editable && <BottomNavigationAction disabled={!isDirty} sx={{ color: !isDirty ? 'lightGray' : null }}
             type="submit"
@@ -136,7 +138,9 @@ const ActivityForm = ({ activity }) => {
         <ActionApprovalDialog open={deleteOpen} handleClose={handleDelete}
           title={text.deleteFormTitle} body={text.deleteFormBody} okText={text.delete} cancelText={text.cancel} />
       </form>
-    </>
+      </Box>
+    </Box>
+
   );
 };
 export default ActivityForm

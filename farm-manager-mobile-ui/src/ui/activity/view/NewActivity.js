@@ -26,7 +26,7 @@ const NewActivity = () => {
   const activity = { type, plan: isPlan, execution: newDate(), activityDef: null, year: user.year, wind, customer: null, fields, resources: [], note: '', invoice: '', editable: true };
 
   return (
-    <Box margin={1}>
+    <Box >
       <ActivityForm activity={activity} />
     </Box>
   )

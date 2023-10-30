@@ -37,7 +37,7 @@ const ActivityView = () => {
       act.year = activity.year ? activity.year : act.execution.getFullYear();
 
       return (
-        <Box margin={1}>         
+        <Box>         
           <ActivityForm activity={act} />
         </Box>
       )
