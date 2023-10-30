@@ -76,9 +76,8 @@ const FieldHistory = () => {
     <Box>
       <List sx={{ height, overflow: 'auto', width: '100%', bgcolor: 'background.paper' }}>
         {renderRows()}
-
       </List>
-      <ListPager bottom={70} dir={dir} page={Number(page)} totalPages={data.totalPages} setPage={(value) => navigate(`/field/${src}/${fieldId}/history/${value}`)} />
+      <ListPager bottom={70} page={Number(page)} totalPages={data.totalPages} setPage={(value) => navigate(`/field/${src}/${fieldId}/history/${value}`)} />
       <ActivitiesFilter />
     </Box>
   )

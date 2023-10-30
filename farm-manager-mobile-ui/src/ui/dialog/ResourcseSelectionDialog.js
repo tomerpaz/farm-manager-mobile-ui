@@ -182,7 +182,7 @@ const ResourcseSelectionDialog = ({ open, handleClose, resourceTypes }) => {
                         </TableBody>
                     </Table>
                 </TableContainer>
-                {showPegination && <ListPager bottom={50} dir={dir} page={Number(page)}
+                {showPegination && <ListPager bottom={50} page={Number(page)}
                     totalPages={Math.ceil(visableResources.length / ROWS_PER_PAGE)} setPage={setPage} />}
         
             </DialogContent>

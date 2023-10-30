@@ -57,7 +57,6 @@ function App() {
   const sevirity = useSelector(selectSnackbarSeverity)
 
   const dispatch = useDispatch()
-
   
   // const dir = 'ltr'//;'rtl'
   document.body.dir = dir;

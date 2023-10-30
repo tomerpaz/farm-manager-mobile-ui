@@ -31,14 +31,14 @@ const ActivityView = () => {
 
     if (GENERAL === activity.type) {
       console.log(activity)
-      const act = {...activity}
+      const act = { ...activity}
       act.execution = parseISO(activity.execution);
       act.note = act.note? act.note : '';
       act.invoice = act.invoice? act.invoice : ''
+      act.year = activity.year ? activity.year : act.execution.getFullYear();
 
       return (
-        <Box margin={1}>
-         
+        <Box margin={1}>         
           <ActivityForm activity={act} />
         </Box>
       )
