@@ -23,14 +23,13 @@ const ActivityView = () => {
 
   const { data: activity, isLoading, isSuccess, isError, error } = useGetActivityByIdQuery(activityId)
 
-  console.log('data', activity);
   if (isLoading) return <Loading />
 
   if (activity && isSuccess) {
 
 
     if (GENERAL === activity.type) {
-      console.log(activity)
+      // console.log(activity)
       const act = { ...activity}
       act.execution = parseISO(activity.execution);
       act.note = act.note? act.note : '';

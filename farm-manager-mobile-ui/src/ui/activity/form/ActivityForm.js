@@ -40,9 +40,11 @@ const ActivityForm = ({ activity }) => {
     error
   } = useGetResourcesQuery({ type: CUSTOMER })
 
-  const { control, register, handleSubmit, getValues, formState: { errors }, setValue } = useForm({ defaultValues: activity, });
+  const { control, register, handleSubmit, getValues, formState: { errors },
+    formState: { isDirty, dirtyFields },
+  } = useForm({ defaultValues: activity, });
 
-  // console.log('errors', errors);
+  console.log('isDirty', isDirty);
 
   if (!isCropsSuccess || !isActivityDefsSuccess || !isCustomersSuccess) {
     return <Loading />
@@ -65,7 +67,7 @@ const ActivityForm = ({ activity }) => {
     if (value) {
       deleteActivity(activity.uuid);
       navigate(-1)
-      dispatch(setSnackbar({msg: text.recordDeleted}))
+      dispatch(setSnackbar({ msg: text.recordDeleted }))
 
     }
   }
@@ -75,7 +77,7 @@ const ActivityForm = ({ activity }) => {
 
     try {
       const result = await saveActivity(data);
-      dispatch(setSnackbar({msg: data.uuid ? text.recordUpdated : text.recordCreated, severity: 'success'}))
+      dispatch(setSnackbar({ msg: data.uuid ? text.recordUpdated : text.recordCreated, severity: 'success' }))
       navigate(-1)
     } catch (err) {
 
@@ -114,16 +116,14 @@ const ActivityForm = ({ activity }) => {
         </Box>
         <BottomNavigation sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} value={-1}
           showLabels>
-          {activity.editable && <BottomNavigationAction /*sx={{ color: 'lightGray' }}*/
+          {activity.editable && <BottomNavigationAction disabled={!isDirty} sx={{ color: !isDirty ? 'lightGray' : null }}
             type="submit"
-
-            label={<Typography>{text.save}</Typography>}
+            label={<Typography >{text.save}</Typography>}
             icon={<Save fontSize='large' />}
           />}
           {activity.editable && activity.uuid && <BottomNavigationAction
             label={<Typography>{text.delete}</Typography>}
-            onClick={()=>setDeleteOpen(true)}
-            // to={`/field/${src}/${fieldId}/dash`} component={Link}
+            onClick={() => setDeleteOpen(true)}
             icon={<Delete fontSize='large' />}
           />}
           <BottomNavigationAction
@@ -132,12 +132,9 @@ const ActivityForm = ({ activity }) => {
             // to={`/field/${src}/${fieldId}/dash`} component={Link}
             icon={<Cancel fontSize='large' />}
           />
-
         </BottomNavigation>
-        <ActionApprovalDialog open={deleteOpen} handleClose={ handleDelete } 
-        title={text.deleteFormTitle} body={text.deleteFormBody} okText={text.delete} cancelText={text.cancel} />
-
-        
+        <ActionApprovalDialog open={deleteOpen} handleClose={handleDelete}
+          title={text.deleteFormTitle} body={text.deleteFormBody} okText={text.delete} cancelText={text.cancel} />
       </form>
     </>
   );
