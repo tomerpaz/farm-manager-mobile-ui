@@ -50,9 +50,10 @@ const ActivityResourceDialog = ({ selectedRow, selectedIndex, handleClose, updat
                             }
                             </InputAdornment>,
                         }}
+                        fullWidth={!user.financial}
                     />
-                    <Box margin={1}></Box>
-                    <TextFieldBase value={tariff} onChange={e => setTariff(Number(e.target.value))}
+                    {user.financial && <Box margin={1}></Box>}
+                    {user.financial && <TextFieldBase value={tariff} onChange={e => setTariff(Number(e.target.value))}
                         type='number' label={text.unitCost}
                         InputProps={{
                             endAdornment: <InputAdornment position="end">{
@@ -60,7 +61,7 @@ const ActivityResourceDialog = ({ selectedRow, selectedIndex, handleClose, updat
                             }
                             </InputAdornment>,
                         }}
-                    />
+                    />}
                 </Box>
                 <Box margin={1}></Box>
                 {isWarehouse &&

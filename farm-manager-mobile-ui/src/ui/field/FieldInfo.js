@@ -20,7 +20,7 @@ const FieldInfo = ({ field }) => {
 
 
 
-    const height = (window.window.innerHeight - 120) / 2;
+    const height = (window.innerHeight - 120) / 2;
 
     const src = 'map'
     return (

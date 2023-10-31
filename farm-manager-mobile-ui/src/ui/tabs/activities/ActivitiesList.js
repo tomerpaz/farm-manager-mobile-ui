@@ -10,13 +10,11 @@ import { useNavigate, useParams } from 'react-router-dom';
 import ActivitiesFilter from '../../../components/filters/ActivitiesFilter';
 import { activityDescription, buildActiviyFilter, parseDate } from '../../FarmUtil';
 
-
-
 const ActivitiesList = ({ plans }) => {
     const { page } = useParams()
     const navigate = useNavigate();
 
-    const height = window.window.innerHeight - 180;
+    const height = window.innerHeight - 180;
     const maxResult = 20;
     const isPlan = plans;
     const orderBy = 'execution';

@@ -1,12 +1,11 @@
-import { Alert, BottomNavigation, BottomNavigationAction, Box, Button, Divider, Snackbar, TextField, Typography } from '@mui/material'
+import { BottomNavigation, BottomNavigationAction, Box, TextField, Typography } from '@mui/material'
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { selectLang, setSnackbar } from '../../../features/app/appSlice'
-import { parseDate } from '../../FarmUtil'
+import { asLocalDate, parseDate } from '../../FarmUtil'
 import ActivityHeaderView from './ActivityHeaderView'
 import { useForm, Controller } from "react-hook-form";
-import TextFieldBase from '../../../components/ui/TextField'
-import { Cancel, Delete, HighlightOffRounded, Save } from '@mui/icons-material'
+import { Cancel, Delete, Save } from '@mui/icons-material'
 import { useNavigate, useParams } from 'react-router-dom'
 import ActivityFields from './ActivityFields'
 import ActivityResources from './ActivityResources'
@@ -16,7 +15,8 @@ import { CUSTOMER, useGetResourcesQuery } from '../../../features/resources/reso
 import Loading from '../../../components/Loading'
 import { useGetActivityDefsQuery } from '../../../features/activityDefs/activityDefsApiSlice'
 import ActionApprovalDialog from '../../../components/ui/ActionApprovalDialog'
-import { useGetWarehousesQuery } from '../../../features/warehouses/cropsApiSlice'
+import { useGetResourcesTariffQuery } from '../../../features/tariff/tariffApiSlice'
+import { useGetUserDataQuery } from '../../../features/auth/authApiSlice'
 
 const ActivityForm = ({ activity }) => {
 
@@ -26,13 +26,16 @@ const ActivityForm = ({ activity }) => {
   const [createActivity] = useCreateActivityMutation();
   const [updateActivity] = useUpdateActivityMutation()
   const [deleteActivity] = useDeleteActivityMutation()
+  const { data: user } = useGetUserDataQuery()
 
   const { data: activityDefs, isSuccess: isActivityDefsSuccess } = useGetActivityDefsQuery()
   const { data: crops, isSuccess: isCropsSuccess } = useGetCropsQuery()
 
   const [deleteOpen, setDeleteOpen] = useState(false);
   const dispatch = useDispatch()
+  const [fetchTariffs, setFetchTariffs] = useState(false);
 
+  
   const {
     data: customers,
     // isLoading,
@@ -41,10 +44,17 @@ const ActivityForm = ({ activity }) => {
     error
   } = useGetResourcesQuery({ type: CUSTOMER })
 
+
   const { control, register, handleSubmit, getValues, formState: { errors },
     formState: { isDirty, dirtyFields },
   } = useForm({ defaultValues: activity, });
 
+  const { data: tariffs } = useGetResourcesTariffQuery({
+    activityType: activity.type,
+    date: asLocalDate(activity.execution),
+  }, { skip: !fetchTariffs });
+
+  console.log('tariffs',user,tariffs,fetchTariffs,activity.type,asLocalDate(activity.execution))
 
   if (!isCropsSuccess || !isActivityDefsSuccess || !isCustomersSuccess) {
     return <Loading />
@@ -96,45 +106,45 @@ const ActivityForm = ({ activity }) => {
   return (
 
     <Box sx={{ maxHeight: window.innerHeight - 130, overflow: 'auto' }}>
-      <Box margin={1}>      
+      <Box margin={1}>
         <form onSubmit={handleSubmit(onSubmit)} >
-        <ActivityHeaderView control={control} register={register} activity={activity} errors={errors} crops={crops} activityDefs={activityDefs} customers={customers} />
-        <ActivityFields control={control} register={register} activity={activity} getValues={getValues} errors={errors} />
-        <ActivityResources control={control} register={register} activity={activity} errors={errors} />
-        <Box padding={1}>
-          <Controller
-            control={control}
-            name="note"
-            render={({ field }) => (
-              <TextField
-                id="activity-note"
-                size='small'
-                label={text.note} fullWidth multiline rows={4} {...field} />
-            )}
-          />
-        </Box>
-        <BottomNavigation sx={{ position: 'fixed', bottom: 0, left: 0, right: 0, paddingTop: 2, borderTop: 1, borderTopColor: 'lightGray', backgroundColor: 'white', zIndex: 1000 }} value={-1}
-          showLabels>
-          {activity.editable && <BottomNavigationAction disabled={!isDirty} sx={{ color: !isDirty ? 'lightGray' : null }}
-            type="submit"
-            label={<Typography >{text.save}</Typography>}
-            icon={<Save fontSize='large' />}
-          />}
-          {activity.editable && activity.uuid && <BottomNavigationAction
-            label={<Typography>{text.delete}</Typography>}
-            onClick={() => setDeleteOpen(true)}
-            icon={<Delete fontSize='large' />}
-          />}
-          <BottomNavigationAction
-            label={<Typography>{text.cancel}</Typography>}
-            onClick={() => navigate(-1)}
-            // to={`/field/${src}/${fieldId}/dash`} component={Link}
-            icon={<Cancel fontSize='large' />}
-          />
-        </BottomNavigation>
-        <ActionApprovalDialog open={deleteOpen} handleClose={handleDelete}
-          title={text.deleteFormTitle} body={text.deleteFormBody} okText={text.delete} cancelText={text.cancel} />
-      </form>
+          <ActivityHeaderView control={control} register={register} activity={activity} errors={errors} crops={crops} activityDefs={activityDefs} customers={customers} />
+          <ActivityFields control={control} register={register} activity={activity} getValues={getValues} errors={errors} />
+          <ActivityResources control={control} register={register} activity={activity} errors={errors}/>
+          <Box padding={1}>
+            <Controller
+              control={control}
+              name="note"
+              render={({ field }) => (
+                <TextField
+                  id="activity-note"
+                  size='small'
+                  label={text.note} fullWidth multiline rows={4} {...field} />
+              )}
+            />
+          </Box>
+          <BottomNavigation sx={{ position: 'fixed', bottom: 0, left: 0, right: 0, paddingTop: 2, borderTop: 1, borderTopColor: 'lightGray', backgroundColor: 'white', zIndex: 1000 }} value={-1}
+            showLabels>
+            {activity.editable && <BottomNavigationAction disabled={!isDirty} sx={{ color: !isDirty ? 'lightGray' : null }}
+              type="submit"
+              label={<Typography >{text.save}</Typography>}
+              icon={<Save fontSize='large' />}
+            />}
+            {activity.editable && activity.uuid && <BottomNavigationAction
+              label={<Typography>{text.delete}</Typography>}
+              onClick={() => setDeleteOpen(true)}
+              icon={<Delete fontSize='large' />}
+            />}
+            <BottomNavigationAction
+              label={<Typography>{text.cancel}</Typography>}
+              onClick={() => navigate(-1)}
+              // to={`/field/${src}/${fieldId}/dash`} component={Link}
+              icon={<Cancel fontSize='large' />}
+            />
+          </BottomNavigation>
+          <ActionApprovalDialog open={deleteOpen} handleClose={handleDelete}
+            title={text.deleteFormTitle} body={text.deleteFormBody} okText={text.delete} cancelText={text.cancel} />
+        </form>
       </Box>
     </Box>
 

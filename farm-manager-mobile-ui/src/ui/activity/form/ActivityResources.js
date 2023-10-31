@@ -9,7 +9,7 @@ import ResourcseSelectionDialog from "../../dialog/ResourcseSelectionDialog"
 import { Controller, useFieldArray } from "react-hook-form"
 import { Delete, Menu } from "@mui/icons-material"
 import ActivityResourceDialog from "./ActivityResourceDialog"
-import { useGetWarehousesQuery } from "../../../features/warehouses/cropsApiSlice"
+import { useGetWarehousesQuery } from "../../../features/warehouses/warehouseApiSlice"
 
 const TRASHHOLD = 3;
 
@@ -33,7 +33,7 @@ const ActivityResources = ({ activity, control, errors, register }) => {
         setSelectedIndex(null);
     };
 
-    const { fields, append, prepend, remove, swap, move, insert, update,  } = useFieldArray({
+    const { fields, append, prepend, remove, swap, move, insert, update, } = useFieldArray({
         control, // control props comes from useForm (optional: if you are using FormContext)
         name: "resources", // unique name for your Field Array
         keyName: "key",
@@ -49,7 +49,6 @@ const ActivityResources = ({ activity, control, errors, register }) => {
         setOpen(false);
         if (selectedResources) {
             const alreadySelectedIDs = fields.map(e => e.resource.id);
-    //        console.log('alreadySelectedIDs', alreadySelectedIDs)
             const newtlySelectedResources = selectedResources.filter(e => !alreadySelectedIDs.includes(e.id)).map(e => {
                 return {
                     resource: e,
@@ -82,12 +81,12 @@ const ActivityResources = ({ activity, control, errors, register }) => {
             <Box display={'flex'} flex={1} justifyContent={'space-between'} alignItems={'center'}>
                 <Button size='large' color={errors.resources ? 'error' : 'primary'} disableElevation={true} variant="contained" onClick={handleClickOpen}>{text.resources} </Button>
                 {fields.length > TRASHHOLD &&
-                        <IconButton sx={{ marginLeft: 1, marginRight: 1 }} onClick={() => setExpendFields(!expendFields)}>
-                            <Badge badgeContent={fields.length} color="primary">
-                                <Menu fontSize='large' />
-                            </Badge>
-                        </IconButton>
-                    }
+                    <IconButton sx={{ marginLeft: 1, marginRight: 1 }} onClick={() => setExpendFields(!expendFields)}>
+                        <Badge badgeContent={fields.length} color="primary">
+                            <Menu fontSize='large' />
+                        </Badge>
+                    </IconButton>
+                }
                 <Box margin={1}></Box>
                 <Controller
                     control={control}
@@ -110,49 +109,47 @@ const ActivityResources = ({ activity, control, errors, register }) => {
                             <TableCell sx={headerSx} >{text.type}</TableCell>
                             <TableCell sx={headerSx}>{text.qty}</TableCell>
                             <TableCell sx={headerSx}>{text.unit}</TableCell>
-                            <TableCell sx={headerSx}>{text.cost}</TableCell>
-
-                            {/* <TableCell sx={headerSx}>{text.variety}</TableCell>
-                            <TableCell sx={headerSx}>{text[user.areaUnit]}</TableCell> */}
+                            {user.financial && <TableCell sx={headerSx}>{text.cost}</TableCell>}
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {getFields().map((row, index) =>
-                            <Row key={row.key} index={index} row={row} text={text} areaUnit={user.areaUnit} register={register} 
-                            remove={remove} 
-                            currency={user.currency} activityDef={activity.activityDef}
-                            onClick={()=>handleOpenEditRow(index, row)}/>
+                            <Row key={row.key} index={index} row={row} text={text} areaUnit={user.areaUnit} register={register}
+                                remove={remove}
+                                currency={user.currency} activityDef={activity.activityDef}
+                                financial={user.financial}
+                                onClick={() => handleOpenEditRow(index, row)} />
                         )}
                     </TableBody>
                 </Table>
             </TableContainer>
 
             <ResourcseSelectionDialog open={open} handleClose={handleClose} resourceTypes={resourceTypes} />
-            {selectedRow && <ActivityResourceDialog selectedIndex={selectedIndex} selectedRow={selectedRow} activityType={activity.type} handleClose={handleCloseEditRow} update={update} warehouses={warehouses} control={control} errors={errors} />}
+            {selectedRow && <ActivityResourceDialog selectedIndex={selectedIndex} selectedRow={selectedRow}
+                activityType={activity.type} handleClose={handleCloseEditRow} update={update}
+                warehouses={warehouses} control={control} errors={errors} />}
 
         </Box>
     )
 }
 function Row(props) {
-    const { row, index, text, areaUnit, onClick, currency, remove, register } = props;
+    const { row, index, text, areaUnit, onClick, currency, remove, register, financial } = props;
     return (
         <Fragment>
-            <TableRow 
-            {...register(`resource.${index}.totalCost`)}
-            {...register(`resource.${index}.qty`)}
-            {...register(`resource.${index}.note`)}
-            {...register(`resource.${index}.warehouse`)}
+            <TableRow
+                {...register(`resource.${index}.totalCost`)}
+                {...register(`resource.${index}.qty`)}
+                {...register(`resource.${index}.note`)}
+                {...register(`resource.${index}.warehouse`)}
 
                 key={index}
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                <TableCell  onClick={onClick} sx={cellSxLink} >{row.resource.name}</TableCell>
+                <TableCell onClick={onClick} sx={cellSxLink} >{row.resource.name}</TableCell>
                 <TableCell onClick={onClick} sx={cellSx} >{getResourceTypeText(row.resource.type, text)}</TableCell>
                 <TableCell onClick={onClick} sx={cellSx}>{row.qty}</TableCell>
                 <TableCell onClick={onClick} sx={cellSx}>{getUnitText(row.resource.usageUnit, areaUnit, text)}</TableCell>
-                <TableCell onClick={onClick} sx={cellSx}>{row.totalCost}</TableCell>
+                {financial && <TableCell onClick={onClick} sx={cellSx}>{row.totalCost}</TableCell>}
                 <TableCell width={1} sx={{ padding: 0, margin: 0 }}><IconButton margin={0} padding={0} onClick={e => remove(index)}><Delete fontSize='large' /></IconButton></TableCell>
-
-                {/* getUnitText = (unit, areaUnit, text) */}
             </TableRow>
         </Fragment>
     );

@@ -14,7 +14,7 @@ const FieldHistory = () => {
   const { fieldId, page, src } = useParams()
   const navigate = useNavigate();
 
-  const height = window.window.innerHeight - 275;
+  const height = window.innerHeight - 275;
 
   const maxResult = 20;
   const isPlan = false;

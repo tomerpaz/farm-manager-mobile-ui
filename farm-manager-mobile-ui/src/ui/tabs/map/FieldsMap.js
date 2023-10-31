@@ -75,7 +75,7 @@ const FieldsMap = (props) => {
 
     let navigate = useNavigate();
 
-    const height = window.window.innerHeight - 110;
+    const height = window.innerHeight - 110;
 
     return (
         <Box display={'flex'} flex={1} alignItems={'stretch'} flexDirection={'column'} justifyContent={'space-between'}>

@@ -21,7 +21,7 @@ import { useGetUserDataQuery } from '../../features/auth/authApiSlice';
 import { displayFieldArea, displayFieldName, getBottomNavigationSx, maxLenghtStr, parseDate } from '../FarmUtil';
 import { useEffect } from 'react';
 
-const height = (window.window.innerHeight - 100);
+const height = (window.innerHeight - 100);
 
 const Field = () => {
   const dispatch = useDispatch()

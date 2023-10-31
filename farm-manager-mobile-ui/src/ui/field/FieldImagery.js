@@ -73,7 +73,7 @@ const FieldImagery = ({ field }) => {
 
     // console.log('tile', tile)
 
-    const height = (window.window.innerHeight - 350);
+    const height = (window.innerHeight - 350);
     const dir = text.dir
 
     return (
