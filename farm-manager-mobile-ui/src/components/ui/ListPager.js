@@ -5,14 +5,13 @@ import { selectLang } from '../../features/app/appSlice'
 import { useSelector } from 'react-redux'
 
 const ListPager = ({bottom, page, totalPages, setPage }) => {
-    
 
     const { dir } = useSelector(selectLang)
 
     return (
-        <Box 
-        sx={{ position: 'fixed', zIndex:10000, bottom: bottom, left: 0, right: 0,  backgroundColor: 'white' }}
-        margin={1} display={'flex'} flex={1} alignItems={'center'} justifyContent={'space-between'} paddingTop={1}
+        <Box
+        sx={{ position: 'fixed', zIndex:10000, bottom: bottom, left: 0, right: 0, borderTop: 1, borderTopColor: 'lightGray',  backgroundColor: 'white' }}
+       padding={1} display={'flex'} flex={1} alignItems={'center'} justifyContent={'space-between'} paddingTop={1}
         >
             <Button size='large' disabled={totalPages === 0 || page === 0} onClick={() => setPage(page - 1)} color='secondary' variant="outlined" disableElevation>
                 {dir === 'rtl' ? <ChevronRightOutlined /> : <ChevronLeftOutlined />}

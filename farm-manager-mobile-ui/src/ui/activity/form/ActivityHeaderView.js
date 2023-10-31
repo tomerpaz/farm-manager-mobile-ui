@@ -26,7 +26,7 @@ const ActivityHeaderView = ({ activity, control, errors, customers, activityDefs
   const config = HEADER_CONFIG.filter(e => activity.type === e.type)[0];
 
   return (
-    <Box margin={1}>
+    <Box margin={1} paddingTop={1}>
       <Box display={'flex'} flex={1} alignItems={'center'} justifyContent={'space-between'} flexDirection={'row'} >
         <Box flex={1} display={'flex'} flexDirection={'row'} alignItems={'center'} >
           <Typography variant='h6'>{getActivityTypeText(activity.type, text)}</Typography>

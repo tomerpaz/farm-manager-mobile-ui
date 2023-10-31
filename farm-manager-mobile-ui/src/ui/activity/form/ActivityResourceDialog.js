@@ -1,32 +1,20 @@
-import { Avatar, Box, Button, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, InputAdornment, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
+import { Autocomplete, Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, InputAdornment, Typography } from "@mui/material";
 import TextFieldBase from "../../../components/ui/TextField";
 import { useSelector } from "react-redux";
 import { selectLang } from "../../../features/app/appSlice";
-import { Fragment, useState } from "react";
-import { cellSx, headerSx } from "../view/FieldsView";
+import { useState } from "react";
 import { useGetUserDataQuery } from "../../../features/auth/authApiSlice";
-import { Search } from "@mui/icons-material";
-import { asLocalDate, getActivityTypeText, getUnitText, isStringEmpty, parseISOOrNull } from "../../FarmUtil";
-import { DatePicker } from "@mui/x-date-pickers";
-import { getFruitIcon } from "../../../icons/FruitIconUtil";
-import ActivityTypeIcon from "../../../icons/ActivityTypeIcon";
+import { WAREHOUSE_RESOURCE_TYPE, getResourceTypeText, getUnitText } from "../../FarmUtil";
 
-
-
-
-
-const ActivityResourceDialog = ({ selectedRow, selectedIndex, handleClose, activityType, update }) => {
+const ActivityResourceDialog = ({ selectedRow, selectedIndex, handleClose, update, warehouses }) => {
     const text = useSelector(selectLang);
     const { data: user } = useGetUserDataQuery()
-
     const [note, setNote] = useState(selectedRow.note ? selectedRow.note : '');
     const [qty, setQty] = useState(selectedRow.qty);
-    const [tariff, setTariff] = useState(selectedRow.tariff);
+    const [tariff, setTariff] = useState(selectedRow.tariff ? selectedRow.tariff : 0);
+    const [warehouse, setWarehouse] = useState(selectedRow.warehouse);
 
     const [manualTariff, setManualTariff] = useState(selectedRow.manualTariff);
-
-    // const [actualExecution, setActualExecution] = useState(selectedRow.actualExecution);
-
 
     const onAction = (save) => {
         if (save) {
@@ -34,35 +22,26 @@ const ActivityResourceDialog = ({ selectedRow, selectedIndex, handleClose, activ
             selectedRow.note = note;
             selectedRow.tariff = tariff;
             selectedRow.totalCost = tariff * qty;
-
-            // selectedRow.actualExecution = actualExecution;
+            selectedRow.warehouse = warehouse;
             update(selectedIndex, selectedRow);
         }
         handleClose(save);
     }
 
+    const isWarehouse = WAREHOUSE_RESOURCE_TYPE.includes(selectedRow.resource.type);
     return (
         <Dialog
             open={selectedRow !== null}
             onClose={handleClose}
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
-        // fullScreen
+
         >
             <DialogTitle id="alert-dialog-title">
-                {/* <Box flex={1} display={'flex'} flexDirection={'row'} alignItems={'center'} >
-                    <Typography component={'div'} variant='h6'>{getActivityTypeText(activityType, text)}</Typography>
-                    <Avatar sx={{ backgroundColor: 'white' }}>
-                        {getFruitIcon(selectedRow.field.cropEngName)}
-                    </Avatar>
-                </Box>
-                <Typography component={'div'} variant="h5">  {selectedRow.field.name} / {selectedRow.field.alias}</Typography>
-                <Typography component={'div'} variant="h6"> {selectedRow.field.cropName} / {selectedRow.field.varietyName}
-                </Typography> */}
-
+                <Typography component={'div'} variant="h5">{`${getResourceTypeText(selectedRow.resource.type, text)}:  ${selectedRow.resource.name}`}</Typography>
             </DialogTitle>
-            <DialogContent>
-                <Box display={'flex'} flex={1} flexDirection={'row'} alignItems={'center'}>
+            <DialogContent sx={{ minHeight: 400 }}>
+                <Box display={'flex'} flex={1} flexDirection={'row'} alignItems={'center'} >
                     <TextFieldBase value={qty} onChange={e => setQty(Number(e.target.value))}
                         type='number' label={text.qty}
                         InputProps={{
@@ -82,24 +61,21 @@ const ActivityResourceDialog = ({ selectedRow, selectedIndex, handleClose, activ
                             </InputAdornment>,
                         }}
                     />
-                    {/* <Box margin={1}></Box> */}
-                    {/* <DatePicker
-                        label={text.executed}
-                        closeOnSelect
-                        localeText={{
-                            cancelButtonLabel: text.cancel,
-                            clearButtonLabel: text.clear
-                        }}
-
-                        showToolbar={false}
-                        value={actualExecution}
-                        onChange={(e) => setActualExecution(e)}// asLocalDate(e, true)}
-                        slotProps={{
-                            textField: { size: 'small', variant: 'outlined', sx: { marginTop: 0.5 } },
-                            actionBar: { actions: ["cancel", "clear"] }
-                        }}
-                    />  */}
                 </Box>
+                <Box margin={1}></Box>
+                {isWarehouse &&
+                    <Autocomplete
+                        disablePortal
+                        value={warehouse}
+                        onChange={(_, data) => setWarehouse(data)}
+                        options={warehouses.filter(e => e.active)}
+                        fullWidth
+                        size='small'
+                        getOptionLabel={(option) => option ? option.name : ''}
+                        isOptionEqualToValue={(option, value) => (value === undefined) || option?.id?.toString() === (value?.id ?? value)?.toString()}
+                        renderInput={(params) => <TextFieldBase sx={{ marginTop: 0.5 }} {...params}
+                            label={text.warehouse} />}
+                    />}
                 <TextFieldBase value={note} onChange={e => setNote(e.target.value)} fullWidth={true} label={text.note} />
             </DialogContent>
             <DialogActions sx={{ justifyContent: 'center' }}>
@@ -110,7 +86,6 @@ const ActivityResourceDialog = ({ selectedRow, selectedIndex, handleClose, activ
             </DialogActions>
         </Dialog>
     )
-
 }
 
 

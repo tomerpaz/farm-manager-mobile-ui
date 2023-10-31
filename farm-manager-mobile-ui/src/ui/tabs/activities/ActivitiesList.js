@@ -12,7 +12,7 @@ import { activityDescription, buildActiviyFilter, parseDate } from '../../FarmUt
 
 
 
-const ActivitiesList = ({plans}) => {
+const ActivitiesList = ({ plans }) => {
     const { page } = useParams()
     const navigate = useNavigate();
 
@@ -30,8 +30,8 @@ const ActivitiesList = ({plans}) => {
 
     const status = useSelector(isPlan ? selectActivityPlanStatusFilter : selectActivityStatusFilter);
 
-    const activityFreeTextFilter = useSelector(selectActivityFreeTextFilter);    
-    const filter = buildActiviyFilter(startDateFilter,endDateFilter, typeFilter, activityFreeTextFilter, status);
+    const activityFreeTextFilter = useSelector(selectActivityFreeTextFilter);
+    const filter = buildActiviyFilter(startDateFilter, endDateFilter, typeFilter, activityFreeTextFilter, status);
 
     const {
         data,
@@ -39,7 +39,7 @@ const ActivitiesList = ({plans}) => {
         isSuccess,
         isError,
         error
-    } = useGetActivitiesFlatQuery({ page, maxResult, isPlan, orderBy, dir , filter})
+    } = useGetActivitiesFlatQuery({ page, maxResult, isPlan, orderBy, dir, filter })
 
     const text = useSelector(selectLang)
 
@@ -80,7 +80,7 @@ const ActivitiesList = ({plans}) => {
     }
 
     return (
-        <Box >
+        <Box display={'flex'} flex={1}>
             <List sx={{ height, overflow: 'auto', width: '100%', bgcolor: 'background.paper' }}>
                 {renderRows()}
             </List>

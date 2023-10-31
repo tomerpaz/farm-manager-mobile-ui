@@ -16,6 +16,7 @@ import { CUSTOMER, useGetResourcesQuery } from '../../../features/resources/reso
 import Loading from '../../../components/Loading'
 import { useGetActivityDefsQuery } from '../../../features/activityDefs/activityDefsApiSlice'
 import ActionApprovalDialog from '../../../components/ui/ActionApprovalDialog'
+import { useGetWarehousesQuery } from '../../../features/warehouses/cropsApiSlice'
 
 const ActivityForm = ({ activity }) => {
 
@@ -28,7 +29,7 @@ const ActivityForm = ({ activity }) => {
 
   const { data: activityDefs, isSuccess: isActivityDefsSuccess } = useGetActivityDefsQuery()
   const { data: crops, isSuccess: isCropsSuccess } = useGetCropsQuery()
-  const [showSnack, setShowSnack] = useState(false);
+
   const [deleteOpen, setDeleteOpen] = useState(false);
   const dispatch = useDispatch()
 
@@ -44,7 +45,6 @@ const ActivityForm = ({ activity }) => {
     formState: { isDirty, dirtyFields },
   } = useForm({ defaultValues: activity, });
 
-  console.log('isDirty', isDirty);
 
   if (!isCropsSuccess || !isActivityDefsSuccess || !isCustomersSuccess) {
     return <Loading />
@@ -58,9 +58,6 @@ const ActivityForm = ({ activity }) => {
     }
   }
 
-  const deleteAction = () => {
-    setDeleteOpen(true)
-  }
 
   const handleDelete = (value) => {
     setDeleteOpen(false)

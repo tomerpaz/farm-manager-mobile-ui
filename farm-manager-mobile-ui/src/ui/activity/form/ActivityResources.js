@@ -9,6 +9,7 @@ import ResourcseSelectionDialog from "../../dialog/ResourcseSelectionDialog"
 import { Controller, useFieldArray } from "react-hook-form"
 import { Delete, Menu } from "@mui/icons-material"
 import ActivityResourceDialog from "./ActivityResourceDialog"
+import { useGetWarehousesQuery } from "../../../features/warehouses/cropsApiSlice"
 
 const TRASHHOLD = 3;
 
@@ -19,6 +20,7 @@ const ActivityResources = ({ activity, control, errors, register }) => {
     const [selectedRow, setSelectedRow] = useState(null);
     const [selectedIndex, setSelectedIndex] = useState(null);
     const [expendFields, setExpendFields] = useState(false);
+    const { data: warehouses, isSuccess: isWarehousesDefsSuccess } = useGetWarehousesQuery()
 
     const handleOpenEditRow = (index, row) => {
         setSelectedRow(row);
@@ -126,7 +128,7 @@ const ActivityResources = ({ activity, control, errors, register }) => {
             </TableContainer>
 
             <ResourcseSelectionDialog open={open} handleClose={handleClose} resourceTypes={resourceTypes} />
-            {selectedRow && <ActivityResourceDialog selectedIndex={selectedIndex} selectedRow={selectedRow} activityType={activity.type} handleClose={handleCloseEditRow} update={update} />}
+            {selectedRow && <ActivityResourceDialog selectedIndex={selectedIndex} selectedRow={selectedRow} activityType={activity.type} handleClose={handleCloseEditRow} update={update} warehouses={warehouses} control={control} errors={errors} />}
 
         </Box>
     )
@@ -139,6 +141,7 @@ function Row(props) {
             {...register(`resource.${index}.totalCost`)}
             {...register(`resource.${index}.qty`)}
             {...register(`resource.${index}.note`)}
+            {...register(`resource.${index}.warehouse`)}
 
                 key={index}
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>

@@ -26,6 +26,8 @@ const isResourceSelected = (resource, selectedResources) => {
     return selectedResources.some(e => e.id === resource.id)
 };
 
+const height = window.innerHeight - 252;
+
 export const ROWS_PER_PAGE = 100;
 const ResourcseSelectionDialog = ({ open, handleClose, resourceTypes }) => {
     const text = useSelector(selectLang);
@@ -140,13 +142,15 @@ const ResourcseSelectionDialog = ({ open, handleClose, resourceTypes }) => {
                     />
                 </Box>
             </DialogTitle>
-            <DialogContent>
-                <TableContainer >
-                    <Table size="small" sx={{ margin: 0, padding: 0 }} aria-label="a dense table">
-                        <TableHead>
-                            <TableRow style={{
-                                height: 10,
-                            }}>
+            <DialogContent  sx={{ padding: 0, margin: 0}}>
+                <TableContainer   sx={{ padding: 0, maxHeight: height}}>
+                    <Table stickyHeader size="small" sx={{width: '100%', margin: 0, padding: 0 }} aria-label="a dense table">
+                        <TableHead >
+                            <TableRow 
+                            // style={{
+                            //     height: 10,
+                            // }}
+                            >
                                 <TableCell padding="checkbox">
                                     <Checkbox
                                         color="primary"
