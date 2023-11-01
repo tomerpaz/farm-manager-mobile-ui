@@ -1,10 +1,10 @@
 import { BottomNavigation, BottomNavigationAction, Box, TextField, Typography } from '@mui/material'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { selectLang, setSnackbar } from '../../../features/app/appSlice'
-import { asLocalDate, parseDate } from '../../FarmUtil'
+import { ACTIVITY_DEF_TYPES, SPRAYER, SPRAY_TYPES, asLocalDate } from '../../FarmUtil'
 import ActivityHeaderView from './ActivityHeaderView'
-import { useForm, Controller } from "react-hook-form";
+import { useForm, Controller, useWatch } from "react-hook-form";
 import { Cancel, Delete, Save } from '@mui/icons-material'
 import { useNavigate, useParams } from 'react-router-dom'
 import ActivityFields from './ActivityFields'
@@ -17,6 +17,7 @@ import { useGetActivityDefsQuery } from '../../../features/activityDefs/activity
 import ActionApprovalDialog from '../../../components/ui/ActionApprovalDialog'
 import { useGetResourcesTariffQuery } from '../../../features/tariff/tariffApiSlice'
 import { useGetUserDataQuery } from '../../../features/auth/authApiSlice'
+import { getReference, isSkipTariffFetch } from './ActivityUtil'
 
 const ActivityForm = ({ activity }) => {
 
@@ -35,7 +36,6 @@ const ActivityForm = ({ activity }) => {
   const dispatch = useDispatch()
   const [fetchTariffs, setFetchTariffs] = useState(false);
 
-  
   const {
     data: customers,
     // isLoading,
@@ -45,16 +45,20 @@ const ActivityForm = ({ activity }) => {
   } = useGetResourcesQuery({ type: CUSTOMER })
 
 
-  const { control, register, handleSubmit, getValues, formState: { errors },
+  const { control, register, handleSubmit, getValues, watch, formState: { errors },
     formState: { isDirty, dirtyFields },
   } = useForm({ defaultValues: activity, });
 
-  const { data: tariffs } = useGetResourcesTariffQuery({
-    activityType: activity.type,
-    date: asLocalDate(activity.execution),
-  }, { skip: !fetchTariffs });
+  const execution = useWatch({ control, name: "execution" })
+  const activityDef = useWatch({ control, name: "activityDef" })
+  const resources = useWatch({ control, name: "resources" })
 
-  console.log('tariffs',user,tariffs,fetchTariffs,activity.type,asLocalDate(activity.execution))
+  const { data: tariffs, isSuccess: isTariffsSuccess, isLoading: isTariffLoading, } = useGetResourcesTariffQuery({
+    activityType: activity.type,
+    date: asLocalDate(execution),
+    reference: getReference(activity.type, resources, activityDef),
+    resources: resources.filter(e=> e.manualTariff === true).map(e => e.resource.id)
+  }, { skip: isSkipTariffFetch(isDirty, user.financial, resources) });
 
   if (!isCropsSuccess || !isActivityDefsSuccess || !isCustomersSuccess) {
     return <Loading />
@@ -80,7 +84,7 @@ const ActivityForm = ({ activity }) => {
   }
 
   const onSubmit = async (data) => {
-    console.log('data', data);
+    // console.log('data', data);
 
     try {
       const result = await saveActivity(data);
@@ -110,7 +114,8 @@ const ActivityForm = ({ activity }) => {
         <form onSubmit={handleSubmit(onSubmit)} >
           <ActivityHeaderView control={control} register={register} activity={activity} errors={errors} crops={crops} activityDefs={activityDefs} customers={customers} />
           <ActivityFields control={control} register={register} activity={activity} getValues={getValues} errors={errors} />
-          <ActivityResources control={control} register={register} activity={activity} errors={errors}/>
+          <ActivityResources control={control} register={register} activity={activity}
+            errors={errors} tariffs={tariffs} />
           <Box padding={1}>
             <Controller
               control={control}

@@ -12,7 +12,7 @@ import { useGetUserDataQuery } from '../../../features/auth/authApiSlice';
 
 const ResourceDialog = ({ row, activity, onClose, areaUnit }) => {
 
-  console.log('ResourceDialog activity', activity.fields[row])
+  //console.log('ResourceDialog activity', activity.fields[row])
   const text = useSelector(selectLang)
 
   const { data: user } = useGetUserDataQuery()
@@ -33,7 +33,6 @@ const ResourceDialog = ({ row, activity, onClose, areaUnit }) => {
     setOpen(row !== null);
     if (row !== null) {
       const record = activity.resources[row];
-      console.log('record', record)
 
       setResourceName(record.resource.name);
       setResourceType(record.resource.type);
@@ -44,7 +43,7 @@ const ResourceDialog = ({ row, activity, onClose, areaUnit }) => {
       setTariff(record.tariff);
       setManualTariff(record.manualTariff);
 
-      
+
       // setActualExecution(record.actualExecution);
 
       // setField(record.field);
@@ -56,23 +55,18 @@ const ResourceDialog = ({ row, activity, onClose, areaUnit }) => {
     }
   }, [row])
 
-
   const onAction = (save) => {
     if (save) {
-      console.log('Save...')
-
       onClose({ qty, resourceNote, tariff })
     } else {
       onClose(null)
     }
   }
 
-
   return (
 
     <Dialog open={open}>
       <DialogTitle>{`${getResourceTypeText(resourceType, text)}: ${resourceName}`}</DialogTitle>
-
       <DialogContent>
         {/* <DialogContentText>
           {`${text.field} ${fieldName}`}

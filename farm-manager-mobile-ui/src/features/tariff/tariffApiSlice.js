@@ -8,8 +8,23 @@ export const tariffAdapter = createEntityAdapter()
 
 const initialState = tariffAdapter.getInitialState()
 
-const buildResourceTariffSearch = (args) =>{
-    return ''
+const buildResourceTariffSearch = ({ reference, resources }) => {
+    let urlParams = null;
+    resources.forEach((r, index, arr) => {
+        if (!urlParams) {
+            if (r) {
+                urlParams = 'r=' + r;
+            }
+        } else {
+            if (r) {
+                urlParams += '&r=' + r;
+            }
+        }
+    });
+    if (reference) {
+        urlParams += '&ref=' + reference;
+    }
+    return urlParams;
 }
 
 export const tariffApiSlice = apiSlice.injectEndpoints({
@@ -19,15 +34,12 @@ export const tariffApiSlice = apiSlice.injectEndpoints({
             query: (args) => `/api/farm/resources/tariff/${args.activityType}/${args.date}?${buildResourceTariffSearch(args)}`,
             //providesTags: ['Tariff']
         }),
-    
+
     })
 })
 
 export const {
     useGetResourcesTariffQuery,
 } = tariffApiSlice
-
-
-//export const selectTariffResult = tariffApiSlice.endpoints.getTariff.select()
 
 export const getTariffState = (state) => state;

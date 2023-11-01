@@ -6,6 +6,8 @@ import { useState } from "react";
 import { useGetUserDataQuery } from "../../../features/auth/authApiSlice";
 import { WAREHOUSE_RESOURCE_TYPE, getResourceTypeText, getUnitText } from "../../FarmUtil";
 
+const height = 300;
+
 const ActivityResourceDialog = ({ selectedRow, selectedIndex, handleClose, update, warehouses }) => {
     const text = useSelector(selectLang);
     const { data: user } = useGetUserDataQuery()
@@ -23,9 +25,15 @@ const ActivityResourceDialog = ({ selectedRow, selectedIndex, handleClose, updat
             selectedRow.tariff = tariff;
             selectedRow.totalCost = tariff * qty;
             selectedRow.warehouse = warehouse;
+            selectedRow.manualTariff = manualTariff;
             update(selectedIndex, selectedRow);
         }
         handleClose(save);
+    }
+
+    const onCHangeTariff = (value) => {
+        setTariff(value);
+        setManualTariff(true);
     }
 
     const isWarehouse = WAREHOUSE_RESOURCE_TYPE.includes(selectedRow.resource.type);
@@ -40,7 +48,7 @@ const ActivityResourceDialog = ({ selectedRow, selectedIndex, handleClose, updat
             <DialogTitle id="alert-dialog-title">
                 <Typography component={'div'} variant="h5">{`${getResourceTypeText(selectedRow.resource.type, text)}:  ${selectedRow.resource.name}`}</Typography>
             </DialogTitle>
-            <DialogContent sx={{ minHeight: 400 }}>
+            <DialogContent sx={{ minHeight: isWarehouse ? height : null }}>
                 <Box display={'flex'} flex={1} flexDirection={'row'} alignItems={'center'} >
                     <TextFieldBase value={qty} onChange={e => setQty(Number(e.target.value))}
                         type='number' label={text.qty}
@@ -53,7 +61,7 @@ const ActivityResourceDialog = ({ selectedRow, selectedIndex, handleClose, updat
                         fullWidth={!user.financial}
                     />
                     {user.financial && <Box margin={1}></Box>}
-                    {user.financial && <TextFieldBase value={tariff} onChange={e => setTariff(Number(e.target.value))}
+                    {user.financial && <TextFieldBase value={tariff} onChange={e => onCHangeTariff(Number(e.target.value))}
                         type='number' label={text.unitCost}
                         InputProps={{
                             endAdornment: <InputAdornment position="end">{
@@ -72,6 +80,7 @@ const ActivityResourceDialog = ({ selectedRow, selectedIndex, handleClose, updat
                         options={warehouses.filter(e => e.active)}
                         fullWidth
                         size='small'
+                        ListboxProps={{ style: { maxHeight: height - 100, } }}
                         getOptionLabel={(option) => option ? option.name : ''}
                         isOptionEqualToValue={(option, value) => (value === undefined) || option?.id?.toString() === (value?.id ?? value)?.toString()}
                         renderInput={(params) => <TextFieldBase sx={{ marginTop: 0.5 }} {...params}

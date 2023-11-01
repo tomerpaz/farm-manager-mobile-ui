@@ -41,6 +41,9 @@ export const EQUIPMENT = 'EQUIPMENT';
 export const DISINFECTANT = 'DISINFECTANT';
 export const WATER = 'WATER';
 
+export const SPRAYER = 'SPRAYER';
+
+
 export const WAREHOUSE_RESOURCE_TYPE = [PESTICIDE, FERTILIZER, ACCESSORY, VARIETY]
 
 

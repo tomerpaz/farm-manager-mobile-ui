@@ -6,7 +6,7 @@ import { Fragment, useState } from "react"
 import { useGetUserDataQuery } from "../../../features/auth/authApiSlice"
 import { useFields } from "../../../features/fields/fieldsApiSlice"
 import FieldSelectionDialog from "../../dialog/FieldsSelectionDialog"
-import { useForm, useFieldArray, Controller, useWatch } from "react-hook-form";
+import { useFieldArray } from "react-hook-form";
 import { Delete, Menu } from "@mui/icons-material"
 import ActivityFieldDialog from "./ActivityFieldDialog"
 

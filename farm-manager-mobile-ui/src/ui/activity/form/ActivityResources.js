@@ -2,7 +2,7 @@ import { Box, Button, TextField, IconButton, Table, TableBody, TableCell, TableC
 import { useSelector } from "react-redux"
 import { selectLang } from "../../../features/app/appSlice"
 import { cellSx, cellSxLink, headerSx } from "../view/FieldsView"
-import { Fragment, useState } from "react"
+import { Fragment, useEffect, useState } from "react"
 import { ACTIVITY_RESOURCES, getResourceTypeText, getUnitText } from "../../FarmUtil"
 import { useGetUserDataQuery } from "../../../features/auth/authApiSlice"
 import ResourcseSelectionDialog from "../../dialog/ResourcseSelectionDialog"
@@ -13,7 +13,7 @@ import { useGetWarehousesQuery } from "../../../features/warehouses/warehouseApi
 
 const TRASHHOLD = 3;
 
-const ActivityResources = ({ activity, control, errors, register }) => {
+const ActivityResources = ({ activity, control, errors, register, tariffs }) => {
     const text = useSelector(selectLang)
     const { data: user } = useGetUserDataQuery()
     const [open, setOpen] = useState(false);
@@ -21,6 +21,7 @@ const ActivityResources = ({ activity, control, errors, register }) => {
     const [selectedIndex, setSelectedIndex] = useState(null);
     const [expendFields, setExpendFields] = useState(false);
     const { data: warehouses, isSuccess: isWarehousesDefsSuccess } = useGetWarehousesQuery()
+    const [loadTariffs, setLoadTariffs] = useState(false);
 
     const handleOpenEditRow = (index, row) => {
         setSelectedRow(row);
@@ -40,12 +41,38 @@ const ActivityResources = ({ activity, control, errors, register }) => {
         rules: { required: false }
     });
 
+
+    const runTariffMatch = () => {
+        if (tariffs) {
+            fields.map((row, index) => {
+                const tariff = tariffs.find(e => e.resource.id === row.resource.id);
+                if (tariff && row.manualTariff === false) {
+                    row.tariff = tariff.price;
+                    if (row.qty) {
+                        row.totalCost = tariff.price * row.qty;
+                    }
+                    update(index, row);
+                }
+            })
+        }
+    }
+
+    useEffect(() => {
+        runTariffMatch();
+    }, [tariffs])
+
+    useEffect(() => {
+        if (loadTariffs === true) {
+            runTariffMatch();
+        }
+        setLoadTariffs(false);
+    }, [loadTariffs])
+
+
     const handleClickOpen = () => {
         setOpen(true);
     };
     const handleClose = (selectedResources) => {
-        console.log('handleClose', selectedResources)
-
         setOpen(false);
         if (selectedResources) {
             const alreadySelectedIDs = fields.map(e => e.resource.id);
@@ -64,6 +91,7 @@ const ActivityResources = ({ activity, control, errors, register }) => {
             }
             );
             append(newtlySelectedResources)
+            setLoadTariffs(true);
         }
     }
     const resourceTypes = ACTIVITY_RESOURCES.find(e => activity.type.includes(e.activity))?.types;
@@ -110,6 +138,8 @@ const ActivityResources = ({ activity, control, errors, register }) => {
                             <TableCell sx={headerSx}>{text.qty}</TableCell>
                             <TableCell sx={headerSx}>{text.unit}</TableCell>
                             {user.financial && <TableCell sx={headerSx}>{text.cost}</TableCell>}
+                            <TableCell ></TableCell>
+
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -141,14 +171,15 @@ function Row(props) {
                 {...register(`resource.${index}.qty`)}
                 {...register(`resource.${index}.note`)}
                 {...register(`resource.${index}.warehouse`)}
+                {...register(`resource.${index}.manualTariff`)}
 
                 key={index}
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                <TableCell onClick={onClick} sx={cellSxLink} >{row.resource.name}</TableCell>
+                <TableCell onClick={onClick} sx={cellSx} >{row.resource.name}</TableCell>
                 <TableCell onClick={onClick} sx={cellSx} >{getResourceTypeText(row.resource.type, text)}</TableCell>
                 <TableCell onClick={onClick} sx={cellSx}>{row.qty}</TableCell>
                 <TableCell onClick={onClick} sx={cellSx}>{getUnitText(row.resource.usageUnit, areaUnit, text)}</TableCell>
-                {financial && <TableCell onClick={onClick} sx={cellSx}>{row.totalCost}</TableCell>}
+                {financial && <TableCell onClick={onClick} sx={row.manualTariff ? cellSxLink : cellSx}>{row.totalCost}</TableCell>}
                 <TableCell width={1} sx={{ padding: 0, margin: 0 }}><IconButton margin={0} padding={0} onClick={e => remove(index)}><Delete fontSize='large' /></IconButton></TableCell>
             </TableRow>
         </Fragment>
