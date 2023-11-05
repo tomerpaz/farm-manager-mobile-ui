@@ -55,13 +55,13 @@ const ActivityForm = ({ activity }) => {
   const fields = useWatch({ control, name: "fields" })
 
 
-  const activityArea = fields.map(e=>e.activityArea).reduce((accumulator, curValue) => accumulator + curValue, 0)
+  const activityArea = fields.map(e => e.activityArea).reduce((accumulator, curValue) => accumulator + curValue, 0)
 
   const { data: tariffs, isSuccess: isTariffsSuccess, isLoading: isTariffLoading, } = useGetResourcesTariffQuery({
     activityType: activity.type,
     date: asLocalDate(execution),
     reference: getReference(activity.type, resources, activityDef),
-    resources: resources.filter(e=> e.manualTariff === false).map(e => e.resource.id)
+    resources: resources.filter(e => e.manualTariff === false).map(e => e.resource.id)
   }, { skip: isSkipTariffFetch(isDirty, user.financial, resources) });
 
   if (!isCropsSuccess || !isActivityDefsSuccess || !isCustomersSuccess) {
@@ -134,22 +134,23 @@ const ActivityForm = ({ activity }) => {
           </Box>
           <BottomNavigation sx={{ position: 'fixed', bottom: 0, left: 0, right: 0, paddingTop: 2, borderTop: 1, borderTopColor: 'lightGray', backgroundColor: 'white', zIndex: 1000 }} value={-1}
             showLabels>
-            {activity.editable && <BottomNavigationAction disabled={!isDirty} sx={{ color: !isDirty ? 'lightGray' : null }}
-              type="submit"
-              label={<Typography >{text.save}</Typography>}
-              icon={<Save fontSize='large' />}
-            />}
-            {activity.editable && activity.uuid && <BottomNavigationAction
-              label={<Typography>{text.delete}</Typography>}
-              onClick={() => setDeleteOpen(true)}
-              icon={<Delete fontSize='large' />}
-            />}
             <BottomNavigationAction
               label={<Typography>{text.cancel}</Typography>}
               onClick={() => navigate(-1)}
               // to={`/field/${src}/${fieldId}/dash`} component={Link}
               icon={<Cancel fontSize='large' />}
             />
+            {activity.editable && activity.uuid && <BottomNavigationAction
+              label={<Typography>{text.delete}</Typography>}
+              onClick={() => setDeleteOpen(true)}
+              icon={<Delete fontSize='large' />}
+            />}
+
+            {activity.editable && <BottomNavigationAction disabled={!isDirty} sx={{ color: !isDirty ? 'lightGray' : null }}
+              type="submit"
+              label={<Typography >{text.save}</Typography>}
+              icon={<Save fontSize='large' />}
+            />}
           </BottomNavigation>
           <ActionApprovalDialog open={deleteOpen} handleClose={handleDelete}
             title={text.deleteFormTitle} body={text.deleteFormBody} okText={text.delete} cancelText={text.cancel} />

@@ -38,6 +38,7 @@ const ActivityFieldDialog = ({ selectedRow, selectedIndex, handleClose, activity
             onClose={handleClose}
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
+            fullWidth
         // fullScreen
         >
             <DialogTitle id="alert-dialog-title">
@@ -79,7 +80,7 @@ const ActivityFieldDialog = ({ selectedRow, selectedIndex, handleClose, activity
             <DialogActions sx={{ justifyContent: 'center' }}>
                 <Button size='large' endIcon={<Cancel />}  variant='outlined' onClick={() => onAction(false)}>{text.cancel}</Button>
                 <Button size='large' endIcon={<Delete />} disableElevation={true} variant='outlined' onClick={remove}>{text.delete}</Button>
-                <Button size='large' endIcon={<Save />}  disableElevation={true} variant='contained' onClick={() => onAction(true)} autoFocus>
+                <Button size='large' endIcon={<Save />}  disableElevation={true} variant='contained' onClick={() => onAction(true)} >
                     {text.save}
                 </Button>
             </DialogActions>
