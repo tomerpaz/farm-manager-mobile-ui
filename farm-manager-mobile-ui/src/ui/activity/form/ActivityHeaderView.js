@@ -44,7 +44,7 @@ const ActivityHeaderView = ({ activity, control, errors, customers, activityDefs
               id="outlined-select-year"
               select
               {...field}
-              size='medium'
+              size='small'
               label={text.year}
             >
               {getYearArray().map((option) => (
@@ -71,7 +71,7 @@ const ActivityHeaderView = ({ activity, control, errors, customers, activityDefs
               }}
               // 
               slotProps={{
-                textField: { size: 'medium', variant: 'outlined', sx: { maxWidth: 150 } },
+                textField: { size: 'small', variant: 'outlined', sx: { maxWidth: 130 } },
                 actionBar: { actions: ["cancel" /*, "clear"*/] }
               }}
 
@@ -89,7 +89,7 @@ const ActivityHeaderView = ({ activity, control, errors, customers, activityDefs
               options={activityDefs.filter(e => e.active && config.activityType === e.type)}
               sx={{ flex: 3 }}
               // fullWidth
-              size='medium'
+              size='small'
               getOptionLabel={(option) => option ? option.name : ''}
               isOptionEqualToValue={(option, value) => (value === undefined) || option?.id?.toString() === (value?.id ?? value)?.toString()}
               renderInput={(params) => <TextFieldBase error={errors.activityDef ? true : false} sx={{ marginTop: 0.5 }} {...params} label={text.activity} />}

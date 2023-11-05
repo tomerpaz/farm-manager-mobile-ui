@@ -10,7 +10,7 @@ const TextFieldBase = (props) => {
   return (
     <TextField
       //sx={sx}
-      size="medium"
+      size={props.size ? props.size : "medium"}
       margin="dense"
       color={props.error ? 'error' : null }
       onWheel={(e) => e.target.blur()}
