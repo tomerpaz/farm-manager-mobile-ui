@@ -3,7 +3,7 @@ import { useSelector } from "react-redux"
 import { selectLang } from "../../../features/app/appSlice"
 import { cellSx, cellSxLink, headerSx } from "../view/FieldsView"
 import { Fragment, useEffect, useState } from "react"
-import { ACTIVITY_RESOURCES, ENERGY, getResourceTypeText, getUnitText } from "../../FarmUtil"
+import { ACTIVITY_RESOURCES, ENERGY, WAREHOUSE_RESOURCE_TYPE, getResourceTypeText, getUnitText } from "../../FarmUtil"
 import { useGetUserDataQuery } from "../../../features/auth/authApiSlice"
 import ResourcseSelectionDialog from "../../dialog/ResourcseSelectionDialog"
 import { Controller, useFieldArray } from "react-hook-form"
@@ -93,7 +93,7 @@ const ActivityResources = ({ activity, control, errors, register, tariffs, activ
                     dosage: null,
                     tariff: 0,
                     manualTariff: false,
-                    warehouse: null,
+                    warehouse: WAREHOUSE_RESOURCE_TYPE.includes(e.type) ? user.warehouse : null,
                 }
             }
             );

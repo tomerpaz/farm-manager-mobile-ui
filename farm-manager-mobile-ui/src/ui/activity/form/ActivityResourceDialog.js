@@ -95,7 +95,7 @@ const ActivityResourceDialog = ({ selectedRow, selectedIndex, handleClose, updat
                     {isWarehouse &&
 
                         <TextFieldBase
-                            value={warehouse.id}
+                            value={warehouse?.id}
                             id="outlined-select-warehouse"
                             select
                             label={text.warehouse}

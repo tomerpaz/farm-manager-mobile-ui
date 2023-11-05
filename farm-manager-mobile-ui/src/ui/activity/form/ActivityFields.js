@@ -90,7 +90,7 @@ const ActivityFields = ({ activity, getValues, control, register, errors, setVal
                         </IconButton>
                     }
                 </Box>
-                {/* <IconButton onClick={e => remove()}><Delete fontSize='large' /></IconButton> */}
+                <IconButton onClick={e => remove()}><Delete fontSize='large' /></IconButton>
             </Box>
 
             <TableContainer >
