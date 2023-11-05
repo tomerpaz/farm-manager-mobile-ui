@@ -1,19 +1,19 @@
-import { Box, Button, TextField, IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Badge } from "@mui/material"
+import { Box, Button, TextField, IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Badge, List, ListItemButton, ListItemText, ListItemIcon, ListItem } from "@mui/material"
 import { useSelector } from "react-redux"
 import { selectLang } from "../../../features/app/appSlice"
 import { cellSx, cellSxLink, headerSx } from "../view/FieldsView"
 import { Fragment, useEffect, useState } from "react"
-import { ACTIVITY_RESOURCES, getResourceTypeText, getUnitText } from "../../FarmUtil"
+import { ACTIVITY_RESOURCES, ENERGY, getResourceTypeText, getUnitText } from "../../FarmUtil"
 import { useGetUserDataQuery } from "../../../features/auth/authApiSlice"
 import ResourcseSelectionDialog from "../../dialog/ResourcseSelectionDialog"
 import { Controller, useFieldArray } from "react-hook-form"
-import { Delete, Menu } from "@mui/icons-material"
+import { Delete, Drafts, Inbox, Menu } from "@mui/icons-material"
 import ActivityResourceDialog from "./ActivityResourceDialog"
 import { useGetWarehousesQuery } from "../../../features/warehouses/warehouseApiSlice"
 
 const TRASHHOLD = 3;
 
-const ActivityResources = ({ activity, control, errors, register, tariffs }) => {
+const ActivityResources = ({ activity, control, errors, register, tariffs, activityArea }) => {
     const text = useSelector(selectLang)
     const { data: user } = useGetUserDataQuery()
     const [open, setOpen] = useState(false);
@@ -32,6 +32,13 @@ const ActivityResources = ({ activity, control, errors, register, tariffs }) => 
     const handleCloseEditRow = () => {
         setSelectedRow(null);
         setSelectedIndex(null);
+    };
+
+    const handleRemoveRow = (index) => {
+        setSelectedRow(null);
+        setSelectedIndex(null);
+        remove(index)
+        
     };
 
     const { fields, append, prepend, remove, swap, move, insert, update, } = useFieldArray({
@@ -90,11 +97,20 @@ const ActivityResources = ({ activity, control, errors, register, tariffs }) => 
                 }
             }
             );
-            append(newtlySelectedResources)
+            prepend(newtlySelectedResources)
             setLoadTariffs(true);
         }
     }
-    const resourceTypes = ACTIVITY_RESOURCES.find(e => activity.type.includes(e.activity))?.types;
+
+    const getResourceTypes = () => {
+        var types = ACTIVITY_RESOURCES.find(e => activity.type.includes(e.activity))?.types;
+        if (types && !user.gg) {
+            types = types.filter(e => e !== ENERGY);
+        }
+        return types
+    }
+
+    const resourceTypes = getResourceTypes();
 
     if (!resourceTypes) {
         return <></>
@@ -129,39 +145,74 @@ const ActivityResources = ({ activity, control, errors, register, tariffs }) => 
                 {/* <IconButton onClick={e => remove()}><Delete fontSize='large' /></IconButton> */}
             </Box>
 
-            <TableContainer >
-                <Table size="small" sx={{ margin: 0, padding: 0 }} aria-label="a dense table">
-                    <TableHead>
-                        <TableRow  >
-                            <TableCell sx={headerSx} >{text.name}</TableCell>
-                            <TableCell sx={headerSx} >{text.type}</TableCell>
-                            <TableCell sx={headerSx}>{text.qty}</TableCell>
-                            <TableCell sx={headerSx}>{text.unit}</TableCell>
-                            {user.financial && <TableCell sx={headerSx}>{text.cost}</TableCell>}
-                            <TableCell ></TableCell>
+            <RenderTable register={register} remove={remove} user={user} activity={activity}
+                handleOpenEditRow={handleOpenEditRow} text={text} getFields={getFields} />
 
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {getFields().map((row, index) =>
-                            <Row key={row.key} index={index} row={row} text={text} areaUnit={user.areaUnit} register={register}
-                                remove={remove}
-                                currency={user.currency} activityDef={activity.activityDef}
-                                financial={user.financial}
-                                onClick={() => handleOpenEditRow(index, row)} />
-                        )}
-                    </TableBody>
-                </Table>
-            </TableContainer>
 
             <ResourcseSelectionDialog open={open} handleClose={handleClose} resourceTypes={resourceTypes} />
             {selectedRow && <ActivityResourceDialog selectedIndex={selectedIndex} selectedRow={selectedRow}
                 activityType={activity.type} handleClose={handleCloseEditRow} update={update}
-                warehouses={warehouses} control={control} errors={errors} />}
+                warehouses={warehouses} control={control} errors={errors} activityArea={activityArea}
+                remove={()=>handleRemoveRow(selectedIndex)} />}
 
         </Box>
     )
 }
+
+const RenderList = ({ register, remove, user, activity, handleOpenEditRow, text, getFields }) => {
+    return (
+        <List>
+            {getFields().map((row, index) =>
+                <ListItem disablePadding dense={true}>
+                    <ListItemButton onClick={() => handleOpenEditRow(index, row)}>
+                        {/* <ListItemIcon>
+                            <Inbox />
+                        </ListItemIcon> */}
+                        <ListItemText primary={row.resource.name} secondary={getResourceTypeText(row.resource.type, text)} />
+                        {/* <ListItemText secondary={row.resource.type} /> */}
+
+                    </ListItemButton>
+                </ListItem>
+                // <Row key={row.key} index={index} row={row} text={text} areaUnit={user.areaUnit} register={register}
+                //     remove={remove}
+                //     currency={user.currency} activityDef={activity.activityDef}
+                //     financial={user.financial}
+                //     onClick={() => handleOpenEditRow(index, row)} />
+            )}
+
+        </List>
+    )
+}
+
+const RenderTable = ({ register, remove, user, activity, handleOpenEditRow, text, getFields }) => {
+    return (
+        <TableContainer >
+            <Table size="small" sx={{ margin: 0, padding: 0 }} aria-label="a dense table">
+                <TableHead>
+                    <TableRow  >
+                        <TableCell sx={headerSx} >{text.name}</TableCell>
+                        <TableCell sx={headerSx} >{text.type}</TableCell>
+                        <TableCell sx={headerSx}>{text.qty}</TableCell>
+                        <TableCell sx={headerSx}>{text.unit}</TableCell>
+                        {user.financial && <TableCell sx={headerSx}>{text.cost}</TableCell>}
+                        {/* <TableCell ></TableCell> */}
+
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    {getFields().map((row, index) =>
+                        <Row key={row.key} index={index} row={row} text={text} areaUnit={user.areaUnit} register={register}
+                            remove={remove}
+                            currency={user.currency} activityDef={activity.activityDef}
+                            financial={user.financial}
+                            onClick={() => handleOpenEditRow(index, row)} />
+                    )}
+                </TableBody>
+            </Table>
+        </TableContainer>
+    )
+}
+
 function Row(props) {
     const { row, index, text, areaUnit, onClick, currency, remove, register, financial } = props;
     return (
@@ -180,7 +231,7 @@ function Row(props) {
                 <TableCell onClick={onClick} sx={cellSx}>{row.qty}</TableCell>
                 <TableCell onClick={onClick} sx={cellSx}>{getUnitText(row.resource.usageUnit, areaUnit, text)}</TableCell>
                 {financial && <TableCell onClick={onClick} sx={row.manualTariff ? cellSxLink : cellSx}>{row.totalCost}</TableCell>}
-                <TableCell width={1} sx={{ padding: 0, margin: 0 }}><IconButton margin={0} padding={0} onClick={e => remove(index)}><Delete fontSize='large' /></IconButton></TableCell>
+                {/* <TableCell width={1} sx={{ padding: 0, margin: 0 }}><IconButton margin={0} padding={0} onClick={e => remove(index)}><Delete fontSize='large' /></IconButton></TableCell> */}
             </TableRow>
         </Fragment>
     );

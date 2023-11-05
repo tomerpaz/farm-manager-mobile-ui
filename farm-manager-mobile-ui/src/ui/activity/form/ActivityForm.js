@@ -52,12 +52,16 @@ const ActivityForm = ({ activity }) => {
   const execution = useWatch({ control, name: "execution" })
   const activityDef = useWatch({ control, name: "activityDef" })
   const resources = useWatch({ control, name: "resources" })
+  const fields = useWatch({ control, name: "fields" })
+
+
+  const activityArea = fields.map(e=>e.activityArea).reduce((accumulator, curValue) => accumulator + curValue, 0)
 
   const { data: tariffs, isSuccess: isTariffsSuccess, isLoading: isTariffLoading, } = useGetResourcesTariffQuery({
     activityType: activity.type,
     date: asLocalDate(execution),
     reference: getReference(activity.type, resources, activityDef),
-    resources: resources.filter(e=> e.manualTariff === true).map(e => e.resource.id)
+    resources: resources.filter(e=> e.manualTariff === false).map(e => e.resource.id)
   }, { skip: isSkipTariffFetch(isDirty, user.financial, resources) });
 
   if (!isCropsSuccess || !isActivityDefsSuccess || !isCustomersSuccess) {
@@ -115,7 +119,7 @@ const ActivityForm = ({ activity }) => {
           <ActivityHeaderView control={control} register={register} activity={activity} errors={errors} crops={crops} activityDefs={activityDefs} customers={customers} />
           <ActivityFields control={control} register={register} activity={activity} getValues={getValues} errors={errors} />
           <ActivityResources control={control} register={register} activity={activity}
-            errors={errors} tariffs={tariffs} />
+            errors={errors} tariffs={tariffs} activityArea={activityArea} />
           <Box padding={1}>
             <Controller
               control={control}
@@ -124,7 +128,7 @@ const ActivityForm = ({ activity }) => {
                 <TextField
                   id="activity-note"
                   size='small'
-                  label={text.note} fullWidth multiline rows={4} {...field} />
+                  label={text.note} fullWidth multiline rows={3} {...field} />
               )}
             />
           </Box>

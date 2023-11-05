@@ -44,7 +44,7 @@ const ActivityHeaderView = ({ activity, control, errors, customers, activityDefs
               id="outlined-select-year"
               select
               {...field}
-              size='small'
+              size='medium'
               label={text.year}
             >
               {getYearArray().map((option) => (
@@ -71,7 +71,7 @@ const ActivityHeaderView = ({ activity, control, errors, customers, activityDefs
               }}
               // 
               slotProps={{
-                textField: { size: 'small', variant: 'outlined', sx: { maxWidth: 150 } },
+                textField: { size: 'medium', variant: 'outlined', sx: { maxWidth: 150 } },
                 actionBar: { actions: ["cancel" /*, "clear"*/] }
               }}
 
@@ -84,12 +84,12 @@ const ActivityHeaderView = ({ activity, control, errors, customers, activityDefs
             control={control}
             rules={{ required: true }}
             render={({ field: { ref, onChange, ...field } }) => <Autocomplete
-              disablePortal
+              // disablePortal
               onChange={(_, data) => onChange(data)}
               options={activityDefs.filter(e => e.active && config.activityType === e.type)}
               sx={{ flex: 3 }}
               // fullWidth
-              size='small'
+              size='medium'
               getOptionLabel={(option) => option ? option.name : ''}
               isOptionEqualToValue={(option, value) => (value === undefined) || option?.id?.toString() === (value?.id ?? value)?.toString()}
               renderInput={(params) => <TextFieldBase error={errors.activityDef ? true : false} sx={{ marginTop: 0.5 }} {...params} label={text.activity} />}

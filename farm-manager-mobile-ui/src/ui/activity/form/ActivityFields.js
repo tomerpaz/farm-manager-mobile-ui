@@ -48,6 +48,12 @@ const ActivityFields = ({ activity, getValues, control, register, errors, setVal
         setSelectedIndex(null);
     };
 
+    const handleRemoveRow = (index) => {
+        setSelectedRow(null);
+        setSelectedIndex(null);
+        remove(index)
+        
+    };
 
     const handleClose = (selectedFields) => {
         setOpen(false);
@@ -84,7 +90,7 @@ const ActivityFields = ({ activity, getValues, control, register, errors, setVal
                         </IconButton>
                     }
                 </Box>
-                <IconButton onClick={e => remove()}><Delete fontSize='large' /></IconButton>
+                {/* <IconButton onClick={e => remove()}><Delete fontSize='large' /></IconButton> */}
             </Box>
 
             <TableContainer >
@@ -96,8 +102,6 @@ const ActivityFields = ({ activity, getValues, control, register, errors, setVal
                             <TableCell sx={headerSx}>{text.crop}</TableCell>
                             <TableCell sx={headerSx}>{text.variety}</TableCell>
                             <TableCell sx={headerSx}>{text[user.areaUnit]}</TableCell>
-                            <TableCell width={1} >{''}</TableCell>
-
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -108,7 +112,7 @@ const ActivityFields = ({ activity, getValues, control, register, errors, setVal
                 </Table>
             </TableContainer>
             <FieldSelectionDialog open={open} fields={fieldsByYear} handleClose={handleClose} />
-            {selectedRow && <ActivityFieldDialog selectedIndex={selectedIndex} selectedRow={selectedRow} activityType={activity.type} handleClose={handleCloseEditRow} update={update} />}
+            {selectedRow && <ActivityFieldDialog selectedIndex={selectedIndex} selectedRow={selectedRow} activityType={activity.type} handleClose={handleCloseEditRow} update={update} remove={()=>handleRemoveRow(selectedIndex)} />}
 
         </Box>
     )
@@ -133,7 +137,7 @@ function Row(props) {
                         {row.activityArea.toFixed(2)}
                     </Box>
                 </TableCell>
-                <TableCell width={1} sx={{ padding: 0, margin: 0 }}><IconButton margin={0} padding={0} onClick={e => remove(index)}><Delete fontSize='large' /></IconButton></TableCell>
+                {/* <TableCell width={1} sx={{ padding: 0, margin: 0 }}><IconButton margin={0} padding={0} onClick={e => remove(index)}><Delete fontSize='large' /></IconButton></TableCell> */}
 
 
 

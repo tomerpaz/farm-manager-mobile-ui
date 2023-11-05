@@ -1,22 +1,30 @@
-import { Autocomplete, Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, InputAdornment, Typography } from "@mui/material";
+import { Autocomplete, Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, MenuItem, TextField, Typography } from "@mui/material";
 import TextFieldBase from "../../../components/ui/TextField";
 import { useSelector } from "react-redux";
 import { selectLang } from "../../../features/app/appSlice";
 import { useState } from "react";
 import { useGetUserDataQuery } from "../../../features/auth/authApiSlice";
-import { WAREHOUSE_RESOURCE_TYPE, getResourceTypeText, getUnitText } from "../../FarmUtil";
+import { QTY_PER_AREA_UNIT_RESOURCE_TYPE, WAREHOUSE_RESOURCE_TYPE, getResourceTypeText, getUnitText, safeDiv } from "../../FarmUtil";
+import { Cancel, Delete, Save } from "@mui/icons-material";
 
-const height = 300;
+const height = 400;
 
-const ActivityResourceDialog = ({ selectedRow, selectedIndex, handleClose, update, warehouses }) => {
+const ActivityResourceDialog = ({ selectedRow, selectedIndex, handleClose, update, warehouses, activityArea, remove }) => {
     const text = useSelector(selectLang);
     const { data: user } = useGetUserDataQuery()
     const [note, setNote] = useState(selectedRow.note ? selectedRow.note : '');
     const [qty, setQty] = useState(selectedRow.qty);
+    const [qtyPerAreaUnit, setQtyPerAreaUnit] = useState(safeDiv(selectedRow.qty, activityArea));
+
+    const [secondaryQty, setSecondaryQty] = useState(selectedRow.secondaryQty);
+
+
     const [tariff, setTariff] = useState(selectedRow.tariff ? selectedRow.tariff : 0);
     const [warehouse, setWarehouse] = useState(selectedRow.warehouse);
 
     const [manualTariff, setManualTariff] = useState(selectedRow.manualTariff);
+
+    //console.log('secondaryQty',secondaryQty)
 
     const onAction = (save) => {
         if (save) {
@@ -26,6 +34,8 @@ const ActivityResourceDialog = ({ selectedRow, selectedIndex, handleClose, updat
             selectedRow.totalCost = tariff * qty;
             selectedRow.warehouse = warehouse;
             selectedRow.manualTariff = manualTariff;
+            // selectedRow.secondaryQty = secondaryQty;
+
             update(selectedIndex, selectedRow);
         }
         handleClose(save);
@@ -37,6 +47,7 @@ const ActivityResourceDialog = ({ selectedRow, selectedIndex, handleClose, updat
     }
 
     const isWarehouse = WAREHOUSE_RESOURCE_TYPE.includes(selectedRow.resource.type);
+    const isQtyPerAreaUnit = QTY_PER_AREA_UNIT_RESOURCE_TYPE.includes(selectedRow.resource.type);
     return (
         <Dialog
             open={selectedRow !== null}
@@ -49,7 +60,7 @@ const ActivityResourceDialog = ({ selectedRow, selectedIndex, handleClose, updat
                 <Typography component={'div'} variant="h5">{`${getResourceTypeText(selectedRow.resource.type, text)}:  ${selectedRow.resource.name}`}</Typography>
             </DialogTitle>
             <DialogContent sx={{ minHeight: isWarehouse ? height : null }}>
-                <Box display={'flex'} flex={1} flexDirection={'row'} alignItems={'center'} >
+                <Box display={'flex'} flex={1} flexDirection={'column'}  >
                     <TextFieldBase value={qty} onChange={e => setQty(Number(e.target.value))}
                         type='number' label={text.qty}
                         InputProps={{
@@ -58,11 +69,20 @@ const ActivityResourceDialog = ({ selectedRow, selectedIndex, handleClose, updat
                             }
                             </InputAdornment>,
                         }}
-                        fullWidth={!user.financial}
+                        fullWidth={true}
                     />
-                    {user.financial && <Box margin={1}></Box>}
+                    {/* {isQtyPerAreaUnit && <Box margin={1}></Box>} */}
+
+                    {isQtyPerAreaUnit &&
+                        <TextFieldBase value={qtyPerAreaUnit} onChange={e => setQtyPerAreaUnit(Number(e.target.value))}
+                            type='number' label={`${text.qty}/${text[user.areaUnit]}`}
+                            fullWidth
+                        />}
+
+                    {/* {user.financial && <Box margin={1}></Box>} */}
                     {user.financial && <TextFieldBase value={tariff} onChange={e => onCHangeTariff(Number(e.target.value))}
                         type='number' label={text.unitCost}
+                        fullWidth
                         InputProps={{
                             endAdornment: <InputAdornment position="end">{
                                 user.currency
@@ -70,27 +90,47 @@ const ActivityResourceDialog = ({ selectedRow, selectedIndex, handleClose, updat
                             </InputAdornment>,
                         }}
                     />}
-                </Box>
-                <Box margin={1}></Box>
-                {isWarehouse &&
-                    <Autocomplete
-                        disablePortal
+                    {/* </Box> */}
+                    {/* <Box margin={1}></Box> */}
+                    {isWarehouse &&
+
+                        <TextFieldBase
+                            value={warehouse.id}
+                            id="outlined-select-warehouse"
+                            select
+                            label={text.warehouse}
+                            onChange={e => setWarehouse(warehouses.find(w => w.id === Number(e.target.value)))}
+
+                        >
+                            {warehouses.filter(e => e.active).map((option) => (
+                                <MenuItem key={option.id} value={option.id}>
+                                    {option.name}
+                                </MenuItem>
+                            ))}
+                        </TextFieldBase>}
+
+                    {/* {isWarehouse && <Autocomplete
                         value={warehouse}
                         onChange={(_, data) => setWarehouse(data)}
                         options={warehouses.filter(e => e.active)}
                         fullWidth
-                        size='small'
-                        ListboxProps={{ style: { maxHeight: height - 100, } }}
+                        size='medium'
+                        ListboxProps={{ style: { maxHeight: height - 150, } }}
                         getOptionLabel={(option) => option ? option.name : ''}
                         isOptionEqualToValue={(option, value) => (value === undefined) || option?.id?.toString() === (value?.id ?? value)?.toString()}
-                        renderInput={(params) => <TextFieldBase sx={{ marginTop: 0.5 }} {...params}
+                        renderInput={(params) => <TextFieldBase  {...params}
                             label={text.warehouse} />}
-                    />}
-                <TextFieldBase value={note} onChange={e => setNote(e.target.value)} fullWidth={true} label={text.note} />
+                    />} */}
+                    <TextFieldBase value={note} onChange={e => setNote(e.target.value)} fullWidth={true} label={text.note} />
+                </Box>
             </DialogContent>
             <DialogActions sx={{ justifyContent: 'center' }}>
-                <Button size='large' variant='outlined' onClick={() => onAction(false)}>{text.cancel}</Button>
-                <Button size='large' disableElevation={true} variant='contained' onClick={() => onAction(true)} autoFocus>
+                <Button size='large' variant='outlined' endIcon={<Cancel />} onClick={() => onAction(false)}>{text.cancel}</Button>
+                <Button size='large' endIcon={<Delete />} disableElevation={true} variant='outlined' onClick={remove}>{text.delete}
+                </Button>
+                <Button size='large' disableElevation={true} variant='contained'
+                    endIcon={<Save />}
+                    onClick={() => onAction(true)} >
                     {text.save}
                 </Button>
             </DialogActions>

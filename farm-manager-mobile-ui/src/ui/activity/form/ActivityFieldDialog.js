@@ -1,21 +1,19 @@
-import { Avatar, Box, Button, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, InputAdornment, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
+import { Avatar, Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from "@mui/material";
 import TextFieldBase from "../../../components/ui/TextField";
 import { useSelector } from "react-redux";
 import { selectLang } from "../../../features/app/appSlice";
-import { Fragment, useState } from "react";
-import { cellSx, headerSx } from "../view/FieldsView";
+import { useState } from "react";
 import { useGetUserDataQuery } from "../../../features/auth/authApiSlice";
-import { Search } from "@mui/icons-material";
-import { asLocalDate, getActivityTypeText, isStringEmpty, parseISOOrNull } from "../../FarmUtil";
+import { UI_SIZE, getActivityTypeText } from "../../FarmUtil";
 import { DatePicker } from "@mui/x-date-pickers";
 import { getFruitIcon } from "../../../icons/FruitIconUtil";
-import ActivityTypeIcon from "../../../icons/ActivityTypeIcon";
+import { Cancel, Delete, Save } from "@mui/icons-material";
 
 
 
 
 
-const ActivityFieldDialog = ({ selectedRow, selectedIndex, handleClose, activityType, update }) => {
+const ActivityFieldDialog = ({ selectedRow, selectedIndex, handleClose, activityType, update, remove }) => {
     const text = useSelector(selectLang);
     const { data: user } = useGetUserDataQuery()
 
@@ -71,7 +69,7 @@ const ActivityFieldDialog = ({ selectedRow, selectedIndex, handleClose, activity
                         value={actualExecution}
                         onChange={(e) => setActualExecution(e)}// asLocalDate(e, true)}
                         slotProps={{
-                            textField: { size: 'small', variant: 'outlined', sx: { marginTop: 0.5 } },
+                            textField: { size: UI_SIZE , variant: 'outlined', sx: { marginTop: 0.5 } },
                             actionBar: { actions: ["cancel", "clear"] }
                         }}
                     />
@@ -79,8 +77,9 @@ const ActivityFieldDialog = ({ selectedRow, selectedIndex, handleClose, activity
                 <TextFieldBase value={note} onChange={e => setNote(e.target.value)} fullWidth={true} label={text.note} />
             </DialogContent>
             <DialogActions sx={{ justifyContent: 'center' }}>
-                <Button size='large' variant='outlined' onClick={() => onAction(false)}>{text.cancel}</Button>
-                <Button size='large' disableElevation={true} variant='contained' onClick={() => onAction(true)} autoFocus>
+                <Button size='large' endIcon={<Cancel />}  variant='outlined' onClick={() => onAction(false)}>{text.cancel}</Button>
+                <Button size='large' endIcon={<Delete />} disableElevation={true} variant='outlined' onClick={remove}>{text.delete}</Button>
+                <Button size='large' endIcon={<Save />}  disableElevation={true} variant='contained' onClick={() => onAction(true)} autoFocus>
                     {text.save}
                 </Button>
             </DialogActions>

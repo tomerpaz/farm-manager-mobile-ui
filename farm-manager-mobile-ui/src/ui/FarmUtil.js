@@ -1,6 +1,8 @@
 import { grey } from "@mui/material/colors";
 import { parseISO } from "date-fns";
 
+export const UI_SIZE = 'medium';
+
 export const GENERAL = 'GENERAL';
 export const GENERAL_PLAN = 'GENERAL_PLAN';
 export const SPRAY = 'SPRAY';
@@ -45,6 +47,7 @@ export const SPRAYER = 'SPRAYER';
 
 
 export const WAREHOUSE_RESOURCE_TYPE = [PESTICIDE, FERTILIZER, ACCESSORY, VARIETY]
+export const QTY_PER_AREA_UNIT_RESOURCE_TYPE = [PESTICIDE, FERTILIZER, ACCESSORY, VARIETY, COMPOST, DISINFECTANT]
 
 
 export const ACTIVITY_RESOURCES = [
@@ -336,5 +339,13 @@ export function getFillColor(field) {
 
 export function getWinds() {
     return ['windSpeedNone', 'windSpeedCalm', 'windSpeedStrong']
+}
+
+export function safeDiv(numerator, denominator) {
+    if(isNaN(numerator) || isNaN(denominator) || denominator === 0 ){
+        return 0;
+    }
+
+    else return (numerator/denominator).toFixed(2)
 }
 
