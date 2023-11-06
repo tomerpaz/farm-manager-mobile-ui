@@ -68,7 +68,8 @@ const ActivityForm = ({ activity }) => {
     return <Loading />
   }
 
-  const saveActivity = (data) => {
+  const saveActivity = (data) => {   
+    data.execution = asLocalDate(data.execution,true);
     if (data.uuid) {
       return updateActivity(data).unwrap();
     } else {
