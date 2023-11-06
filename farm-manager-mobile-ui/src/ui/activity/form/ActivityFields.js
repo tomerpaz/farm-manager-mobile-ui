@@ -7,7 +7,7 @@ import { useGetUserDataQuery } from "../../../features/auth/authApiSlice"
 import { useFields } from "../../../features/fields/fieldsApiSlice"
 import FieldSelectionDialog from "../../dialog/FieldsSelectionDialog"
 import { useFieldArray } from "react-hook-form";
-import { Delete, Menu } from "@mui/icons-material"
+import { Delete, DragHandle, Menu } from "@mui/icons-material"
 import ActivityFieldDialog from "./ActivityFieldDialog"
 
 const TRASHHOLD = 3;
@@ -52,7 +52,7 @@ const ActivityFields = ({ activity, getValues, control, register, errors, setVal
         setSelectedRow(null);
         setSelectedIndex(null);
         remove(index)
-        
+
     };
 
     const handleClose = (selectedFields) => {
@@ -85,8 +85,8 @@ const ActivityFields = ({ activity, getValues, control, register, errors, setVal
                     {fields.length > TRASHHOLD &&
                         <IconButton sx={{ marginLeft: 1, marginRight: 1 }} onClick={() => setExpendFields(!expendFields)}>
                             <Badge badgeContent={fields.length} color="primary">
-                                <Menu fontSize='large' />
-                            </Badge>
+                                {expendFields && <Menu fontSize='large' />}
+                                {!expendFields && <DragHandle fontSize='large' />}                            </Badge>
                         </IconButton>
                     }
                 </Box>
@@ -112,7 +112,7 @@ const ActivityFields = ({ activity, getValues, control, register, errors, setVal
                 </Table>
             </TableContainer>
             <FieldSelectionDialog open={open} fields={fieldsByYear} handleClose={handleClose} />
-            {selectedRow && <ActivityFieldDialog selectedIndex={selectedIndex} selectedRow={selectedRow} activityType={activity.type} handleClose={handleCloseEditRow} update={update} remove={()=>handleRemoveRow(selectedIndex)} />}
+            {selectedRow && <ActivityFieldDialog selectedIndex={selectedIndex} selectedRow={selectedRow} activityType={activity.type} handleClose={handleCloseEditRow} update={update} remove={() => handleRemoveRow(selectedIndex)} />}
 
         </Box>
     )
@@ -125,7 +125,7 @@ function Row(props) {
 
     return (
         <Fragment >
-            <TableRow 
+            <TableRow
                 key={index}
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                 <TableCell onClick={onClick} sx={cellSx} >{row.field.name}</TableCell>

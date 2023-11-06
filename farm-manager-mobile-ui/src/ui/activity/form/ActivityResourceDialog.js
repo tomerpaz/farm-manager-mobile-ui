@@ -110,7 +110,7 @@ const ActivityResourceDialog = ({ selectedRow, selectedIndex, handleClose, updat
             <DialogTitle id="alert-dialog-title">
                 <Typography component={'div'} variant="h5">{`${getResourceTypeText(selectedRow.resource.type, text)}:  ${selectedRow.resource.name}`}</Typography>
             </DialogTitle>
-            <DialogContent sx={{ minHeight: isWarehouse ? height : null }}>
+            <DialogContent /*sx={{ minHeight: isWarehouse ? height : null }}*/>
                 <Box display={'flex'} flex={1} flexDirection={'column'}  >
                     <TextFieldBase value={qty} onChange={e => setQty(Number(e.target.value))}
                         type='number' label={text.qty}

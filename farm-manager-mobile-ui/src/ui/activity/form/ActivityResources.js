@@ -7,7 +7,7 @@ import { ACTIVITY_RESOURCES, ENERGY, WAREHOUSE_RESOURCE_TYPE, getResourceTypeTex
 import { useGetUserDataQuery } from "../../../features/auth/authApiSlice"
 import ResourcseSelectionDialog from "../../dialog/ResourcseSelectionDialog"
 import { Controller, useFieldArray } from "react-hook-form"
-import { Delete, Drafts, Inbox, Menu } from "@mui/icons-material"
+import { Delete, Drafts, DragHandle, Expand, Inbox, Menu, MenuOpen } from "@mui/icons-material"
 import ActivityResourceDialog from "./ActivityResourceDialog"
 import { useGetWarehousesQuery } from "../../../features/warehouses/warehouseApiSlice"
 
@@ -127,7 +127,8 @@ const ActivityResources = ({ activity, control, errors, register, tariffs, activ
                 {fields.length > TRASHHOLD &&
                     <IconButton sx={{ marginLeft: 1, marginRight: 1 }} onClick={() => setExpendFields(!expendFields)}>
                         <Badge badgeContent={fields.length} color="primary">
-                            <Menu fontSize='large' />
+                           {expendFields && <Menu fontSize='large' /> }
+                           {!expendFields && <DragHandle fontSize='large' /> }
                         </Badge>
                     </IconButton>
                 }
