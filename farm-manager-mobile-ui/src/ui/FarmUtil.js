@@ -48,6 +48,9 @@ export const SPRAYER = 'SPRAYER';
 
 export const WAREHOUSE_RESOURCE_TYPE = [PESTICIDE, FERTILIZER, ACCESSORY, VARIETY]
 export const QTY_PER_AREA_UNIT_RESOURCE_TYPE = [PESTICIDE, FERTILIZER, ACCESSORY, VARIETY, COMPOST, DISINFECTANT]
+export const SECONDARY_QTY_RESOURCES = [
+    {type: WATER, label : 'publicSource', lessThanQty: true, gg: true},
+    {type: ENERGY, label : 'renewable', lessThanQty: true, gg: true}]
 
 
 export const ACTIVITY_RESOURCES = [

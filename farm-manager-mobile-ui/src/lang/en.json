@@ -108,7 +108,11 @@
     "recordCreated": "Record Created",
     "recordDeleted": "Record deleted",
     "kwh": "Kwh",
-    "tonne": "Tonne"
+    "tonne": "Tonne",
+    "workerCount": "Worker Count",
+    "qtyPerWorker": "Qty/Worker",
+    "renewable": "Renewable"
+
 
   }
   

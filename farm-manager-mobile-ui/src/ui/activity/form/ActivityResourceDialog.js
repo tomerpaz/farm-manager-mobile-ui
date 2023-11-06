@@ -4,10 +4,18 @@ import { useSelector } from "react-redux";
 import { selectLang } from "../../../features/app/appSlice";
 import { useState } from "react";
 import { useGetUserDataQuery } from "../../../features/auth/authApiSlice";
-import { QTY_PER_AREA_UNIT_RESOURCE_TYPE, WAREHOUSE_RESOURCE_TYPE, getResourceTypeText, getUnitText, safeDiv } from "../../FarmUtil";
+import { QTY_PER_AREA_UNIT_RESOURCE_TYPE, SECONDARY_QTY_RESOURCES, WAREHOUSE_RESOURCE_TYPE, WORKER_GROUP, getResourceTypeText, getUnitText, safeDiv } from "../../FarmUtil";
 import { Cancel, Delete, Save } from "@mui/icons-material";
 
 const height = 400;
+
+const getQtyPerWorker = (selectedRow) => {
+
+    if(selectedRow.qty &&  selectedRow.secondaryQty && selectedRow.secondaryQty != 0){
+        return (selectedRow.qty / selectedRow.secondaryQty).toFixed(2);
+    }
+    return 0;
+}
 
 const ActivityResourceDialog = ({ selectedRow, selectedIndex, handleClose, update, warehouses, activityArea, remove }) => {
     const text = useSelector(selectLang);
@@ -23,8 +31,13 @@ const ActivityResourceDialog = ({ selectedRow, selectedIndex, handleClose, updat
     const [warehouse, setWarehouse] = useState(selectedRow.warehouse);
 
     const [manualTariff, setManualTariff] = useState(selectedRow.manualTariff);
+    const [qtyPerWorker, setQtyPerWorker] = useState(getQtyPerWorker(selectedRow));
 
     //console.log('secondaryQty',secondaryQty)
+    const secondaryQtyConfig = SECONDARY_QTY_RESOURCES.find(e => e.type === selectedRow.resource.type);
+    const isWarehouse = WAREHOUSE_RESOURCE_TYPE.includes(selectedRow.resource.type);
+    const isQtyPerAreaUnit = QTY_PER_AREA_UNIT_RESOURCE_TYPE.includes(selectedRow.resource.type);
+    const isWorkerGropup = WORKER_GROUP === selectedRow.resource.type;
 
     const onAction = (save) => {
         if (save) {
@@ -34,20 +47,58 @@ const ActivityResourceDialog = ({ selectedRow, selectedIndex, handleClose, updat
             selectedRow.totalCost = tariff * qty;
             selectedRow.warehouse = warehouse;
             selectedRow.manualTariff = manualTariff;
-            // selectedRow.secondaryQty = secondaryQty;
+            if (secondaryQtyConfig || isWorkerGropup) {
+                selectedRow.secondaryQty = secondaryQty;
+            }
 
             update(selectedIndex, selectedRow);
         }
         handleClose(save);
     }
 
-    const onCHangeTariff = (value) => {
+    const onTariffChange = (value) => {
         setTariff(value);
         setManualTariff(true);
     }
 
-    const isWarehouse = WAREHOUSE_RESOURCE_TYPE.includes(selectedRow.resource.type);
-    const isQtyPerAreaUnit = QTY_PER_AREA_UNIT_RESOURCE_TYPE.includes(selectedRow.resource.type);
+    const onQtyPerAreUnitChange = (value) => {
+        setQtyPerAreaUnit(value);
+        if (value && activityArea) {
+            setQty((value * activityArea).toFixed());
+        }
+    }
+
+    const onSecondaryQtyChange = (value) => {
+        if (secondaryQtyConfig.lessThanQty) {
+            if (qty) {
+                if (value <= qty) {
+                    setSecondaryQty(value);
+                } else {
+                    setSecondaryQty(qty);
+                }
+            }
+        } else {
+            setSecondaryQty(value);
+        }
+    }
+
+
+    const onQtyPerWorkerChange = (value) => {
+        setQtyPerWorker(value);
+        if(value && secondaryQty){
+            setQty((value * secondaryQty).toFixed(2));
+        }
+    }
+
+    const onWorkerCountChange = (value) => {
+        const workerCount = value? value.toFixed(0) : 0
+        setSecondaryQty(workerCount);
+        if(workerCount && qtyPerWorker){
+            setQty((workerCount * qtyPerWorker).toFixed(2));
+        }
+    }
+
+
     return (
         <Dialog
             open={selectedRow !== null}
@@ -71,16 +122,30 @@ const ActivityResourceDialog = ({ selectedRow, selectedIndex, handleClose, updat
                         }}
                         fullWidth={true}
                     />
-                    {/* {isQtyPerAreaUnit && <Box margin={1}></Box>} */}
 
                     {isQtyPerAreaUnit &&
-                        <TextFieldBase value={qtyPerAreaUnit} onChange={e => setQtyPerAreaUnit(Number(e.target.value))}
+                        <TextFieldBase value={qtyPerAreaUnit} onChange={e => onQtyPerAreUnitChange(Number(e.target.value))}
                             type='number' label={`${text.qty}/${text[user.areaUnit]}`}
                             fullWidth
                         />}
 
-                    {/* {user.financial && <Box margin={1}></Box>} */}
-                    {user.financial && <TextFieldBase value={tariff} onChange={e => onCHangeTariff(Number(e.target.value))}
+                    {secondaryQtyConfig &&
+                        <TextFieldBase value={secondaryQty ? secondaryQty : 0} onChange={e => onSecondaryQtyChange(Number(e.target.value))}
+                            type='number' label={`${text[secondaryQtyConfig.label]}`}
+                            fullWidth
+                        />}
+                    {isWorkerGropup && <Box display={'flex'} flex={1} flexDirection={'row'}>
+                        <TextFieldBase value={secondaryQty ? secondaryQty : 0} onChange={e => onWorkerCountChange(Number(e.target.value))}
+                            type='number' label={`${text.workerCount}`}
+                            fullWidth
+                        />
+                        <Box margin={1}/>
+                        <TextFieldBase value={qtyPerWorker} onChange={e => onQtyPerWorkerChange(Number(e.target.value))}
+                            type='number' label={`${text.qtyPerWorker}`}
+                            fullWidth
+                        />
+                    </Box>}
+                    {user.financial && <TextFieldBase value={tariff} onChange={e => onTariffChange(Number(e.target.value))}
                         type='number' label={text.unitCost}
                         fullWidth
                         InputProps={{

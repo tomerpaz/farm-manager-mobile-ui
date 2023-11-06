@@ -108,5 +108,8 @@
     "recordCreated": "רשומה חדשה נוצרה",
     "recordDeleted": "הרשומה נמחקה",
     "kwh": "קוט\"ש",
-    "tonne": "טון"
+    "tonne": "טון",
+    "workerCount": "מס' עובדים",
+    "qtyPerWorker": "כמות לעובד",
+    "renewable": "מתחדשת"
 }

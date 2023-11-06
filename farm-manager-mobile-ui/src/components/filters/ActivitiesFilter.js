@@ -42,7 +42,7 @@ const ActivitiesFilter = () => {
     const endDateFilter = useSelector(selectEndDateFilter);
 
 
-    console.log('parseISOOrNull',endDateFilter, parseISOOrNull(endDateFilter))
+   // console.log('parseISOOrNull',endDateFilter, parseISOOrNull(endDateFilter))
 
     const noFilter = isStringEmpty(startDateFilter) && isStringEmpty(endDateFilter) && isStringEmpty(typeFilter) && isDefault;
 

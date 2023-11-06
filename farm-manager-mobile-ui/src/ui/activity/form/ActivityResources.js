@@ -230,7 +230,7 @@ function Row(props) {
                 <TableCell onClick={onClick} sx={cellSx} >{getResourceTypeText(row.resource.type, text)}</TableCell>
                 <TableCell onClick={onClick} sx={cellSx}>{row.qty}</TableCell>
                 <TableCell onClick={onClick} sx={cellSx}>{getUnitText(row.resource.usageUnit, areaUnit, text)}</TableCell>
-                {financial && <TableCell onClick={onClick} sx={row.manualTariff ? cellSxLink : cellSx}>{row.totalCost}</TableCell>}
+                {financial && <TableCell onClick={onClick} sx={row.manualTariff ? cellSxLink : cellSx}>{row.totalCost? row.totalCost.toFixed(2) : 0}</TableCell>}
                 {/* <TableCell width={1} sx={{ padding: 0, margin: 0 }}><IconButton margin={0} padding={0} onClick={e => remove(index)}><Delete fontSize='large' /></IconButton></TableCell> */}
             </TableRow>
         </Fragment>

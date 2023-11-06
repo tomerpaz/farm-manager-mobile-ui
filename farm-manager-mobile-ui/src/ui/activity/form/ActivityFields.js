@@ -128,11 +128,11 @@ function Row(props) {
             <TableRow 
                 key={index}
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                <TableCell onClick={onClick} sx={cellSxLink} >{row.field.name}</TableCell>
+                <TableCell onClick={onClick} sx={cellSx} >{row.field.name}</TableCell>
                 <TableCell onClick={onClick} sx={cellSx}>{row.field.alias}</TableCell>
                 <TableCell onClick={onClick} sx={cellSx} >{row.field.cropName}</TableCell>
                 <TableCell onClick={onClick} sx={cellSx}>{row.field.varietyName}</TableCell>
-                <TableCell onClick={onClick} sx={cellSx}>
+                <TableCell onClick={onClick} sx={row.activityArea === row.field.area ? cellSx : cellSxLink}>
                     <Box {...register(`field.${index}.activityArea`)}>
                         {row.activityArea.toFixed(2)}
                     </Box>

@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React, { Fragment, useEffect } from 'react'
 import { Avatar, List, ListItem, ListItemText, ListItemAvatar, Box, Button, Typography, Divider } from '@mui/material';
 import { useSelector } from 'react-redux';
 import { useGetActivitiesFlatQuery } from '../../../features/activities/activitiesApiSlice';
@@ -30,6 +30,10 @@ const ActivitiesList = ({ plans }) => {
 
     const activityFreeTextFilter = useSelector(selectActivityFreeTextFilter);
     const filter = buildActiviyFilter(startDateFilter, endDateFilter, typeFilter, activityFreeTextFilter, status);
+
+    // useEffect(() => {
+    //     console.log('filter cahnged', filter)
+    // }, [typeFilter,startDateFilter,endDateFilter,status]);
 
     const {
         data,
