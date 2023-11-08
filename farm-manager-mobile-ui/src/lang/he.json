@@ -111,5 +111,6 @@
     "tonne": "טון",
     "workerCount": "מס' עובדים",
     "qtyPerWorker": "כמות לעובד",
-    "renewable": "מתחדשת"
+    "renewable": "מתחדשת",
+    "bulkQtyUpdate" : "עדכון כמות"
 }

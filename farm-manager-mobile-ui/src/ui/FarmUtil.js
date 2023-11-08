@@ -13,7 +13,6 @@ export const SCOUT = 'SCOUTING';
 export const IRRIGATION = 'IRRIGATION';
 export const IRRIGATION_PLAN = 'IRRIGATION_PLAN';
 
-const CONTACROR = 'CONTACROR';
 
 const GROWER_ACTIVITY_TYPES = [GENERAL, SPRAY, IRRIGATION, HARVEST, MARKET]
 
@@ -49,12 +48,12 @@ export const SPRAYER = 'SPRAYER';
 export const WAREHOUSE_RESOURCE_TYPE = [PESTICIDE, FERTILIZER, ACCESSORY, VARIETY]
 export const QTY_PER_AREA_UNIT_RESOURCE_TYPE = [PESTICIDE, FERTILIZER, ACCESSORY, VARIETY, COMPOST, DISINFECTANT]
 export const SECONDARY_QTY_RESOURCES = [
-    {type: WATER, label : 'publicSource', lessThanQty: true, gg: true},
-    {type: ENERGY, label : 'renewable', lessThanQty: true, gg: true}]
+    { type: WATER, label: 'publicSource', lessThanQty: true, gg: true },
+    { type: ENERGY, label: 'renewable', lessThanQty: true, gg: true }]
 
 
 export const ACTIVITY_RESOURCES = [
-    { activity: GENERAL, types: [WORKER, CONTRACTOR, WORKER_GROUP, EQUIPMENT, PESTICIDE, FERTILIZER, ACCESSORY, VARIETY, COMPOST, DISINFECTANT,ENERGY] },
+    { activity: GENERAL, types: [WORKER, CONTRACTOR, WORKER_GROUP, EQUIPMENT, PESTICIDE, FERTILIZER, ACCESSORY, VARIETY, COMPOST, DISINFECTANT, ENERGY] },
     { activity: SPRAY, types: [WORKER, CONTRACTOR, WORKER_GROUP, EQUIPMENT, PESTICIDE, FERTILIZER] },
     { activity: HARVEST, types: [WORKER, CONTRACTOR, WORKER_GROUP, EQUIPMENT, ACCESSORY] },
     { activity: IRRIGATION, types: [WATER, FERTILIZER, PESTICIDE, WORKER, CONTRACTOR, WORKER_GROUP, ACCESSORY] }
@@ -104,7 +103,8 @@ export const displayFieldName = (field) => {
 export const displayFieldArea = (field, areaUnit, text) => {
     return `${field.area} ${text[areaUnit]}`;
 }
-const AREA_UNIT = "area_unit";
+export const AREA_UNIT = "area_unit";
+export const HOUR = "hour";
 
 export const getUnitText = (unit, areaUnit, text) => {
     if (isStringEmpty(unit)) {
@@ -154,7 +154,7 @@ export const getActivityStatusText = (type, text) => {
 }
 
 export const getResourceUsageUnit = (resource, activityDef) => {
-    if (activityDef && CONTACROR === resource.type) {
+    if (activityDef && CONTRACTOR === resource.type) {
         return activityDef.unit;
     }
     return resource.usageUnit;
@@ -345,10 +345,9 @@ export function getWinds() {
 }
 
 export function safeDiv(numerator, denominator) {
-    if(isNaN(numerator) || isNaN(denominator) || denominator === 0 ){
+    if (isNaN(numerator) || isNaN(denominator) || denominator === 0) {
         return 0;
     }
 
-    else return (numerator/denominator).toFixed(2)
+    else return (numerator / denominator).toFixed(2)
 }
-

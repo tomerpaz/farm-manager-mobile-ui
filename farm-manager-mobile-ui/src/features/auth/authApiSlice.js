@@ -14,8 +14,8 @@ export const authApiSlice = apiSlice.injectEndpoints({
                 method: 'POST',
                 body: { ...credentials }
             }),
-            invalidatesTags: ['User','Activities','FieldActivities',
-                { type: 'Field', id: "LIST" },
+            invalidatesTags: ['Field', 'Activities', 'User', 'FieldActivities', 
+            'Dashboard','ActivityDefs', 'Crops','SelectedActivity','Warehouses'
             ]
         }),
         getUser: builder.mutation({
@@ -24,7 +24,7 @@ export const authApiSlice = apiSlice.injectEndpoints({
               
             }),
             providesTags: (result, error, arg) => [
-                { type: 'User', id: "User" },
+                'User'
             ]
         }),
         getUserData: builder.query({
@@ -32,7 +32,7 @@ export const authApiSlice = apiSlice.injectEndpoints({
                 url: '/api/farm/user',
               
             }),
-            providesTags:  ["User"]
+            providesTags:  ['User']
         }),
     })
 })

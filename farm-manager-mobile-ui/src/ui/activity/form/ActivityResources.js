@@ -3,17 +3,19 @@ import { useSelector } from "react-redux"
 import { selectLang } from "../../../features/app/appSlice"
 import { cellSx, cellSxLink, headerSx } from "../view/FieldsView"
 import { Fragment, useEffect, useState } from "react"
-import { ACTIVITY_RESOURCES, ENERGY, WAREHOUSE_RESOURCE_TYPE, getResourceTypeText, getUnitText } from "../../FarmUtil"
+import { ACTIVITY_RESOURCES, AREA_UNIT, ENERGY, HOUR, WAREHOUSE_RESOURCE_TYPE, getResourceTypeText, getResourceUsageUnit, getUnitText, isArrayEmpty } from "../../FarmUtil"
 import { useGetUserDataQuery } from "../../../features/auth/authApiSlice"
 import ResourcseSelectionDialog from "../../dialog/ResourcseSelectionDialog"
 import { Controller, useFieldArray } from "react-hook-form"
-import { Delete, Drafts, DragHandle, Expand, Inbox, Menu, MenuOpen } from "@mui/icons-material"
+import { DragHandle, Menu, MoreVert } from "@mui/icons-material"
 import ActivityResourceDialog from "./ActivityResourceDialog"
 import { useGetWarehousesQuery } from "../../../features/warehouses/warehouseApiSlice"
+import EditBulkQtyDialog from "./EditBulkQtyDialog"
 
 const TRASHHOLD = 3;
+const UNITS = [AREA_UNIT.toUpperCase(), HOUR.toUpperCase()]
 
-const ActivityResources = ({ activity, control, errors, register, tariffs, activityArea }) => {
+const ActivityResources = ({ activity, control, errors, register, tariffs, activityArea, activityDef }) => {
     const text = useSelector(selectLang)
     const { data: user } = useGetUserDataQuery()
     const [open, setOpen] = useState(false);
@@ -22,6 +24,7 @@ const ActivityResources = ({ activity, control, errors, register, tariffs, activ
     const [expendFields, setExpendFields] = useState(false);
     const { data: warehouses, isSuccess: isWarehousesDefsSuccess } = useGetWarehousesQuery()
     const [loadTariffs, setLoadTariffs] = useState(false);
+    const [openEditBulkQty, setOpenEditBulkQty] = useState(false);
 
     const handleOpenEditRow = (index, row) => {
         setSelectedRow(row);
@@ -38,7 +41,7 @@ const ActivityResources = ({ activity, control, errors, register, tariffs, activ
         setSelectedRow(null);
         setSelectedIndex(null);
         remove(index)
-        
+
     };
 
     const { fields, append, prepend, remove, swap, move, insert, update, } = useFieldArray({
@@ -63,6 +66,8 @@ const ActivityResources = ({ activity, control, errors, register, tariffs, activ
             })
         }
     }
+
+    const resourceBulkUnits = Array.from(new Set(fields.filter(e => UNITS.includes(getResourceUsageUnit(e.resource, activityDef))).map(e => getResourceUsageUnit(e.resource, activityDef))));
 
     useEffect(() => {
         runTariffMatch();
@@ -102,6 +107,21 @@ const ActivityResources = ({ activity, control, errors, register, tariffs, activ
         }
     }
 
+    const handleBulkQtyUpdate = (unit, qty) => {
+        if (unit && qty) {
+            fields.map((row, index) => {
+                if (unit === getResourceUsageUnit(row.resource, activityDef)) {
+                    row.qty = qty;
+                    if (row.tariff) {
+                        row.totalCost = row.tariff * qty;
+                    }
+                    update(index, row);
+                }
+            })
+        }
+        setOpenEditBulkQty(false)
+    }
+
     const getResourceTypes = () => {
         var types = ACTIVITY_RESOURCES.find(e => activity.type.includes(e.activity))?.types;
         if (types && !user.gg) {
@@ -127,8 +147,8 @@ const ActivityResources = ({ activity, control, errors, register, tariffs, activ
                 {fields.length > TRASHHOLD &&
                     <IconButton sx={{ marginLeft: 1, marginRight: 1 }} onClick={() => setExpendFields(!expendFields)}>
                         <Badge badgeContent={fields.length} color="primary">
-                           {expendFields && <Menu fontSize='large' /> }
-                           {!expendFields && <DragHandle fontSize='large' /> }
+                            {expendFields && <Menu fontSize='large' />}
+                            {!expendFields && <DragHandle fontSize='large' />}
                         </Badge>
                     </IconButton>
                 }
@@ -143,18 +163,19 @@ const ActivityResources = ({ activity, control, errors, register, tariffs, activ
                             label={text.invoice} fullWidth {...field} />
                     )}
                 />
-                {/* <IconButton onClick={e => remove()}><Delete fontSize='large' /></IconButton> */}
+                {!isArrayEmpty(resourceBulkUnits) && <IconButton onClick={e => setOpenEditBulkQty(true)}><MoreVert fontSize='large' /></IconButton>}
             </Box>
 
             <RenderTable register={register} remove={remove} user={user} activity={activity}
-                handleOpenEditRow={handleOpenEditRow} text={text} getFields={getFields} />
+                handleOpenEditRow={handleOpenEditRow} text={text} getFields={getFields} activityDef={activityDef} />
 
 
             <ResourcseSelectionDialog open={open} handleClose={handleClose} resourceTypes={resourceTypes} />
             {selectedRow && <ActivityResourceDialog selectedIndex={selectedIndex} selectedRow={selectedRow}
                 activityType={activity.type} handleClose={handleCloseEditRow} update={update}
                 warehouses={warehouses} control={control} errors={errors} activityArea={activityArea}
-                remove={()=>handleRemoveRow(selectedIndex)} />}
+                remove={() => handleRemoveRow(selectedIndex)} />}
+            <EditBulkQtyDialog open={openEditBulkQty} units={resourceBulkUnits} text={text} handleClose={handleBulkQtyUpdate} areaUnit={user.areaUnit} activityArea={activityArea} />
 
         </Box>
     )
@@ -185,7 +206,7 @@ const RenderList = ({ register, remove, user, activity, handleOpenEditRow, text,
     )
 }
 
-const RenderTable = ({ register, remove, user, activity, handleOpenEditRow, text, getFields }) => {
+const RenderTable = ({ register, remove, user, activity, handleOpenEditRow, text, getFields, activityDef }) => {
     return (
         <TableContainer >
             <Table size="small" sx={{ margin: 0, padding: 0 }} aria-label="a dense table">
@@ -204,9 +225,10 @@ const RenderTable = ({ register, remove, user, activity, handleOpenEditRow, text
                     {getFields().map((row, index) =>
                         <Row key={row.key} index={index} row={row} text={text} areaUnit={user.areaUnit} register={register}
                             remove={remove}
-                            currency={user.currency} activityDef={activity.activityDef}
+                            currency={user.currency}
                             financial={user.financial}
-                            onClick={() => handleOpenEditRow(index, row)} />
+                            onClick={() => handleOpenEditRow(index, row)}
+                            activityDef={activityDef} />
                     )}
                 </TableBody>
             </Table>
@@ -215,7 +237,8 @@ const RenderTable = ({ register, remove, user, activity, handleOpenEditRow, text
 }
 
 function Row(props) {
-    const { row, index, text, areaUnit, onClick, currency, remove, register, financial } = props;
+    const { row, index, text, areaUnit, onClick, currency, remove, register, financial, activityDef } = props;
+
     return (
         <Fragment>
             <TableRow
@@ -230,8 +253,8 @@ function Row(props) {
                 <TableCell onClick={onClick} sx={cellSx} >{row.resource.name}</TableCell>
                 <TableCell onClick={onClick} sx={cellSx} >{getResourceTypeText(row.resource.type, text)}</TableCell>
                 <TableCell onClick={onClick} sx={cellSx}>{row.qty}</TableCell>
-                <TableCell onClick={onClick} sx={cellSx}>{getUnitText(row.resource.usageUnit, areaUnit, text)}</TableCell>
-                {financial && <TableCell onClick={onClick} sx={row.manualTariff ? cellSxLink : cellSx}>{row.totalCost? row.totalCost.toFixed(2) : 0}</TableCell>}
+                <TableCell onClick={onClick} sx={cellSx}>{getUnitText(getResourceUsageUnit(row.resource, activityDef), areaUnit, text)}</TableCell>
+                {financial && <TableCell onClick={onClick} sx={row.manualTariff ? cellSxLink : cellSx}>{row.totalCost ? row.totalCost.toFixed(2) : 0}</TableCell>}
                 {/* <TableCell width={1} sx={{ padding: 0, margin: 0 }}><IconButton margin={0} padding={0} onClick={e => remove(index)}><Delete fontSize='large' /></IconButton></TableCell> */}
             </TableRow>
         </Fragment>

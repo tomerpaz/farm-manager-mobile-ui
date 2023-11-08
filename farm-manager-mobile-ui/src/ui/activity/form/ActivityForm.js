@@ -1,12 +1,12 @@
 import { BottomNavigation, BottomNavigationAction, Box, TextField, Typography } from '@mui/material'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { selectLang, setSnackbar } from '../../../features/app/appSlice'
-import { ACTIVITY_DEF_TYPES, SPRAYER, SPRAY_TYPES, asLocalDate } from '../../FarmUtil'
+import { asLocalDate } from '../../FarmUtil'
 import ActivityHeaderView from './ActivityHeaderView'
 import { useForm, Controller, useWatch } from "react-hook-form";
 import { Cancel, Delete, Save } from '@mui/icons-material'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import ActivityFields from './ActivityFields'
 import ActivityResources from './ActivityResources'
 import { useCreateActivityMutation, useDeleteActivityMutation, useUpdateActivityMutation } from '../../../features/activities/activitiesApiSlice'
@@ -21,7 +21,6 @@ import { getReference, isSkipTariffFetch } from './ActivityUtil'
 
 const ActivityForm = ({ activity }) => {
 
-  const { type, src } = useParams()
   const navigate = useNavigate()
   const text = useSelector(selectLang)
   const [createActivity] = useCreateActivityMutation();
@@ -34,7 +33,6 @@ const ActivityForm = ({ activity }) => {
 
   const [deleteOpen, setDeleteOpen] = useState(false);
   const dispatch = useDispatch()
-  const [fetchTariffs, setFetchTariffs] = useState(false);
 
   const {
     data: customers,
@@ -68,8 +66,8 @@ const ActivityForm = ({ activity }) => {
     return <Loading />
   }
 
-  const saveActivity = (data) => {   
-    data.execution = asLocalDate(data.execution,true);
+  const saveActivity = (data) => {
+    data.execution = asLocalDate(data.execution, true);
     if (data.uuid) {
       return updateActivity(data).unwrap();
     } else {
@@ -89,37 +87,22 @@ const ActivityForm = ({ activity }) => {
   }
 
   const onSubmit = async (data) => {
-    // console.log('data', data);
-
     try {
       const result = await saveActivity(data);
       dispatch(setSnackbar({ msg: data.uuid ? text.recordUpdated : text.recordCreated, severity: 'success' }))
       navigate(-1)
     } catch (err) {
-
       console.log(err);
-      // if (!err?.originalStatus) {
-      //     // isLoading: true until timeout occurs
-      //     setErrMsg('No Server Response');
-      // } else if (err.originalStatus === 400) {
-      //     setErrMsg('Missing Username or Password');
-      // } else if (err.originalStatus === 401) {
-      //     setErrMsg('Unauthorized');
-      // } else {
-      //     setErrMsg('Login Failed');
-      // }
-      // errRef.current.focus();
     }
-
   }
-  return (
 
+  return (
     <Box sx={{ maxHeight: window.innerHeight - 130, overflow: 'auto' }}>
       <Box margin={1}>
         <form onSubmit={handleSubmit(onSubmit)} >
           <ActivityHeaderView control={control} register={register} activity={activity} errors={errors} crops={crops} activityDefs={activityDefs} customers={customers} />
           <ActivityFields control={control} register={register} activity={activity} getValues={getValues} errors={errors} />
-          <ActivityResources control={control} register={register} activity={activity}
+          <ActivityResources control={control} register={register} activity={activity} activityDef={activityDef}
             errors={errors} tariffs={tariffs} activityArea={activityArea} />
           <Box padding={1}>
             <Controller
@@ -138,7 +121,6 @@ const ActivityForm = ({ activity }) => {
             <BottomNavigationAction
               label={<Typography>{text.cancel}</Typography>}
               onClick={() => navigate(-1)}
-              // to={`/field/${src}/${fieldId}/dash`} component={Link}
               icon={<Cancel fontSize='large' />}
             />
             {activity.editable && activity.uuid && <BottomNavigationAction
