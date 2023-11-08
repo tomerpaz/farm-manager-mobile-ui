@@ -1,7 +1,7 @@
 import { Badge, Box, Button, IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from "@mui/material"
 import { useSelector } from "react-redux"
 import { selectLang } from "../../../features/app/appSlice"
-import { cellSx, cellSxLink, headerSx } from "../view/FieldsView"
+import { cellSx, cellSxBlue, cellSxLink, headerSx } from "../view/FieldsView"
 import { Fragment, useState } from "react"
 import { useGetUserDataQuery } from "../../../features/auth/authApiSlice"
 import { useFields } from "../../../features/fields/fieldsApiSlice"
@@ -128,11 +128,11 @@ function Row(props) {
             <TableRow
                 key={index}
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                <TableCell onClick={onClick} sx={cellSx} >{row.field.name}</TableCell>
-                <TableCell onClick={onClick} sx={cellSx}>{row.field.alias}</TableCell>
-                <TableCell onClick={onClick} sx={cellSx} >{row.field.cropName}</TableCell>
-                <TableCell onClick={onClick} sx={cellSx}>{row.field.varietyName}</TableCell>
-                <TableCell onClick={onClick} sx={row.activityArea === row.field.area ? cellSx : cellSxLink}>
+                <TableCell onClick={onClick} sx={cellSxLink} >{row.field.name}</TableCell>
+                <TableCell /*onClick={onClick}*/ sx={cellSx}>{row.field.alias}</TableCell>
+                <TableCell /*onClick={onClick}*/ sx={cellSx} >{row.field.cropName}</TableCell>
+                <TableCell /*onClick={onClick}*/ sx={cellSx}>{row.field.varietyName}</TableCell>
+                <TableCell /*onClick={onClick}*/ sx={row.activityArea === row.field.area ? cellSx : cellSxBlue}>
                     <Box {...register(`field.${index}.activityArea`)}>
                         {row.activityArea.toFixed(2)}
                     </Box>

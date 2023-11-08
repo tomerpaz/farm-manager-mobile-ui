@@ -9,7 +9,8 @@ import FieldDialog from './FieldDialog'
 
 export const headerSx = { fontWeight: 'bold', padding: 1 };
 export const cellSx = { padding: 1 };
-export const cellSxLink = { padding: 1, color: 'blue' };
+export const cellSxLink = { padding: 1, textDecoration: 'underline', color: 'blue' };
+export const cellSxBlue = { padding: 1, color: 'green' };
 
 const TRASHHOLD = 3;
 

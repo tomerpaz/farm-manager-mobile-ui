@@ -1,7 +1,7 @@
 import { Box, Button, TextField, IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Badge, List, ListItemButton, ListItemText, ListItemIcon, ListItem } from "@mui/material"
 import { useSelector } from "react-redux"
 import { selectLang } from "../../../features/app/appSlice"
-import { cellSx, cellSxLink, headerSx } from "../view/FieldsView"
+import { cellSx, cellSxBlue, cellSxLink, headerSx } from "../view/FieldsView"
 import { Fragment, useEffect, useState } from "react"
 import { ACTIVITY_RESOURCES, AREA_UNIT, ENERGY, HOUR, WAREHOUSE_RESOURCE_TYPE, getResourceTypeText, getResourceUsageUnit, getUnitText, isArrayEmpty } from "../../FarmUtil"
 import { useGetUserDataQuery } from "../../../features/auth/authApiSlice"
@@ -250,11 +250,11 @@ function Row(props) {
 
                 key={index}
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                <TableCell onClick={onClick} sx={cellSx} >{row.resource.name}</TableCell>
-                <TableCell onClick={onClick} sx={cellSx} >{getResourceTypeText(row.resource.type, text)}</TableCell>
-                <TableCell onClick={onClick} sx={cellSx}>{row.qty}</TableCell>
-                <TableCell onClick={onClick} sx={cellSx}>{getUnitText(getResourceUsageUnit(row.resource, activityDef), areaUnit, text)}</TableCell>
-                {financial && <TableCell onClick={onClick} sx={row.manualTariff ? cellSxLink : cellSx}>{row.totalCost ? row.totalCost.toFixed(2) : 0}</TableCell>}
+                <TableCell onClick={onClick} sx={cellSxLink} >{row.resource.name}</TableCell>
+                <TableCell /*onClick={onClick}*/ sx={cellSx} >{getResourceTypeText(row.resource.type, text)}</TableCell>
+                <TableCell /*onClick={onClick}*/ sx={cellSx}>{row.qty}</TableCell>
+                <TableCell /*onClick={onClick}*/ sx={cellSx}>{getUnitText(getResourceUsageUnit(row.resource, activityDef), areaUnit, text)}</TableCell>
+                {financial && <TableCell /*onClick={onClick}*/ sx={row.manualTariff ? cellSxBlue : cellSx}>{row.totalCost ? row.totalCost.toFixed(2) : 0}</TableCell>}
                 {/* <TableCell width={1} sx={{ padding: 0, margin: 0 }}><IconButton margin={0} padding={0} onClick={e => remove(index)}><Delete fontSize='large' /></IconButton></TableCell> */}
             </TableRow>
         </Fragment>
