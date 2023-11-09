@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { selectLang } from "../../../features/app/appSlice";
 import { useState } from "react";
 import { useGetUserDataQuery } from "../../../features/auth/authApiSlice";
-import { UI_SIZE, getActivityTypeText } from "../../FarmUtil";
+import { UI_SIZE, displayFieldName, getActivityTypeText } from "../../FarmUtil";
 import { DatePicker } from "@mui/x-date-pickers";
 import { getFruitIcon } from "../../../icons/FruitIconUtil";
 import { Cancel, Delete, Save } from "@mui/icons-material";
@@ -42,14 +42,15 @@ const ActivityFieldDialog = ({ selectedRow, selectedIndex, handleClose, activity
         // fullScreen
         >
             <DialogTitle id="alert-dialog-title">
-                <Box flex={1} display={'flex'} flexDirection={'row'} alignItems={'center'} >
+                {/* <Box flex={1} display={'flex'} flexDirection={'row'} alignItems={'center'} >
                     <Typography component={'div'} variant='h6'>{getActivityTypeText(activityType, text)}</Typography>
-                    <Avatar sx={{ backgroundColor: 'white' }}>
+
+                </Box> */}
+                <Typography component={'div'} variant="h6"> {displayFieldName(selectedRow.field)}</Typography>
+                <Typography component={'div'} > {selectedRow.field.cropName} / {selectedRow.field.varietyName} - {selectedRow.field.area} {text[user.areaUnit]}
+                {/* <Avatar sx={{ backgroundColor: 'white' }}>
                         {getFruitIcon(selectedRow.field.cropEngName)}
-                    </Avatar>
-                </Box>
-                <Typography component={'div'} variant="h5">  {selectedRow.field.name} / {selectedRow.field.alias}</Typography>
-                <Typography component={'div'} variant="h6"> {selectedRow.field.cropName} / {selectedRow.field.varietyName}
+                    </Avatar> */}
                 </Typography>
 
             </DialogTitle>

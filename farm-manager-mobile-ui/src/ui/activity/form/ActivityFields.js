@@ -1,7 +1,7 @@
 import { Badge, Box, Button, IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from "@mui/material"
 import { useSelector } from "react-redux"
 import { selectLang } from "../../../features/app/appSlice"
-import { cellSx, cellSxBlue, cellSxLink, headerSx } from "../view/FieldsView"
+import { cellSx, cellSxChange, cellSxLink, headerSx } from "../view/FieldsView"
 import { Fragment, useState } from "react"
 import { useGetUserDataQuery } from "../../../features/auth/authApiSlice"
 import { useFields } from "../../../features/fields/fieldsApiSlice"
@@ -132,7 +132,7 @@ function Row(props) {
                 <TableCell /*onClick={onClick}*/ sx={cellSx}>{row.field.alias}</TableCell>
                 <TableCell /*onClick={onClick}*/ sx={cellSx} >{row.field.cropName}</TableCell>
                 <TableCell /*onClick={onClick}*/ sx={cellSx}>{row.field.varietyName}</TableCell>
-                <TableCell /*onClick={onClick}*/ sx={row.activityArea === row.field.area ? cellSx : cellSxBlue}>
+                <TableCell /*onClick={onClick}*/ sx={row.activityArea === row.field.area ? cellSx : cellSxChange}>
                     <Box {...register(`field.${index}.activityArea`)}>
                         {row.activityArea.toFixed(2)}
                     </Box>

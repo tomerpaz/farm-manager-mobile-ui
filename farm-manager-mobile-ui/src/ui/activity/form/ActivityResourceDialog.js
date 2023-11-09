@@ -17,7 +17,7 @@ const getQtyPerWorker = (selectedRow) => {
     return 0;
 }
 
-const ActivityResourceDialog = ({ selectedRow, selectedIndex, handleClose, update, warehouses, activityArea, remove }) => {
+const ActivityResourceDialog = ({ selectedRow, selectedIndex, handleClose, update, warehouses, activityArea, remove, resourceUnit }) => {
     const text = useSelector(selectLang);
     const { data: user } = useGetUserDataQuery()
     const [note, setNote] = useState(selectedRow.note ? selectedRow.note : '');
@@ -108,7 +108,7 @@ const ActivityResourceDialog = ({ selectedRow, selectedIndex, handleClose, updat
 
         >
             <DialogTitle id="alert-dialog-title">
-                <Typography component={'div'} variant="h5">{`${getResourceTypeText(selectedRow.resource.type, text)}:  ${selectedRow.resource.name}`}</Typography>
+                <Typography component={'div'} variant="h6">{`${getResourceTypeText(selectedRow.resource.type, text)}:  ${selectedRow.resource.name}`}</Typography>
             </DialogTitle>
             <DialogContent /*sx={{ minHeight: isWarehouse ? height : null }}*/>
                 <Box display={'flex'} flex={1} flexDirection={'column'}  >
@@ -116,7 +116,7 @@ const ActivityResourceDialog = ({ selectedRow, selectedIndex, handleClose, updat
                         type='number' label={text.qty}
                         InputProps={{
                             endAdornment: <InputAdornment position="end">{
-                                getUnitText(selectedRow.resource.usageUnit, user.areaUnit, text)
+                                getUnitText(resourceUnit, user.areaUnit, text)
                             }
                             </InputAdornment>,
                         }}

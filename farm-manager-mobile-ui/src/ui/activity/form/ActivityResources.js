@@ -1,7 +1,7 @@
 import { Box, Button, TextField, IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Badge, List, ListItemButton, ListItemText, ListItemIcon, ListItem } from "@mui/material"
 import { useSelector } from "react-redux"
 import { selectLang } from "../../../features/app/appSlice"
-import { cellSx, cellSxBlue, cellSxLink, headerSx } from "../view/FieldsView"
+import { cellSx, cellSxChange, cellSxLink, headerSx } from "../view/FieldsView"
 import { Fragment, useEffect, useState } from "react"
 import { ACTIVITY_RESOURCES, AREA_UNIT, ENERGY, HOUR, WAREHOUSE_RESOURCE_TYPE, getResourceTypeText, getResourceUsageUnit, getUnitText, isArrayEmpty } from "../../FarmUtil"
 import { useGetUserDataQuery } from "../../../features/auth/authApiSlice"
@@ -174,8 +174,10 @@ const ActivityResources = ({ activity, control, errors, register, tariffs, activ
             {selectedRow && <ActivityResourceDialog selectedIndex={selectedIndex} selectedRow={selectedRow}
                 activityType={activity.type} handleClose={handleCloseEditRow} update={update}
                 warehouses={warehouses} control={control} errors={errors} activityArea={activityArea}
+                resourceUnit={getResourceUsageUnit(selectedRow.resource, activityDef)}
                 remove={() => handleRemoveRow(selectedIndex)} />}
-            <EditBulkQtyDialog open={openEditBulkQty} units={resourceBulkUnits} text={text} handleClose={handleBulkQtyUpdate} areaUnit={user.areaUnit} activityArea={activityArea} />
+            <EditBulkQtyDialog open={openEditBulkQty} units={resourceBulkUnits} text={text} handleClose={handleBulkQtyUpdate} areaUnit={user.areaUnit} activityArea={activityArea} 
+            />
 
         </Box>
     )
@@ -254,7 +256,7 @@ function Row(props) {
                 <TableCell /*onClick={onClick}*/ sx={cellSx} >{getResourceTypeText(row.resource.type, text)}</TableCell>
                 <TableCell /*onClick={onClick}*/ sx={cellSx}>{row.qty}</TableCell>
                 <TableCell /*onClick={onClick}*/ sx={cellSx}>{getUnitText(getResourceUsageUnit(row.resource, activityDef), areaUnit, text)}</TableCell>
-                {financial && <TableCell /*onClick={onClick}*/ sx={row.manualTariff ? cellSxBlue : cellSx}>{row.totalCost ? row.totalCost.toFixed(2) : 0}</TableCell>}
+                {financial && <TableCell /*onClick={onClick}*/ sx={row.manualTariff ? cellSxChange : cellSx}>{row.totalCost ? row.totalCost.toFixed(2) : 0}</TableCell>}
                 {/* <TableCell width={1} sx={{ padding: 0, margin: 0 }}><IconButton margin={0} padding={0} onClick={e => remove(index)}><Delete fontSize='large' /></IconButton></TableCell> */}
             </TableRow>
         </Fragment>
