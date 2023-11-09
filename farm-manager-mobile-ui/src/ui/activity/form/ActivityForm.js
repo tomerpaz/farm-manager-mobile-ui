@@ -5,7 +5,7 @@ import { selectLang, setSnackbar } from '../../../features/app/appSlice'
 import { asLocalDate } from '../../FarmUtil'
 import ActivityHeaderView from './ActivityHeaderView'
 import { useForm, Controller, useWatch } from "react-hook-form";
-import { Cancel, Delete, Save } from '@mui/icons-material'
+import { Cancel, ControlPointDuplicate, Delete, Save } from '@mui/icons-material'
 import { useNavigate } from 'react-router-dom'
 import ActivityFields from './ActivityFields'
 import ActivityResources from './ActivityResources'
@@ -32,6 +32,8 @@ const ActivityForm = ({ activity }) => {
   const { data: crops, isSuccess: isCropsSuccess } = useGetCropsQuery()
 
   const [deleteOpen, setDeleteOpen] = useState(false);
+  const [isDuplicate, setIsDuplicate] = useState(false);
+
   const dispatch = useDispatch()
 
   const {
@@ -44,13 +46,15 @@ const ActivityForm = ({ activity }) => {
 
 
   const { control, register, handleSubmit, getValues, watch, formState: { errors },
-    formState: { isDirty, dirtyFields },
+    formState: { isDirty, dirtyFields }, reset, setValue
   } = useForm({ defaultValues: activity, });
 
   const execution = useWatch({ control, name: "execution" })
   const activityDef = useWatch({ control, name: "activityDef" })
   const resources = useWatch({ control, name: "resources" })
   const fields = useWatch({ control, name: "fields" })
+  const uuid = useWatch({ control, name: "uuid" })
+  const reference = useWatch({ control, name: "reference" })
 
 
   const activityArea = fields.map(e => e.activityArea).reduce((accumulator, curValue) => accumulator + curValue, 0)
@@ -73,6 +77,13 @@ const ActivityForm = ({ activity }) => {
     } else {
       createActivity(data).unwrap();
     }
+  }
+
+  const duplicate = () => {
+    setValue('uuid', null);
+    setValue('reference', null);
+    setValue('editable', true);
+    setIsDuplicate(true);
   }
 
 
@@ -100,7 +111,12 @@ const ActivityForm = ({ activity }) => {
     <Box sx={{ maxHeight: window.innerHeight - 130, overflow: 'auto' }}>
       <Box margin={1}>
         <form onSubmit={handleSubmit(onSubmit)} >
-          <ActivityHeaderView control={control} register={register} activity={activity} errors={errors} crops={crops} activityDefs={activityDefs} customers={customers} />
+          {/* <Box
+            {...register(`uuid`)}
+            {...register(`reference`)} /> */}
+
+          
+          <ActivityHeaderView control={control} register={register} activity={activity} errors={errors} crops={crops} activityDefs={activityDefs} customers={customers} reference={reference} isDuplicate={isDuplicate} />
           <ActivityFields control={control} register={register} activity={activity} getValues={getValues} errors={errors} />
           <ActivityResources control={control} register={register} activity={activity} activityDef={activityDef}
             errors={errors} tariffs={tariffs} activityArea={activityArea} />
@@ -123,12 +139,16 @@ const ActivityForm = ({ activity }) => {
               onClick={() => navigate(-1)}
               icon={<Cancel fontSize='large' />}
             />
-            {activity.editable && activity.uuid && <BottomNavigationAction
+            {activity.editable && uuid && <BottomNavigationAction
               label={<Typography>{text.delete}</Typography>}
               onClick={() => setDeleteOpen(true)}
               icon={<Delete fontSize='large' />}
             />}
-
+            {uuid && <BottomNavigationAction
+              label={<Typography>{text.duplicate}</Typography>}
+              onClick={duplicate}
+              icon={<ControlPointDuplicate fontSize='large' />}
+            />}
             {activity.editable && <BottomNavigationAction disabled={!isDirty} sx={{ color: !isDirty ? 'lightGray' : null }}
               type="submit"
               label={<Typography >{text.save}</Typography>}

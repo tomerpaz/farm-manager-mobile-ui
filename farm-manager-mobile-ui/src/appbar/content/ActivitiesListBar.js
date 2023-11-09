@@ -17,9 +17,6 @@ const ActivitiesListBar = ({plans}) => {
     const typeFilter = useSelector(isPlan ? selectActivityPlanTypeFilter : selectActivityTypeFilter);
     const statusFilter = useSelector(isPlan ? selectActivityPlanStatusFilter : selectActivityStatusFilter);
 
-    console.log('statusFilterm',statusFilter)
-
-
     const isDefault = isPlan ? statusFilter === DEFAULT_PLAN_STATUS : statusFilter === DEFAULT_ACTIVITY_STATUS;
 
     const noFilter = isStringEmpty(startDateFilter) && isStringEmpty(endDateFilter) && isStringEmpty(typeFilter) && isDefault;

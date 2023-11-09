@@ -19,7 +19,7 @@ const HEADER_CONFIG = [
   { type: MARKET, date: true, year: true, },
 ]
 
-const ActivityHeaderView = ({ activity, control, errors, customers, activityDefs, crops }) => {
+const ActivityHeaderView = ({ activity, control, errors, customers, activityDefs, crops, reference, isDuplicate }) => {
 
   const [crop, setCrop] = useState(null);
   const text = useSelector(selectLang)
@@ -29,12 +29,12 @@ const ActivityHeaderView = ({ activity, control, errors, customers, activityDefs
     <Box margin={1} paddingTop={1}>
       <Box display={'flex'} flex={1} alignItems={'center'} justifyContent={'space-between'} flexDirection={'row'} >
         <Box flex={1} display={'flex'} flexDirection={'row'} alignItems={'center'} >
-          <Typography variant='h6'>{getActivityTypeText(activity.type, text)}</Typography>
+          <Typography sx={{backgroundColor: isDuplicate?  '#ffc107' : null, borderRadius: 2, paddingLeft: 1, paddingRight: 1}} variant='h6'>{getActivityTypeText(activity.type, text)}</Typography>
           <Avatar sx={{ bgcolor: 'white' }}>
             <ActivityTypeIcon type={activity.type} />
           </Avatar>
         </Box>
-        <Typography flex={1} variant='h6'>{activity.reference}</Typography>
+        <Typography flex={1} variant='h6'>{reference}</Typography>
         <Controller
           control={control}
           name="year"

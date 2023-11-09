@@ -9,7 +9,6 @@ export const tariffAdapter = createEntityAdapter()
 const initialState = tariffAdapter.getInitialState()
 
 const buildResourceTariffSearch = ({ reference, resources }) => {
-    console.log('resources',resources)
     let urlParams = null;
     resources.forEach((r, index, arr) => {
         if (!urlParams) {
@@ -25,7 +24,6 @@ const buildResourceTariffSearch = ({ reference, resources }) => {
     if (reference) {
         urlParams += '&ref=' + reference;
     }
-    console.log(urlParams)
     return urlParams;
 }
 
