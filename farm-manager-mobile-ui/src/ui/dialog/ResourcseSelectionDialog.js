@@ -71,7 +71,6 @@ const ResourcseSelectionDialog = ({ open, handleClose, resourceTypes }) => {
     } = useGetResourcesQuery({ type })
 
 
-    if (isLoading) return <Loading />
 
     const onSelectRow = (e) => {
         if (isResourceSelected(e, selectedResources)) {
@@ -81,7 +80,7 @@ const ResourcseSelectionDialog = ({ open, handleClose, resourceTypes }) => {
         }
     }
 
-    const visableResources = data.filter(e => filterResource(e, filter, type));
+    const visableResources = data ? data.filter(e => filterResource(e, filter, type)) : [];
     const visableSelectedResources = visableResources.filter(e => selectedResources.includes(e));
     const numSelected = visableSelectedResources.length;
     const rowCount = visableResources.length;
@@ -142,11 +141,11 @@ const ResourcseSelectionDialog = ({ open, handleClose, resourceTypes }) => {
                     />
                 </Box>
             </DialogTitle>
-            <DialogContent  sx={{ padding: 0, margin: 0}}>
-                <TableContainer   sx={{ padding: 0, maxHeight: height}}>
-                    <Table stickyHeader size="small" sx={{width: '100%', margin: 0, padding: 0 }} aria-label="a dense table">
+            <DialogContent sx={{ padding: 0, margin: 0 }}>
+                <TableContainer sx={{ padding: 0, maxHeight: height }}>
+                    <Table stickyHeader size="small" sx={{ width: '100%', margin: 0, padding: 0 }} aria-label="a dense table">
                         <TableHead >
-                            <TableRow 
+                            <TableRow
                             // style={{
                             //     height: 10,
                             // }}
@@ -187,7 +186,7 @@ const ResourcseSelectionDialog = ({ open, handleClose, resourceTypes }) => {
                 </TableContainer>
                 {showPegination && <ListPager bottom={50} page={Number(page)}
                     totalPages={Math.ceil(visableResources.length / ROWS_PER_PAGE)} setPage={setPage} />}
-        
+
             </DialogContent>
             <DialogActions sx={{ justifyContent: 'center' }}>
                 <Button size='large' variant='outlined' onClick={() => onAction(false)}>{text.cancel}</Button>

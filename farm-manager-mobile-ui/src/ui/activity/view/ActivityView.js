@@ -14,7 +14,7 @@ import { GENERAL, HARVEST } from '../../FarmUtil'
 import ActivityForm from '../form/ActivityForm'
 import { parseISO } from 'date-fns'
 
-const SUPPORTED_TYPES = [GENERAL, /*HARVEST*/]
+const SUPPORTED_TYPES = [GENERAL/*, HARVEST*/]
 
 const ActivityView = () => {
 

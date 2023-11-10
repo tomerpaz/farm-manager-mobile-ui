@@ -75,7 +75,8 @@ const ActivityForm = ({ activity }) => {
     if (data.uuid) {
       return updateActivity(data).unwrap();
     } else {
-      createActivity(data).unwrap();
+      data.src = 'MUI'
+      return createActivity(data).unwrap();
     }
   }
 

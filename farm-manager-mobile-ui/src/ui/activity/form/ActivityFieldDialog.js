@@ -8,6 +8,7 @@ import { HARVEST, UI_SIZE, displayFieldName, getActivityTypeText } from "../../F
 import { DatePicker } from "@mui/x-date-pickers";
 import { getFruitIcon } from "../../../icons/FruitIconUtil";
 import { Cancel, Delete, Save } from "@mui/icons-material";
+import { useGetContainersQuery } from "../../../features/containers/containersApiSlice";
 
 
 
@@ -23,8 +24,9 @@ const ActivityFieldDialog = ({ selectedRow, selectedIndex, handleClose, activity
     const [qty, setQty] = useState(selectedRow.qty);
     const [weight, setWeight] = useState(selectedRow.weight);
 
+    const { data: containers, isSuccess: isContainersSuccess } = useGetContainersQuery({},{skip: activityType !== HARVEST})
 
-    console.log(user)
+    console.log('containers',containers)
 
     const onAction = (save) => {
         if (save) {
@@ -88,9 +90,7 @@ const ActivityFieldDialog = ({ selectedRow, selectedIndex, handleClose, activity
                     <Box display={'flex'} flexDirection={'row'}>
                         <TextFieldBase value={qty} onChange={e => setQty(Number(e.target.value))} type='number' label={text.qty} />
                         <Box margin={1}></Box>
-
                         <TextFieldBase value={weight} onChange={e => setWeight(Number(e.target.value))} type='number' label={text[user.weightUnit]} />
-
                     </Box>
                 }
                 <TextFieldBase value={note} onChange={e => setNote(e.target.value)} fullWidth={true} label={text.note} />
