@@ -15,7 +15,7 @@ const HEADER_CONFIG = [
   { type: SPRAY_PLAN, date: true, year: true, endHour: true, startHour: true, crop: true, wind: true },
   { type: IRRIGATION, date: true, year: true, endDate: true, },
   { type: IRRIGATION_PLAN, date: true, year: true, endDate: true, },
-  { type: HARVEST, date: true, year: true, activity: true, activityType: HARVEST },
+  { type: HARVEST, date: true, year: true, activity: true, activityType: HARVEST, waybill: true, customer: true },
   { type: MARKET, date: true, year: true, },
 ]
 
@@ -29,7 +29,7 @@ const ActivityHeaderView = ({ activity, control, errors, customers, activityDefs
     <Box margin={1} paddingTop={1}>
       <Box display={'flex'} flex={1} alignItems={'center'} justifyContent={'space-between'} flexDirection={'row'} >
         <Box flex={1} display={'flex'} flexDirection={'row'} alignItems={'center'} >
-          <Typography sx={{backgroundColor: isDuplicate?  '#ffc107' : null, borderRadius: 2, paddingLeft: 1, paddingRight: 1}} variant='h6'>{getActivityTypeText(activity.type, text)}</Typography>
+          <Typography sx={{ backgroundColor: isDuplicate ? '#ffc107' : null, borderRadius: 2, paddingLeft: 1, paddingRight: 1 }} variant='h6'>{getActivityTypeText(activity.type, text)}</Typography>
           <Avatar sx={{ bgcolor: 'white' }}>
             <ActivityTypeIcon type={activity.type} />
           </Avatar>
@@ -155,22 +155,36 @@ const ActivityHeaderView = ({ activity, control, errors, customers, activityDefs
             )}
           />}
 
-        {CUSTOMER_TYPES.includes(activity.type) &&
 
-          <Controller
-            name="customer.id"
-            control={control}
-            render={({ field: { ref, onChange, ...field } }) => <Autocomplete
-              disablePortal
-              onChange={(_, data) => onChange(data)}
-              options={customers}
-              sx={{ width: 300 }}
-              size='small'
-              getOptionLabel={(option) => option ? option.name : ''}
-              isOptionEqualToValue={(option, value) => (value === undefined) || option?.id?.toString() === (value?.id ?? value)?.toString()}
-              renderInput={(params) => <TextFieldBase sx={{ marginTop: 0.5 }} {...params} label={text.cusomer} />}
-              {...field} />}
-          />}
+        {HARVEST === activity.type &&
+          <Box marginTop={1} display={'flex'} flex={1} flexDirection={'row'} alignContent={'center'} alignItems={'center'}>
+            <Controller
+              control={control}
+              name="waybill"
+              render={({ field }) => (
+                <TextField size='small'
+                  sx={{ flex: 1 }}
+                  id="activity-waybill"
+                  label={text.waybill}  {...field} />
+              )}
+            />
+            <Box margin={1} />
+            <Controller
+              name="customer"
+              control={control}
+              render={({ field: { ref, onChange, ...field } }) => <Autocomplete
+                disablePortal
+                onChange={(_, data) => onChange(data)}
+                options={customers}
+                sx={{ flex: 1 }}
+                size='small'
+                getOptionLabel={(option) => option ? option.name : ''}
+                isOptionEqualToValue={(option, value) => (value === undefined) || option?.id?.toString() === (value?.id ?? value)?.toString()}
+                renderInput={(params) => <TextFieldBase sx={{ marginTop: 0.5 }} {...params} label={text.customer} />}
+                {...field} />}
+            />
+          </Box>
+        }
       </Box>
     </Box>)
 }

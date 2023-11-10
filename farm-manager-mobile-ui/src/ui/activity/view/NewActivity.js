@@ -23,7 +23,7 @@ const NewActivity = () => {
   const wind = isSpray ? getWinds()[0] : null;
 
   const fields = field ? [{ field, activityArea: field.area, fieldNote: null, actualExecution: null }] : [];
-  const activity = { type, plan: isPlan, execution: newDate(), activityDef: null, year: user.year, wind, customer: null, fields, resources: [], note: '', invoice: '', editable: true };
+  const activity = { type, plan: isPlan, execution: newDate(), activityDef: null, year: user.year, wind, customer: null, fields, resources: [], note: '', invoice: '', editable: true, waybill: '' };
 
   return (
     <Box >

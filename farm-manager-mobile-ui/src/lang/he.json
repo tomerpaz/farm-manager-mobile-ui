@@ -112,5 +112,7 @@
     "workerCount": "מס' עובדים",
     "qtyPerWorker": "כמות לעובד",
     "renewable": "מתחדשת",
-    "bulkQtyUpdate" : "עדכון כמות"
+    "bulkQtyUpdate" : "עדכון כמות",
+    "waybill": "ת. משלוח",
+    "customer":"לקוח"
 }

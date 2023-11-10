@@ -112,7 +112,9 @@
     "workerCount": "Worker Count",
     "qtyPerWorker": "Qty/Worker",
     "renewable": "Renewable",
-    "bulkQtyUpdate" : "Qty Updated"
+    "bulkQtyUpdate" : "Qty Updated",
+    "waybill": "Waybill",
+    "customer":"Customer"
 
 
 
