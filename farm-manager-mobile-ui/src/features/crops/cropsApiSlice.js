@@ -2,6 +2,7 @@ import {
     createEntityAdapter
 } from "@reduxjs/toolkit";
 import { apiSlice } from "../../app/api/apiSlice";
+import { Crops_TAG } from "../auth/authApiSlice";
 
 
 export const cropsAdapter = createEntityAdapter()
@@ -15,7 +16,7 @@ export const cropsApiSlice = apiSlice.injectEndpoints({
         getCrops: builder.query({
 
             query: (args) => `/api/farm/crops`,
-            providesTags: ['Crops']
+            providesTags: [Crops_TAG]
         }),
     
     })

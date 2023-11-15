@@ -2,6 +2,7 @@ import {
     createEntityAdapter
 } from "@reduxjs/toolkit";
 import { apiSlice } from "../../app/api/apiSlice";
+import { Activities_TAG, FieldActivities_TAG, SelectedActivity_TAG } from "../auth/authApiSlice";
 
 
 export const activitiesAdapter = createEntityAdapter({
@@ -62,7 +63,7 @@ export const activityApiSlice = apiSlice.injectEndpoints({
                 body: { ...args },
                 
             }),
-            invalidatesTags: ['Activities','SelectedActivity','FieldActivities']
+            invalidatesTags: [Activities_TAG, SelectedActivity_TAG, FieldActivities_TAG]
                
         }),
         updateActivity: builder.mutation({
@@ -72,7 +73,7 @@ export const activityApiSlice = apiSlice.injectEndpoints({
                 body: { ...args },
                 
             }),
-            invalidatesTags: ['Activities','SelectedActivity','FieldActivities']
+            invalidatesTags: [Activities_TAG, SelectedActivity_TAG, FieldActivities_TAG]
 
         }),
 
@@ -83,9 +84,7 @@ export const activityApiSlice = apiSlice.injectEndpoints({
                 method: 'DELETE',
               }
             },
-           // invalidatesTags: (result, error, id) => [{ type: 'Posts', id }],
-           invalidatesTags: ['Activities', 'SelectedActivity', 'FieldActivities']
-
+           invalidatesTags: [Activities_TAG, SelectedActivity_TAG, FieldActivities_TAG]
           }),
 
     })

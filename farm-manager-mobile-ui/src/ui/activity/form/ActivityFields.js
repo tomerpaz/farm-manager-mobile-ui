@@ -9,6 +9,7 @@ import FieldSelectionDialog from "../../dialog/FieldsSelectionDialog"
 import { useFieldArray } from "react-hook-form";
 import { Delete, DragHandle, Menu } from "@mui/icons-material"
 import ActivityFieldDialog from "./ActivityFieldDialog"
+import { isArrayEmpty } from "../../FarmUtil"
 
 const TRASHHOLD = 3;
 
@@ -90,7 +91,7 @@ const ActivityFields = ({ activity, getValues, control, register, errors, setVal
                         </IconButton>
                     }
                 </Box>
-                <IconButton onClick={e => remove()}><Delete fontSize='large' /></IconButton>
+                <IconButton disabled={isArrayEmpty(fields)} onClick={e => remove()}><Delete fontSize='large' /></IconButton>
             </Box>
 
             <TableContainer >

@@ -7,7 +7,7 @@ import { ACTIVITY_RESOURCES, AREA_UNIT, ENERGY, HOUR, WAREHOUSE_RESOURCE_TYPE, g
 import { useGetUserDataQuery } from "../../../features/auth/authApiSlice"
 import ResourcseSelectionDialog from "../../dialog/ResourcseSelectionDialog"
 import { Controller, useFieldArray } from "react-hook-form"
-import { DragHandle, Menu, MoreVert } from "@mui/icons-material"
+import { Delete, DragHandle, Menu, MoreVert } from "@mui/icons-material"
 import ActivityResourceDialog from "./ActivityResourceDialog"
 import { useGetWarehousesQuery } from "../../../features/warehouses/warehouseApiSlice"
 import EditBulkQtyDialog from "./EditBulkQtyDialog"
@@ -143,16 +143,19 @@ const ActivityResources = ({ activity, control, errors, register, tariffs, activ
     return (
         <Box margin={1} paddingTop={2} display={'flex'} flexDirection={'column'}>
             <Box display={'flex'} flex={1} justifyContent={'space-between'} alignItems={'center'}>
-                <Button size='large' color={errors.resources ? 'error' : 'primary'} disableElevation={true} variant="contained" onClick={handleClickOpen}>{text.resources} </Button>
-                {fields.length > TRASHHOLD &&
-                    <IconButton sx={{ marginLeft: 1, marginRight: 1 }} onClick={() => setExpendFields(!expendFields)}>
-                        <Badge badgeContent={fields.length} color="primary">
-                            {expendFields && <Menu fontSize='large' />}
-                            {!expendFields && <DragHandle fontSize='large' />}
-                        </Badge>
-                    </IconButton>
-                }
-                <Box margin={1}></Box>
+                <Box>                <Button size='large' color={errors.resources ? 'error' : 'primary'} disableElevation={true} variant="contained" onClick={handleClickOpen}>{text.resources} </Button>
+                    {fields.length > TRASHHOLD &&
+                        <IconButton sx={{ marginLeft: 1, marginRight: 1 }} onClick={() => setExpendFields(!expendFields)}>
+                            <Badge badgeContent={fields.length} color="primary">
+                                {expendFields && <Menu fontSize='large' />}
+                                {!expendFields && <DragHandle fontSize='large' />}
+                            </Badge>
+                        </IconButton>
+                    }
+                </Box>
+                <IconButton disabled={isArrayEmpty(fields)} onClick={() => remove()}><Delete fontSize='large' /></IconButton>
+            </Box>
+            <Box marginTop={1} display={'flex'} flex={1} justifyContent={'space-between'} alignItems={'center'}>
                 <Controller
                     control={control}
                     name="invoice"
@@ -163,7 +166,7 @@ const ActivityResources = ({ activity, control, errors, register, tariffs, activ
                             label={text.invoice} fullWidth {...field} />
                     )}
                 />
-                {!isArrayEmpty(resourceBulkUnits) && <IconButton onClick={e => setOpenEditBulkQty(true)}><MoreVert fontSize='large' /></IconButton>}
+                <IconButton disabled={isArrayEmpty(resourceBulkUnits)} onClick={() => setOpenEditBulkQty(true)}><MoreVert fontSize='large' /></IconButton>
             </Box>
 
             <RenderTable register={register} remove={remove} user={user} activity={activity}
@@ -176,7 +179,7 @@ const ActivityResources = ({ activity, control, errors, register, tariffs, activ
                 warehouses={warehouses} control={control} errors={errors} activityArea={activityArea}
                 resourceUnit={getResourceUsageUnit(selectedRow.resource, activityDef)}
                 remove={() => handleRemoveRow(selectedIndex)} />}
-            <EditBulkQtyDialog open={openEditBulkQty} units={resourceBulkUnits} text={text} handleClose={handleBulkQtyUpdate} areaUnit={user.areaUnit} activityArea={activityArea} 
+            <EditBulkQtyDialog open={openEditBulkQty} units={resourceBulkUnits} text={text} handleClose={handleBulkQtyUpdate} areaUnit={user.areaUnit} activityArea={activityArea}
             />
 
         </Box>

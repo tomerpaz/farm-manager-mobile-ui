@@ -3,6 +3,7 @@ import {
     createEntityAdapter
 } from "@reduxjs/toolkit";
 import { apiSlice } from "../../app/api/apiSlice";
+import { User_TAG } from "../auth/authApiSlice";
 
 
 
@@ -35,8 +36,8 @@ export const fieldsApiSlice = apiSlice.injectEndpoints({
                 return fieldsAdapter.setAll(initialState, fields)
             },
             providesTags: (result, error, arg) => [
-                { type: 'Field', id: "LIST" },
-                ...result.ids.map(id => ({ type: 'Field', id }))
+                { type: User_TAG, id: "LIST" },
+                ...result.ids.map(id => ({ type: User_TAG, id }))
             ]
         })
     })

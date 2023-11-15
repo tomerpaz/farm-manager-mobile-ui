@@ -2,6 +2,7 @@ import {
     createEntityAdapter
 } from "@reduxjs/toolkit";
 import { apiSlice } from "../../app/api/apiSlice";
+import { Resources_TAG } from "../auth/authApiSlice";
 
 
 export const resourcesAdapter = createEntityAdapter()
@@ -15,15 +16,7 @@ export const resourcesApiSlice = apiSlice.injectEndpoints({
     endpoints: builder => ({
         getResources: builder.query({
             query: (args) => `/api/farm/${args.type}/resources`,
-            providesTags: ['Resources']
-            // transformResponse: responseData => {
-
-            //     return activitiesAdapter.setAll(initialState, responseData.content)
-            // },
-            // providesTags: (result, error, arg) => [
-            //     { type: 'ActivityDefs', id: "LIST" },
-            //     ...result.content.map(e => ({ type: 'ActivityDefs', id: e.id }))
-            // ]
+            providesTags: [Resources_TAG]
         }),
     
     })

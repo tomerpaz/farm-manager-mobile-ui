@@ -71,7 +71,7 @@ const ActivityHeaderView = ({ activity, control, errors, customers, activityDefs
               }}
               // 
               slotProps={{
-                textField: { size: 'small', variant: 'outlined', sx: { maxWidth: 110 } },
+                textField: { size: 'small', variant: 'outlined', sx: { maxWidth: 115 } },
                 actionBar: { actions: ["cancel" /*, "clear"*/] }
               }}
 

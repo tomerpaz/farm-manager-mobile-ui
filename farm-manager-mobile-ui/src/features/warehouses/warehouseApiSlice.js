@@ -2,6 +2,7 @@ import {
     createEntityAdapter
 } from "@reduxjs/toolkit";
 import { apiSlice } from "../../app/api/apiSlice";
+import { Warehouses_TAG } from "../auth/authApiSlice";
 
 
 export const warehousesAdapter = createEntityAdapter()
@@ -15,7 +16,7 @@ export const warehousesApiSlice = apiSlice.injectEndpoints({
         getWarehouses: builder.query({
 
             query: (args) => `/api/farm/warehouses`,
-            providesTags: ['Warehouses']
+            providesTags: [Warehouses_TAG]
         }),
     
     })
