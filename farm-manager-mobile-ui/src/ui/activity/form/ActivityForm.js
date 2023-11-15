@@ -133,7 +133,7 @@ const ActivityForm = ({ activity }) => {
               )}
             />
           </Box>
-          <BottomNavigation sx={{ position: 'fixed', bottom: 0, left: 0, right: 0, paddingTop: 2, borderTop: 1, borderTopColor: 'lightGray', backgroundColor: 'white', zIndex: 1000 }} value={-1}
+          <BottomNavigation sx={{ position: 'fixed', bottom: 0, left: 0, right: 0, paddingTop: 2, paddingBottom: 2, borderTop: 1, borderTopColor: 'lightGray', backgroundColor: 'white', zIndex: 1000 }} value={-1}
             showLabels>
             <BottomNavigationAction
               label={<Typography>{text.cancel}</Typography>}
