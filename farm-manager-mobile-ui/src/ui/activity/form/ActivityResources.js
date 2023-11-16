@@ -10,7 +10,7 @@ import { Controller, useFieldArray } from "react-hook-form"
 import { Delete, DragHandle, Menu, MoreVert } from "@mui/icons-material"
 import ActivityResourceDialog from "./ActivityResourceDialog"
 import { useGetWarehousesQuery } from "../../../features/warehouses/warehouseApiSlice"
-import EditBulkQtyDialog from "./EditBatchQtyDialog"
+import EditBulkQtyDialog from "./EditBulkQtyDialog"
 
 const TRASHHOLD = 3;
 const UNITS = [AREA_UNIT.toUpperCase(), HOUR.toUpperCase()]
