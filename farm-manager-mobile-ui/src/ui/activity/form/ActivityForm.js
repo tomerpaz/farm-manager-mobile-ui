@@ -59,12 +59,13 @@ const ActivityForm = ({ activity }) => {
 
   const activityArea = fields.map(e => e.activityArea).reduce((accumulator, curValue) => accumulator + curValue, 0)
 
+  const tariffResourceIds = resources.filter(e => e.manualTariff === false).map(e => e.resource.id);
   const { data: tariffs, isSuccess: isTariffsSuccess, isLoading: isTariffLoading, } = useGetResourcesTariffQuery({
     activityType: activity.type,
     date: asLocalDate(execution),
     reference: getReference(activity.type, resources, activityDef),
-    resources: resources.filter(e => e.manualTariff === false).map(e => e.resource.id)
-  }, { skip: isSkipTariffFetch(isDirty, user.financial, resources) });
+    resources: tariffResourceIds
+  }, { skip: isSkipTariffFetch(isDirty, user.financial, tariffResourceIds) });
 
   if (!isCropsSuccess || !isActivityDefsSuccess || !isCustomersSuccess) {
     return <Loading />
@@ -116,7 +117,7 @@ const ActivityForm = ({ activity }) => {
             {...register(`uuid`)}
             {...register(`reference`)} /> */}
 
-          
+
           <ActivityHeaderView control={control} register={register} activity={activity} errors={errors} crops={crops} activityDefs={activityDefs} customers={customers} reference={reference} isDuplicate={isDuplicate} />
           <ActivityFields control={control} register={register} activity={activity} getValues={getValues} errors={errors} />
           <ActivityResources control={control} register={register} activity={activity} activityDef={activityDef}

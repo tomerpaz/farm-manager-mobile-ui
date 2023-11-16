@@ -10,11 +10,11 @@ import FieldsView from './FieldsView'
 import ActivityHeaderView from './ActivityHeaderView'
 import { ControlPointDuplicate, Delete, DeleteForever, DeleteOutline, DeleteRounded, Save, Task, HighlightOffRounded } from '@mui/icons-material'
 import TextFieldBase from '../../../components/ui/TextField'
-import { GENERAL, HARVEST } from '../../FarmUtil'
+import { GENERAL, HARVEST, parseISOOrNull } from '../../FarmUtil'
 import ActivityForm from '../form/ActivityForm'
 import { parseISO } from 'date-fns'
 
-const SUPPORTED_TYPES = [GENERAL/*, HARVEST*/]
+const SUPPORTED_TYPES = [GENERAL, HARVEST]
 
 const ActivityView = () => {
 
@@ -32,14 +32,25 @@ const ActivityView = () => {
 
     if (SUPPORTED_TYPES.includes(activity.type)) {
       // console.log(activity)
-      const act = { ...activity}
+
+      const fields = activity.fields.map(e => {
+        return {...e, actualExecution: parseISOOrNull(e.actualExecution)}
+      });
+
+      const act = { ...activity, fields }
+
+
       act.execution = parseISO(activity.execution);
-      act.note = act.note? act.note : '';
-      act.invoice = act.invoice? act.invoice : ''
+      act.note = act.note ? act.note : '';
+      act.invoice = act.invoice ? act.invoice : ''
       act.year = activity.year ? activity.year : act.execution.getFullYear();
+      act.waybill = act.waybill ? act.waybill : '';
+      // act.fields.forEach(e => {
+      //   e.actualExecution = parseISOOrNull(e.actualExecution);
+      // });
 
       return (
-        <Box>         
+        <Box>
           <ActivityForm activity={act} />
         </Box>
       )

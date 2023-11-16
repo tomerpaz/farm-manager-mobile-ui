@@ -1,10 +1,10 @@
-import { Avatar, Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from "@mui/material";
+import { Autocomplete, Avatar, Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from "@mui/material";
 import TextFieldBase from "../../../components/ui/TextField";
 import { useSelector } from "react-redux";
 import { selectLang } from "../../../features/app/appSlice";
 import { useState } from "react";
 import { useGetUserDataQuery } from "../../../features/auth/authApiSlice";
-import { HARVEST, UI_SIZE, displayFieldName, getActivityTypeText } from "../../FarmUtil";
+import { HARVEST, UI_SIZE, displayFieldName, getActivityTypeText, isArrayEmpty } from "../../FarmUtil";
 import { DatePicker } from "@mui/x-date-pickers";
 import { getFruitIcon } from "../../../icons/FruitIconUtil";
 import { Cancel, Delete, Save } from "@mui/icons-material";
@@ -23,10 +23,11 @@ const ActivityFieldDialog = ({ selectedRow, selectedIndex, handleClose, activity
     const [actualExecution, setActualExecution] = useState(selectedRow.actualExecution);
     const [qty, setQty] = useState(selectedRow.qty);
     const [weight, setWeight] = useState(selectedRow.weight);
+    const [container, setContainer] = useState(activityType === HARVEST ? selectedRow.container : null);
 
-    const { data: containers, isSuccess: isContainersSuccess } = useGetContainersQuery({},{skip: activityType !== HARVEST})
+    const { data: containers, isSuccess: isContainersSuccess } = useGetContainersQuery({}, { skip: activityType !== HARVEST })
 
-    console.log('containers',containers)
+    console.log('containers', containers)
 
     const onAction = (save) => {
         if (save) {
@@ -36,6 +37,7 @@ const ActivityFieldDialog = ({ selectedRow, selectedIndex, handleClose, activity
             if (HARVEST === activityType) {
                 selectedRow.qty = qty;
                 selectedRow.weight = weight;
+                selectedRow.container = container;
             }
             update(selectedIndex, selectedRow);
         }
@@ -65,9 +67,9 @@ const ActivityFieldDialog = ({ selectedRow, selectedIndex, handleClose, activity
 
             </DialogTitle>
             <DialogContent>
-                <Box  display={'flex'} flex={1} flexDirection={'row'} alignItems={'center'}>
+                <Box display={'flex'} flex={1} flexDirection={'row'} alignItems={'center'}>
 
-                    <TextFieldBase sx={{flex: 1}} value={activityArea} onChange={e => setActivityArea(Number(e.target.value))} type='number' label={text[user.areaUnit]} />
+                    <TextFieldBase sx={{ flex: 1 }} value={activityArea} onChange={e => setActivityArea(Number(e.target.value))} type='number' label={text[user.areaUnit]} />
                     <Box margin={1}></Box>
                     <DatePicker
                         label={text.executed}
@@ -76,7 +78,7 @@ const ActivityFieldDialog = ({ selectedRow, selectedIndex, handleClose, activity
                             cancelButtonLabel: text.cancel,
                             clearButtonLabel: text.clear
                         }}
-                        
+
                         showToolbar={false}
                         value={actualExecution}
                         onChange={(e) => setActualExecution(e)}// asLocalDate(e, true)}
@@ -92,6 +94,21 @@ const ActivityFieldDialog = ({ selectedRow, selectedIndex, handleClose, activity
                         <Box margin={1}></Box>
                         <TextFieldBase value={weight} onChange={e => setWeight(Number(e.target.value))} type='number' label={text[user.weightUnit]} />
                     </Box>
+                }
+                {HARVEST === activityType && !isArrayEmpty(containers) &&
+                    <Autocomplete
+                        // disablePortal
+                        value={container}
+                        onChange={(_, data) => setContainer(data)}
+                        options={containers}
+                        // sx={{ flex: 3 }}
+                        // fullWidth
+                       // size='small'
+                        getOptionLabel={(option) => option ? option.name : ''}
+                        isOptionEqualToValue={(option, value) => (value === undefined) || option?.id?.toString() === (value?.id ?? value)?.toString()}
+                        renderInput={(params) => <TextFieldBase {...params} label={text.container} />}
+                    />
+
                 }
                 <TextFieldBase value={note} onChange={e => setNote(e.target.value)} fullWidth={true} label={text.note} />
             </DialogContent>

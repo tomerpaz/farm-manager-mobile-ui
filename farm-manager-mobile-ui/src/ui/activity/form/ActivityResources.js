@@ -10,7 +10,7 @@ import { Controller, useFieldArray } from "react-hook-form"
 import { Delete, DragHandle, Menu, MoreVert } from "@mui/icons-material"
 import ActivityResourceDialog from "./ActivityResourceDialog"
 import { useGetWarehousesQuery } from "../../../features/warehouses/warehouseApiSlice"
-import EditBulkQtyDialog from "./EditBulkQtyDialog"
+import EditBulkQtyDialog from "./EditBatchQtyDialog"
 
 const TRASHHOLD = 3;
 const UNITS = [AREA_UNIT.toUpperCase(), HOUR.toUpperCase()]
@@ -142,6 +142,18 @@ const ActivityResources = ({ activity, control, errors, register, tariffs, activ
 
     return (
         <Box margin={1} paddingTop={2} display={'flex'} flexDirection={'column'}>
+            <Box marginTop={1} marginBottom={1} display={'flex'} flex={1} justifyContent={'space-between'} alignItems={'center'}>
+                <Controller
+                    control={control}
+                    name="invoice"
+                    render={({ field }) => (
+                        <TextField size='small'
+
+                            id="activity-invoice"
+                            label={text.invoice} fullWidth {...field} />
+                    )}
+                />
+            </Box>
             <Box display={'flex'} flex={1} justifyContent={'space-between'} alignItems={'center'}>
                 <Box>                <Button size='large' color={errors.resources ? 'error' : 'primary'} disableElevation={true} variant="contained" onClick={handleClickOpen}>{text.resources} </Button>
                     {fields.length > TRASHHOLD &&
@@ -153,21 +165,12 @@ const ActivityResources = ({ activity, control, errors, register, tariffs, activ
                         </IconButton>
                     }
                 </Box>
-                <IconButton disabled={isArrayEmpty(fields)} onClick={() => remove()}><Delete fontSize='large' /></IconButton>
+                <Box>
+                    <IconButton disabled={isArrayEmpty(resourceBulkUnits)} onClick={() => setOpenEditBulkQty(true)}><MoreVert fontSize='large' /></IconButton>
+                    <IconButton disabled={isArrayEmpty(fields)} onClick={() => remove()}><Delete fontSize='large' /></IconButton>
+                </Box>
             </Box>
-            <Box marginTop={1} display={'flex'} flex={1} justifyContent={'space-between'} alignItems={'center'}>
-                <Controller
-                    control={control}
-                    name="invoice"
-                    render={({ field }) => (
-                        <TextField size='small'
 
-                            id="activity-invoice"
-                            label={text.invoice} fullWidth {...field} />
-                    )}
-                />
-                <IconButton disabled={isArrayEmpty(resourceBulkUnits)} onClick={() => setOpenEditBulkQty(true)}><MoreVert fontSize='large' /></IconButton>
-            </Box>
 
             <RenderTable register={register} remove={remove} user={user} activity={activity}
                 handleOpenEditRow={handleOpenEditRow} text={text} getFields={getFields} activityDef={activityDef} />
