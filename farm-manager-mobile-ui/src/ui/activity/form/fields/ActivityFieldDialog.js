@@ -1,13 +1,13 @@
-import { Autocomplete, Avatar, Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from "@mui/material";
+import { Autocomplete, Avatar, Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Typography } from "@mui/material";
 import TextFieldBase from "../../../../components/ui/TextField";
 import { useSelector } from "react-redux";
 import { selectLang } from "../../../../features/app/appSlice";
 import { useState } from "react";
 import { useGetUserDataQuery } from "../../../../features/auth/authApiSlice";
-import { HARVEST, UI_SIZE, displayFieldName, getActivityTypeText, isArrayEmpty } from "../../../FarmUtil";
+import { HARVEST, MARKET, UI_SIZE, displayFieldName, getActivityTypeText, isArrayEmpty } from "../../../FarmUtil";
 import { DatePicker } from "@mui/x-date-pickers";
 import { getFruitIcon } from "../../../../icons/FruitIconUtil";
-import { Cancel, Delete, Save } from "@mui/icons-material";
+import { Cancel, ControlPointDuplicate, Delete, Save } from "@mui/icons-material";
 import { useGetContainersQuery } from "../../../../features/containers/containersApiSlice";
 
 
@@ -27,7 +27,7 @@ const ActivityFieldDialog = ({ selectedRow, selectedIndex, handleClose, activity
 
     const { data: containers, isSuccess: isContainersSuccess } = useGetContainersQuery({}, { skip: activityType !== HARVEST })
 
-    console.log('containers', containers)
+    //  console.log('containers', containers)
 
     const onAction = (save) => {
         if (save) {
@@ -58,13 +58,22 @@ const ActivityFieldDialog = ({ selectedRow, selectedIndex, handleClose, activity
                     <Typography component={'div'} variant='h6'>{getActivityTypeText(activityType, text)}</Typography>
 
                 </Box> */}
-                <Typography component={'div'} variant="h6"> {displayFieldName(selectedRow.field)}</Typography>
-                <Typography component={'div'} > {selectedRow.field.cropName} / {selectedRow.field.varietyName} - {selectedRow.field.area} {text[user.areaUnit]}
-                    {/* <Avatar sx={{ backgroundColor: 'white' }}>
+                <Box display={'flex'} flexDirection={'row'} justifyContent={'space-between'}>
+                    <Box>
+                        <Typography component={'div'} variant="h6"> {displayFieldName(selectedRow.field)}</Typography>
+                        <Typography component={'div'} > {selectedRow.field.cropName} / {selectedRow.field.varietyName} - {selectedRow.field.area} {text[user.areaUnit]}
+                            {/* <Avatar sx={{ backgroundColor: 'white' }}>
                         {getFruitIcon(selectedRow.field.cropEngName)}
                     </Avatar> */}
-                </Typography>
-
+                        </Typography>
+                    </Box>
+                    {[HARVEST, MARKET].includes(activityType) &&
+                        // <Button size='large'  startIcon={<ControlPointDuplicate />}  onClick={_=>console.log('duplicate field')}>{text.duplicate}</Button>
+                        <IconButton onClick={_ => console.log('duplicate field')} color="primary" aria-label="duplicate-activity-field" size="large">
+                            <ControlPointDuplicate fontSize="inherit" />
+                        </IconButton>
+                    }
+                </Box>
             </DialogTitle>
             <DialogContent>
                 <Box display={'flex'} flex={1} flexDirection={'row'} alignItems={'center'}>
@@ -95,15 +104,12 @@ const ActivityFieldDialog = ({ selectedRow, selectedIndex, handleClose, activity
                         <TextFieldBase value={weight} onChange={e => setWeight(Number(e.target.value))} type='number' label={text[user.weightUnit]} />
                     </Box>
                 }
-                {HARVEST === activityType && !isArrayEmpty(containers) &&
+                {HARVEST === activityType &&
                     <Autocomplete
-                        // disablePortal
                         value={container}
                         onChange={(_, data) => setContainer(data)}
-                        options={containers}
-                        // sx={{ flex: 3 }}
-                        // fullWidth
-                       // size='small'
+                        options={!isArrayEmpty(containers) ? containers : [container]}
+                        //fullWidth
                         getOptionLabel={(option) => option ? option.name : ''}
                         isOptionEqualToValue={(option, value) => (value === undefined) || option?.id?.toString() === (value?.id ?? value)?.toString()}
                         renderInput={(params) => <TextFieldBase {...params} label={text.container} />}

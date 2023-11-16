@@ -7,9 +7,9 @@ import { useGetUserDataQuery } from "../../../../features/auth/authApiSlice"
 import { useFields } from "../../../../features/fields/fieldsApiSlice"
 import FieldSelectionDialog from "../../../dialog/FieldsSelectionDialog"
 import { useFieldArray } from "react-hook-form";
-import { Delete, DragHandle, Menu } from "@mui/icons-material"
+import { Delete, DragHandle, Menu, MoreVert } from "@mui/icons-material"
 import ActivityFieldDialog from "./ActivityFieldDialog"
-import { isArrayEmpty } from "../../../FarmUtil"
+import { HARVEST, isArrayEmpty } from "../../../FarmUtil"
 
 const TRASHHOLD = 3;
 
@@ -28,6 +28,9 @@ const ActivityFields = ({ activity, getValues, control, register, errors, setVal
 
 
     const [open, setOpen] = useState(false);
+    const [openAllFields, setOpenAllFields] = useState(false);
+
+
 
     const [selectedRow, setSelectedRow] = useState(null);
     const [selectedIndex, setSelectedIndex] = useState(null);
@@ -76,7 +79,6 @@ const ActivityFields = ({ activity, getValues, control, register, errors, setVal
     const getFields = () => {
         return (expendFields && fields.length > TRASHHOLD) ? fields : fields.slice(0, TRASHHOLD);
     }
-    // const fields = (expendFields && activity.fields.length > TRASHHOLD) ? activity.fields : activity.fields.slice(0, TRASHHOLD);
 
     return (
         <Box margin={1} display={'flex'} flexDirection={'column'}>
@@ -91,7 +93,10 @@ const ActivityFields = ({ activity, getValues, control, register, errors, setVal
                         </IconButton>
                     }
                 </Box>
-                <IconButton disabled={isArrayEmpty(fields)} onClick={e => remove()}><Delete fontSize='large' /></IconButton>
+                <Box>
+                    {[HARVEST].includes(activity.type) && <IconButton disabled={isArrayEmpty(fields)} onClick={_ => setOpenAllFields(true)}><MoreVert fontSize='large' /></IconButton>}
+                    <IconButton disabled={isArrayEmpty(fields)} onClick={e => remove()}><Delete fontSize='large' /></IconButton>
+                </Box>
             </Box>
 
             <TableContainer >

@@ -179,7 +179,7 @@ const ActivityResources = ({ activity, control, errors, register, tariffs, activ
             <ResourcseSelectionDialog open={open} handleClose={handleClose} resourceTypes={resourceTypes} />
             {selectedRow && <ActivityResourceDialog selectedIndex={selectedIndex} selectedRow={selectedRow}
                 activityType={activity.type} handleClose={handleCloseEditRow} update={update}
-                warehouses={warehouses} control={control} errors={errors} activityArea={activityArea}
+                warehouses={warehouses} control={control} errors={errors} activityArea={activityArea} 
                 resourceUnit={getResourceUsageUnit(selectedRow.resource, activityDef)}
                 remove={() => handleRemoveRow(selectedIndex)} />}
             <UpdateResourcesQtyDialog open={openEditBulkQty} units={resourceBulkUnits} text={text} handleClose={handleBulkQtyUpdate} areaUnit={user.areaUnit} activityArea={activityArea}

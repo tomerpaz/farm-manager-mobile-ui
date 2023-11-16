@@ -4,20 +4,20 @@ import { useSelector } from "react-redux";
 import { selectLang } from "../../../../features/app/appSlice";
 import { useState } from "react";
 import { useGetUserDataQuery } from "../../../../features/auth/authApiSlice";
-import { QTY_PER_AREA_UNIT_RESOURCE_TYPE, SECONDARY_QTY_RESOURCES, WAREHOUSE_RESOURCE_TYPE, WORKER_GROUP, getResourceTypeText, getUnitText, safeDiv } from "../../../FarmUtil";
+import { HARVEST, MARKET, QTY_PER_AREA_UNIT_RESOURCE_TYPE, SECONDARY_QTY_RESOURCES, WAREHOUSE_RESOURCE_TYPE, WORKER_GROUP, getResourceTypeText, getUnitText, safeDiv } from "../../../FarmUtil";
 import { Cancel, Delete, Save } from "@mui/icons-material";
 
 const height = 400;
 
 const getQtyPerWorker = (selectedRow) => {
 
-    if(selectedRow.qty &&  selectedRow.secondaryQty && selectedRow.secondaryQty != 0){
+    if (selectedRow.qty && selectedRow.secondaryQty && selectedRow.secondaryQty != 0) {
         return (selectedRow.qty / selectedRow.secondaryQty).toFixed(2);
     }
     return 0;
 }
 
-const ActivityResourceDialog = ({ selectedRow, selectedIndex, handleClose, update, warehouses, activityArea, remove, resourceUnit }) => {
+const ActivityResourceDialog = ({ selectedRow, selectedIndex, handleClose, update, warehouses, activityArea, remove, resourceUnit, activityType }) => {
     const text = useSelector(selectLang);
     const { data: user } = useGetUserDataQuery()
     const [note, setNote] = useState(selectedRow.note ? selectedRow.note : '');
@@ -85,15 +85,15 @@ const ActivityResourceDialog = ({ selectedRow, selectedIndex, handleClose, updat
 
     const onQtyPerWorkerChange = (value) => {
         setQtyPerWorker(value);
-        if(value && secondaryQty){
+        if (value && secondaryQty) {
             setQty((value * secondaryQty).toFixed(2));
         }
     }
 
     const onWorkerCountChange = (value) => {
-        const workerCount = value? value.toFixed(0) : 0
+        const workerCount = value ? value.toFixed(0) : 0
         setSecondaryQty(workerCount);
-        if(workerCount && qtyPerWorker){
+        if (workerCount && qtyPerWorker) {
             setQty((workerCount * qtyPerWorker).toFixed(2));
         }
     }
@@ -139,7 +139,7 @@ const ActivityResourceDialog = ({ selectedRow, selectedIndex, handleClose, updat
                             type='number' label={`${text.workerCount}`}
                             fullWidth
                         />
-                        <Box margin={1}/>
+                        <Box margin={1} />
                         <TextFieldBase value={qtyPerWorker} onChange={e => onQtyPerWorkerChange(Number(e.target.value))}
                             type='number' label={`${text.qtyPerWorker}`}
                             fullWidth
