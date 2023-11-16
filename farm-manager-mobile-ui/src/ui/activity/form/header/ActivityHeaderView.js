@@ -1,12 +1,12 @@
 import { Avatar, Box, Typography, Autocomplete, MenuItem, TextField } from '@mui/material'
 import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
-import { selectLang } from '../../../features/app/appSlice'
-import ActivityTypeIcon from '../../../icons/ActivityTypeIcon'
-import { CUSTOMER_TYPES, GENERAL, GENERAL_PLAN, getActivityTypeText, getWinds, getYearArray, HARVEST, IRRIGARION_TYPES, IRRIGATION, IRRIGATION_PLAN, MARKET, SPRAY, SPRAY_PLAN } from '../../FarmUtil'
+import { selectLang } from '../../../../features/app/appSlice'
+import ActivityTypeIcon from '../../../../icons/ActivityTypeIcon'
+import { CUSTOMER_TYPES, GENERAL, GENERAL_PLAN, getActivityTypeText, getWinds, getYearArray, HARVEST, IRRIGARION_TYPES, IRRIGATION, IRRIGATION_PLAN, MARKET, SPRAY, SPRAY_PLAN } from '../../../FarmUtil'
 import { DatePicker, TimePicker } from '@mui/x-date-pickers';
 import { Controller } from 'react-hook-form'
-import TextFieldBase from '../../../components/ui/TextField'
+import TextFieldBase from '../../../../components/ui/TextField'
 
 const HEADER_CONFIG = [
   { type: GENERAL, date: true, year: true, activity: true, activityType: GENERAL },
@@ -171,6 +171,7 @@ const ActivityHeaderView = ({ activity, control, errors, customers, activityDefs
             <Box margin={1} />
             <Controller
               name="customer"
+              rules={{ required: true }}
               control={control}
               render={({ field: { ref, onChange, ...field } }) => <Autocomplete
                 disablePortal
@@ -180,7 +181,9 @@ const ActivityHeaderView = ({ activity, control, errors, customers, activityDefs
                 size='small'
                 getOptionLabel={(option) => option ? option.name : ''}
                 isOptionEqualToValue={(option, value) => (value === undefined) || option?.id?.toString() === (value?.id ?? value)?.toString()}
-                renderInput={(params) => <TextFieldBase sx={{ marginTop: 0.5 }} {...params} label={text.customer} />}
+                renderInput={(params) => <TextFieldBase 
+                  error={errors.customer ? true : false}
+                  sx={{ marginTop: 0.5 }} {...params} label={text.customer} />}
                 {...field} />}
             />
           </Box>

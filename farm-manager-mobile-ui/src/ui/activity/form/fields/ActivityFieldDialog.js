@@ -1,14 +1,14 @@
 import { Autocomplete, Avatar, Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from "@mui/material";
-import TextFieldBase from "../../../components/ui/TextField";
+import TextFieldBase from "../../../../components/ui/TextField";
 import { useSelector } from "react-redux";
-import { selectLang } from "../../../features/app/appSlice";
+import { selectLang } from "../../../../features/app/appSlice";
 import { useState } from "react";
-import { useGetUserDataQuery } from "../../../features/auth/authApiSlice";
-import { HARVEST, UI_SIZE, displayFieldName, getActivityTypeText, isArrayEmpty } from "../../FarmUtil";
+import { useGetUserDataQuery } from "../../../../features/auth/authApiSlice";
+import { HARVEST, UI_SIZE, displayFieldName, getActivityTypeText, isArrayEmpty } from "../../../FarmUtil";
 import { DatePicker } from "@mui/x-date-pickers";
-import { getFruitIcon } from "../../../icons/FruitIconUtil";
+import { getFruitIcon } from "../../../../icons/FruitIconUtil";
 import { Cancel, Delete, Save } from "@mui/icons-material";
-import { useGetContainersQuery } from "../../../features/containers/containersApiSlice";
+import { useGetContainersQuery } from "../../../../features/containers/containersApiSlice";
 
 
 

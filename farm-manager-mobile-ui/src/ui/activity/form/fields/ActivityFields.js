@@ -1,15 +1,15 @@
 import { Badge, Box, Button, IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from "@mui/material"
 import { useSelector } from "react-redux"
-import { selectLang } from "../../../features/app/appSlice"
-import { cellSx, cellSxChange, cellSxLink, headerSx } from "../view/FieldsView"
+import { selectLang } from "../../../../features/app/appSlice"
+import { cellSx, cellSxChange, cellSxLink, headerSx } from "../../view/FieldsView"
 import { Fragment, useState } from "react"
-import { useGetUserDataQuery } from "../../../features/auth/authApiSlice"
-import { useFields } from "../../../features/fields/fieldsApiSlice"
-import FieldSelectionDialog from "../../dialog/FieldsSelectionDialog"
+import { useGetUserDataQuery } from "../../../../features/auth/authApiSlice"
+import { useFields } from "../../../../features/fields/fieldsApiSlice"
+import FieldSelectionDialog from "../../../dialog/FieldsSelectionDialog"
 import { useFieldArray } from "react-hook-form";
 import { Delete, DragHandle, Menu } from "@mui/icons-material"
 import ActivityFieldDialog from "./ActivityFieldDialog"
-import { isArrayEmpty } from "../../FarmUtil"
+import { isArrayEmpty } from "../../../FarmUtil"
 
 const TRASHHOLD = 3;
 

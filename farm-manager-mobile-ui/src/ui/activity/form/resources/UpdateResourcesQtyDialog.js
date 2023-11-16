@@ -1,10 +1,10 @@
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, MenuItem, TextField, Typography } from "@mui/material";
-import TextFieldBase from "../../../components/ui/TextField";
+import TextFieldBase from "../../../../components/ui/TextField";
 import { Cancel, Save } from "@mui/icons-material";
 import { useState } from "react";
-import { AREA_UNIT, getUnitText } from "../../FarmUtil";
+import { AREA_UNIT, getUnitText } from "../../../FarmUtil";
 
-const EditBulkQtyDialog = ({ open, units, text, handleClose, areaUnit, activityArea }) => {
+const UpdateResourcesQtyDialog = ({ open, units, text, handleClose, areaUnit, activityArea }) => {
 
     const [qty, setQty] = useState('');
     const [unit, setUnit] = useState('');
@@ -64,4 +64,4 @@ const EditBulkQtyDialog = ({ open, units, text, handleClose, areaUnit, activityA
         </Dialog>
     )
 }
-export default EditBulkQtyDialog;
+export default UpdateResourcesQtyDialog;

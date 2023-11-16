@@ -1,16 +1,16 @@
 import { Box, Button, TextField, IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Badge, List, ListItemButton, ListItemText, ListItemIcon, ListItem } from "@mui/material"
 import { useSelector } from "react-redux"
-import { selectLang } from "../../../features/app/appSlice"
-import { cellSx, cellSxChange, cellSxLink, headerSx } from "../view/FieldsView"
+import { selectLang } from "../../../../features/app/appSlice"
+import { cellSx, cellSxChange, cellSxLink, headerSx } from "../../view/FieldsView"
 import { Fragment, useEffect, useState } from "react"
-import { ACTIVITY_RESOURCES, AREA_UNIT, ENERGY, HOUR, WAREHOUSE_RESOURCE_TYPE, getResourceTypeText, getResourceUsageUnit, getUnitText, isArrayEmpty } from "../../FarmUtil"
-import { useGetUserDataQuery } from "../../../features/auth/authApiSlice"
-import ResourcseSelectionDialog from "../../dialog/ResourcseSelectionDialog"
+import { ACTIVITY_RESOURCES, AREA_UNIT, ENERGY, HOUR, WAREHOUSE_RESOURCE_TYPE, getResourceTypeText, getResourceUsageUnit, getUnitText, isArrayEmpty } from "../../../FarmUtil"
+import { useGetUserDataQuery } from "../../../../features/auth/authApiSlice"
+import ResourcseSelectionDialog from "../../../dialog/ResourcseSelectionDialog"
 import { Controller, useFieldArray } from "react-hook-form"
 import { Delete, DragHandle, Menu, MoreVert } from "@mui/icons-material"
 import ActivityResourceDialog from "./ActivityResourceDialog"
-import { useGetWarehousesQuery } from "../../../features/warehouses/warehouseApiSlice"
-import EditBulkQtyDialog from "./EditBulkQtyDialog"
+import { useGetWarehousesQuery } from "../../../../features/warehouses/warehouseApiSlice"
+import UpdateResourcesQtyDialog from "./UpdateResourcesQtyDialog"
 
 const TRASHHOLD = 3;
 const UNITS = [AREA_UNIT.toUpperCase(), HOUR.toUpperCase()]
@@ -182,7 +182,7 @@ const ActivityResources = ({ activity, control, errors, register, tariffs, activ
                 warehouses={warehouses} control={control} errors={errors} activityArea={activityArea}
                 resourceUnit={getResourceUsageUnit(selectedRow.resource, activityDef)}
                 remove={() => handleRemoveRow(selectedIndex)} />}
-            <EditBulkQtyDialog open={openEditBulkQty} units={resourceBulkUnits} text={text} handleClose={handleBulkQtyUpdate} areaUnit={user.areaUnit} activityArea={activityArea}
+            <UpdateResourcesQtyDialog open={openEditBulkQty} units={resourceBulkUnits} text={text} handleClose={handleBulkQtyUpdate} areaUnit={user.areaUnit} activityArea={activityArea}
             />
 
         </Box>
