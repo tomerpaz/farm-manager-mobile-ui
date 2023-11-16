@@ -94,8 +94,8 @@ const ActivityFields = ({ activity, getValues, control, register, errors, setVal
                     }
                 </Box>
                 <Box>
-                    {[HARVEST].includes(activity.type) && <IconButton disabled={isArrayEmpty(fields)} onClick={_ => setOpenAllFields(true)}><MoreVert fontSize='large' /></IconButton>}
-                    <IconButton disabled={isArrayEmpty(fields)} onClick={e => remove()}><Delete fontSize='large' /></IconButton>
+                    {[HARVEST].includes(activity.type) && <IconButton size='large' disabled={isArrayEmpty(fields)} onClick={_ => setOpenAllFields(true)}><MoreVert fontSize='large' /></IconButton>}
+                    <IconButton size='large' disabled={isArrayEmpty(fields)} onClick={e => remove()}><Delete fontSize='large' /></IconButton>
                 </Box>
             </Box>
 

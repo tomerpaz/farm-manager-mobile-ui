@@ -70,7 +70,7 @@ const ActivityFieldDialog = ({ selectedRow, selectedIndex, handleClose, activity
                     {[HARVEST, MARKET].includes(activityType) &&
                         // <Button size='large'  startIcon={<ControlPointDuplicate />}  onClick={_=>console.log('duplicate field')}>{text.duplicate}</Button>
                         <IconButton onClick={_ => console.log('duplicate field')} color="primary" aria-label="duplicate-activity-field" size="large">
-                            <ControlPointDuplicate fontSize="inherit" />
+                            <ControlPointDuplicate fontSize="large" />
                         </IconButton>
                     }
                 </Box>
@@ -98,10 +98,10 @@ const ActivityFieldDialog = ({ selectedRow, selectedIndex, handleClose, activity
                     />
                 </Box>
                 {HARVEST === activityType &&
-                    <Box display={'flex'} flexDirection={'row'}>
-                        <TextFieldBase value={qty} onChange={e => setQty(Number(e.target.value))} type='number' label={text.qty} />
+                    <Box display={'flex'} flexDirection={'row'} flex={1}>
+                        <TextFieldBase sx={{flex: 1}} value={qty} onChange={e => setQty(Number(e.target.value))} type='number' label={text.qty} />
                         <Box margin={1}></Box>
-                        <TextFieldBase value={weight} onChange={e => setWeight(Number(e.target.value))} type='number' label={text[user.weightUnit]} />
+                        <TextFieldBase sx={{flex: 1}} value={weight} onChange={e => setWeight(Number(e.target.value))} type='number' label={text[user.weightUnit]} />
                     </Box>
                 }
                 {HARVEST === activityType &&
