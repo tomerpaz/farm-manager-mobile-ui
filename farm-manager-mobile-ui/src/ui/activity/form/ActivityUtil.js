@@ -29,8 +29,11 @@ export function getReference  (type, resources,activityDef){
     if(isArrayEmpty(fields)){
       return 0;
     }
-    const activityAreas =  fields.filter(e=>e[fieldName]).map(e=>e[fieldName])
-    const sum = activityAreas.reduce(function(a, b){
+    const values =  fields.filter(e=>e[fieldName]).map(e=>e[fieldName])
+    if(isArrayEmpty(values)){
+      return 0;
+    }
+    const sum = values.reduce(function(a, b){
       return a + b;
     });
     return sum;

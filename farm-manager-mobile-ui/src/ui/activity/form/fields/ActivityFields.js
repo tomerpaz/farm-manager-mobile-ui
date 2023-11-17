@@ -11,13 +11,13 @@ import { Delete, DragHandle, Menu, MoreVert } from "@mui/icons-material"
 import ActivityFieldDialog from "./ActivityFieldDialog"
 import { HARVEST, isArrayEmpty } from "../../../FarmUtil"
 import UpdateAllFieldsDialog from "./UpdateAllFieldsDialog"
-import { getTotalQty, getTotalweight } from "../ActivityUtil"
+import { getTotalActivityArea, getTotalQty, getTotalweight } from "../ActivityUtil"
 
 const TRASHHOLD = 3;
 
 const ActivityFields = ({ activity, getValues, control, register, errors, setValue }) => {
 
-    const { fields, append, prepend, remove, swap, move, insert, update } = useFieldArray({
+    const { fields, append, prepend, remove, swap, move, insert, update, replace } = useFieldArray({
         control, // control props comes from useForm (optional: if you are using FormContext)
         name: "fields", // unique name for your Field Array
         keyName: "key",
@@ -30,13 +30,9 @@ const ActivityFields = ({ activity, getValues, control, register, errors, setVal
 
 
     const [open, setOpen] = useState(false);
-    const [openAllFields, setOpenAllFields] = useState(false);
-
-
-
+    const [openBulkUpdateFields, setOpenBulkUpdateFields] = useState(false);
     const [selectedRow, setSelectedRow] = useState(null);
     const [selectedIndex, setSelectedIndex] = useState(null);
-
     const [expendFields, setExpendFields] = useState(false);
 
     const handleClickOpen = () => {
@@ -58,7 +54,6 @@ const ActivityFields = ({ activity, getValues, control, register, errors, setVal
         setSelectedRow(null);
         setSelectedIndex(null);
         remove(index)
-
     };
 
     const handleClose = (selectedFields) => {
@@ -76,6 +71,10 @@ const ActivityFields = ({ activity, getValues, control, register, errors, setVal
             );
             append(newtlySelectedFields)
         }
+    };
+
+    const handleCloseBulkUpdateFields = () => {
+        setOpenBulkUpdateFields(false);
     };
 
     const getFields = () => {
@@ -96,7 +95,7 @@ const ActivityFields = ({ activity, getValues, control, register, errors, setVal
                     }
                 </Box>
                 <Box>
-                    {[HARVEST].includes(activity.type) && <IconButton size='large' disabled={isArrayEmpty(fields)} onClick={_ => setOpenAllFields(true)}><MoreVert fontSize='large' /></IconButton>}
+                    {[HARVEST].includes(activity.type) && <IconButton size='large' disabled={isArrayEmpty(fields)} onClick={_ => setOpenBulkUpdateFields(true)}><MoreVert fontSize='large' /></IconButton>}
                     <IconButton size='large' disabled={isArrayEmpty(fields)} onClick={e => remove()}><Delete fontSize='large' /></IconButton>
                 </Box>
             </Box>
@@ -121,7 +120,13 @@ const ActivityFields = ({ activity, getValues, control, register, errors, setVal
             </TableContainer>
             <FieldSelectionDialog open={open} fields={fieldsByYear} handleClose={handleClose} />
             {selectedRow && <ActivityFieldDialog selectedIndex={selectedIndex} selectedRow={selectedRow} activityType={activity.type} handleClose={handleCloseEditRow} update={update} remove={() => handleRemoveRow(selectedIndex)} />}
-            {openAllFields && <UpdateAllFieldsDialog open={openAllFields} text={text} totalQty={getTotalQty(fields)} totalWeight={getTotalweight(fields)} weightUnit={user.weightUnit} handleClose={_=>setOpenAllFields(false)}/>}
+            {openBulkUpdateFields && <UpdateAllFieldsDialog open={openBulkUpdateFields} text={text} totalQty={getTotalQty(fields)}
+                fields={fields}
+                totalWeight={getTotalweight(fields)} 
+                weightUnit={user.weightUnit} 
+                activityArea={getTotalActivityArea(fields)} 
+                handleClose={handleCloseBulkUpdateFields}
+                replace={replace} />}
         </Box>
     )
 
