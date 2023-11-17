@@ -8,9 +8,21 @@ const UpdateAllFieldsDialog = ({ open, text, handleClose, areaUnit, activityArea
 
     const [_totalWeight, setTotalWeight] = useState(totalWeight);
     const [_totalQty, setTotalQty] = useState(totalQty);
-  //  const [touched, setTouched] = useState(false);
+    const [touched, setTouched] = useState(false);
 
+    // useEffect(() => {
+    //     setTouched(true)
+    //   }, [_totalWeight,_totalQty])
 
+    const handleTotalWeight = (val) => {
+        setTotalWeight(val);
+        setTouched(true);
+    }
+
+    const handleTotalQty = (val) => {
+        setTotalQty(val);
+        setTouched(true);
+    }
 
     const onAction = (val) => {
         if(val){
@@ -43,15 +55,15 @@ const UpdateAllFieldsDialog = ({ open, text, handleClose, areaUnit, activityArea
             </DialogTitle>
             <DialogContent>
                 <Box display={'flex'} flexDirection={'row'}>
-                    <TextFieldBase type='number' value={_totalQty.toFixed(2)} onChange={e => setTotalQty(Number(e.target.value))} fullWidth={true} label={`${text.total} ${text.qty}`} />
+                    <TextFieldBase type='number' value={_totalQty} onChange={e => handleTotalQty(Number(e.target.value))} fullWidth={true} label={`${text.total} ${text.qty}`} />
                     <Box margin={1}/>
-                    <TextFieldBase type='number' value={_totalWeight.toFixed(2)} onChange={e => setTotalWeight(Number(e.target.value))} fullWidth={true} label={`${text.total} ${text[weightUnit]}`} />
+                    <TextFieldBase type='number' value={_totalWeight} onChange={e => handleTotalWeight(Number(e.target.value))} fullWidth={true} label={`${text.total} ${text[weightUnit]}`} />
                 </Box>
 
             </DialogContent>
             <DialogActions sx={{ justifyContent: 'center' }}>
                 <Button size='large' endIcon={<Cancel />} variant='outlined' onClick={() => onAction(false)}>{text.cancel}</Button>
-                <Button disabled={_totalWeight === totalWeight && _totalQty === totalQty} size='large' endIcon={<Save />} disableElevation={true} variant='contained' onClick={() => onAction(true)} >
+                <Button disabled={!touched} size='large' endIcon={<Save />} disableElevation={true} variant='contained' onClick={() => onAction(true)} >
                     {text.save}
                 </Button>
             </DialogActions>
