@@ -4,23 +4,19 @@ import { Cancel, Save } from "@mui/icons-material";
 import { useState } from "react";
 import { AREA_UNIT, getUnitText } from "../../../FarmUtil";
 
-const UpdateAllFieldsDialog = ({ open, units, text, handleClose, areaUnit, activityArea }) => {
+const UpdateAllFieldsDialog = ({ open, text, handleClose, areaUnit, activityArea, totalWeight, totalQty, weightUnit }) => {
 
-    const [totalWeight, setTotalWeight] = useState('');
-    const [totalQty, setTotalQty] = useState('');
+    const [_totalWeight, setTotalWeight] = useState(totalWeight);
+    const [_totalQty, setTotalQty] = useState(totalQty);
 
     const onAction = (val) => {
+        console.log(_totalWeight, _totalQty)
+        handleClose();
         //handleClose(val ? unit : null, val ? qty: null);
-        setQty('');
-        setUnit('')
+        // setTotalWeight('');
+        // setTotalQty('')
     }
 
-    const handleSetUnit = (val) => {
-        if(val.toLowerCase() === AREA_UNIT && activityArea){
-            setQty(activityArea);
-        }
-        setUnit(val);
-    }
 
     return (
         <Dialog
@@ -31,33 +27,19 @@ const UpdateAllFieldsDialog = ({ open, units, text, handleClose, areaUnit, activ
             fullWidth
         >
             <DialogTitle id="alert-dialog-title">
-                <Typography component={'div'} variant="h5">  {text.bulkQtyUpdate}</Typography>
+                <Typography component={'div'} variant="h5">  {text.updateFields}</Typography>
             </DialogTitle>
             <DialogContent>
-                <Box display={'flex'} flexDirection={'row'} alignItems={'center'} >
-                    <TextField
-                        sx={{ marginTop: 0.5 }}
-                        value={unit}
-                        id="outlined-select-unit"
-                        onChange={e => handleSetUnit(e.target.value)}
-                        fullWidth
-                        select
-                        label={text.unit}
-                    >
-                        <MenuItem key={''} value={''}><em /></MenuItem>
-                        {units.map((option) => (
-                            <MenuItem key={option} value={option}>
-                                {getUnitText(option, areaUnit, text)}
-                            </MenuItem>
-                        ))}
-                    </TextField>
-                    <Box margin={1} />
-                    <TextFieldBase type='number' value={qty} onChange={e => setQty(Number(e.target.value))} fullWidth={true} label={text.qty} />
+                <Box display={'flex'} flexDirection={'row'}>
+                    <TextFieldBase type='number' value={_totalQty} onChange={e => setTotalQty(Number(e.target.value))} fullWidth={true} label={`${text.total} ${text.qty}`} />
+                    <Box margin={1}/>
+                    <TextFieldBase type='number' value={_totalWeight} onChange={e => setTotalWeight(Number(e.target.value))} fullWidth={true} label={`${text.total} ${text[weightUnit]}`} />
                 </Box>
+
             </DialogContent>
             <DialogActions sx={{ justifyContent: 'center' }}>
                 <Button size='large' endIcon={<Cancel />} variant='outlined' onClick={() => onAction(false)}>{text.cancel}</Button>
-                <Button disabled={'' === unit || '' === qty} size='large' endIcon={<Save />} disableElevation={true} variant='contained' onClick={() => onAction(true)} >
+                <Button disabled={true /*_totalWeight === totalWeight && _totalQty === totalQty*/} size='large' endIcon={<Save />} disableElevation={true} variant='contained' onClick={() => onAction(true)} >
                     {text.save}
                 </Button>
             </DialogActions>

@@ -114,7 +114,8 @@
     "renewable": "Renewable",
     "bulkQtyUpdate" : "Qty Updated",
     "waybill": "Waybill",
-    "customer":"Customer"
+    "customer":"Customer",
+    "updateFields":"Update Fields"
 
 
 

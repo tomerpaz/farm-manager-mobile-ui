@@ -114,5 +114,6 @@
     "renewable": "מתחדשת",
     "bulkQtyUpdate" : "עדכון כמות",
     "waybill": "ת. משלוח",
-    "customer":"לקוח"
+    "customer":"לקוח",
+    "updateFields":"עדכון חלקות"
 }

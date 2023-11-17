@@ -10,6 +10,8 @@ import { useFieldArray } from "react-hook-form";
 import { Delete, DragHandle, Menu, MoreVert } from "@mui/icons-material"
 import ActivityFieldDialog from "./ActivityFieldDialog"
 import { HARVEST, isArrayEmpty } from "../../../FarmUtil"
+import UpdateAllFieldsDialog from "./UpdateAllFieldsDialog"
+import { getTotalQty, getTotalweight } from "../ActivityUtil"
 
 const TRASHHOLD = 3;
 
@@ -119,7 +121,7 @@ const ActivityFields = ({ activity, getValues, control, register, errors, setVal
             </TableContainer>
             <FieldSelectionDialog open={open} fields={fieldsByYear} handleClose={handleClose} />
             {selectedRow && <ActivityFieldDialog selectedIndex={selectedIndex} selectedRow={selectedRow} activityType={activity.type} handleClose={handleCloseEditRow} update={update} remove={() => handleRemoveRow(selectedIndex)} />}
-
+            {openAllFields && <UpdateAllFieldsDialog open={openAllFields} text={text} totalQty={getTotalQty(fields)} totalWeight={getTotalweight(fields)} weightUnit={user.weightUnit} handleClose={_=>setOpenAllFields(false)}/>}
         </Box>
     )
 

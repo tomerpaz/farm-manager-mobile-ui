@@ -24,3 +24,26 @@ export function getReference  (type, resources,activityDef){
     }
     return false;
   }
+
+  export function getTotalByField (fields, fieldName){
+    if(isArrayEmpty(fields)){
+      return 0;
+    }
+    const activityAreas =  fields.filter(e=>e[fieldName]).map(e=>e[fieldName])
+    const sum = activityAreas.reduce(function(a, b){
+      return a + b;
+    });
+    return sum;
+  }
+
+  export function getTotalQty (fields){
+    return getTotalByField(fields, 'qty')
+  }
+
+  export function getTotalweight (fields){
+    return getTotalByField(fields, 'weight')
+  }
+
+  export function getTotalActivityArea (fields){
+    return getTotalByField(fields, 'activityArea')
+  }
