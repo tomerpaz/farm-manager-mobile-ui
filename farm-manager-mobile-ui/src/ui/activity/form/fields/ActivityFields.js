@@ -11,11 +11,11 @@ import { Delete, DragHandle, Menu, MoreVert } from "@mui/icons-material"
 import ActivityFieldDialog from "./ActivityFieldDialog"
 import { HARVEST, isArrayEmpty } from "../../../FarmUtil"
 import UpdateAllFieldsDialog from "./UpdateAllFieldsDialog"
-import { getTotalActivityArea, getTotalQty, getTotalweight } from "../ActivityUtil"
+import {  getTotalQty, getTotalweight } from "../ActivityUtil"
 
 const TRASHHOLD = 3;
 
-const ActivityFields = ({ activity, getValues, control, register, errors, setValue }) => {
+const ActivityFields = ({ activity, getValues, control, register, errors, activityArea }) => {
 
     const { fields, append, prepend, remove, swap, move, insert, update, replace } = useFieldArray({
         control, // control props comes from useForm (optional: if you are using FormContext)
@@ -124,7 +124,7 @@ const ActivityFields = ({ activity, getValues, control, register, errors, setVal
                 fields={fields}
                 totalWeight={getTotalweight(fields)} 
                 weightUnit={user.weightUnit} 
-                activityArea={getTotalActivityArea(fields)} 
+                activityArea={activityArea} 
                 handleClose={handleCloseBulkUpdateFields}
                 replace={replace} />}
         </Box>

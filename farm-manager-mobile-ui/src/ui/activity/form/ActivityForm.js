@@ -17,7 +17,7 @@ import { useGetActivityDefsQuery } from '../../../features/activityDefs/activity
 import ActionApprovalDialog from '../../../components/ui/ActionApprovalDialog'
 import { useGetResourcesTariffQuery } from '../../../features/tariff/tariffApiSlice'
 import { useGetUserDataQuery } from '../../../features/auth/authApiSlice'
-import { getReference, isSkipTariffFetch } from './ActivityUtil'
+import { getReference, getTotalActivityArea, isSkipTariffFetch } from './ActivityUtil'
 
 const ActivityForm = ({ activity }) => {
 
@@ -57,7 +57,7 @@ const ActivityForm = ({ activity }) => {
   const reference = useWatch({ control, name: "reference" })
 
 
-  const activityArea = fields.map(e => e.activityArea).reduce((accumulator, curValue) => accumulator + curValue, 0)
+  const activityArea =  getTotalActivityArea(fields);
 
   const tariffResourceIds = resources.filter(e => e.manualTariff === false).map(e => e.resource.id);
   const { data: tariffs, isSuccess: isTariffsSuccess, isLoading: isTariffLoading, } = useGetResourcesTariffQuery({
@@ -119,7 +119,7 @@ const ActivityForm = ({ activity }) => {
 
 
           <ActivityHeaderView control={control} register={register} activity={activity} errors={errors} crops={crops} activityDefs={activityDefs} customers={customers} reference={reference} isDuplicate={isDuplicate} />
-          <ActivityFields control={control} register={register} activity={activity} getValues={getValues} errors={errors} />
+          <ActivityFields control={control} register={register} activity={activity} getValues={getValues} activityArea={activityArea} errors={errors} />
           <ActivityResources control={control} register={register} activity={activity} activityDef={activityDef}
             errors={errors} tariffs={tariffs} activityArea={activityArea} />
           <Box padding={1}>
