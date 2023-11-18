@@ -9,12 +9,13 @@ import { DatePicker } from "@mui/x-date-pickers";
 import { getFruitIcon } from "../../../../icons/FruitIconUtil";
 import { Cancel, ControlPointDuplicate, Delete, Save } from "@mui/icons-material";
 import { useGetContainersQuery } from "../../../../features/containers/containersApiSlice";
+import ActionApprovalDialog from "../../../../components/ui/ActionApprovalDialog";
 
 
 
 
 
-const ActivityFieldDialog = ({ selectedRow, selectedIndex, handleClose, activityType, update, remove }) => {
+const ActivityFieldDialog = ({ selectedRow, selectedIndex, handleClose, activityType, update, remove, prepend }) => {
     const text = useSelector(selectLang);
     const { data: user } = useGetUserDataQuery()
 
@@ -24,6 +25,7 @@ const ActivityFieldDialog = ({ selectedRow, selectedIndex, handleClose, activity
     const [qty, setQty] = useState(selectedRow.qty);
     const [weight, setWeight] = useState(selectedRow.weight);
     const [container, setContainer] = useState(activityType === HARVEST ? selectedRow.container : null);
+    const [duplicateOpen, setDuplicateOpen] = useState(false);
 
     const { data: containers, isSuccess: isContainersSuccess } = useGetContainersQuery({}, { skip: activityType !== HARVEST })
 
@@ -41,91 +43,105 @@ const ActivityFieldDialog = ({ selectedRow, selectedIndex, handleClose, activity
             }
             update(selectedIndex, selectedRow);
         }
-        handleClose(save);
+        handleClose();
+    }
+
+    const handleDuplicate = (val) => {
+        setDuplicateOpen(false);
+        if(val){
+            prepend({...selectedRow})
+            handleClose();
+        }
     }
 
     return (
-        <Dialog
-            open={selectedRow !== null}
-            onClose={handleClose}
-            aria-labelledby="alert-dialog-title"
-            aria-describedby="alert-dialog-description"
-            fullWidth
-        // fullScreen
-        >
-            <DialogTitle id="alert-dialog-title">
-                {/* <Box flex={1} display={'flex'} flexDirection={'row'} alignItems={'center'} >
+        <Box>
+
+            <Dialog
+                open={selectedRow !== null}
+                onClose={handleClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+                fullWidth
+            // fullScreen
+            >
+                <DialogTitle id="alert-dialog-title">
+                    {/* <Box flex={1} display={'flex'} flexDirection={'row'} alignItems={'center'} >
                     <Typography component={'div'} variant='h6'>{getActivityTypeText(activityType, text)}</Typography>
 
                 </Box> */}
-                <Box display={'flex'} flexDirection={'row'} justifyContent={'space-between'}>
-                    <Box>
-                        <Typography component={'div'} variant="h6"> {displayFieldName(selectedRow.field)}</Typography>
-                        <Typography component={'div'} > {selectedRow.field.cropName} / {selectedRow.field.varietyName} - {selectedRow.field.area} {text[user.areaUnit]}
-                            {/* <Avatar sx={{ backgroundColor: 'white' }}>
+                    <Box display={'flex'} flexDirection={'row'} justifyContent={'space-between'}>
+                        <Box>
+                            <Typography component={'div'} variant="h6"> {displayFieldName(selectedRow.field)}</Typography>
+                            <Typography component={'div'} > {selectedRow.field.cropName} / {selectedRow.field.varietyName} - {selectedRow.field.area} {text[user.areaUnit]}
+                                {/* <Avatar sx={{ backgroundColor: 'white' }}>
                         {getFruitIcon(selectedRow.field.cropEngName)}
                     </Avatar> */}
-                        </Typography>
+                            </Typography>
+                        </Box>
+                        {[HARVEST, MARKET].includes(activityType) &&
+                            // <Button size='large'  startIcon={<ControlPointDuplicate />}  onClick={_=>console.log('duplicate field')}>{text.duplicate}</Button>
+                            <IconButton onClick={_ => setDuplicateOpen(true)} color="primary" aria-label="duplicate-activity-field" size="large">
+                                <ControlPointDuplicate fontSize="large" />
+                            </IconButton>
+                        }
                     </Box>
-                    {[HARVEST, MARKET].includes(activityType) &&
-                        // <Button size='large'  startIcon={<ControlPointDuplicate />}  onClick={_=>console.log('duplicate field')}>{text.duplicate}</Button>
-                        <IconButton onClick={_ => console.log('duplicate field')} color="primary" aria-label="duplicate-activity-field" size="large">
-                            <ControlPointDuplicate fontSize="large" />
-                        </IconButton>
-                    }
-                </Box>
-            </DialogTitle>
-            <DialogContent>
-                <Box display={'flex'} flex={1} flexDirection={'row'} alignItems={'center'}>
+                </DialogTitle>
+                <DialogContent>
+                    <Box display={'flex'} flex={1} flexDirection={'row'} alignItems={'center'}>
 
-                    <TextFieldBase sx={{ flex: 1 }} value={activityArea} onChange={e => setActivityArea(Number(e.target.value))} type='number' label={text[user.areaUnit]} />
-                    <Box margin={1}></Box>
-                    <DatePicker
-                        label={text.executed}
-                        closeOnSelect
-                        localeText={{
-                            cancelButtonLabel: text.cancel,
-                            clearButtonLabel: text.clear
-                        }}
-
-                        showToolbar={false}
-                        value={actualExecution}
-                        onChange={(e) => setActualExecution(e)}// asLocalDate(e, true)}
-                        slotProps={{
-                            textField: { size: UI_SIZE, variant: 'outlined', sx: { marginTop: 0.5, flex: 1 } },
-                            actionBar: { actions: ["cancel", "clear"] }
-                        }}
-                    />
-                </Box>
-                {HARVEST === activityType &&
-                    <Box display={'flex'} flexDirection={'row'} flex={1}>
-                        <TextFieldBase sx={{flex: 1}} value={qty} onChange={e => setQty(Number(e.target.value))} type='number' label={text.qty} />
+                        <TextFieldBase sx={{ flex: 1 }} value={activityArea} onChange={e => setActivityArea(Number(e.target.value))} type='number' label={text[user.areaUnit]} />
                         <Box margin={1}></Box>
-                        <TextFieldBase sx={{flex: 1}} value={weight} onChange={e => setWeight(Number(e.target.value))} type='number' label={text[user.weightUnit]} />
-                    </Box>
-                }
-                {HARVEST === activityType &&
-                    <Autocomplete
-                        value={container}
-                        onChange={(_, data) => setContainer(data)}
-                        options={!isArrayEmpty(containers) ? containers : [container]}
-                        //fullWidth
-                        getOptionLabel={(option) => option ? option.name : ''}
-                        isOptionEqualToValue={(option, value) => (value === undefined) || option?.id?.toString() === (value?.id ?? value)?.toString()}
-                        renderInput={(params) => <TextFieldBase {...params} label={text.container} />}
-                    />
+                        <DatePicker
+                            label={text.executed}
+                            closeOnSelect
+                            localeText={{
+                                cancelButtonLabel: text.cancel,
+                                clearButtonLabel: text.clear
+                            }}
 
-                }
-                <TextFieldBase value={note} onChange={e => setNote(e.target.value)} fullWidth={true} label={text.note} />
-            </DialogContent>
-            <DialogActions sx={{ justifyContent: 'center' }}>
-                <Button size='large' endIcon={<Cancel />} variant='outlined' onClick={() => onAction(false)}>{text.cancel}</Button>
-                <Button size='large' endIcon={<Delete />} disableElevation={true} variant='outlined' onClick={remove}>{text.delete}</Button>
-                <Button size='large' endIcon={<Save />} disableElevation={true} variant='contained' onClick={() => onAction(true)} >
-                    {text.save}
-                </Button>
-            </DialogActions>
-        </Dialog>
+                            showToolbar={false}
+                            value={actualExecution}
+                            onChange={(e) => setActualExecution(e)}// asLocalDate(e, true)}
+                            slotProps={{
+                                textField: { size: UI_SIZE, variant: 'outlined', sx: { marginTop: 0.5, flex: 1 } },
+                                actionBar: { actions: ["cancel", "clear"] }
+                            }}
+                        />
+                    </Box>
+                    {HARVEST === activityType &&
+                        <Box display={'flex'} flexDirection={'row'} flex={1}>
+                            <TextFieldBase sx={{ flex: 1 }} value={qty} onChange={e => setQty(Number(e.target.value))} type='number' label={text.qty} />
+                            <Box margin={1}></Box>
+                            <TextFieldBase sx={{ flex: 1 }} value={weight} onChange={e => setWeight(Number(e.target.value))} type='number' label={text[user.weightUnit]} />
+                        </Box>
+                    }
+                    {HARVEST === activityType &&
+                        <Autocomplete
+                            value={container}
+                            onChange={(_, data) => setContainer(data)}
+                            options={!isArrayEmpty(containers) ? containers : [container]}
+                            //fullWidth
+                            getOptionLabel={(option) => option ? option.name : ''}
+                            isOptionEqualToValue={(option, value) => (value === undefined) || option?.id?.toString() === (value?.id ?? value)?.toString()}
+                            renderInput={(params) => <TextFieldBase {...params} label={text.container} />}
+                        />
+
+                    }
+                    <TextFieldBase value={note} onChange={e => setNote(e.target.value)} fullWidth={true} label={text.note} />
+                </DialogContent>
+                <DialogActions sx={{ justifyContent: 'center' }}>
+                    <Button size='large' endIcon={<Cancel />} variant='outlined' onClick={() => onAction(false)}>{text.cancel}</Button>
+                    <Button size='large' endIcon={<Delete />} disableElevation={true} variant='outlined' onClick={remove}>{text.delete}</Button>
+                    <Button size='large' endIcon={<Save />} disableElevation={true} variant='contained' onClick={() => onAction(true)} >
+                        {text.save}
+                    </Button>
+                </DialogActions>
+            </Dialog>
+            <ActionApprovalDialog open={duplicateOpen} handleClose={handleDuplicate}
+                title={`${text.duplicate} ${text.field}?`}  okText={text.duplicate} cancelText={text.cancel} />
+
+        </Box>
     )
 
 }

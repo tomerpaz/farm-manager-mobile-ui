@@ -25,7 +25,7 @@ export function getReference  (type, resources,activityDef){
     return false;
   }
 
-  export function getTotalByField (fields, fieldName){
+  export function getTotalByField (fields, fieldName, decimalPiont){
     if(isArrayEmpty(fields)){
       return 0;
     }
@@ -36,17 +36,17 @@ export function getReference  (type, resources,activityDef){
     const sum = values.reduce(function(a, b){
       return a + b;
     });
-    return sum;
+    return sum.toFixed(decimalPiont? decimalPiont : 2);
   }
 
-  export function getTotalQty (fields){
-    return getTotalByField(fields, 'qty')
+  export function getTotalQty (fields, decimalPiont){
+    return getTotalByField(fields, 'qty', decimalPiont)
   }
 
-  export function getTotalweight (fields){
-    return getTotalByField(fields, 'weight')
+  export function getTotalweight (fields, decimalPiont){
+    return getTotalByField(fields, 'weight' ,decimalPiont )
   }
 
-  export function getTotalActivityArea (fields){
-    return getTotalByField(fields, 'activityArea')
+  export function getTotalActivityArea (fields, decimalPiont){
+    return getTotalByField(fields, 'activityArea', decimalPiont)
   }

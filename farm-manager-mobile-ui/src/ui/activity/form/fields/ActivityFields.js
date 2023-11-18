@@ -119,7 +119,7 @@ const ActivityFields = ({ activity, getValues, control, register, errors, setVal
                 </Table>
             </TableContainer>
             <FieldSelectionDialog open={open} fields={fieldsByYear} handleClose={handleClose} />
-            {selectedRow && <ActivityFieldDialog selectedIndex={selectedIndex} selectedRow={selectedRow} activityType={activity.type} handleClose={handleCloseEditRow} update={update} remove={() => handleRemoveRow(selectedIndex)} />}
+            {selectedRow && <ActivityFieldDialog selectedIndex={selectedIndex} selectedRow={selectedRow} activityType={activity.type} handleClose={handleCloseEditRow} update={update} remove={() => handleRemoveRow(selectedIndex)} prepend={prepend} />}
             {openBulkUpdateFields && <UpdateAllFieldsDialog open={openBulkUpdateFields} text={text} totalQty={getTotalQty(fields)}
                 fields={fields}
                 totalWeight={getTotalweight(fields)} 
