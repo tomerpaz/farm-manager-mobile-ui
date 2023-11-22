@@ -10,7 +10,7 @@ const ListPager = ({bottom, page, totalPages, setPage }) => {
 
     return (
         <Box
-        sx={{ position: 'fixed', zIndex:10000, bottom: bottom, left: 0, right: 0, borderTop: 1, borderTopColor: 'lightGray',  backgroundColor: 'white' }}
+        sx={{ position: 'fixed', bottom: bottom, left: 0, right: 0, borderTop: 1, borderTopColor: 'lightGray',  backgroundColor: 'white' }}
        padding={1} display={'flex'} flex={1} alignItems={'center'} justifyContent={'space-between'} paddingTop={1}
         >
             <Button size='large' disabled={totalPages === 0 || page === 0} onClick={() => setPage(page - 1)} color='secondary' variant="outlined" disableElevation>

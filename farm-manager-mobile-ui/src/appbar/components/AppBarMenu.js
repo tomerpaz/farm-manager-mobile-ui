@@ -1,9 +1,10 @@
-import { Logout, More, MoreVert } from '@mui/icons-material';
+import { Logout, More, MoreVert, Settings } from '@mui/icons-material';
 import { Box, IconButton, Menu, MenuItem } from '@mui/material'
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { logOut, selectLang } from '../../features/app/appSlice';
+import { logOut, selectLang, setOpenSettings } from '../../features/app/appSlice';
+import SettingsDialog from '../../ui/settings/SettingsDialog';
 
 
 
@@ -30,6 +31,12 @@ const AppBarMenu = () => {
         dispatch(logOut());
 
         navigate("/login");
+    };
+
+    const handleSettings = () => {
+        setAnchorEl(null);
+        dispatch(setOpenSettings(true));
+
     };
 
     return (
@@ -71,7 +78,19 @@ const AppBarMenu = () => {
 
                     {text.logout}
                 </MenuItem>
+                <MenuItem onClick={handleSettings}>
+                    <IconButton
+                        size="large"
+                        aria-label="settings"
+                        color="inherit"
+                    >
+                        <Settings />
+                    </IconButton>
+
+                    {text.settings}
+                </MenuItem>
             </Menu>
+            <SettingsDialog/>
         </Box>)
 }
 

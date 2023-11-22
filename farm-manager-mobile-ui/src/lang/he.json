@@ -115,5 +115,6 @@
     "bulkQtyUpdate" : "עדכון כמות",
     "waybill": "ת. משלוח",
     "customer":"לקוח",
-    "updateFields":"עדכון חלקות"
+    "updateFields":"עדכון חלקות",
+    "settings": "הגדרות"
 }

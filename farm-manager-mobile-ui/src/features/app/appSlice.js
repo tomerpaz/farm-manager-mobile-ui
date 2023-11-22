@@ -27,7 +27,8 @@ const appSlice = createSlice({
         activityPlanStatusFilter: DEFAULT_PLAN_STATUS,
         activityType: '',
         snackbarMsg: '',
-        snackbarSeverity: 'succsess'
+        snackbarSeverity: 'succsess',
+        openSettings: false,
     },
     reducers: {
         setCredentials: (state, action) => {
@@ -42,7 +43,11 @@ const appSlice = createSlice({
             state.refreshToken = refreshToken;
         },
         setLang: (state, action) => {
-            state.lang = action.payload
+            localStorage.setItem('lang', action.payload.lang);
+            state.lang = action.payload;
+        },
+        setOpenSettings: (state, action) => {
+            state.openSettings = action.payload
         },
         logOut: (state, action) => {
             localStorage.removeItem('token')
@@ -101,7 +106,7 @@ const appSlice = createSlice({
 
 export const { setCredentials, logOut, setLang, setCurrentYear, setAppBarDialogOpen, setFieldFreeTextFilter, setActivityFreeTextFilter,
     setStartDateFilter, setEndDateFilter, setActivityTypeFilter, setFieldSiteFilter, setFieldBaseFieldFilter, setFieldDashboardYear, setFieldsViewStatus,
-    setActivityPlanStatusFilter, setActivityPlanTypeFilter, setActivityStatusFilter, setActivityType, setSnackbar } = appSlice.actions
+    setActivityPlanStatusFilter, setActivityPlanTypeFilter, setActivityStatusFilter, setActivityType, setSnackbar, setOpenSettings } = appSlice.actions
 
 export default appSlice.reducer
 
@@ -124,3 +129,4 @@ export const selectActivityPlanStatusFilter = (state) => state.app.activityPlanS
 export const selectActivityType = (state) => state.app.activityType
 export const selectSnackbarMsg = (state) => state.app.snackbarMsg
 export const selectSnackbarSeverity = (state) => state.app.snackbarSeverity
+export const selectOpenSettings = (state) => state.app.openSettings

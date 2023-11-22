@@ -104,7 +104,14 @@ const ActivityResources = ({ activity, control, errors, register, tariffs, activ
             );
             prepend(newtlySelectedResources)
             setLoadTariffs(true);
+
         }
+        // const element = document.getElementById('section-1');
+        // if (element) {
+        //   // 👇 Will scroll smoothly to the top of the next section
+        //   element.scrollIntoView({ behavior: 'smooth' });
+        // }
+
     }
 
     const handleBulkQtyUpdate = (unit, qty) => {
@@ -155,7 +162,8 @@ const ActivityResources = ({ activity, control, errors, register, tariffs, activ
                 />
             </Box>
             <Box display={'flex'} flex={1} justifyContent={'space-between'} alignItems={'center'}>
-                <Box>                <Button size='large' color={errors.resources ? 'error' : 'primary'} disableElevation={true} variant="contained" onClick={handleClickOpen}>{text.resources} </Button>
+                <Box>                
+                    <Button id={'section-1'} size='large' color={errors.resources ? 'error' : 'primary'} disableElevation={true} variant="contained" onClick={handleClickOpen}>{text.resources} </Button>
                     {fields.length > TRASHHOLD &&
                         <IconButton sx={{ marginLeft: 1, marginRight: 1 }} onClick={() => setExpendFields(!expendFields)}>
                             <Badge badgeContent={fields.length} color="primary">
