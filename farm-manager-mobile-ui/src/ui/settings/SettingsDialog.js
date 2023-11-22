@@ -13,12 +13,14 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 const flagMap = [
-    { id: 'en', flag: 'GB', label: 'English' },
-    { id: 'pt', flag: 'PT', label: 'Português' },
-    { id: 'he', flag: 'IL', label: 'עברית' },
+    { id: 'en', flag: 'GB', label: 'English', emoji: '🇬🇧' },
+    { id: 'pt', flag: 'PT', label: 'Português' , emoji: '🇵🇹' },
+    { id: 'he', flag: 'IL', label: 'עברית', emoji: '🇮🇱'},
 
     // { id: 'es', flag: 'ES', label: 'Español' },
 ];
+
+
 
 const SettingsDialog = ({ fields, }) => {
 
@@ -87,7 +89,7 @@ const SettingsDialog = ({ fields, }) => {
 
                         <MenuItem key={e.id} value={e.id}  >
                             <Box display={'flex'} flexDirection={'row'} alignItems={'center'} alignContent={'center'}>
-                                <Box>
+                                {/* <Box>
                                     <img
                                         loading="lazy"
                                         width="20"
@@ -95,7 +97,8 @@ const SettingsDialog = ({ fields, }) => {
                                         src={`https://flagcdn.com/w20/${e.flag.toLowerCase()}.png`}
                                         alt=""
                                     />
-                                </Box>
+                                </Box> */}
+                                 <Box fontSize={25}> {e.emoji}</Box>
                                 <Box marginLeft={1} marginRight={1}>{`${e.label}`} </Box>
                             </Box>
                         </MenuItem>
