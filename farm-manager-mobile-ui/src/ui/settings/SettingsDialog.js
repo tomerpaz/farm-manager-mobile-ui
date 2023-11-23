@@ -1,11 +1,8 @@
-import React, { useEffect } from 'react'
-import { AppBar, Box, Dialog, DialogContent, Divider, FormControl, IconButton, InputLabel, List, ListItem, ListItemText, MenuItem, Select, Slide, TextField, Toolbar, Typography } from '@mui/material'
+import React from 'react'
+import { AppBar, Box, Dialog, DialogContent, IconButton, MenuItem, Select, Slide, Toolbar, Typography } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux';
-import { selectAppBarDialogOpen, selectCurrentYear, selectFieldBaseFieldFilter, selectFieldSiteFilter, selectFieldsViewStatus, selectLang, selectOpenSettings, setAppBarDialogOpen, setCurrentYear, setFieldBaseFieldFilter, setFieldSiteFilter, setFieldsViewStatus, setLang, setOpenSettings } from '../../features/app/appSlice';
-import DoneIcon from '@mui/icons-material/Done';
-import { Close, FilterAltOff } from '@mui/icons-material';
-import { ACTIVE, ALL, getYearArray, INACTIVE } from '../FarmUtil';
-import { useGetUserDataQuery } from '../../features/auth/authApiSlice';
+import {  selectLang, selectOpenSettings, setLang, setOpenSettings } from '../../features/app/appSlice';
+import { Close } from '@mui/icons-material';
 import { getUserLang } from '../../router/UserRoutes';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -17,33 +14,14 @@ const flagMap = [
     { id: 'pt', flag: 'PT', label: 'Português' , emoji: '🇵🇹' },
     { id: 'he', flag: 'IL', label: 'עברית', emoji: '🇮🇱'},
 
-    // { id: 'es', flag: 'ES', label: 'Español' },
+    // { id: 'es', flag: 'ES', label: 'Español', emoji: '🇪🇸' },
 ];
 
-
-
-const SettingsDialog = ({ fields, }) => {
+const SettingsDialog = () => {
 
     const text = useSelector(selectLang)
-
     const dispatch = useDispatch()
-
     const open = useSelector(selectOpenSettings)
-
-    const fieldSiteFilter = useSelector(selectFieldSiteFilter)
-    const fieldBaseFieldFilter = useSelector(selectFieldBaseFieldFilter)
-    const { data: user } = useGetUserDataQuery()
-
-
-    const fieldsViewStatus = useSelector(selectFieldsViewStatus)
-
-
-    
-
-
-    // useEffect(() => {
-    //     return () => dispatch(setOpenSettings(false));
-    // }, [])
 
     const handleClose = () => {
         dispatch(setOpenSettings(false));
@@ -89,44 +67,14 @@ const SettingsDialog = ({ fields, }) => {
 
                         <MenuItem key={e.id} value={e.id}  >
                             <Box display={'flex'} flexDirection={'row'} alignItems={'center'} alignContent={'center'}>
-                                {/* <Box>
-                                    <img
-                                        loading="lazy"
-                                        width="20"
-                                        srcSet={`https://flagcdn.com/w40/${e.flag.toLowerCase()}.png 2x`}
-                                        src={`https://flagcdn.com/w20/${e.flag.toLowerCase()}.png`}
-                                        alt=""
-                                    />
-                                </Box> */}
                                  <Box fontSize={25}> {e.emoji}</Box>
                                 <Box marginLeft={1} marginRight={1}>{`${e.label}`} </Box>
                             </Box>
                         </MenuItem>
                     )}
-
-
                 </Select>
             </DialogContent>
         </Dialog>
     )
 }
-
 export default SettingsDialog
-
-/*
-        <Box component="li" sx={{ '& > img': { mr: 2, flexShrink: 0 } }} {...props}>
-          <img
-            loading="lazy"
-            width="20"
-            srcSet={`https://flagcdn.com/w40/${option.code.toLowerCase()}.png 2x`}
-            src={`https://flagcdn.com/w20/${option.code.toLowerCase()}.png`}
-            alt=""
-          />
-          {option.label} ({option.code}) +{option.phone}
-        </Box>
-*/
-
-// <MenuItem key={e.id} value={e.id}>
-//     Ten
-
-//     </MenuItem>)}
