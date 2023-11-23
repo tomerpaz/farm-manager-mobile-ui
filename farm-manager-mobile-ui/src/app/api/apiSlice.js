@@ -3,7 +3,7 @@ import { logOut, setCredentials } from '../../features/app/appSlice'
 
 
 
-    // export const FARM_MANAGER = 'http://localhost:8080'
+//export const FARM_MANAGER = 'http://localhost:8080'
 
 export const FARM_MANAGER = 'https://api.manager.farm'
 
@@ -11,7 +11,7 @@ export const FARM_MANAGER = 'https://api.manager.farm'
 const baseQuery = fetchBaseQuery({
     baseUrl: FARM_MANAGER,
     // credentials: 'include',
-    prepareHeaders: (headers, { getState,  }) => {
+    prepareHeaders: (headers, { getState, }) => {
 
         const token = 'refresh' === getState().app.token ? getState().app.refreshToken : getState().app.token;
         if (token) {
@@ -58,8 +58,8 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
 export const apiSlice = createApi({
     reducerPath: 'api', // optional
     baseQuery: baseQueryWithReauth,
-    tagTypes: ['Field', 'Activities', 'User', 'FieldActivities', 
-    'Dashboard','ActivityDefs', 'Crops','SelectedActivity','Warehouses', 'Containers'],
+    tagTypes: ['Field', 'Activities', 'User', 'FieldActivities',
+        'Dashboard', 'ActivityDefs', 'Crops', 'SelectedActivity', 'Warehouses', 'Containers'],
 
     endpoints: builder => ({})
 })
