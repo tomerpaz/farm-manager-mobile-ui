@@ -351,3 +351,8 @@ export function safeDiv(numerator, denominator) {
 
     else return (numerator / denominator).toFixed(2)
 }
+
+export function isMobile() {
+    const regex = /Mobi|Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i;
+    return regex.test(navigator.userAgent);
+}

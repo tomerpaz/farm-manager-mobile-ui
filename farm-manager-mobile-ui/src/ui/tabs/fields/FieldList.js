@@ -65,9 +65,7 @@ function renderRow(props) {
 
 
 export default function FieldList(props) {
-    const height = window.innerHeight - 110;
-
-
+    const height = window.innerHeight - 115;
     
     const { data: user } = useGetUserDataQuery()
 
