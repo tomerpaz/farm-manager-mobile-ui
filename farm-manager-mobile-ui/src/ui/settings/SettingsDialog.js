@@ -78,10 +78,12 @@ const SettingsDialog = () => {
                     )}
                 </Select>
                 <Box marginTop={2} display={'flex'} flexDirection={'row'} >
-                    <IconButton onClick={_=>setShowAgent(!showAgent)} >
-                        {isMobile() ? <MobileFriendlyOutlined /> : <DesktopWindowsOutlined />}
-                    </IconButton>
-                    <Box margin={1}/>
+                    <Box>
+                        <IconButton onClick={_ => setShowAgent(!showAgent)} >
+                            {isMobile() ? <MobileFriendlyOutlined /> : <DesktopWindowsOutlined />}
+                        </IconButton>
+                    </Box>
+                    <Box margin={1} />
                     {showAgent && <Box>{navigator.userAgent}</Box>}
 
                 </Box>
