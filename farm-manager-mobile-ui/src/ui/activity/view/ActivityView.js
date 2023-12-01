@@ -10,11 +10,11 @@ import FieldsView from './FieldsView'
 import ActivityHeaderView from './ActivityHeaderView'
 import { ControlPointDuplicate, Delete, DeleteForever, DeleteOutline, DeleteRounded, Save, Task, HighlightOffRounded } from '@mui/icons-material'
 import TextFieldBase from '../../../components/ui/TextField'
-import { GENERAL, HARVEST, parseISOOrNull } from '../../FarmUtil'
+import { GENERAL, HARVEST, IRRIGARION_TYPES, IRRIGATION, parseISOOrNull } from '../../FarmUtil'
 import ActivityForm from '../form/ActivityForm'
 import { parseISO } from 'date-fns'
 
-const SUPPORTED_TYPES = [GENERAL, HARVEST]
+const SUPPORTED_TYPES = [GENERAL, HARVEST, IRRIGATION]
 
 const ActivityView = () => {
 
@@ -31,16 +31,19 @@ const ActivityView = () => {
 
 
     if (SUPPORTED_TYPES.includes(activity.type)) {
-      // console.log(activity)
 
       const fields = activity.fields.map(e => {
-        return {...e, actualExecution: parseISOOrNull(e.actualExecution)}
+        return { ...e, actualExecution: parseISOOrNull(e.actualExecution) }
       });
 
       const act = { ...activity, fields }
 
 
       act.execution = parseISO(activity.execution);
+      if (IRRIGARION_TYPES.includes(activity.type)) {
+        act.executionEnd = parseISO(activity.executionEnd);
+      }
+
       act.note = act.note ? act.note : '';
       act.invoice = act.invoice ? act.invoice : ''
       act.year = activity.year ? activity.year : act.execution.getFullYear();

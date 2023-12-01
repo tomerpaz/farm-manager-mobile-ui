@@ -13,9 +13,8 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 const flagMap = [
     { id: 'en', flag: 'GB', label: 'English', emoji: '🇬🇧' },
     { id: 'pt', flag: 'PT', label: 'Português', emoji: '🇵🇹' },
+    { id: 'es', flag: 'ES', label: 'Español', emoji: '🇪🇸' },
     { id: 'he', flag: 'IL', label: 'עברית', emoji: '🇮🇱' },
-
-    // { id: 'es', flag: 'ES', label: 'Español', emoji: '🇪🇸' },
 ];
 
 const SettingsDialog = () => {

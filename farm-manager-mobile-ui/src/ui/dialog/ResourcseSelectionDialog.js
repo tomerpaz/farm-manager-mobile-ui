@@ -6,7 +6,7 @@ import { Fragment, useEffect, useState } from "react";
 import { cellSx, headerSx } from "../activity/view/FieldsView";
 import { useGetUserDataQuery } from "../../features/auth/authApiSlice";
 import { Search } from "@mui/icons-material";
-import { FERTILIZER, VARIETY, getResourceTypeText, getUnitText, isStringEmpty } from "../FarmUtil";
+import { EQUIPMENT, FERTILIZER, VARIETY, WATER, getResourceTypeText, getUnitText, isStringEmpty } from "../FarmUtil";
 import Loading from "../../components/Loading";
 import { useGetResourcesQuery } from "../../features/resources/resourcesApiSlice";
 import ListPager from "../../components/ui/ListPager";
@@ -70,13 +70,18 @@ const ResourcseSelectionDialog = ({ open, handleClose, resourceTypes }) => {
         // error
     } = useGetResourcesQuery({ type })
 
+    const isSingular = type === WATER
 
 
     const onSelectRow = (e) => {
         if (isResourceSelected(e, selectedResources)) {
             setSelectedResources(selectedResources.filter(f => e.id !== f.id));
         } else {
-            setSelectedResources(selectedResources.concat([e]));
+            if(isSingular){
+                setSelectedResources(selectedResources.filter(r=>r.type!==e.type).concat([e]))
+            } else {
+                setSelectedResources(selectedResources.concat([e]));
+            }
         }
     }
 
@@ -87,6 +92,7 @@ const ResourcseSelectionDialog = ({ open, handleClose, resourceTypes }) => {
     const showPegination = rowCount > ROWS_PER_PAGE;
     const isFertilizer = type === FERTILIZER;
     const isVariety = type === VARIETY;
+    const isEquipment = type === EQUIPMENT;
 
     const onSelectAllClick = (e) => {
         if (e.target.checked) {
@@ -152,6 +158,7 @@ const ResourcseSelectionDialog = ({ open, handleClose, resourceTypes }) => {
                             >
                                 <TableCell padding="checkbox">
                                     <Checkbox
+                                    disabled={isSingular}
                                         color="primary"
                                         indeterminate={numSelected > 0 && numSelected < rowCount}
                                         checked={rowCount > 0 && numSelected === rowCount}
@@ -171,7 +178,7 @@ const ResourcseSelectionDialog = ({ open, handleClose, resourceTypes }) => {
                                     <TableCell sx={headerSx}>{'SG'}</TableCell>
                                 }
                                 {isVariety && <TableCell sx={headerSx} >{text.crop}</TableCell>}
-
+                                {isEquipment && <TableCell sx={headerSx} >{text.category}</TableCell>}
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -179,7 +186,8 @@ const ResourcseSelectionDialog = ({ open, handleClose, resourceTypes }) => {
                                 <Row key={index} index={index} row={row} text={text}
                                     onClick={() => onSelectRow(row, index)}
                                     isItemSelected={isResourceSelected(row, selectedResources)}
-                                    user={user} isFertilizer={isFertilizer} isVariety={isVariety} />
+                                    user={user} isFertilizer={isFertilizer} isVariety={isVariety}
+                                    isEquipment={isEquipment} />
                             )}
                         </TableBody>
                     </Table>
@@ -199,7 +207,7 @@ const ResourcseSelectionDialog = ({ open, handleClose, resourceTypes }) => {
 
 }
 function Row(props) {
-    const { row, index, text, onClick, isItemSelected, user, isFertilizer, isVariety } = props;
+    const { row, index, text, onClick, isItemSelected, user, isFertilizer, isVariety, isEquipment } = props;
     return (
         <Fragment>
             <TableRow style={{
@@ -221,6 +229,7 @@ function Row(props) {
                 {isFertilizer && <TableCell sx={cellSx} >{`${row.n}-${row.p}-${row.k} `}</TableCell>}
                 {isFertilizer && <TableCell sx={cellSx} >{row.specificGravity}</TableCell>}
                 {isVariety && <TableCell sx={cellSx} >{row.identification}</TableCell>}
+                {isEquipment  && <TableCell sx={cellSx} >{row.category}</TableCell>}
             </TableRow>
         </Fragment>
     );

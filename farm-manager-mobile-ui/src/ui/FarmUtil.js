@@ -356,3 +356,15 @@ export function isMobile() {
     const regex = /Mobi|Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i;
     return regex.test(navigator.userAgent);
 }
+
+export function getMinDateWidth(){
+    return isMobile() ? 115 : 150;
+}
+
+export function daysDif(before, after){
+    if(after && before){
+        return (((after.getTime() - before .getTime())/(1000 * 3600 * 24))+2).toFixed(0) 
+    }
+    return 0;
+
+}

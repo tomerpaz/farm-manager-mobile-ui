@@ -13,7 +13,7 @@
   "market": "Marketing",
   "irrigation": "Irrigação",
   "note": "Observação",
-  "endDate": "Fim",
+  "end": "Fim",
   "density": "Densidade",
   "season": "Temporada",
   "maturity": "Maturidade",
@@ -116,5 +116,8 @@
   "waybill": "Guia",
   "customer": "Cliente",
   "updateFields": "Atualizar campos",
-  "settings": "Configurações"
+  "settings": "Configurações",
+  "water": "Fonte de água",
+  "publicSource": "Fonte pública",
+  "start": "Start"
 }

@@ -3,7 +3,7 @@ import { useSelector } from "react-redux"
 import { selectLang } from "../../../../features/app/appSlice"
 import { cellSx, cellSxChange, cellSxLink, headerSx } from "../../view/FieldsView"
 import { Fragment, useEffect, useState } from "react"
-import { ACTIVITY_RESOURCES, AREA_UNIT, ENERGY, HOUR, WAREHOUSE_RESOURCE_TYPE, getResourceTypeText, getResourceUsageUnit, getUnitText, isArrayEmpty } from "../../../FarmUtil"
+import { ACTIVITY_RESOURCES, AREA_UNIT, ENERGY, HOUR, IRRIGARION_TYPES, IRRIGATION, IRRIGATION_PLAN, SPRAY, SPRAY_TYPES, WAREHOUSE_RESOURCE_TYPE, WATER, getResourceTypeText, getResourceUsageUnit, getUnitText, isArrayEmpty } from "../../../FarmUtil"
 import { useGetUserDataQuery } from "../../../../features/auth/authApiSlice"
 import ResourcseSelectionDialog from "../../../dialog/ResourcseSelectionDialog"
 import { Controller, useFieldArray } from "react-hook-form"
@@ -11,6 +11,7 @@ import { Delete, DragHandle, Menu, MoreVert } from "@mui/icons-material"
 import ActivityResourceDialog from "./ActivityResourceDialog"
 import { useGetWarehousesQuery } from "../../../../features/warehouses/warehouseApiSlice"
 import UpdateResourcesQtyDialog from "./UpdateResourcesQtyDialog"
+import Calculator from "../../../../icons/Calculator"
 
 const TRASHHOLD = 3;
 const UNITS = [AREA_UNIT.toUpperCase(), HOUR.toUpperCase()]
@@ -80,6 +81,21 @@ const ActivityResources = ({ activity, control, errors, register, tariffs, activ
         setLoadTariffs(false);
     }, [loadTariffs])
 
+    const clearSingular = (newtlySelectedResources) => {
+        if (IRRIGARION_TYPES.concat(SPRAY_TYPES).includes(activity.type)) {
+            if (IRRIGARION_TYPES.includes(activity.type)) {
+                const ws = newtlySelectedResources.filter(e => e.resource.type === WATER)
+                if (!isArrayEmpty(ws)) {
+                    fields.forEach((e, index, arr) => {
+                        if (e.resource.type === WATER) {
+                            remove(index);
+                        }
+                    })
+                }
+            }
+        }
+        return newtlySelectedResources;
+    }
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -88,7 +104,7 @@ const ActivityResources = ({ activity, control, errors, register, tariffs, activ
         setOpen(false);
         if (selectedResources) {
             const alreadySelectedIDs = fields.map(e => e.resource.id);
-            const newtlySelectedResources = selectedResources.filter(e => !alreadySelectedIDs.includes(e.id)).map(e => {
+            let newtlySelectedResources = selectedResources.filter(e => !alreadySelectedIDs.includes(e.id)).map(e => {
                 return {
                     resource: e,
                     qty: 0,
@@ -102,8 +118,11 @@ const ActivityResources = ({ activity, control, errors, register, tariffs, activ
                 }
             }
             );
-            prepend(newtlySelectedResources)
-            setLoadTariffs(true);
+            if (!isArrayEmpty(newtlySelectedResources)) {
+                newtlySelectedResources = clearSingular(newtlySelectedResources);
+                prepend(newtlySelectedResources)
+                setLoadTariffs(true);
+            }
 
         }
         // const element = document.getElementById('section-1');
@@ -162,7 +181,7 @@ const ActivityResources = ({ activity, control, errors, register, tariffs, activ
                 />
             </Box>
             <Box display={'flex'} flex={1} justifyContent={'space-between'} alignItems={'center'}>
-                <Box>                
+                <Box>
                     <Button id={'section-1'} size='large' color={errors.resources ? 'error' : 'primary'} disableElevation={true} variant="contained" onClick={handleClickOpen}>{text.resources} </Button>
                     {fields.length > TRASHHOLD &&
                         <IconButton sx={{ marginLeft: 1, marginRight: 1 }} onClick={() => setExpendFields(!expendFields)}>
@@ -172,6 +191,9 @@ const ActivityResources = ({ activity, control, errors, register, tariffs, activ
                             </Badge>
                         </IconButton>
                     }
+                    {/* {IRRIGARION_TYPES.includes(activity.type) &&
+                        <IconButton size='large'  onClick={() => setOpenEditBulkQty(true)}><Calculator fontSize='large' /></IconButton>
+                    } */}
                 </Box>
                 <Box>
                     <IconButton size='large' disabled={isArrayEmpty(resourceBulkUnits)} onClick={() => setOpenEditBulkQty(true)}><MoreVert fontSize='large' /></IconButton>
@@ -187,7 +209,7 @@ const ActivityResources = ({ activity, control, errors, register, tariffs, activ
             <ResourcseSelectionDialog open={open} handleClose={handleClose} resourceTypes={resourceTypes} />
             {selectedRow && <ActivityResourceDialog selectedIndex={selectedIndex} selectedRow={selectedRow}
                 activityType={activity.type} handleClose={handleCloseEditRow} update={update}
-                warehouses={warehouses} control={control} errors={errors} activityArea={activityArea} 
+                warehouses={warehouses} control={control} errors={errors} activityArea={activityArea}
                 resourceUnit={getResourceUsageUnit(selectedRow.resource, activityDef)}
                 remove={() => handleRemoveRow(selectedIndex)} />}
             <UpdateResourcesQtyDialog open={openEditBulkQty} units={resourceBulkUnits} text={text} handleClose={handleBulkQtyUpdate} areaUnit={user.areaUnit} activityArea={activityArea}

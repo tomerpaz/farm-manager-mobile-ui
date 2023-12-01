@@ -13,7 +13,7 @@
   "market": "Merketing",
   "irrigation": "Irrigation",
   "note": "Note",
-  "endDate": "End",
+  "end": "End",
   "density": "Density",
   "season": "Season",
   "maturity": "Maturity",
@@ -116,5 +116,8 @@
   "waybill": "Waybill",
   "customer": "Customer",
   "updateFields": "Update Fields",
-  "settings": "Settings"
+  "settings": "Settings",
+  "water": "Water Source",
+  "publicSource": "Public Source",
+  "start": "Start"
 }

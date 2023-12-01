@@ -3,10 +3,11 @@ import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
 import { selectLang } from '../../../../features/app/appSlice'
 import ActivityTypeIcon from '../../../../icons/ActivityTypeIcon'
-import { CUSTOMER_TYPES, GENERAL, GENERAL_PLAN, getActivityTypeText, getWinds, getYearArray, HARVEST, IRRIGARION_TYPES, IRRIGATION, IRRIGATION_PLAN, MARKET, SPRAY, SPRAY_PLAN } from '../../../FarmUtil'
+import { CUSTOMER_TYPES, GENERAL, GENERAL_PLAN, getActivityTypeText, getMinDateWidth, getWinds, getYearArray, HARVEST, IRRIGARION_TYPES, IRRIGATION, IRRIGATION_PLAN, MARKET, SPRAY, SPRAY_PLAN } from '../../../FarmUtil'
 import { DatePicker, TimePicker } from '@mui/x-date-pickers';
 import { Controller } from 'react-hook-form'
 import TextFieldBase from '../../../../components/ui/TextField'
+import DecoratedBox from '../../../../components/ui/DecoratedBox'
 
 const HEADER_CONFIG = [
   { type: GENERAL, date: true, year: true, activity: true, activityType: GENERAL },
@@ -19,7 +20,7 @@ const HEADER_CONFIG = [
   { type: MARKET, date: true, year: true, },
 ]
 
-const ActivityHeaderView = ({ activity, control, errors, customers, activityDefs, crops, reference, isDuplicate }) => {
+const ActivityHeaderView = ({ activity, control, errors, customers, activityDefs, crops, reference, isDuplicate, execution, days }) => {
 
   const [crop, setCrop] = useState(null);
   const text = useSelector(selectLang)
@@ -56,12 +57,12 @@ const ActivityHeaderView = ({ activity, control, errors, customers, activityDefs
           )}
         />
       </Box>
-      <Box paddingTop={1} display={'flex'} flex={1} alignContent={'center'} alignItems={'center'} justifyContent={'space-between'} flexDirection={'row'} >
+      <Box paddingTop={1} display={'flex'} flex={1} alignContent={'center'} alignItems={'center'} flexDirection={'row'} >
         <Controller
           name="execution"
           control={control}
           render={({ field }) =>
-            <DatePicker label={text.date}
+            <DatePicker label={config.endDate ? text.start : text.date}
               closeOnSelect
               showToolbar={false}
               localeText={{
@@ -69,15 +70,35 @@ const ActivityHeaderView = ({ activity, control, errors, customers, activityDefs
                 clearButtonLabel: text.clear,
                 okButtonLabel: text.save
               }}
-              // 
               slotProps={{
-                textField: { size: 'small', variant: 'outlined', sx: { maxWidth: 115 } },
+                textField: { size: 'small', variant: 'outlined', sx: { maxWidth: getMinDateWidth() } },
                 actionBar: { actions: ["cancel" /*, "clear"*/] }
               }}
-
               {...field} />}
         />
-        {config.activity && <Box margin={1} />}
+        {(config.activity || config.endDate) && <Box margin={1} />}
+        {config.endDate && <Controller
+          closeOnSelect
+          showToolbar={false}
+          rules={{ required: true, min: execution }}
+          localeText={{
+            cancelButtonLabel: text.cancel,
+            clearButtonLabel: text.clear,
+            okButtonLabel: text.save
+          }}
+
+          name="executionEnd"
+          control={control}
+          render={({ field }) => <DatePicker
+            minDate={execution}
+            label={text.end}
+            slotProps={{
+              textField: { size: 'small', error: (errors?.executionEnd ? true : false), variant: 'outlined', sx: { maxWidth: getMinDateWidth() } },
+              actionBar: { actions: ["cancel" /*, "clear"*/] }
+            }}
+            {...field} />}
+        />}
+        {config.endDate && <Box flex={1} display={'flex'} justifyContent={'end'}><DecoratedBox value={`${days} ${text.days}`} error={days<1} /> </Box>}
         {config.activity &&
           <Controller
             name="activityDef"
@@ -103,16 +124,6 @@ const ActivityHeaderView = ({ activity, control, errors, customers, activityDefs
 
           />
         }
-
-        {IRRIGARION_TYPES.includes(activity.type) && <Controller
-          name="executionEnd"
-          control={control}
-          render={({ field }) => <DatePicker
-            label={text.endDate}
-            slotProps={{ textField: { size: 'small', sx: { minWidth: 150, width: 150 } } }}
-
-            {...field} />}
-        />}
       </Box>
       <Box display={'flex'} flex={1} alignItems={'center'} justifyContent={'space-between'} flexDirection={'row'} >
         {config.crop &&
@@ -181,7 +192,7 @@ const ActivityHeaderView = ({ activity, control, errors, customers, activityDefs
                 size='small'
                 getOptionLabel={(option) => option ? option.name : ''}
                 isOptionEqualToValue={(option, value) => (value === undefined) || option?.id?.toString() === (value?.id ?? value)?.toString()}
-                renderInput={(params) => <TextFieldBase 
+                renderInput={(params) => <TextFieldBase
                   error={errors.customer ? true : false}
                   sx={{ marginTop: 0.5 }} {...params} label={text.customer} />}
                 {...field} />}

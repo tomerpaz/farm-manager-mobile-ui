@@ -7,12 +7,14 @@ import Loading from '../components/Loading'
 import he from "../lang/he.json";
 import en from "../lang/en.json";
 import pt from "../lang/pt.json";
+import es from "../lang/es.json";
 
 
 const langs = {
     'he':  he,
     'pt':  pt,
     'en':  en,
+    'es':  es,
 }
 export const getUserLang = (lang) =>{
    return langs[lang];

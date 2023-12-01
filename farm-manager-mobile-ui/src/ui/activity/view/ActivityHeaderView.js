@@ -13,7 +13,6 @@ const ActivityHeaderView = ({ activity }) => {
   const text = useSelector(selectLang)
 
 
-  console.log(activity)
   return (
     <Box margin={1}>
       <Box  display={'flex'} flex={1} alignItems={'center'} justifyContent={'space-between'} flexDirection={'row'} >

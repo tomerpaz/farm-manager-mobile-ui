@@ -4,8 +4,9 @@ import { useSelector } from "react-redux";
 import { selectLang } from "../../../../features/app/appSlice";
 import { useState } from "react";
 import { useGetUserDataQuery } from "../../../../features/auth/authApiSlice";
-import { HARVEST, MARKET, QTY_PER_AREA_UNIT_RESOURCE_TYPE, SECONDARY_QTY_RESOURCES, WAREHOUSE_RESOURCE_TYPE, WORKER_GROUP, getResourceTypeText, getUnitText, safeDiv } from "../../../FarmUtil";
+import { HARVEST, MARKET, QTY_PER_AREA_UNIT_RESOURCE_TYPE, SECONDARY_QTY_RESOURCES, WAREHOUSE_RESOURCE_TYPE, WATER, WORKER_GROUP, getResourceTypeText, getUnitText, safeDiv } from "../../../FarmUtil";
 import { Cancel, Delete, Save } from "@mui/icons-material";
+import Calculator from "../../../../icons/Calculator";
 
 const height = 400;
 
@@ -38,6 +39,7 @@ const ActivityResourceDialog = ({ selectedRow, selectedIndex, handleClose, updat
     const isWarehouse = WAREHOUSE_RESOURCE_TYPE.includes(selectedRow.resource.type);
     const isQtyPerAreaUnit = QTY_PER_AREA_UNIT_RESOURCE_TYPE.includes(selectedRow.resource.type);
     const isWorkerGropup = WORKER_GROUP === selectedRow.resource.type;
+    const isWater = WATER === selectedRow.resource.type;
 
     const onAction = (save) => {
         if (save) {

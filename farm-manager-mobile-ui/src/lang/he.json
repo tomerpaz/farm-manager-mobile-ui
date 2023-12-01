@@ -13,7 +13,7 @@
     "market": "שיווק",
     "irrigation": "השקיה",
     "note": "הערה",
-    "endDate": "סיום",
+    "end": "סיום",
     "density": "עומד",
     "season": "עונה",
     "maturity": "בגרות",
@@ -116,5 +116,9 @@
     "waybill": "ת. משלוח",
     "customer":"לקוח",
     "updateFields":"עדכון חלקות",
-    "settings": "הגדרות"
+    "settings": "הגדרות",
+    "water": "מקור מים",
+    "publicSource": "מקור ציבורי",
+    "category": "קטגוריה",
+    "start": "התחלה"
 }

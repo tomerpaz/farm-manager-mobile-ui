@@ -2,7 +2,7 @@ import { BottomNavigation, BottomNavigationAction, Box, TextField, Typography } 
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { selectLang, setSnackbar } from '../../../features/app/appSlice'
-import { asLocalDate } from '../../FarmUtil'
+import { asLocalDate, daysDif } from '../../FarmUtil'
 import ActivityHeaderView from './header/ActivityHeaderView'
 import { useForm, Controller, useWatch } from "react-hook-form";
 import { Cancel, ControlPointDuplicate, Delete, Save } from '@mui/icons-material'
@@ -55,7 +55,9 @@ const ActivityForm = ({ activity }) => {
   const fields = useWatch({ control, name: "fields" })
   const uuid = useWatch({ control, name: "uuid" })
   const reference = useWatch({ control, name: "reference" })
+  const executionEnd = useWatch({ control, name: "executionEnd" })
 
+  const days = daysDif(execution,executionEnd);
 
   const activityArea =  getTotalActivityArea(fields);
 
@@ -118,7 +120,8 @@ const ActivityForm = ({ activity }) => {
             {...register(`reference`)} /> */}
 
 
-          <ActivityHeaderView control={control} register={register} activity={activity} errors={errors} crops={crops} activityDefs={activityDefs} customers={customers} reference={reference} isDuplicate={isDuplicate} />
+          <ActivityHeaderView control={control} register={register} activity={activity} errors={errors} crops={crops} activityDefs={activityDefs} customers={customers} reference={reference} isDuplicate={isDuplicate}
+           execution={execution} days={days} />
           <ActivityFields control={control} register={register} activity={activity} getValues={getValues} activityArea={activityArea} errors={errors} />
           <ActivityResources control={control} register={register} activity={activity} activityDef={activityDef}
             errors={errors} tariffs={tariffs} activityArea={activityArea} />

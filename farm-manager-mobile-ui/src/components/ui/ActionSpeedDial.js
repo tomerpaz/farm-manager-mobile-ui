@@ -5,7 +5,7 @@ import SpeedDial from '@mui/material/SpeedDial';
 import SpeedDialIcon from '@mui/material/SpeedDialIcon';
 import SpeedDialAction from '@mui/material/SpeedDialAction';
 import ActivityTypeIcon from '../../icons/ActivityTypeIcon';
-import { GENERAL, HARVEST, SCOUT, getActivityTypeText, getActivityTypes } from '../../ui/FarmUtil';
+import { GENERAL, HARVEST, IRRIGATION, SCOUT, getActivityTypeText, getActivityTypes } from '../../ui/FarmUtil';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectActivityType, selectLang, setActivityType } from '../../features/app/appSlice';
 import { createSearchParams, useNavigate } from 'react-router-dom';
@@ -35,7 +35,7 @@ const ActionSpeedDial = ({ role, plan, map, bottom, fieldId }) => {
   const handleAction = (e) => {
     //  console.log('new',e, 'map',map)
 
-    console.log('handleAction',fieldId)
+  //  console.log('handleAction',fieldId)
     const searchParams = fieldId ?
       createSearchParams({fid: fieldId}).toString() :
       null
@@ -43,7 +43,7 @@ const ActionSpeedDial = ({ role, plan, map, bottom, fieldId }) => {
 
     dispatch(setActivityType(e.type));
     if (SCOUT !== e.type) {
-      if ([GENERAL, HARVEST].includes(e.type)) {
+      if ([GENERAL, HARVEST, IRRIGATION].includes(e.type)) {
         navigate(
           {
             pathname: `/activity/new/${e.type}`,
