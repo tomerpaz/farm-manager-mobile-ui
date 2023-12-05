@@ -45,7 +45,7 @@ const ActivityForm = ({ activity }) => {
   } = useGetResourcesQuery({ type: CUSTOMER })
 
   const { control, register, handleSubmit, getValues, watch, formState: { errors },
-    formState: { isDirty, dirtyFields }, reset, setValue
+    formState: { isDirty, dirtyFields }, reset, setValue, trigger
   } = useForm({ defaultValues: activity, });
 
   const execution = useWatch({ control, name: "execution" })
@@ -74,6 +74,7 @@ const ActivityForm = ({ activity }) => {
 
   const saveActivity = (data) => {
     data.execution = asLocalDate(data.execution, true);
+    data.executionEnd = asLocalDate(data.executionEnd, true);
     if (data.uuid) {
       return updateActivity(data).unwrap();
     } else {
@@ -124,7 +125,7 @@ const ActivityForm = ({ activity }) => {
           <ActivityFields control={control} register={register} activity={activity} getValues={getValues} activityArea={activityArea} errors={errors} />
           <ActivityResources control={control} register={register} activity={activity} activityDef={activityDef}
             errors={errors} tariffs={tariffs} activityArea={activityArea} days={days}
-            irrigationParams={irrigationParams} setValue={setValue}/>
+            irrigationParams={irrigationParams} setValue={setValue} trigger={trigger}/>
           <Box padding={1}>
             <Controller
               control={control}

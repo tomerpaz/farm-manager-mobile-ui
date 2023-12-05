@@ -77,28 +77,29 @@ const ActivityHeaderView = ({ activity, control, errors, customers, activityDefs
               {...field} />}
         />
         {(config.activity || config.endDate) && <Box margin={1} />}
-        {config.endDate && <Controller
-          closeOnSelect
-          showToolbar={false}
-          rules={{ required: true, min: execution }}
-          localeText={{
-            cancelButtonLabel: text.cancel,
-            clearButtonLabel: text.clear,
-            okButtonLabel: text.save
-          }}
+        {config.endDate &&
+          <Controller
+            control={control}
 
-          name="executionEnd"
-          control={control}
-          render={({ field }) => <DatePicker
-            minDate={execution}
-            label={text.end}
-            slotProps={{
-              textField: { size: 'small', error: (errors?.executionEnd ? true : false), variant: 'outlined', sx: { maxWidth: getMinDateWidth() } },
-              actionBar: { actions: ["cancel" /*, "clear"*/] }
-            }}
-            {...field} />}
-        />}
-        {config.endDate && <Box flex={1} display={'flex'} justifyContent={'end'}><DecoratedBox value={`${days} ${text.days}`} error={days<1} /> </Box>}
+            name="executionEnd"
+            render={({ field }) => <DatePicker
+              closeOnSelect
+              showToolbar={false}
+              minDate={execution}
+              label={text.end}
+              localeText={{
+                cancelButtonLabel: text.cancel,
+                clearButtonLabel: text.clear,
+                okButtonLabel: text.save
+              }}
+              slotProps={{
+                textField: { size: 'small', error: (errors?.executionEnd ? true : false), variant: 'outlined', sx: { maxWidth: getMinDateWidth() } },
+                actionBar: { actions: ["cancel" /*, "clear"*/] }
+              }}
+              {...field} />}
+            rules={{ required: true, min: execution }}
+          />}
+        {config.endDate && <Box flex={1} display={'flex'} justifyContent={'end'}><DecoratedBox value={`${days} ${text.days}`} error={days < 1} /> </Box>}
         {config.activity &&
           <Controller
             name="activityDef"

@@ -17,7 +17,11 @@ import IrrigationConfigDialog from "./IrrigationConfigDialog"
 const TRASHHOLD = 3;
 const UNITS = [AREA_UNIT.toUpperCase(), HOUR.toUpperCase()]
 
-const ActivityResources = ({ activity, control, errors, register, tariffs, activityArea, activityDef, days, irrigationParams, setValue }) => {
+//const REQUIRED_RESOURCES = SPRAY_TYPES.concat(IRRIGARION_TYPES);
+
+const ELEMENT_ID = 'resources'
+
+const ActivityResources = ({ activity, control, errors, register, tariffs, activityArea, activityDef, days, irrigationParams, setValue , trigger}) => {
     const text = useSelector(selectLang)
     const { data: user } = useGetUserDataQuery()
     const [open, setOpen] = useState(false);
@@ -38,6 +42,7 @@ const ActivityResources = ({ activity, control, errors, register, tariffs, activ
     const handleCloseEditRow = () => {
         setSelectedRow(null);
         setSelectedIndex(null);
+        trigger(['resources'])
     };
 
     const handleRemoveRow = (index) => {
@@ -46,15 +51,37 @@ const ActivityResources = ({ activity, control, errors, register, tariffs, activ
         remove(index)
 
     };
+    const valideArray = (arr, act) => {
+        if (IRRIGARION_TYPES.includes(act.type)) {
+            const water = arr.find(e => e.resource.type === WATER)
+         
+            if(!water){
+                return 'waterSource';
+            } else if ( water.qty <= 0){
+                return 'waterQtyNotPositive';
+            }
+        }
+
+        return null;
+    }
 
     const { fields, append, prepend, remove, swap, move, insert, update, } = useFieldArray({
         control, // control props comes from useForm (optional: if you are using FormContext)
         name: "resources", // unique name for your Field Array
         keyName: "key",
-        rules: { required: false }
+        rules: {
+            required: false,
+            validate: valideArray
+        }
     });
 
 
+    const errorMsg = errors.resources?.root?.message;
+    if(errorMsg){
+       
+        console.log('errors', errorMsg)
+
+    }
     const runTariffMatch = () => {
         if (tariffs) {
             fields.map((row, index) => {
@@ -127,11 +154,11 @@ const ActivityResources = ({ activity, control, errors, register, tariffs, activ
             }
 
         }
-        // const element = document.getElementById('section-1');
-        // if (element) {
-        //   // 👇 Will scroll smoothly to the top of the next section
-        //   element.scrollIntoView({ behavior: 'smooth' });
-        // }
+        const element = document.getElementById(ELEMENT_ID);
+        if (element) {
+          // 👇 Will scroll smoothly to the top of the next section
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
 
     }
 
@@ -205,7 +232,7 @@ const ActivityResources = ({ activity, control, errors, register, tariffs, activ
             </Box>
             <Box display={'flex'} flex={1} justifyContent={'space-between'} alignItems={'center'}>
                 <Box>
-                    <Button id={'section-1'} size='large' color={errors.resources ? 'error' : 'primary'} disableElevation={true} variant="contained" onClick={handleClickOpen}>{text.resources} </Button>
+                    <Button id={ELEMENT_ID} size='large' color={errors.resources ? 'error' : 'primary'} disableElevation={true} variant="contained" onClick={handleClickOpen}>{text.resources} </Button>
                     {fields.length > TRASHHOLD &&
                         <IconButton sx={{ marginLeft: 1, marginRight: 1 }} onClick={() => setExpendFields(!expendFields)}>
                             <Badge badgeContent={fields.length} color="primary">
@@ -225,7 +252,10 @@ const ActivityResources = ({ activity, control, errors, register, tariffs, activ
             </Box>
 
 
-            <RenderTable register={register} remove={remove} user={user} activity={activity}
+            <RenderTable 
+            
+           
+            register={register} remove={remove} user={user} activity={activity}
                 handleOpenEditRow={handleOpenEditRow} text={text} getFields={getFields} activityDef={activityDef} irrigationParams={irrigationParams} />
 
 

@@ -41,7 +41,7 @@ const ActivityView = () => {
 
       act.execution = parseISO(activity.execution);
       if (IRRIGARION_TYPES.includes(activity.type)) {
-        console.log(activity.executionEnd);
+       // console.log(activity.executionEnd);
         act.executionEnd = parseISO(activity.executionEnd);
       }
 

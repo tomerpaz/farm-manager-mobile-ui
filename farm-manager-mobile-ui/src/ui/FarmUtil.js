@@ -1,5 +1,6 @@
 import { grey } from "@mui/material/colors";
 import { parseISO } from "date-fns";
+import { fi } from "date-fns/locale";
 
 export const UI_SIZE = 'medium';
 
@@ -250,7 +251,7 @@ export function parseISOOrNull(date) {
 
 export const daysDiff = (before, after) => {
    if(before && after){
-    let difference =  endOfDay( after).getTime() - startOfDay(before).getTime();
+    let difference =  (endOfDay( after).getTime()) - (startOfDay(before).getTime());
     let TotalDays = Math.ceil(difference / (1000 * 3600 * 24));
     return TotalDays;
    }
@@ -373,6 +374,19 @@ export function isMobile() {
 
 export function getMinDateWidth(){
     return isMobile() ? 115 : 150;
+}
+
+export function firstDayOfThisMonth(){
+    var date = new Date();
+    var firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+    return firstDay;
+}
+
+export function lastDayOfThisMonth(){
+    var date = new Date();
+    var lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+    return lastDay;
+
 }
 
 // export function daysDif(before, after){
