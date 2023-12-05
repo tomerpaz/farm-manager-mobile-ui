@@ -192,6 +192,17 @@ export function newDate() {
     var date = new Date();
     return date;
 }
+export function startOfDay(date) {
+    date.setUTCHours(0, 0, 0, 0);
+    return date;
+}
+
+export function endOfDay(date) {
+    date.setUTCHours(23, 59, 59, 999);;
+    return date;
+}
+
+
 
 export function subtractYear(date, years) {
     const val = years ? years : 1;
@@ -237,10 +248,13 @@ export function parseISOOrNull(date) {
 }
 
 
-export const daysDiff = (date_1, date_2) => {
-    let difference = date_1.getTime() - date_2.getTime();
+export const daysDiff = (before, after) => {
+   if(before && after){
+    let difference =  endOfDay( after).getTime() - startOfDay(before).getTime();
     let TotalDays = Math.ceil(difference / (1000 * 3600 * 24));
     return TotalDays;
+   }
+   return 0;
 }
 
 
@@ -361,10 +375,10 @@ export function getMinDateWidth(){
     return isMobile() ? 115 : 150;
 }
 
-export function daysDif(before, after){
-    if(after && before){
-        return (((after.getTime() - before .getTime())/(1000 * 3600 * 24))+2).toFixed(0) 
-    }
-    return 0;
+// export function daysDif(before, after){
+//     if(after && before){
+//         return (((after.getTime() - before .getTime())/(1000 * 3600 * 24))+2).toFixed(0) 
+//     }
+//     return 0;
 
-}
+// }

@@ -12,11 +12,12 @@ import ActivityResourceDialog from "./ActivityResourceDialog"
 import { useGetWarehousesQuery } from "../../../../features/warehouses/warehouseApiSlice"
 import UpdateResourcesQtyDialog from "./UpdateResourcesQtyDialog"
 import Calculator from "../../../../icons/Calculator"
+import IrrigationConfigDialog from "./IrrigationConfigDialog"
 
 const TRASHHOLD = 3;
 const UNITS = [AREA_UNIT.toUpperCase(), HOUR.toUpperCase()]
 
-const ActivityResources = ({ activity, control, errors, register, tariffs, activityArea, activityDef }) => {
+const ActivityResources = ({ activity, control, errors, register, tariffs, activityArea, activityDef, days, irrigationParams, setValue }) => {
     const text = useSelector(selectLang)
     const { data: user } = useGetUserDataQuery()
     const [open, setOpen] = useState(false);
@@ -26,6 +27,7 @@ const ActivityResources = ({ activity, control, errors, register, tariffs, activ
     const { data: warehouses, isSuccess: isWarehousesDefsSuccess } = useGetWarehousesQuery()
     const [loadTariffs, setLoadTariffs] = useState(false);
     const [openEditBulkQty, setOpenEditBulkQty] = useState(false);
+    const [openIrrigationConfig, setOpenIrrigationConfig] = useState(false);
 
     const handleOpenEditRow = (index, row) => {
         setSelectedRow(row);
@@ -148,6 +150,27 @@ const ActivityResources = ({ activity, control, errors, register, tariffs, activ
         setOpenEditBulkQty(false)
     }
 
+    const handleIrrigationConfig = (conf) => {
+        if (conf) {
+            setValue('irrigationParams', conf,
+                {
+                    shouldDirty: true
+                })
+        }
+        // if (unit && qty) {
+        //     fields.map((row, index) => {
+        //         if (unit === getResourceUsageUnit(row.resource, activityDef)) {
+        //             row.qty = qty;
+        //             if (row.tariff) {
+        //                 row.totalCost = row.tariff * qty;
+        //             }
+        //             update(index, row);
+        //         }
+        //     })
+        // }
+        setOpenIrrigationConfig(false)
+    }
+
     const getResourceTypes = () => {
         var types = ACTIVITY_RESOURCES.find(e => activity.type.includes(e.activity))?.types;
         if (types && !user.gg) {
@@ -191,9 +214,9 @@ const ActivityResources = ({ activity, control, errors, register, tariffs, activ
                             </Badge>
                         </IconButton>
                     }
-                    {/* {IRRIGARION_TYPES.includes(activity.type) &&
-                        <IconButton size='large'  onClick={() => setOpenEditBulkQty(true)}><Calculator fontSize='large' /></IconButton>
-                    } */}
+                    {IRRIGARION_TYPES.includes(activity.type) &&
+                        <IconButton size='large' onClick={() => setOpenIrrigationConfig(true)}><Calculator fontSize='large' /></IconButton>
+                    }
                 </Box>
                 <Box>
                     <IconButton size='large' disabled={isArrayEmpty(resourceBulkUnits)} onClick={() => setOpenEditBulkQty(true)}><MoreVert fontSize='large' /></IconButton>
@@ -203,7 +226,7 @@ const ActivityResources = ({ activity, control, errors, register, tariffs, activ
 
 
             <RenderTable register={register} remove={remove} user={user} activity={activity}
-                handleOpenEditRow={handleOpenEditRow} text={text} getFields={getFields} activityDef={activityDef} />
+                handleOpenEditRow={handleOpenEditRow} text={text} getFields={getFields} activityDef={activityDef} irrigationParams={irrigationParams} />
 
 
             <ResourcseSelectionDialog open={open} handleClose={handleClose} resourceTypes={resourceTypes} />
@@ -214,6 +237,10 @@ const ActivityResources = ({ activity, control, errors, register, tariffs, activ
                 remove={() => handleRemoveRow(selectedIndex)} />}
             <UpdateResourcesQtyDialog open={openEditBulkQty} units={resourceBulkUnits} text={text} handleClose={handleBulkQtyUpdate} areaUnit={user.areaUnit} activityArea={activityArea}
             />
+            {IRRIGARION_TYPES.includes(activity.type) && <IrrigationConfigDialog open={openIrrigationConfig} days={days} text={text} handleClose={handleIrrigationConfig} areaUnit={user.areaUnit} activityArea={activityArea}
+                irrigationParams={irrigationParams}
+            // {...register(`irrigationParams`)}
+            />}
 
         </Box>
     )
@@ -244,7 +271,7 @@ const RenderList = ({ register, remove, user, activity, handleOpenEditRow, text,
     )
 }
 
-const RenderTable = ({ register, remove, user, activity, handleOpenEditRow, text, getFields, activityDef }) => {
+const RenderTable = ({ register, remove, user, activity, handleOpenEditRow, text, getFields, activityDef, irrigationParams }) => {
     return (
         <TableContainer >
             <Table size="small" sx={{ margin: 0, padding: 0 }} aria-label="a dense table">
@@ -253,9 +280,10 @@ const RenderTable = ({ register, remove, user, activity, handleOpenEditRow, text
                         <TableCell sx={headerSx} >{text.name}</TableCell>
                         <TableCell sx={headerSx} >{text.type}</TableCell>
                         <TableCell sx={headerSx}>{text.qty}</TableCell>
+                        {/* <TableCell ><Calculator/></TableCell> */}
+
                         <TableCell sx={headerSx}>{text.unit}</TableCell>
                         {user.financial && <TableCell sx={headerSx}>{text.cost}</TableCell>}
-                        {/* <TableCell ></TableCell> */}
 
                     </TableRow>
                 </TableHead>
@@ -266,7 +294,7 @@ const RenderTable = ({ register, remove, user, activity, handleOpenEditRow, text
                             currency={user.currency}
                             financial={user.financial}
                             onClick={() => handleOpenEditRow(index, row)}
-                            activityDef={activityDef} />
+                            activityDef={activityDef} irrigationParams={irrigationParams} />
                     )}
                 </TableBody>
             </Table>
@@ -275,7 +303,7 @@ const RenderTable = ({ register, remove, user, activity, handleOpenEditRow, text
 }
 
 function Row(props) {
-    const { row, index, text, areaUnit, onClick, currency, remove, register, financial, activityDef } = props;
+    const { row, index, text, areaUnit, onClick, currency, remove, register, financial, activityDef, irrigationParams } = props;
 
     return (
         <Fragment>

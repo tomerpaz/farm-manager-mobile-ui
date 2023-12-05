@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 import { useParams, useSearchParams } from 'react-router-dom'
 import { selectCurrentYear } from '../../../features/app/appSlice'
 import ActivityForm from '../form/ActivityForm'
-import { getWinds, newDate } from '../../FarmUtil'
+import { getWinds, newDate, startOfDay } from '../../FarmUtil'
 import { useGetUserDataQuery } from '../../../features/auth/authApiSlice'
 import { useFieldsById } from '../../../features/fields/fieldsApiSlice'
 
@@ -25,8 +25,9 @@ const NewActivity = () => {
   const fields = field ? [{ field, activityArea: field.area, fieldNote: null, actualExecution: null }] : [];
   const activity = {
     type, plan: isPlan,
-    execution: newDate(),
+    execution: startOfDay(newDate()),
     executionEnd : null,
+    irrigationParams: null,
     activityDef: null, year: user.year, wind, customer: null, fields, resources: [], note: '', invoice: '', editable: true, waybill: ''
   };
 

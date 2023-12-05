@@ -119,5 +119,12 @@
   "settings": "Settings",
   "water": "Water Source",
   "publicSource": "Public Source",
-  "start": "Start"
+  "start": "Start",
+  "irrigationMethod": "Irrigation Method",
+  "fertilizeMethod": "Fertilize Method",
+  "irrigationDay": "Irrigation Day",
+  "irrigationDays": "Irrigation Days",
+  "per": "Per/",
+  "frequency": "Frequency"
+
 }

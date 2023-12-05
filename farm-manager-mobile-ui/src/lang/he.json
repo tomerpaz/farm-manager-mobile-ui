@@ -120,5 +120,11 @@
     "water": "מקור מים",
     "publicSource": "מקור ציבורי",
     "category": "קטגוריה",
-    "start": "התחלה"
+    "start": "התחלה",
+    "irrigationMethod": "שיטת השקיה",
+    "fertilizeMethod": "שיטת דישון",
+    "irrigationDay": "יום השקיה",
+    "irrigationDays": "ימי השקיה",
+    "per": "ל",
+    "frequency": "תדירות"
 }

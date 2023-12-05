@@ -27,7 +27,7 @@ const FieldPesticdeTable = ({ pesticides }) => {
                             <TableCell sx={tableCellSx}>{formatNumber(row.qty)}</TableCell>
                             <TableCell sx={tableCellSx}>{row.dosage}</TableCell>
                             <TableCell sx={tableCellSx}>{parseDate(row.date)}</TableCell>
-                            <TableCell sx={tableCellSx}>{daysDiff(newDate(), new Date(row.date))}</TableCell>
+                            <TableCell sx={tableCellSx}>{daysDiff(new Date(row.date),newDate())}</TableCell>
                         </TableRow>
                     )}
                 </TableBody>
