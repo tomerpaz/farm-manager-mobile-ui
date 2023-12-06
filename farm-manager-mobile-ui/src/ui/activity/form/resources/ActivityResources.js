@@ -58,7 +58,7 @@ const ActivityResources = ({ activity, control, errors, register, tariffs, activ
             const water = arr.find(e => e.resource.type === WATER)
 
             if (!water) {
-                return 'waterSource';
+                return 'waterSource,waterQty';
             } else if (water.qty <= 0) {
                 return 'waterQty';
             }
@@ -77,8 +77,7 @@ const ActivityResources = ({ activity, control, errors, register, tariffs, activ
         }
     });
 
-
-    const errorMsg = errors.resources?.root?.message;
+    const errorMsg = errors.resources?.root?.message?.split(",");
     if (errorMsg) {
 
         console.log('errors', errorMsg)
@@ -247,7 +246,12 @@ const ActivityResources = ({ activity, control, errors, register, tariffs, activ
                         <IconButton size='large' onClick={() => setOpenIrrigationConfig(true)}><Calculator fontSize='large' /></IconButton>
                     }
                     {errorMsg &&
-                        <IconButton color ='error' size='large' onClick={() => setShowAlert(true)}><Error fontSize='large' /></IconButton>
+                        <IconButton color='error' size='large' onClick={() => setShowAlert(true)}>
+                            <Badge badgeContent={errorMsg.length} color="secondary">
+                                <Error fontSize='large' />
+                            </Badge>
+
+                        </IconButton>
                     }
                 </Box>
                 <Box>
@@ -276,34 +280,8 @@ const ActivityResources = ({ activity, control, errors, register, tariffs, activ
                 irrigationParams={irrigationParams}
             // {...register(`irrigationParams`)}
             />}
-            <AlertDialog open={showAlert} message={errorMsg} varieant={'error'} handleClose={_=>setShowAlert(false)} buttonText={text.close}/>
-
+            <AlertDialog open={showAlert} title={'requiredFieldsMissing'} message={errorMsg} varieant={'error'} handleClose={_ => setShowAlert(false)} buttonText={text.close} />
         </Box>
-    )
-}
-
-const RenderList = ({ register, remove, user, activity, handleOpenEditRow, text, getFields }) => {
-    return (
-        <List>
-            {getFields().map((row, index) =>
-                <ListItem disablePadding dense={true}>
-                    <ListItemButton onClick={() => handleOpenEditRow(index, row)}>
-                        {/* <ListItemIcon>
-                            <Inbox />
-                        </ListItemIcon> */}
-                        <ListItemText primary={row.resource.name} secondary={getResourceTypeText(row.resource.type, text)} />
-                        {/* <ListItemText secondary={row.resource.type} /> */}
-
-                    </ListItemButton>
-                </ListItem>
-                // <Row key={row.key} index={index} row={row} text={text} areaUnit={user.areaUnit} register={register}
-                //     remove={remove}
-                //     currency={user.currency} activityDef={activity.activityDef}
-                //     financial={user.financial}
-                //     onClick={() => handleOpenEditRow(index, row)} />
-            )}
-
-        </List>
     )
 }
 

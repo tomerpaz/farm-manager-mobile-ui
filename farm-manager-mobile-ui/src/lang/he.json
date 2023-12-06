@@ -127,5 +127,7 @@
     "irrigationDays": "ימי השקיה",
     "per": "ל",
     "frequency": "תדירות",
-    "close": "סגור"
+    "close": "סגור",
+    "requiredFieldsMissing": "שדות חובה חסרים",
+    "waterQty": "כמות מים"
 }

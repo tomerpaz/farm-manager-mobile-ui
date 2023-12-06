@@ -126,5 +126,7 @@
   "irrigationDays": "Dias de irrigação",
   "per": "Por/",
   "frequency": "Frequência",
-  "close": "Fechar"
+  "close": "Fechar",
+  "requiredFieldsMissing": "Campos obrigatórios ausentes",
+  "waterQty": "Quantidade de água"
 }

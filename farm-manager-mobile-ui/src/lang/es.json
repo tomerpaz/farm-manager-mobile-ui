@@ -126,5 +126,7 @@
   "irrigationDays": "Días de riego",
   "per": "Por/",
   "frequency": "Frecuencia",
-  "close": "Cerca"
+  "close": "Cerca",
+  "requiredFieldsMissing": "Faltan campos obligatorios",
+  "waterQty": "Cantidad de agua"
 }

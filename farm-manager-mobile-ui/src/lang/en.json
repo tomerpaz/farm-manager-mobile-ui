@@ -126,6 +126,8 @@
   "irrigationDays": "Irrigation Days",
   "per": "Per/",
   "frequency": "Frequency",
-  "close":"Close"
+  "close":"Close",
+  "requiredFieldsMissing": "Required fields missing",
+  "waterQty": "Water Qty"
 
 }
