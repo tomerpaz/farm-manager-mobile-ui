@@ -7,12 +7,13 @@ import { ACTIVITY_RESOURCES, AREA_UNIT, ENERGY, HOUR, IRRIGARION_TYPES, IRRIGATI
 import { useGetUserDataQuery } from "../../../../features/auth/authApiSlice"
 import ResourcseSelectionDialog from "../../../dialog/ResourcseSelectionDialog"
 import { Controller, useFieldArray } from "react-hook-form"
-import { Delete, DragHandle, Menu, MoreVert } from "@mui/icons-material"
+import { Delete, DragHandle, Error, Menu, MoreVert } from "@mui/icons-material"
 import ActivityResourceDialog from "./ActivityResourceDialog"
 import { useGetWarehousesQuery } from "../../../../features/warehouses/warehouseApiSlice"
 import UpdateResourcesQtyDialog from "./UpdateResourcesQtyDialog"
 import Calculator from "../../../../icons/Calculator"
 import IrrigationConfigDialog from "./IrrigationConfigDialog"
+import AlertDialog from "../../../dialog/AlertDialog"
 
 const TRASHHOLD = 3;
 const UNITS = [AREA_UNIT.toUpperCase(), HOUR.toUpperCase()]
@@ -21,7 +22,7 @@ const UNITS = [AREA_UNIT.toUpperCase(), HOUR.toUpperCase()]
 
 const ELEMENT_ID = 'resources'
 
-const ActivityResources = ({ activity, control, errors, register, tariffs, activityArea, activityDef, days, irrigationParams, setValue , trigger}) => {
+const ActivityResources = ({ activity, control, errors, register, tariffs, activityArea, activityDef, days, irrigationParams, setValue, trigger }) => {
     const text = useSelector(selectLang)
     const { data: user } = useGetUserDataQuery()
     const [open, setOpen] = useState(false);
@@ -32,6 +33,7 @@ const ActivityResources = ({ activity, control, errors, register, tariffs, activ
     const [loadTariffs, setLoadTariffs] = useState(false);
     const [openEditBulkQty, setOpenEditBulkQty] = useState(false);
     const [openIrrigationConfig, setOpenIrrigationConfig] = useState(false);
+    const [showAlert, setShowAlert] = useState(false);
 
     const handleOpenEditRow = (index, row) => {
         setSelectedRow(row);
@@ -54,10 +56,10 @@ const ActivityResources = ({ activity, control, errors, register, tariffs, activ
     const valideArray = (arr, act) => {
         if (IRRIGARION_TYPES.includes(act.type)) {
             const water = arr.find(e => e.resource.type === WATER)
-         
-            if(!water){
+
+            if (!water) {
                 return 'waterSource';
-            } else if ( water.qty <= 0){
+            } else if (water.qty <= 0) {
                 return 'waterQtyNotPositive';
             }
         }
@@ -77,8 +79,8 @@ const ActivityResources = ({ activity, control, errors, register, tariffs, activ
 
 
     const errorMsg = errors.resources?.root?.message;
-    if(errorMsg){
-       
+    if (errorMsg) {
+
         console.log('errors', errorMsg)
 
     }
@@ -156,8 +158,8 @@ const ActivityResources = ({ activity, control, errors, register, tariffs, activ
         }
         const element = document.getElementById(ELEMENT_ID);
         if (element) {
-          // 👇 Will scroll smoothly to the top of the next section
-          element.scrollIntoView({ behavior: 'smooth' });
+            // 👇 Will scroll smoothly to the top of the next section
+            element.scrollIntoView({ behavior: 'smooth' });
         }
 
     }
@@ -241,8 +243,11 @@ const ActivityResources = ({ activity, control, errors, register, tariffs, activ
                             </Badge>
                         </IconButton>
                     }
-                    {IRRIGARION_TYPES.includes(activity.type) &&
+                    {IRRIGARION_TYPES.includes(activity.type) && !['ICCPRO', 'TALGIL'].includes(activity.src) &&
                         <IconButton size='large' onClick={() => setOpenIrrigationConfig(true)}><Calculator fontSize='large' /></IconButton>
+                    }
+                    {errorMsg &&
+                        <IconButton color ='error' size='large' onClick={() => setShowAlert(true)}><Error fontSize='large' /></IconButton>
                     }
                 </Box>
                 <Box>
@@ -252,10 +257,10 @@ const ActivityResources = ({ activity, control, errors, register, tariffs, activ
             </Box>
 
 
-            <RenderTable 
-            
-           
-            register={register} remove={remove} user={user} activity={activity}
+            <RenderTable
+
+
+                register={register} remove={remove} user={user} activity={activity}
                 handleOpenEditRow={handleOpenEditRow} text={text} getFields={getFields} activityDef={activityDef} irrigationParams={irrigationParams} />
 
 
@@ -271,6 +276,7 @@ const ActivityResources = ({ activity, control, errors, register, tariffs, activ
                 irrigationParams={irrigationParams}
             // {...register(`irrigationParams`)}
             />}
+            <AlertDialog open={showAlert} message={errorMsg} varieant={'error'} handleClose={_=>setShowAlert(false)} buttonText={text.close}/>
 
         </Box>
     )

@@ -125,6 +125,7 @@
   "irrigationDay": "Irrigation Day",
   "irrigationDays": "Irrigation Days",
   "per": "Per/",
-  "frequency": "Frequency"
+  "frequency": "Frequency",
+  "close":"Close"
 
 }

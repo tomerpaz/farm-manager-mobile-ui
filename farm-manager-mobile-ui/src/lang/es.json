@@ -118,5 +118,13 @@
   "updateFields": "Actualizar campos",
   "settings": "Ajustes",
   "water": "Fuente de agua",
-  "publicSource": "Fuente pública"
+  "publicSource": "Fuente pública",
+  "start": "Comenzar",
+  "irrigationMethod": "Método de riego",
+  "fertilizeMethod": "Método de fertilización",
+  "irrigationDay": "Día de riego",
+  "irrigationDays": "Días de riego",
+  "per": "Por/",
+  "frequency": "Frecuencia",
+  "close": "Cerca"
 }
