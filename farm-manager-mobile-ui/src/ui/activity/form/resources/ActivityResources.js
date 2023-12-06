@@ -60,7 +60,7 @@ const ActivityResources = ({ activity, control, errors, register, tariffs, activ
             if (!water) {
                 return 'waterSource';
             } else if (water.qty <= 0) {
-                return 'waterQtyNotPositive';
+                return 'waterQty';
             }
         }
 
