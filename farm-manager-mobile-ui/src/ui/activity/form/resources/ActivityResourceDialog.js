@@ -104,10 +104,8 @@ const ActivityResourceDialog = ({ selectedRow, selectedIndex, handleClose, updat
     return (
         <Dialog
             open={selectedRow !== null}
-            onClose={handleClose}
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
-
         >
             <DialogTitle id="alert-dialog-title">
                 <Typography component={'div'} variant="h6">{`${getResourceTypeText(selectedRow.resource.type, text)}:  ${selectedRow.resource.name}`}</Typography>
@@ -157,8 +155,6 @@ const ActivityResourceDialog = ({ selectedRow, selectedIndex, handleClose, updat
                             </InputAdornment>,
                         }}
                     />}
-                    {/* </Box> */}
-                    {/* <Box margin={1}></Box> */}
                     {isWarehouse &&
 
                         <TextFieldBase

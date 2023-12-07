@@ -3,7 +3,7 @@ import { useSelector } from "react-redux"
 import { selectLang } from "../../../../features/app/appSlice"
 import { cellSx, cellSxChange, cellSxLink, headerSx } from "../../view/FieldsView"
 import { Fragment, useEffect, useState } from "react"
-import { ACTIVITY_RESOURCES, AREA_UNIT, ENERGY, HOUR, IRRIGARION_TYPES, IRRIGATION, IRRIGATION_PLAN, SPRAY, SPRAY_TYPES, WAREHOUSE_RESOURCE_TYPE, WATER, getResourceTypeText, getResourceUsageUnit, getUnitText, isArrayEmpty } from "../../../FarmUtil"
+import { ACTIVITY_RESOURCES, AREA_UNIT, ENERGY, FERTILIZER, HOUR, IRRIGARION_TYPES, IRRIGATION, IRRIGATION_PLAN, SPRAY, SPRAY_TYPES, WAREHOUSE_RESOURCE_TYPE, WATER, getResourceTypeText, getResourceUsageUnit, getUnitText, isArrayEmpty } from "../../../FarmUtil"
 import { useGetUserDataQuery } from "../../../../features/auth/authApiSlice"
 import ResourcseSelectionDialog from "../../../dialog/ResourcseSelectionDialog"
 import { Controller, useFieldArray } from "react-hook-form"
@@ -217,6 +217,9 @@ const ActivityResources = ({ activity, control, errors, register, tariffs, activ
         return (expendFields && fields.length > TRASHHOLD) ? fields : fields.slice(0, TRASHHOLD);
     }
 
+    const calcIrrigation = (irrigationParams?.irrigationMethod || irrigationParams?.fertilizeMethod) ? true : false;
+
+    console.log('calcIrrigation', calcIrrigation)
     return (
         <Box margin={1} paddingTop={2} display={'flex'} flexDirection={'column'}>
             <Box marginTop={1} marginBottom={1} display={'flex'} flex={1} justifyContent={'space-between'} alignItems={'center'}>
@@ -243,7 +246,7 @@ const ActivityResources = ({ activity, control, errors, register, tariffs, activ
                         </IconButton>
                     }
                     {IRRIGARION_TYPES.includes(activity.type) && !['ICCPRO', 'TALGIL'].includes(activity.src) &&
-                        <IconButton size='large' onClick={() => setOpenIrrigationConfig(true)}><Calculator fontSize='large' /></IconButton>
+                        <IconButton size='large' onClick={() => setOpenIrrigationConfig(true)}><Calculator color={calcIrrigation ? 'primary' : 'secondary'} fontSize='large' /></IconButton>
                     }
                     {errorMsg &&
                         <IconButton color='error' size='large' onClick={() => setShowAlert(true)}>
@@ -262,12 +265,9 @@ const ActivityResources = ({ activity, control, errors, register, tariffs, activ
 
 
             <RenderTable
-
-
                 register={register} remove={remove} user={user} activity={activity}
-                handleOpenEditRow={handleOpenEditRow} text={text} getFields={getFields} activityDef={activityDef} irrigationParams={irrigationParams} />
-
-
+                handleOpenEditRow={handleOpenEditRow} text={text} getFields={getFields} activityDef={activityDef}
+                irrigationParams={irrigationParams} calcIrrigation={calcIrrigation} />
             <ResourcseSelectionDialog open={open} handleClose={handleClose} resourceTypes={resourceTypes} />
             {selectedRow && <ActivityResourceDialog selectedIndex={selectedIndex} selectedRow={selectedRow}
                 activityType={activity.type} handleClose={handleCloseEditRow} update={update}
@@ -285,7 +285,7 @@ const ActivityResources = ({ activity, control, errors, register, tariffs, activ
     )
 }
 
-const RenderTable = ({ register, remove, user, activity, handleOpenEditRow, text, getFields, activityDef, irrigationParams }) => {
+const RenderTable = ({ register, remove, user, activity, handleOpenEditRow, text, getFields, activityDef, irrigationParams, calcIrrigation }) => {
     return (
         <TableContainer >
             <Table size="small" sx={{ margin: 0, padding: 0 }} aria-label="a dense table">
@@ -294,7 +294,7 @@ const RenderTable = ({ register, remove, user, activity, handleOpenEditRow, text
                         <TableCell sx={headerSx} >{text.name}</TableCell>
                         <TableCell sx={headerSx} >{text.type}</TableCell>
                         <TableCell sx={headerSx}>{text.qty}</TableCell>
-                        {/* <TableCell ><Calculator/></TableCell> */}
+                        {calcIrrigation && <TableCell sx={cellSx} ><Calculator /></TableCell>}
 
                         <TableCell sx={headerSx}>{text.unit}</TableCell>
                         {user.financial && <TableCell sx={headerSx}>{text.cost}</TableCell>}
@@ -308,7 +308,8 @@ const RenderTable = ({ register, remove, user, activity, handleOpenEditRow, text
                             currency={user.currency}
                             financial={user.financial}
                             onClick={() => handleOpenEditRow(index, row)}
-                            activityDef={activityDef} irrigationParams={irrigationParams} />
+                            activityDef={activityDef} irrigationParams={irrigationParams}
+                            calcIrrigation={calcIrrigation} />
                     )}
                 </TableBody>
             </Table>
@@ -316,9 +317,14 @@ const RenderTable = ({ register, remove, user, activity, handleOpenEditRow, text
     )
 }
 
-function Row(props) {
-    const { row, index, text, areaUnit, onClick, currency, remove, register, financial, activityDef, irrigationParams } = props;
+function calcQty(row, irrigationParams){
+    return '-';//row.qty*345;
+}
 
+function Row(props) {
+    const { row, index, text, areaUnit, onClick, currency, remove, register, financial, activityDef, irrigationParams, calcIrrigation } = props;
+
+    const calc = (calcIrrigation && [WATER,FERTILIZER].includes(row.resource.type)) ? calcQty(row, irrigationParams) : '';
     return (
         <Fragment>
             <TableRow
@@ -333,6 +339,7 @@ function Row(props) {
                 <TableCell onClick={onClick} sx={cellSxLink} >{row.resource.name}</TableCell>
                 <TableCell /*onClick={onClick}*/ sx={cellSx} >{getResourceTypeText(row.resource.type, text)}</TableCell>
                 <TableCell /*onClick={onClick}*/ sx={cellSx}>{row.qty}</TableCell>
+                {calcIrrigation && <TableCell /*onClick={onClick}*/ sx={cellSx}>{calc}</TableCell>}
                 <TableCell /*onClick={onClick}*/ sx={cellSx}>{getUnitText(getResourceUsageUnit(row.resource, activityDef), areaUnit, text)}</TableCell>
                 {financial && <TableCell /*onClick={onClick}*/ sx={row.manualTariff ? cellSxChange : cellSx}>{row.totalCost ? row.totalCost.toFixed(2) : 0}</TableCell>}
                 {/* <TableCell width={1} sx={{ padding: 0, margin: 0 }}><IconButton margin={0} padding={0} onClick={e => remove(index)}><Delete fontSize='large' /></IconButton></TableCell> */}

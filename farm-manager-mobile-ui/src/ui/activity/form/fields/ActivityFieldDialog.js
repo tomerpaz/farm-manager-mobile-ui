@@ -29,8 +29,6 @@ const ActivityFieldDialog = ({ selectedRow, selectedIndex, handleClose, activity
 
     const { data: containers, isSuccess: isContainersSuccess } = useGetContainersQuery({}, { skip: activityType !== HARVEST })
 
-    //  console.log('containers', containers)
-
     const onAction = (save) => {
         if (save) {
             selectedRow.activityArea = activityArea;
@@ -59,17 +57,11 @@ const ActivityFieldDialog = ({ selectedRow, selectedIndex, handleClose, activity
 
             <Dialog
                 open={selectedRow !== null}
-                onClose={handleClose}
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
                 fullWidth
-            // fullScreen
             >
                 <DialogTitle id="alert-dialog-title">
-                    {/* <Box flex={1} display={'flex'} flexDirection={'row'} alignItems={'center'} >
-                    <Typography component={'div'} variant='h6'>{getActivityTypeText(activityType, text)}</Typography>
-
-                </Box> */}
                     <Box display={'flex'} flexDirection={'row'} justifyContent={'space-between'}>
                         <Box>
                             <Typography component={'div'} variant="h6"> {displayFieldName(selectedRow.field)}</Typography>

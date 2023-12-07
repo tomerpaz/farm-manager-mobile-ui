@@ -128,5 +128,7 @@
   "frequency": "Frequência",
   "close": "Fechar",
   "requiredFieldsMissing": "Campos obrigatórios ausentes",
-  "waterQty": "Quantidade de água"
+  "waterQty": "Quantidade de água",
+  "every": "Todo"
+
 }
