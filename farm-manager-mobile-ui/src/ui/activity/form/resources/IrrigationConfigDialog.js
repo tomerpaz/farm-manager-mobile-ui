@@ -47,26 +47,25 @@ const IrrigationConfigDialog = ({ open, units, text, handleClose, areaUnit, acti
                 <Typography component={'div'} variant="h6">  {text.days.toLowerCase()}: {days}</Typography>
             </DialogTitle> */}
             <DialogContent>
-                <Box display={'flex'} flexDirection={'row'} alignItems={'center'} >
-                    <TextField
-                        sx={{ flex: 3 }}
-                        value={irrigationMethod}
-                        id="outlined-selectirrigation-method"
-                        onChange={e => handleSetIrrigationMethod(e.target.value)}
-                        fullWidth
-                        select
-                        label={text.irrigationMethod}
-                    >
-                        <MenuItem key={''} value={''}><em /></MenuItem>
-                        <MenuItem value={'perAreaUnitPerDay'}>{`${text[areaUnit]}/${text.day}`}</MenuItem>
-                        <MenuItem value={'perAreaUnitPerIrrigationDay'}>{`${text[areaUnit]}/${text.irrigationDay}`}</MenuItem>
-                        <MenuItem value={'totalPerAreaUnit'}>{`${text.total}/${text[areaUnit]}`}</MenuItem>
-                        <MenuItem value={'totalPerField'}>{`${text.total}/  ${text.field}`}</MenuItem>
-                    </TextField>
-                    <Box marginLeft={1} marginRight={1} />
+                <TextField
+                    value={irrigationMethod}
+                    id="outlined-selectirrigation-method"
+                    onChange={e => handleSetIrrigationMethod(e.target.value)}
+                    fullWidth
+                    select
+                    label={text.irrigationMethod}
+                >
+                    <MenuItem key={''} value={''}><em /></MenuItem>
+                    <MenuItem value={'perAreaUnitPerDay'}>{`${text[areaUnit]}/${text.day}`}</MenuItem>
+                    <MenuItem value={'perAreaUnitPerIrrigationDay'}>{`${text[areaUnit]}/${text.irrigationDay}`}</MenuItem>
+                    <MenuItem value={'totalPerAreaUnit'}>{`${text.total}/${text[areaUnit]}`}</MenuItem>
+                    <MenuItem value={'totalPerField'}>{`${text.total}/  ${text.field}`}</MenuItem>
+                </TextField>
+
+                {PER_AREA_UNIT_PER_IRREGATION_DAY === irrigationMethod &&
+                    <Box margin={2} />}
+                {PER_AREA_UNIT_PER_IRREGATION_DAY === irrigationMethod &&
                     <TextFieldBase
-                        sx={{ flex: 2 }}
-                        disabled={PER_AREA_UNIT_PER_IRREGATION_DAY !== irrigationMethod}
                         value={PER_AREA_UNIT_PER_IRREGATION_DAY !== irrigationMethod ? '' : frequency} onChange={e => handleSetFrequency(Number(e.target.value))}
                         type='number' label={`${text.frequency}, ${text.every}`}
                         fullWidth
@@ -76,8 +75,7 @@ const IrrigationConfigDialog = ({ open, units, text, handleClose, areaUnit, acti
                             }
                             </InputAdornment>,
                         }}
-                    />
-                </Box>
+                    />}
                 <Box margin={2} />
                 <TextField
                     value={fertilizeMethod}
