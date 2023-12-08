@@ -44,6 +44,10 @@ const ActivityFieldDialog = ({ selectedRow, selectedIndex, handleClose, activity
         handleClose();
     }
 
+    const handleSetActivityArea = (val) => {
+        setActivityArea(val > 0  ? val : selectedRow.field.area )
+    }
+
     const handleDuplicate = (val) => {
         setDuplicateOpen(false);
         if(val){
@@ -82,7 +86,7 @@ const ActivityFieldDialog = ({ selectedRow, selectedIndex, handleClose, activity
                 <DialogContent>
                     <Box display={'flex'} flex={1} flexDirection={'row'} alignItems={'center'}>
 
-                        <TextFieldBase sx={{ flex: 1 }} value={activityArea} onChange={e => setActivityArea(Number(e.target.value))} type='number' label={text[user.areaUnit]} />
+                        <TextFieldBase sx={{ flex: 1 }} value={activityArea} onChange={e => handleSetActivityArea(Number(e.target.value))} type='number' label={text[user.areaUnit]} />
                         <Box margin={1}></Box>
                         <DatePicker
                             label={text.executed}
