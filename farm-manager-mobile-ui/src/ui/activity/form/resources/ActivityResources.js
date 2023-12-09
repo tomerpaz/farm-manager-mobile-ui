@@ -355,12 +355,21 @@ function calcQty(row, irrigationParams, activityArea, daysInPeriod, fieldsCount,
     return 0;
 }
 
+function getTotalCost(tariff, qty){
+    if(tariff * qty){
+        return (tariff * qty).toFixed(2);
+    }
+    return 0;
+}
+
 function Row(props) {
     const { row, index, text, areaUnit, onClick, currency, remove, register, financial, activityDef, irrigationParams, calcIrrigation, activityArea,
         daysInPeriod, fieldsCount, totalWaterQty
     } = props;
 
-    const calc = (calcIrrigation && [WATER,FERTILIZER].includes(row.resource.type)) ? calcQty(row, irrigationParams, activityArea, daysInPeriod, fieldsCount, totalWaterQty) : '';
+    const calc = (calcIrrigation && [WATER,FERTILIZER].includes(row.resource.type)) ? calcQty(row, irrigationParams, activityArea, daysInPeriod, fieldsCount, totalWaterQty) : null;
+    const totalCost =  getTotalCost(row.tariff, calc ? calc : row.qty);
+   
     return (
         <Fragment>
             <TableRow
@@ -375,9 +384,9 @@ function Row(props) {
                 <TableCell onClick={onClick} sx={cellSxLink} >{row.resource.name}</TableCell>
                 <TableCell /*onClick={onClick}*/ sx={cellSx} >{getResourceTypeText(row.resource.type, text)}</TableCell>
                 <TableCell /*onClick={onClick}*/ sx={cellSx}>{row.qty}</TableCell>
-                {calcIrrigation && <TableCell /*onClick={onClick}*/ sx={cellSx}>{calc}</TableCell>}
+                {calcIrrigation && <TableCell /*onClick={onClick}*/ sx={cellSx}>{calc ? calc : ''}</TableCell>}
                 <TableCell /*onClick={onClick}*/ sx={cellSx}>{getUnitText(getResourceUsageUnit(row.resource, activityDef), areaUnit, text)}</TableCell>
-                {financial && <TableCell /*onClick={onClick}*/ sx={row.manualTariff ? cellSxChange : cellSx}>{row.totalCost ? row.totalCost.toFixed(2) : 0}</TableCell>}
+                {financial && <TableCell /*onClick={onClick}*/ sx={row.manualTariff ? cellSxChange : cellSx}>{totalCost}</TableCell>}
                 {/* <TableCell width={1} sx={{ padding: 0, margin: 0 }}><IconButton margin={0} padding={0} onClick={e => remove(index)}><Delete fontSize='large' /></IconButton></TableCell> */}
             </TableRow>
         </Fragment>
