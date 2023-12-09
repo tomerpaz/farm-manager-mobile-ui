@@ -75,6 +75,7 @@ const ActivityForm = ({ activity }) => {
   const saveActivity = (data) => {
     data.execution = asLocalDate(data.execution, true);
     data.executionEnd = asLocalDate(data.executionEnd, true);
+   
     if (data.uuid) {
       return updateActivity(data).unwrap();
     } else {
@@ -125,7 +126,9 @@ const ActivityForm = ({ activity }) => {
           <ActivityFields control={control} register={register} activity={activity} getValues={getValues} activityArea={activityArea} errors={errors} />
           <ActivityResources control={control} register={register} activity={activity} activityDef={activityDef}
             errors={errors} tariffs={tariffs} activityArea={activityArea} days={days}
-            irrigationParams={irrigationParams} setValue={setValue} trigger={trigger}/>
+            irrigationParams={irrigationParams} setValue={setValue} trigger={trigger}
+            fieldsCount={fields.length}
+            />
           <Box padding={1}>
             <Controller
               control={control}

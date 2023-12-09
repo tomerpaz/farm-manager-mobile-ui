@@ -3,11 +3,13 @@
 // import { sumBy } from 'lodash';
 // import { CONTRACTOR, WORKER, WORKER_GROUP } from "../modules/activity/types";
 
+import { CONTRACTOR, WORKER, WORKER_GROUP } from "./FarmUtil";
+
 
 export function calcNPK(quntity, specificGravity, value, usageUnit) {
     let result = ((quntity * value) / 100) * specificGravity;
     if (result) {
-        if (PER_M3 === usageUnit) {
+        if ('m3' === usageUnit) {
             result = result * 1000;
         }
         return result.toFixed(2);
@@ -16,16 +18,15 @@ export function calcNPK(quntity, specificGravity, value, usageUnit) {
 }
 
 
+export function calcIrrigationDays(days, frequency){
+    if(days && frequency){
+        return (days/frequency).toFixed(0);
+    }
+    return 1;
+}
+
 export function calcTotalWaterQtyUtilFunc(irrigationMtd, waterQty, area, daysInPeriod, irrigationDays, numberOfFields) {
-    // if (IrrigationMethod.PER_AREA_UNIT_PER_DAY.equals(irrigationMtd)) {
-    //     return waterQty * area * daysInPeriod;
-    // } else if (IrrigationMethod.PER_AREA_UNIT_PER_IRREGATION_DAY.equals(irrigationMtd)) {
-    //     return waterQty * area * irrigationDays;
-    // } else if (IrrigationMethod.TOTAL_PER_AREA_UNIT.equals(irrigationMtd)) {
-    //     return waterQty * area;
-    // } else if (IrrigationMethod.TOTAL_PER_FIELD.equals(irrigationMtd)) {
-    //     return waterQty * numberOfFields;
-    // }
+
     switch (irrigationMtd) {
 
         case PER_AREA_UNIT_PER_DAY: {
@@ -46,11 +47,11 @@ export function calcTotalWaterQtyUtilFunc(irrigationMtd, waterQty, area, daysInP
     }
 }
 
-export const PER_WATER_UNIT = 'PER_WATER_UNIT'
-export const PER_AREA_UNIT_PER_DAY = 'PER_AREA_UNIT_PER_DAY'
-export const PER_AREA_UNIT_PER_IRREGATION_DAY = 'PER_AREA_UNIT_PER_IRREGATION_DAY'
-export const TOTAL_PER_AREA_UNIT = 'TOTAL_PER_AREA_UNIT'
-export const TOTAL_PER_FIELD = 'TOTAL_PER_FIELD'
+export const PER_WATER_UNIT = 'perM3Water'
+export const PER_AREA_UNIT_PER_DAY = 'perAreaUnitPerDay'
+export const PER_AREA_UNIT_PER_IRREGATION_DAY = 'perAreaUnitPerIrrigationDay'
+export const TOTAL_PER_AREA_UNIT = 'totalPerAreaUnit'
+export const TOTAL_PER_FIELD = 'totalPerField'
 
 
 export function calcTotalFertilizerQty(fertilizeMethod, fertilizerQty, totalWaterQty, area, daysInPeriod, irrigationDays, numberOfFields) {
@@ -119,43 +120,43 @@ export function convertKelvin(value, toUnit) {
     return result.toFixed(1);
 }
 
-export function adjustUsageAmountForTariff(amount, ru) {
-    if (ru && ru.resource && amount && amount !== 0) {
-        const r = ru.resource;
-        if (FERTILIZER === r.type && r.specificGravity !== null && r.usageUnit === PER_LIT && r.inventoryUnit === PER_KG) {
-            return amount * r.specificGravity;
-        }
-    }
-    return amount;
-}
+// export function adjustUsageAmountForTariff(amount, ru) {
+//     if (ru && ru.resource && amount && amount !== 0) {
+//         const r = ru.resource;
+//         if (FERTILIZER === r.type && r.specificGravity !== null && r.usageUnit === LIT && r.inventoryUnit === KG) {
+//             return amount * r.specificGravity;
+//         }
+//     }
+//     return amount;
+// }
 
-export function getTotalWeight(activityDomains) {
-    const totalWight = Number(sumBy(activityDomains, 'netWeight')).toFixed(2);
-    return totalWight;
-}
+// export function getTotalWeight(activityDomains) {
+//     const totalWight = Number(sumBy(activityDomains, 'netWeight')).toFixed(2);
+//     return totalWight;
+// }
 
 
 
-export function isContainerResource(e, activityDef) {
-    if (e.resource) {
-        if ([WORKER, WORKER_GROUP].includes(e.resource.type) && e.resource.usageUnit === PER_CONTAINER) {
-            return true;
-        } else if ([CONTRACTOR].includes(e.resource.type) && activityDef && activityDef.unit === PER_CONTAINER) {
-            return true;
-        }
-    }
-    return false;
-}
-export function getTotalContainers(resources, selectedActivityDefOption) {
-    const activityDef = selectedActivityDefOption ? selectedActivityDefOption.element : null;
-    resources.forEach(element => {
-        if (element.groupAmount) {
-            element.groupAmount = Number(element.groupAmount);
-        }
-    });
-    const containers = Number(sumBy(resources.filter(e => isContainerResource(e, activityDef)), 'groupAmount')).toFixed(2);
-    return containers;
-}
+// export function isContainerResource(e, activityDef) {
+//     if (e.resource) {
+//         if ([WORKER, WORKER_GROUP].includes(e.resource.type) && e.resource.usageUnit === PER_CONTAINER) {
+//             return true;
+//         } else if ([CONTRACTOR].includes(e.resource.type) && activityDef && activityDef.unit === PER_CONTAINER) {
+//             return true;
+//         }
+//     }
+//     return false;
+// }
+// export function getTotalContainers(resources, selectedActivityDefOption) {
+//     const activityDef = selectedActivityDefOption ? selectedActivityDefOption.element : null;
+//     resources.forEach(element => {
+//         if (element.groupAmount) {
+//             element.groupAmount = Number(element.groupAmount);
+//         }
+//     });
+//     const containers = Number(sumBy(resources.filter(e => isContainerResource(e, activityDef)), 'groupAmount')).toFixed(2);
+//     return containers;
+// }
 
 
 export function withinPerscentRange(first, second, percentage) {

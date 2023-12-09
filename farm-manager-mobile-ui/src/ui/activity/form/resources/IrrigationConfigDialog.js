@@ -1,10 +1,11 @@
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, InputAdornment, MenuItem, TextField, Typography } from "@mui/material";
 import TextFieldBase from "../../../../components/ui/TextField";
 import { Cancel, Clear, Save } from "@mui/icons-material";
-import { useState } from "react";
-import { AREA_UNIT, getUnitText } from "../../../FarmUtil";
+import { useEffect, useState } from "react";
+import { PER_AREA_UNIT_PER_DAY, PER_AREA_UNIT_PER_IRREGATION_DAY, PER_WATER_UNIT, TOTAL_PER_AREA_UNIT, TOTAL_PER_FIELD, calcIrrigationDays } from "../../../FarmCalculator";
+import DecoratedBox from "../../../../components/ui/DecoratedBox";
 
-const PER_AREA_UNIT_PER_IRREGATION_DAY = 'perAreaUnitPerIrrigationDay';
+
 
 const IrrigationConfigDialog = ({ open, units, text, handleClose, areaUnit, activityArea, days, irrigationParams }) => {
     //  console.log(irrigationParams)
@@ -12,15 +13,20 @@ const IrrigationConfigDialog = ({ open, units, text, handleClose, areaUnit, acti
     const [irrigationMethod, setIrrigationMethod] = useState(irrigationParams?.irrigationMethod ? irrigationParams?.irrigationMethod : '');
     const [fertilizeMethod, setFertilizeMethod] = useState(irrigationParams?.fertilizeMethod ? irrigationParams?.fertilizeMethod : '');
     const [frequency, setFrequency] = useState(irrigationParams?.frequency ? irrigationParams?.frequency : 1);
-    const [irrigationDays, setIrrigationDays] = useState(irrigationParams?.irrigationDays ? irrigationParams?.irrigationDays : 1);
+    // const [irrigationDays, setIrrigationDays] = useState(calcIrrigationDays(days,irrigationParams.frequency));
 
+    // useEffect(() => {
+    //     if(frequency !== 0){
+    //         calcIrrigationDays(days,frequency);
+    //     }
+    // }, [frequency]);
 
     const onAction = (val) => {
         handleClose(val ? { irrigationMethod, fertilizeMethod, frequency } : null);
     }
 
     const clear = () => {
-        setIrrigationDays(1);
+        // setIrrigationDays(1);
         setFrequency(1);
         setIrrigationMethod('');
         setFertilizeMethod('');
@@ -32,7 +38,13 @@ const IrrigationConfigDialog = ({ open, units, text, handleClose, areaUnit, acti
     }
 
     const handleSetFrequency = (val) => {
-        setFrequency(val < 1 ? 1 : val);
+        if(val < 1){
+            setFrequency(1);
+        } else if( val > days) {
+            setFrequency(days);
+        } else {
+            setFrequency(val)
+        }
     }
 
     return (
@@ -49,48 +61,56 @@ const IrrigationConfigDialog = ({ open, units, text, handleClose, areaUnit, acti
             <DialogContent>
                 <TextField
                     value={irrigationMethod}
-                    id="outlined-selectirrigation-method"
+                    id="outlined-select_irrigation-method"
                     onChange={e => handleSetIrrigationMethod(e.target.value)}
                     fullWidth
                     select
                     label={text.irrigationMethod}
                 >
                     <MenuItem key={''} value={''}><em /></MenuItem>
-                    <MenuItem value={'perAreaUnitPerDay'}>{`${text[areaUnit]}/${text.day}`}</MenuItem>
-                    <MenuItem value={'perAreaUnitPerIrrigationDay'}>{`${text[areaUnit]}/${text.irrigationDay}`}</MenuItem>
-                    <MenuItem value={'totalPerAreaUnit'}>{`${text.total}/${text[areaUnit]}`}</MenuItem>
-                    <MenuItem value={'totalPerField'}>{`${text.total}/  ${text.field}`}</MenuItem>
+                    <MenuItem value={PER_AREA_UNIT_PER_DAY}>{`${text[areaUnit]}/${text.day}`}</MenuItem>
+                    <MenuItem value={PER_AREA_UNIT_PER_IRREGATION_DAY}>{`${text[areaUnit]}/${text.irrigationDay}`}</MenuItem>
+                    <MenuItem value={TOTAL_PER_AREA_UNIT}>{`${text.total}/${text[areaUnit]}`}</MenuItem>
+                    <MenuItem value={TOTAL_PER_FIELD}>{`${text.total}/  ${text.field}`}</MenuItem>
                 </TextField>
 
                 {PER_AREA_UNIT_PER_IRREGATION_DAY === irrigationMethod &&
                     <Box margin={2} />}
                 {PER_AREA_UNIT_PER_IRREGATION_DAY === irrigationMethod &&
-                    <TextFieldBase
-                        value={PER_AREA_UNIT_PER_IRREGATION_DAY !== irrigationMethod ? '' : frequency} onChange={e => handleSetFrequency(Number(e.target.value))}
-                        type='number' label={`${text.frequency}, ${text.every}`}
-                        fullWidth
-                        InputProps={{
-                            endAdornment: <InputAdornment position="end">{
-                                text.days
-                            }
-                            </InputAdornment>,
-                        }}
-                    />}
+                    <Box display={'flex'} flexDirection={'row'} alignItems={'center'}>
+                        <TextFieldBase sx={{ flex: 1 }}
+                            value={PER_AREA_UNIT_PER_IRREGATION_DAY !== irrigationMethod ? '' : frequency} onChange={e => handleSetFrequency(Number(e.target.value))}
+                            type='number' label={`${text.frequency}, ${text.every}`}
+                            fullWidth
+                            InputProps={{
+                                endAdornment: <InputAdornment position="end">{
+                                    text.days
+                                }
+                                </InputAdornment>,
+                            }}
+                        />
+                        <Box >
+                            <DecoratedBox value={`${text.irrigationDays}: ${calcIrrigationDays(days,frequency)}`} />
+                        </Box>
+
+                    </Box>
+
+                }
                 <Box margin={2} />
                 <TextField
                     value={fertilizeMethod}
-                    id="outlined-select-unit"
+                    id="outlined-select-fertilize-unit"
                     onChange={e => setFertilizeMethod(e.target.value)}
                     fullWidth
                     select
                     label={text.fertilizeMethod}
                 >
                     <MenuItem key={''} value={''}>{<em />}</MenuItem>
-                    <MenuItem value={'perM3Water'}>{`${text.per}${text.m3}`}</MenuItem>
-                    <MenuItem value={'perAreaUnitPerDay'}>{`${text[areaUnit]}/${text.day}`}</MenuItem>
-                    <MenuItem value={'perAreaUnitPerIrrigationDay'}>{`${text[areaUnit]}/${text.irrigationDay}`}</MenuItem>
-                    <MenuItem value={'totalPerAreaUnit'}>{`${text.total}/${text[areaUnit]}`}</MenuItem>
-                    <MenuItem value={'totalPerField'}>{`${text.total}/${text.field}`}</MenuItem>
+                    <MenuItem value={PER_WATER_UNIT}>{`${text.per}${text.m3}`}</MenuItem>
+                    <MenuItem value={PER_AREA_UNIT_PER_DAY}>{`${text[areaUnit]}/${text.day}`}</MenuItem>
+                    <MenuItem value={PER_AREA_UNIT_PER_IRREGATION_DAY}>{`${text[areaUnit]}/${text.irrigationDay}`}</MenuItem>
+                    <MenuItem value={TOTAL_PER_AREA_UNIT}>{`${text.total}/${text[areaUnit]}`}</MenuItem>
+                    <MenuItem value={TOTAL_PER_FIELD}>{`${text.total}/${text.field}`}</MenuItem>
                 </TextField>
 
             </DialogContent>

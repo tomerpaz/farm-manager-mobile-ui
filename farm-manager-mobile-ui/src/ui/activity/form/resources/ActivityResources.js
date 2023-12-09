@@ -14,6 +14,7 @@ import UpdateResourcesQtyDialog from "./UpdateResourcesQtyDialog"
 import Calculator from "../../../../icons/Calculator"
 import IrrigationConfigDialog from "./IrrigationConfigDialog"
 import AlertDialog from "../../../dialog/AlertDialog"
+import { calcIrrigationDays, calcTotalFertilizerQty, calcTotalWaterQtyUtilFunc } from "../../../FarmCalculator"
 
 const TRASHHOLD = 3;
 const UNITS = [AREA_UNIT.toUpperCase(), HOUR.toUpperCase()]
@@ -22,7 +23,7 @@ const UNITS = [AREA_UNIT.toUpperCase(), HOUR.toUpperCase()]
 
 const ELEMENT_ID = 'resources'
 
-const ActivityResources = ({ activity, control, errors, register, tariffs, activityArea, activityDef, days, irrigationParams, setValue, trigger }) => {
+const ActivityResources = ({ activity, control, errors, register, tariffs, activityArea, activityDef, days, irrigationParams, setValue, trigger, fieldsCount }) => {
     const text = useSelector(selectLang)
     const { data: user } = useGetUserDataQuery()
     const [open, setOpen] = useState(false);
@@ -78,11 +79,11 @@ const ActivityResources = ({ activity, control, errors, register, tariffs, activ
     });
 
     const errorMsg = errors.resources?.root?.message?.split(",");
-    if (errorMsg) {
+    // if (errorMsg) {
 
-        console.log('errors', errorMsg)
+    //     console.log('errors', errorMsg)
 
-    }
+    // }
     const runTariffMatch = () => {
         if (tariffs) {
             fields.map((row, index) => {
@@ -217,9 +218,24 @@ const ActivityResources = ({ activity, control, errors, register, tariffs, activ
         return (expendFields && fields.length > TRASHHOLD) ? fields : fields.slice(0, TRASHHOLD);
     }
 
+    
+
     const calcIrrigation = (irrigationParams?.irrigationMethod || irrigationParams?.fertilizeMethod) ? true : false;
 
-    console.log('calcIrrigation', calcIrrigation)
+
+
+    const caclTotalWater = () => {
+        const water = fields.find(e=>e.resource.type === WATER);
+        if(calcIrrigation && water && water.qty && irrigationParams.irrigationMethod){
+            const irrigationDays =  calcIrrigationDays(days,irrigationParams.frequency);
+            return calcTotalWaterQtyUtilFunc(irrigationParams.irrigationMethod, water.qty, activityArea, days, irrigationDays, fieldsCount)
+        } 
+        return 0;
+    }
+
+
+    const totalWaterQty = caclTotalWater();
+
     return (
         <Box margin={1} paddingTop={2} display={'flex'} flexDirection={'column'}>
             <Box marginTop={1} marginBottom={1} display={'flex'} flex={1} justifyContent={'space-between'} alignItems={'center'}>
@@ -267,7 +283,12 @@ const ActivityResources = ({ activity, control, errors, register, tariffs, activ
             <RenderTable
                 register={register} remove={remove} user={user} activity={activity}
                 handleOpenEditRow={handleOpenEditRow} text={text} getFields={getFields} activityDef={activityDef}
-                irrigationParams={irrigationParams} calcIrrigation={calcIrrigation} />
+                irrigationParams={irrigationParams} calcIrrigation={calcIrrigation} 
+                activityArea={activityArea}
+                daysInPeriod={days}
+                fieldsCount={fieldsCount}
+                totalWaterQty={totalWaterQty}
+                />
             <ResourcseSelectionDialog open={open} handleClose={handleClose} resourceTypes={resourceTypes} />
             {selectedRow && <ActivityResourceDialog selectedIndex={selectedIndex} selectedRow={selectedRow}
                 activityType={activity.type} handleClose={handleCloseEditRow} update={update}
@@ -285,7 +306,7 @@ const ActivityResources = ({ activity, control, errors, register, tariffs, activ
     )
 }
 
-const RenderTable = ({ register, remove, user, activity, handleOpenEditRow, text, getFields, activityDef, irrigationParams, calcIrrigation }) => {
+const RenderTable = ({ register, remove, user, activity, handleOpenEditRow, text, getFields, activityDef, irrigationParams, calcIrrigation, activityArea,daysInPeriod, fieldsCount, totalWaterQty }) => {
     return (
         <TableContainer >
             <Table size="small" sx={{ margin: 0, padding: 0 }} aria-label="a dense table">
@@ -304,12 +325,18 @@ const RenderTable = ({ register, remove, user, activity, handleOpenEditRow, text
                 <TableBody>
                     {getFields().map((row, index) =>
                         <Row key={row.key} index={index} row={row} text={text} areaUnit={user.areaUnit} register={register}
+                            activityArea={activityArea}
                             remove={remove}
                             currency={user.currency}
                             financial={user.financial}
                             onClick={() => handleOpenEditRow(index, row)}
                             activityDef={activityDef} irrigationParams={irrigationParams}
-                            calcIrrigation={calcIrrigation} />
+                            calcIrrigation={calcIrrigation}
+                            daysInPeriod={daysInPeriod} 
+                            fieldsCount={fieldsCount}
+                            totalWaterQty={totalWaterQty}
+                            
+                            />
                     )}
                 </TableBody>
             </Table>
@@ -317,14 +344,23 @@ const RenderTable = ({ register, remove, user, activity, handleOpenEditRow, text
     )
 }
 
-function calcQty(row, irrigationParams){
-    return '-';//row.qty*345;
+function calcQty(row, irrigationParams, activityArea, daysInPeriod, fieldsCount, totalWaterQty){
+    if(row.resource.type === WATER && row.qty && irrigationParams.irrigationMethod){
+        return totalWaterQty.toFixed(2);
+    } 
+    if(row.resource.type === FERTILIZER && row.qty && irrigationParams.fertilizeMethod){
+        const irrigationDays = calcIrrigationDays(daysInPeriod,irrigationParams.frequency); 
+          return calcTotalFertilizerQty(irrigationParams.fertilizeMethod, row.qty, totalWaterQty,  activityArea,daysInPeriod, irrigationDays, fieldsCount).toFixed(2)
+    } 
+    return 0;
 }
 
 function Row(props) {
-    const { row, index, text, areaUnit, onClick, currency, remove, register, financial, activityDef, irrigationParams, calcIrrigation } = props;
+    const { row, index, text, areaUnit, onClick, currency, remove, register, financial, activityDef, irrigationParams, calcIrrigation, activityArea,
+        daysInPeriod, fieldsCount, totalWaterQty
+    } = props;
 
-    const calc = (calcIrrigation && [WATER,FERTILIZER].includes(row.resource.type)) ? calcQty(row, irrigationParams) : '';
+    const calc = (calcIrrigation && [WATER,FERTILIZER].includes(row.resource.type)) ? calcQty(row, irrigationParams, activityArea, daysInPeriod, fieldsCount, totalWaterQty) : '';
     return (
         <Fragment>
             <TableRow
