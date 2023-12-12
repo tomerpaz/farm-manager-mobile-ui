@@ -129,5 +129,7 @@
   "close": "Cerca",
   "requiredFieldsMissing": "Faltan campos obligatorios",
   "waterQty": "Cantidad de agua",
-  "every": "Cada"
+  "every": "Cada",
+  "fertilization": "Fertilización",
+  "and": "y "
 }

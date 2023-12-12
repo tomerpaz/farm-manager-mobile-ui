@@ -130,6 +130,9 @@
     "close": "סגור",
     "requiredFieldsMissing": "שדות חובה חסרים",
     "waterQty": "כמות מים",
-    "every": "כל"
+    "every": "כל",
+    "fertilization":"דישון",
+    "and":"ו"
+
 
 }

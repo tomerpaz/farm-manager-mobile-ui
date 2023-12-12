@@ -129,6 +129,8 @@
   "close": "Fechar",
   "requiredFieldsMissing": "Campos obrigatórios ausentes",
   "waterQty": "Quantidade de água",
-  "every": "Todo"
+  "every": "Todo",
+  "fertilization": "Fertilização",
+  "and": "e "
 
 }

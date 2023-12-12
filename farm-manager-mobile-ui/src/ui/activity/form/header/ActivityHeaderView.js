@@ -30,7 +30,7 @@ const ActivityHeaderView = ({ activity, control, errors, customers, activityDefs
     <Box margin={1} paddingTop={1}>
       <Box display={'flex'} flex={1} alignItems={'center'} justifyContent={'space-between'} flexDirection={'row'} >
         <Box flex={1} display={'flex'} flexDirection={'row'} alignItems={'center'} >
-          <Typography sx={{ backgroundColor: isDuplicate ? '#ffc107' : null, borderRadius: 2, paddingLeft: 1, paddingRight: 1 }} variant='h6'>{getActivityTypeText(activity.type, text)}</Typography>
+          <Typography sx={{ backgroundColor: isDuplicate ? '#ffc107' : null, borderRadius: 2, paddingLeft: 1, paddingRight: 1 }} variant='h6'>{getActivityTypeText(activity.type, text, true)}</Typography>
           <Avatar sx={{ bgcolor: 'white' }}>
             <ActivityTypeIcon type={activity.type} />
           </Avatar>

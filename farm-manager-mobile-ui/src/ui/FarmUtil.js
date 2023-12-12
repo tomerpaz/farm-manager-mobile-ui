@@ -161,13 +161,19 @@ export const getResourceUsageUnit = (resource, activityDef) => {
     return resource.usageUnit;
 }
 
-export const getActivityTypeText = (type, text) => {
+export const getActivityTypeText = (type, text, long) => {
     if (SCOUT === type) {
         return text.scouting;
+    }
+    if(long){
+        if(IRRIGARION_TYPES.includes(type)){
+           return  `${text[type.toLowerCase()]} ${text.and}${text.fertilization}`
+        }
     }
     return [GENERAL].includes(type) ? text.activity : text[type.toLowerCase()];
 
 }
+
 
 export function isArrayEmpty(filterValue, filterNulls) {
     if (filterNulls) {

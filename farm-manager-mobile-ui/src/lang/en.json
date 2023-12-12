@@ -129,6 +129,8 @@
   "close":"Close",
   "requiredFieldsMissing": "Required fields missing",
   "waterQty": "Water Qty",
-  "every": "Every"
+  "every": "Every",
+  "fertilization":"Fertilization",
+  "and":"& "
 
 }
