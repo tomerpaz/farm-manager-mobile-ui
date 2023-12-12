@@ -6,9 +6,6 @@ import { useState } from "react";
 import { useGetUserDataQuery } from "../../../../features/auth/authApiSlice";
 import { HARVEST, MARKET, QTY_PER_AREA_UNIT_RESOURCE_TYPE, SECONDARY_QTY_RESOURCES, WAREHOUSE_RESOURCE_TYPE, WATER, WORKER_GROUP, getResourceTypeText, getUnitText, safeDiv } from "../../../FarmUtil";
 import { Cancel, Delete, Save } from "@mui/icons-material";
-import Calculator from "../../../../icons/Calculator";
-
-const height = 400;
 
 const getQtyPerWorker = (selectedRow) => {
 
@@ -16,6 +13,14 @@ const getQtyPerWorker = (selectedRow) => {
         return (selectedRow.qty / selectedRow.secondaryQty).toFixed(2);
     }
     return 0;
+}
+
+const getSecondaryQtyConfig = (selectedRow, user) => {
+   const val = SECONDARY_QTY_RESOURCES.find(e => e.type === selectedRow.resource.type);
+   if(val && val.gg === true && user.gg === false){
+       return null;
+   }
+   return val;
 }
 
 const ActivityResourceDialog = ({ selectedRow, selectedIndex, handleClose, update, warehouses, activityArea, remove, resourceUnit, activityType }) => {
@@ -34,8 +39,7 @@ const ActivityResourceDialog = ({ selectedRow, selectedIndex, handleClose, updat
     const [manualTariff, setManualTariff] = useState(selectedRow.manualTariff);
     const [qtyPerWorker, setQtyPerWorker] = useState(getQtyPerWorker(selectedRow));
 
-    //console.log('secondaryQty',secondaryQty)
-    const secondaryQtyConfig = SECONDARY_QTY_RESOURCES.find(e => e.type === selectedRow.resource.type);
+    const secondaryQtyConfig = getSecondaryQtyConfig(selectedRow, user);
     const isWarehouse = WAREHOUSE_RESOURCE_TYPE.includes(selectedRow.resource.type);
     const isQtyPerAreaUnit = QTY_PER_AREA_UNIT_RESOURCE_TYPE.includes(selectedRow.resource.type);
     const isWorkerGropup = WORKER_GROUP === selectedRow.resource.type;

@@ -74,13 +74,13 @@ const FieldDialog = ({ row, activity, onClose }) => {
           onChange={e => setFieldNote(e.target.value)}
           fullWidth
         />
-        <DatePicker
+        {/* <DatePicker
           label={text.executed}
           //     inputFormat="dd/MM/yyyy"
           value={actualExecution}
           onChange={setActualExecution}
           slotProps={{ textField: {  size: 'small', fullWidth: true, variant: 'outlined', margin: "dense"  } }}
-        />
+        /> */}
         {[HARVEST].includes(activityType) &&
           <TextFieldBase
             value={qty}
