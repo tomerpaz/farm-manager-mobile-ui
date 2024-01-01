@@ -67,7 +67,7 @@ const IrrigationConfigDialog = ({ open, units, text, handleClose, areaUnit, acti
                     select
                     label={text.irrigationMethod}
                 >
-                    <MenuItem key={''} value={''}><em /></MenuItem>
+                    <MenuItem key={''} value={''}><em  style={{height: 20}}/></MenuItem>
                     <MenuItem value={PER_AREA_UNIT_PER_DAY}>{`${text[areaUnit]}/${text.day}`}</MenuItem>
                     <MenuItem value={PER_AREA_UNIT_PER_IRREGATION_DAY}>{`${text[areaUnit]}/${text.irrigationDay}`}</MenuItem>
                     <MenuItem value={TOTAL_PER_AREA_UNIT}>{`${text.total}/${text[areaUnit]}`}</MenuItem>
@@ -105,7 +105,7 @@ const IrrigationConfigDialog = ({ open, units, text, handleClose, areaUnit, acti
                     select
                     label={text.fertilizeMethod}
                 >
-                    <MenuItem key={''} value={''}>{<em />}</MenuItem>
+                    <MenuItem key={''} value={''}>{<em style={{height: 20}}/>}</MenuItem>
                     <MenuItem value={PER_WATER_UNIT}>{`${text.per}${text.m3}`}</MenuItem>
                     <MenuItem value={PER_AREA_UNIT_PER_DAY}>{`${text[areaUnit]}/${text.day}`}</MenuItem>
                     <MenuItem value={PER_AREA_UNIT_PER_IRREGATION_DAY}>{`${text[areaUnit]}/${text.irrigationDay}`}</MenuItem>

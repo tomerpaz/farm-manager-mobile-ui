@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { selectLang } from "../../../../features/app/appSlice";
 import { useState } from "react";
 import { useGetUserDataQuery } from "../../../../features/auth/authApiSlice";
-import { HARVEST, MARKET, QTY_PER_AREA_UNIT_RESOURCE_TYPE, SECONDARY_QTY_RESOURCES, WAREHOUSE_RESOURCE_TYPE, WATER, WORKER_GROUP, getResourceTypeText, getUnitText, safeDiv } from "../../../FarmUtil";
+import { FERTILIZER, HARVEST, MARKET, QTY_PER_AREA_UNIT_RESOURCE_TYPE, SECONDARY_QTY_RESOURCES, WAREHOUSE_RESOURCE_TYPE, WATER, WORKER_GROUP, getResourceTypeText, getUnitText, isStringEmpty, safeDiv } from "../../../FarmUtil";
 import { Cancel, Delete, Save } from "@mui/icons-material";
 
 const getQtyPerWorker = (selectedRow) => {
@@ -23,7 +23,15 @@ const getSecondaryQtyConfig = (selectedRow, user) => {
    return val;
 }
 
-const ActivityResourceDialog = ({ selectedRow, selectedIndex, handleClose, update, warehouses, activityArea, remove, resourceUnit, activityType }) => {
+const isQtyPerAreaUnitFunc = (selectedRow, irrigationParams) => {
+    if(FERTILIZER === selectedRow.resource.type && !isStringEmpty(irrigationParams?.fertilizeMethod)){
+        return false;
+    }
+    
+    return QTY_PER_AREA_UNIT_RESOURCE_TYPE.includes(selectedRow.resource.type)
+}
+
+const ActivityResourceDialog = ({ selectedRow, selectedIndex, handleClose, update, warehouses, activityArea, remove, resourceUnit, activityType, irrigationParams }) => {
     const text = useSelector(selectLang);
     const { data: user } = useGetUserDataQuery()
     const [note, setNote] = useState(selectedRow.note ? selectedRow.note : '');
@@ -41,7 +49,7 @@ const ActivityResourceDialog = ({ selectedRow, selectedIndex, handleClose, updat
 
     const secondaryQtyConfig = getSecondaryQtyConfig(selectedRow, user);
     const isWarehouse = WAREHOUSE_RESOURCE_TYPE.includes(selectedRow.resource.type);
-    const isQtyPerAreaUnit = QTY_PER_AREA_UNIT_RESOURCE_TYPE.includes(selectedRow.resource.type);
+    const isQtyPerAreaUnit = isQtyPerAreaUnitFunc(selectedRow, irrigationParams);
     const isWorkerGropup = WORKER_GROUP === selectedRow.resource.type;
     const isWater = WATER === selectedRow.resource.type;
 

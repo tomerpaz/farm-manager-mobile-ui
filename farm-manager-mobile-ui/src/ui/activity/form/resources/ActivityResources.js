@@ -294,7 +294,8 @@ const ActivityResources = ({ activity, control, errors, register, tariffs, activ
                 activityType={activity.type} handleClose={handleCloseEditRow} update={update}
                 warehouses={warehouses} control={control} errors={errors} activityArea={activityArea}
                 resourceUnit={getResourceUsageUnit(selectedRow.resource, activityDef)}
-                remove={() => handleRemoveRow(selectedIndex)} />}
+                remove={() => handleRemoveRow(selectedIndex)} 
+                irrigationParams={irrigationParams}/>}
             <UpdateResourcesQtyDialog open={openEditBulkQty} units={resourceBulkUnits} text={text} handleClose={handleBulkQtyUpdate} areaUnit={user.areaUnit} activityArea={activityArea}
             />
             {IRRIGARION_TYPES.includes(activity.type) && <IrrigationConfigDialog open={openIrrigationConfig} days={days} text={text} handleClose={handleIrrigationConfig} areaUnit={user.areaUnit} activityArea={activityArea}
