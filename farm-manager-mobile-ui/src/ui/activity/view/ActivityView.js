@@ -10,11 +10,11 @@ import FieldsView from './FieldsView'
 import ActivityHeaderView from './ActivityHeaderView'
 import { ControlPointDuplicate, Delete, DeleteForever, DeleteOutline, DeleteRounded, Save, Task, HighlightOffRounded } from '@mui/icons-material'
 import TextFieldBase from '../../../components/ui/TextField'
-import { GENERAL, HARVEST, IRRIGARION_TYPES, IRRIGATION, parseISOOrNull } from '../../FarmUtil'
+import { GENERAL, HARVEST, IRRIGARION_TYPES, IRRIGATION, SPRAY, SPRAY_TYPES, parseISOOrNull } from '../../FarmUtil'
 import ActivityForm from '../form/ActivityForm'
 import { parseISO } from 'date-fns'
 
-const SUPPORTED_TYPES = [GENERAL, HARVEST, IRRIGATION]
+const SUPPORTED_TYPES = [GENERAL, HARVEST, IRRIGATION, SPRAY]
 
 const ActivityView = () => {
 
@@ -37,12 +37,14 @@ const ActivityView = () => {
       });
 
       const act = { ...activity, fields }
-
+      console.log(activity);
 
       act.execution = parseISO(activity.execution);
       if (IRRIGARION_TYPES.includes(activity.type)) {
-       // console.log(activity.executionEnd);
         act.executionEnd = parseISO(activity.executionEnd);
+      }
+      if (SPRAY_TYPES.includes(activity.type)) {
+        act.endHour = parseISO(`${activity.execution} ${activity.endHour}`);
       }
 
       act.note = act.note ? act.note : '';

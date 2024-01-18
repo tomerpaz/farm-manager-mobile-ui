@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
 import { selectLang } from '../../../../features/app/appSlice'
 import ActivityTypeIcon from '../../../../icons/ActivityTypeIcon'
-import { CUSTOMER_TYPES, GENERAL, GENERAL_PLAN, getActivityTypeText, getMinDateWidth, getWinds, getYearArray, HARVEST, IRRIGARION_TYPES, IRRIGATION, IRRIGATION_PLAN, MARKET, SPRAY, SPRAY_PLAN } from '../../../FarmUtil'
+import { CUSTOMER_TYPES, GENERAL, GENERAL_PLAN, getActivityTypeText, getMinDateWidth, getWinds, getYearArray, HARVEST, IRRIGARION_TYPES, IRRIGATION, IRRIGATION_PLAN, MARKET, SPRAY, SPRAY_PLAN, SPRAY_TYPES } from '../../../FarmUtil'
 import { DatePicker, TimePicker } from '@mui/x-date-pickers';
 import { Controller } from 'react-hook-form'
 import TextFieldBase from '../../../../components/ui/TextField'
@@ -20,11 +20,16 @@ const HEADER_CONFIG = [
   { type: MARKET, date: true, year: true, },
 ]
 
-const ActivityHeaderView = ({ activity, control, errors, customers, activityDefs, crops, reference, isDuplicate, execution, days }) => {
+const ActivityHeaderView = ({ activity, control, errors, customers, activityDefs, crops, reference, isDuplicate, execution, days, crop }) => {
 
-  const [crop, setCrop] = useState(null);
   const text = useSelector(selectLang)
   const config = HEADER_CONFIG.filter(e => activity.type === e.type)[0];
+
+  const onCropChange = (onChange, data) => {
+    onChange(data)
+    console.log('onCropChange', data, crop)
+
+  }
 
   return (
     <Box margin={1} paddingTop={1}>
@@ -118,35 +123,58 @@ const ActivityHeaderView = ({ activity, control, errors, customers, activityDefs
               {...field} />}
           />}
 
+        {(config.endHour) && <Box margin={1} />}
+
         {config.endHour &&
-          <TimePicker size='small' label={text.endHour}
-            slotProps={{ textField: { size: 'small', sx: { minWidth: 150, width: 150 } } }}
+          <Controller
+            control={control}
+
+            name="endHour"
+            render={({ field }) => <TimePicker
+              closeOnSelect
+              showToolbar={false}
+              label={text.endHour}
+              localeText={{
+                cancelButtonLabel: text.cancel,
+                clearButtonLabel: text.clear,
+                okButtonLabel: text.save
+              }}
+              slotProps={{
+                textField: { size: 'small', error: (errors?.endHour ? true : false), variant: 'outlined', sx: { maxWidth: getMinDateWidth() } },
+                actionBar: { actions: [/*"cancel", "clear"*/] }
+              }}
+              {...field} />}
+            rules={{ required: true }}
+          />}
 
 
-          />
-        }
+        {/* <TimePicker size='small' label={text.endHour}
+          slotProps={{ textField: { size: 'small', sx: { minWidth: 150, width: 150 } } }}
+
+
+        /> */}
+
       </Box>
-      <Box display={'flex'} flex={1} alignItems={'center'} justifyContent={'space-between'} flexDirection={'row'} >
-        {config.crop &&
-          <Autocomplete
-            disablePortal
-            id="combo-box-demo"
-            getOptionLabel={(option) => option.name}
-            onChange={(_, data) => setCrop(data)}
-            size='small'
-            options={crops.filter(e => e.active)}
-            value={crop}
-            sx={{ width: 150 }}
-            renderInput={(params) => <TextFieldBase sx={{ marginTop: 0.5 }} {...params} label={text.crop} />}
-            renderOption={(props, option) => (
-              <Box key={option.id} component="li" sx={{ '& > img': { mr: 2, flexShrink: 0 } }} {...props}>
-                {option.name}
-              </Box>
-            )}
-          />
+      {SPRAY_TYPES.includes(activity.type) &&
 
-        }
-        {config.wind &&
+        < Box display={'flex'} marginTop={1} flex={1} alignItems={'center'} justifyContent={'space-between'} flexDirection={'row'} >
+          <Controller
+            name="sprayParams.crop"
+            control={control}
+            rules={{ required: true }}
+            render={({ field: { ref, onChange, ...field } }) => <Autocomplete
+              // disablePortal
+              onChange={(_, data) => onCropChange(onChange, data)}
+              options={crops.filter(e => e.active)}
+              // sx={{ width: 150 }}
+              fullWidth
+              size='small'
+              getOptionLabel={(option) => option ? option.name : ''}
+              isOptionEqualToValue={(option, value) => (value === undefined) || option?.id?.toString() === (value?.id ?? value)?.toString()}
+              renderInput={(params) => <TextFieldBase error={errors.crop ? true : false} sx={{ marginTop: 0.5 }} {...params} label={text.crop} />}
+              {...field} />}
+          />
+          <Box margin={1} />
           <Controller
             control={control}
             name="wind"
@@ -157,6 +185,7 @@ const ActivityHeaderView = ({ activity, control, errors, customers, activityDefs
                 {...field}
                 size='small'
                 label={text.windSpeed}
+                fullWidth
               >
                 {getWinds().map((option) => (
                   <MenuItem key={option} value={option}>
@@ -165,9 +194,10 @@ const ActivityHeaderView = ({ activity, control, errors, customers, activityDefs
                 ))}
               </TextField>
             )}
-          />}
-
-
+          />
+        </Box>
+      }
+      <Box display={'flex'} flex={1} alignItems={'center'} justifyContent={'space-between'} flexDirection={'row'} >
         {HARVEST === activity.type &&
           <Box marginTop={1} display={'flex'} flex={1} flexDirection={'row'} alignContent={'center'} alignItems={'center'}>
             <Controller
@@ -201,7 +231,7 @@ const ActivityHeaderView = ({ activity, control, errors, customers, activityDefs
           </Box>
         }
       </Box>
-    </Box>)
+    </Box >)
 }
 
 export default ActivityHeaderView

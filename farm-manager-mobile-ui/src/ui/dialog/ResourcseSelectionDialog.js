@@ -6,30 +6,32 @@ import { Fragment, useEffect, useState } from "react";
 import { cellSx, headerSx } from "../activity/view/FieldsView";
 import { useGetUserDataQuery } from "../../features/auth/authApiSlice";
 import { Search } from "@mui/icons-material";
-import { EQUIPMENT, FERTILIZER, VARIETY, WATER, getResourceTypeText, getUnitText, isStringEmpty } from "../FarmUtil";
-import Loading from "../../components/Loading";
+import { EQUIPMENT, FERTILIZER, LIST_PESTICIDE, PESTICIDE, SPRAYER, VARIETY, WATER, getResourceTypeText, getUnitText, isStringEmpty } from "../FarmUtil";
 import { useGetResourcesQuery } from "../../features/resources/resourcesApiSlice";
 import ListPager from "../../components/ui/ListPager";
+import { useGetCropPesticidesQuery } from "../../features/pesticides/pecticidesApiSlice";
 
-const filterResource = (e, filter, type) => {
+const filterResource = (e, filter, type, text, isSprayer) => {
+    const categopryOk = (isSprayer ? e.category === SPRAYER : e.category !== SPRAYER);
     if (isStringEmpty(filter)) {
-        return type === e.type;
+        return type === e.type && categopryOk;
     } else {
         const val = filter.toLowerCase();
-        return e.name.toLowerCase().includes(val) ||
+        return (categopryOk) && (e.name.toLowerCase().includes(val) ||
             e.code?.toLowerCase().includes(val) ||
-            e.identification?.toLowerCase().includes(val)
+            e.identification?.toLowerCase().includes(val) ||
+            text[e.category?.toLowerCase()]?.toLowerCase().includes(val))
     }
 };
 
-const isResourceSelected = (resource, selectedResources) => {
-    return selectedResources.some(e => e.id === resource.id)
+const isItemSelected = (item, selectedItems) => {
+    return selectedItems.some(e => e.id === item.id)
 };
 
 const height = window.innerHeight - 252;
 
 export const ROWS_PER_PAGE = 100;
-const ResourcseSelectionDialog = ({ open, handleClose, resourceTypes }) => {
+const ResourcseSelectionDialog = ({ open, handleClose, resourceTypes, cropId }) => {
     const text = useSelector(selectLang);
     const { data: user } = useGetUserDataQuery()
 
@@ -37,6 +39,7 @@ const ResourcseSelectionDialog = ({ open, handleClose, resourceTypes }) => {
     const [type, setType] = useState(resourceTypes[0]);
 
     const [selectedResources, setSelectedResources] = useState([]);
+  //  const [selectedPesticides, setSelectedPesticides] = useState([]);
 
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(ROWS_PER_PAGE);
@@ -62,30 +65,51 @@ const ResourcseSelectionDialog = ({ open, handleClose, resourceTypes }) => {
         clear();
     }, [type]);
 
+    const isPesticidelist = type === LIST_PESTICIDE;
+    const isSprayer = type === SPRAYER;
+
+    const fetchType = isSprayer ? EQUIPMENT : type;
     const {
         data,
         isLoading,
         isSuccess,
         // isError,
         // error
-    } = useGetResourcesQuery({ type })
+    } = useGetResourcesQuery({ type: fetchType }, { skip: isPesticidelist })
 
-    const isSingular = type === WATER
 
+    const { data: cropPesticides, isSuccess: isContainersSuccess } = useGetCropPesticidesQuery({ cropId }, { skip: cropId === null })
+
+    const isSingular = [WATER, SPRAYER].includes(type);
 
     const onSelectRow = (e) => {
-        if (isResourceSelected(e, selectedResources)) {
+        if (isItemSelected(e, selectedResources)) {
             setSelectedResources(selectedResources.filter(f => e.id !== f.id));
         } else {
-            if(isSingular){
-                setSelectedResources(selectedResources.filter(r=>r.type!==e.type).concat([e]))
+            if (isSingular) {
+                setSelectedResources(selectedResources.filter(r => r.type !== e.type).concat([e]))
             } else {
                 setSelectedResources(selectedResources.concat([e]));
             }
         }
     }
 
-    const visableResources = data ? data.filter(e => filterResource(e, filter, type)) : [];
+
+
+    const buildVisableResources = () => {
+        if (isPesticidelist) {
+            return cropPesticides.filter(e => filterResource(e.resource, filter, PESTICIDE, text, false));
+            // return cropPesticides ? cropPesticides : [];
+
+        } else {
+            return data ? data.filter(e => filterResource(e, filter, fetchType, text, type === SPRAYER)) : [];
+        }
+    }
+
+
+    const visableResources = buildVisableResources();
+
+
     const visableSelectedResources = visableResources.filter(e => selectedResources.includes(e));
     const numSelected = visableSelectedResources.length;
     const rowCount = visableResources.length;
@@ -158,7 +182,7 @@ const ResourcseSelectionDialog = ({ open, handleClose, resourceTypes }) => {
                             >
                                 <TableCell padding="checkbox">
                                     <Checkbox
-                                    disabled={isSingular}
+                                        disabled={isSingular}
                                         color="primary"
                                         indeterminate={numSelected > 0 && numSelected < rowCount}
                                         checked={rowCount > 0 && numSelected === rowCount}
@@ -169,8 +193,14 @@ const ResourcseSelectionDialog = ({ open, handleClose, resourceTypes }) => {
                                     />
                                 </TableCell>
                                 <TableCell sx={headerSx} >{text.name}</TableCell>
-                                <TableCell sx={headerSx}>{text.unit}</TableCell>
 
+                                {isPesticidelist &&
+                                    <TableCell sx={headerSx}>{text.pest}</TableCell>
+                                }
+                                <TableCell sx={headerSx}>{text.unit}</TableCell>
+                                {isSprayer &&
+                                    <TableCell sx={headerSx}>{text.capacity}</TableCell>
+                                }
                                 {isFertilizer &&
                                     <TableCell sx={headerSx}>{'N-P-K'}</TableCell>
                                 }
@@ -185,9 +215,9 @@ const ResourcseSelectionDialog = ({ open, handleClose, resourceTypes }) => {
                             {visableResources.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) =>
                                 <Row key={index} index={index} row={row} text={text}
                                     onClick={() => onSelectRow(row, index)}
-                                    isItemSelected={isResourceSelected(row, selectedResources)}
+                                    isItemSelected={isItemSelected(row, selectedResources)}
                                     user={user} isFertilizer={isFertilizer} isVariety={isVariety}
-                                    isEquipment={isEquipment} />
+                                    isEquipment={isEquipment} isSprayer={isSprayer} />
                             )}
                         </TableBody>
                     </Table>
@@ -207,7 +237,8 @@ const ResourcseSelectionDialog = ({ open, handleClose, resourceTypes }) => {
 
 }
 function Row(props) {
-    const { row, index, text, onClick, isItemSelected, user, isFertilizer, isVariety, isEquipment } = props;
+    const { row, index, text, onClick, isItemSelected, user, isFertilizer, isVariety, isEquipment, isSprayer } = props;
+    const resource = row.resource ? row.resource : row;
     return (
         <Fragment>
             <TableRow style={{
@@ -224,12 +255,16 @@ function Row(props) {
                         }}
                     />
                 </TableCell>
-                <TableCell sx={cellSx} >{row.name}</TableCell>
-                <TableCell sx={cellSx}>{getUnitText(row.usageUnit, user.areaUnit, text)}</TableCell>
-                {isFertilizer && <TableCell sx={cellSx} >{`${row.n}-${row.p}-${row.k} `}</TableCell>}
-                {isFertilizer && <TableCell sx={cellSx} >{row.specificGravity}</TableCell>}
-                {isVariety && <TableCell sx={cellSx} >{row.identification}</TableCell>}
-                {isEquipment  && <TableCell sx={cellSx} >{row.category}</TableCell>}
+                <TableCell sx={cellSx} >{resource.name}</TableCell>
+                {row.pestName && <TableCell sx={cellSx} >{row.pestName}</TableCell>}
+
+                <TableCell sx={cellSx}>{getUnitText(row.unit ? row.unit : resource.usageUnit, user.areaUnit, text)}</TableCell>
+                {isSprayer && <TableCell sx={cellSx} >{`${resource.capacity} `}</TableCell>}
+
+                {isFertilizer && <TableCell sx={cellSx} >{`${resource.n}-${resource.p}-${resource.k} `}</TableCell>}
+                {isFertilizer && <TableCell sx={cellSx} >{resource.specificGravity}</TableCell>}
+                {isVariety && <TableCell sx={cellSx} >{resource.identification}</TableCell>}
+                {isEquipment && <TableCell sx={cellSx} >{text[resource.category?.toLowerCase()]}</TableCell>}
             </TableRow>
         </Fragment>
     );

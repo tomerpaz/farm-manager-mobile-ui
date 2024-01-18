@@ -2,7 +2,7 @@ import { BottomNavigation, BottomNavigationAction, Box, TextField, Typography } 
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { selectLang, setSnackbar } from '../../../features/app/appSlice'
-import { asLocalDate, daysDif, daysDiff } from '../../FarmUtil'
+import { asLocalDate, asLocalTime, daysDif, daysDiff } from '../../FarmUtil'
 import ActivityHeaderView from './header/ActivityHeaderView'
 import { useForm, Controller, useWatch } from "react-hook-form";
 import { Cancel, ControlPointDuplicate, Delete, Save } from '@mui/icons-material'
@@ -48,6 +48,8 @@ const ActivityForm = ({ activity }) => {
     formState: { isDirty, dirtyFields }, reset, setValue, trigger
   } = useForm({ defaultValues: activity, });
 
+
+
   const execution = useWatch({ control, name: "execution" })
   const activityDef = useWatch({ control, name: "activityDef" })
   const resources = useWatch({ control, name: "resources" })
@@ -57,6 +59,8 @@ const ActivityForm = ({ activity }) => {
   const executionEnd = useWatch({ control, name: "executionEnd" })
   const irrigationParams = useWatch({ control, name: "irrigationParams" })
   const days = daysDiff(execution,executionEnd);
+  const sprayParams = useWatch({ control, name: "sprayParams" })
+  const crop = useWatch({ control, name: "sprayParams.crop" })
 
   const activityArea =  getTotalActivityArea(fields);
 
@@ -73,9 +77,12 @@ const ActivityForm = ({ activity }) => {
   }
 
   const saveActivity = (data) => {
+    console.log(data);
     data.execution = asLocalDate(data.execution, true);
     data.executionEnd = asLocalDate(data.executionEnd, true);
-   
+    data.endHour = asLocalTime(data.endHour, true);
+
+    console.log('saveActivity',data.endHour)
     if (data.uuid) {
       return updateActivity(data).unwrap();
     } else {
@@ -102,6 +109,7 @@ const ActivityForm = ({ activity }) => {
     }
   }
 
+
   const onSubmit = async (data) => {
     try {
       const result = await saveActivity(data);
@@ -122,12 +130,12 @@ const ActivityForm = ({ activity }) => {
 
 
           <ActivityHeaderView control={control} register={register} activity={activity} errors={errors} crops={crops} activityDefs={activityDefs} customers={customers} reference={reference} isDuplicate={isDuplicate}
-           execution={execution} days={days} />
+           execution={execution} days={days} crop={crop}/>
           <ActivityFields control={control} register={register} activity={activity} getValues={getValues} activityArea={activityArea} errors={errors} />
           <ActivityResources control={control} register={register} activity={activity} activityDef={activityDef}
             errors={errors} tariffs={tariffs} activityArea={activityArea} days={days}
             irrigationParams={irrigationParams} setValue={setValue} trigger={trigger}
-            fieldsCount={fields.length}
+            fieldsCount={fields.length} sprayParams={sprayParams}
             />
           <Box padding={1}>
             <Controller

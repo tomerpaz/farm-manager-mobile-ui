@@ -119,6 +119,7 @@
   "settings": "Ajustes",
   "water": "Fuente de agua",
   "publicSource": "Fuente pública",
+  "category": "Categoría",
   "start": "Comenzar",
   "irrigationMethod": "Método de riego",
   "fertilizeMethod": "Método de fertilización",
@@ -131,5 +132,7 @@
   "waterQty": "Cantidad de agua",
   "every": "Cada",
   "fertilization": "Fertilización",
-  "and": "y "
+  "and": "y ",
+  "listpesticide":"Pesticidas"
+
 }

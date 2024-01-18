@@ -100,7 +100,7 @@
   "tapInFieldPosition": "Tap in field position",
   "clear": "Clear",
   "select": "Select",
-  "endHour": "endHour",
+  "endHour": "End Hour",
   "invoice": "Invoice",
   "deleteFormTitle": "Delete data?",
   "deleteFormBody": "Data will be deleted permanently",
@@ -119,6 +119,7 @@
   "settings": "Settings",
   "water": "Water Source",
   "publicSource": "Public Source",
+  "category": "Category",
   "start": "Start",
   "irrigationMethod": "Irrigation Method",
   "fertilizeMethod": "Fertilize Method",
@@ -131,6 +132,14 @@
   "waterQty": "Water Qty",
   "every": "Every",
   "fertilization":"Fertilization",
-  "and":"& "
-
+  "and":"& ",
+  "other": "Other",
+  "agro_machine": "Agro Machinery",
+  "tractor": "Tractor",
+  "listpesticide":"Pesticide",
+  "pest":"Pest",
+  "grm":"grm",
+  "cc":"cc",
+  "percent":"%",
+  "capacity": "Capacity"
 }

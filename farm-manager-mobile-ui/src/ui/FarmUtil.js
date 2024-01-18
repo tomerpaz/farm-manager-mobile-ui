@@ -1,6 +1,5 @@
 import { grey } from "@mui/material/colors";
 import { parseISO } from "date-fns";
-import { fi } from "date-fns/locale";
 
 export const UI_SIZE = 'medium';
 
@@ -44,7 +43,7 @@ export const DISINFECTANT = 'DISINFECTANT';
 export const WATER = 'WATER';
 
 export const SPRAYER = 'SPRAYER';
-
+export const LIST_PESTICIDE = 'listPesticide';
 
 export const WAREHOUSE_RESOURCE_TYPE = [PESTICIDE, FERTILIZER, ACCESSORY, VARIETY]
 export const QTY_PER_AREA_UNIT_RESOURCE_TYPE = [PESTICIDE, FERTILIZER, ACCESSORY, VARIETY, COMPOST, DISINFECTANT]
@@ -55,7 +54,7 @@ export const SECONDARY_QTY_RESOURCES = [
 
 export const ACTIVITY_RESOURCES = [
     { activity: GENERAL, types: [WORKER, CONTRACTOR, WORKER_GROUP, EQUIPMENT, PESTICIDE, FERTILIZER, ACCESSORY, VARIETY, COMPOST, DISINFECTANT, ENERGY] },
-    { activity: SPRAY, types: [WORKER, CONTRACTOR, WORKER_GROUP, EQUIPMENT, PESTICIDE, FERTILIZER] },
+    { activity: SPRAY, types: [SPRAYER, LIST_PESTICIDE, WORKER, CONTRACTOR, WORKER_GROUP, EQUIPMENT, FERTILIZER] },
     { activity: HARVEST, types: [WORKER, CONTRACTOR, WORKER_GROUP, EQUIPMENT, ACCESSORY] },
     { activity: IRRIGATION, types: [WATER, FERTILIZER, PESTICIDE, WORKER, CONTRACTOR, WORKER_GROUP, ACCESSORY] }
 ]
@@ -245,6 +244,20 @@ export function asLocalDate(date, hyphen) {
         var dd = date.getDate().toString();
         const space = hyphen ? "-" : "";
         return yyyy + space + (mm[1] ? mm : "0" + mm[0]) + space + (dd[1] ? dd : "0" + dd[0]);
+    } else {
+        return date;
+    }
+}
+
+export function asLocalTime(date, hyphen) {
+    console.log(date)
+    if (date && date instanceof Date) {
+        var hh = date.getHours().toString();
+        var mm = (date.getMinutes()).toString(); // getMonth() is zero-based         
+       // var ss = date.getSeconds().toString();
+        const space = hyphen ? "-" : "";
+        return (hh[1] ? hh : "0" + hh[0]) +":"+(mm[1] ? mm : "0" + mm[0]) +":00"
+        //return hh + ":" + mm (hh[1] ? hh : "0" + mm[0]) + space + (dd[1] ? dd : "0" + dd[0]);
     } else {
         return date;
     }

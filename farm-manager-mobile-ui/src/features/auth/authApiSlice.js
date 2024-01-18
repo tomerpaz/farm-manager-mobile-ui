@@ -15,6 +15,8 @@ export const SelectedActivity_TAG = 'SelectedActivity';
 export const Warehouses_TAG = 'Warehouses';
 export const Resources_TAG = 'Resources';
 export const Containers_TAG = 'Containers';
+export const CropPesticides_TAG = 'CropPesticides_TAG';
+
 // const _TAG = '';
 // const _TAG = '';
 
@@ -28,7 +30,7 @@ export const authApiSlice = apiSlice.injectEndpoints({
             }),
             invalidatesTags: [Field_TAG, Activities_TAG,User_TAG, FieldActivities_TAG, 
             Dashboard_TAG,ActivityDefs_TAG,Crops_TAG ,SelectedActivity_TAG, Warehouses_TAG,
-            Resources_TAG,Containers_TAG
+            Resources_TAG,Containers_TAG,CropPesticides_TAG
             ]
         }),
         // getUser: builder.mutation({
