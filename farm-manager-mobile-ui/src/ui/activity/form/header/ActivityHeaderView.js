@@ -62,7 +62,7 @@ const ActivityHeaderView = ({ activity, control, errors, customers, activityDefs
           )}
         />
       </Box>
-      <Box paddingTop={1} display={'flex'} flex={1} alignContent={'center'} alignItems={'center'} flexDirection={'row'} >
+      <Box paddingTop={1} display={'flex'} flex={1} alignContent={'center'} alignItems={'center'} flexDirection={'row'} justifyContent={'space-between'} >
         <Controller
           name="execution"
           control={control}
@@ -156,8 +156,7 @@ const ActivityHeaderView = ({ activity, control, errors, customers, activityDefs
 
       </Box>
       {SPRAY_TYPES.includes(activity.type) &&
-
-        < Box display={'flex'} marginTop={1} flex={1} alignItems={'center'} justifyContent={'space-between'} flexDirection={'row'} >
+        < Box display={'flex'} marginTop={2} flex={1} alignItems={'center'} justifyContent={'space-between'} flexDirection={'row'} >
           <Controller
             name="sprayParams.crop"
             control={control}
@@ -197,9 +196,9 @@ const ActivityHeaderView = ({ activity, control, errors, customers, activityDefs
           />
         </Box>
       }
-      <Box display={'flex'} flex={1} alignItems={'center'} justifyContent={'space-between'} flexDirection={'row'} >
-        {HARVEST === activity.type &&
-          <Box marginTop={1} display={'flex'} flex={1} flexDirection={'row'} alignContent={'center'} alignItems={'center'}>
+      {HARVEST === activity.type &&
+        <Box marginTop={2} display={'flex'} flex={1} alignItems={'center'} justifyContent={'space-between'} flexDirection={'row'} >
+          <Box  display={'flex'} flex={1} flexDirection={'row'} alignContent={'center'} alignItems={'center'}>
             <Controller
               control={control}
               name="waybill"
@@ -229,8 +228,9 @@ const ActivityHeaderView = ({ activity, control, errors, customers, activityDefs
                 {...field} />}
             />
           </Box>
-        }
-      </Box>
+
+        </Box>
+      }
     </Box >)
 }
 

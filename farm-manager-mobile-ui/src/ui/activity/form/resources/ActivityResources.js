@@ -258,6 +258,7 @@ const ActivityResources = ({ activity, control, errors, register, tariffs, activ
                             label={text[`sprayVolume${user.areaUnit}`]}  {...field} />
                     )}
                 />
+                <Box margin={1}/>
                 <Controller
                     control={control}
                     name="sprayParams.volume"
