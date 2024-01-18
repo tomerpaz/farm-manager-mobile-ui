@@ -9,16 +9,18 @@ import { Search } from "@mui/icons-material";
 import { isStringEmpty } from "../FarmUtil";
 import ListPager from "../../components/ui/ListPager";
 
-const filterField = (field, filter) => {
+const filterField = (field, filter, cropId) => {
     if (isStringEmpty(filter)) {
-        return true;
+        return cropId ? field.cropId === cropId : true;
     } else {
         const val = filter.toLowerCase();
-        return field.name.toLowerCase().includes(val) ||
-            field.alias?.toLowerCase().includes(val) ||
-            field.siteName?.toLowerCase().includes(val) ||
-            field.cropName.toLowerCase().includes(val) ||
-            field.varietyName.toLowerCase().includes(val)
+        return (cropId ? field.cropId === cropId : true) &&
+            (field.name.toLowerCase().includes(val) ||
+                field.alias?.toLowerCase().includes(val) ||
+                field.siteName?.toLowerCase().includes(val) ||
+                field.cropName.toLowerCase().includes(val) ||
+                field.varietyName.toLowerCase().includes(val)
+            )
     }
 };
 
@@ -28,19 +30,16 @@ const isFieldSelected = (field, selectedFields) => {
 
 export const ROWS_PER_PAGE = 100;
 
-const FieldSelectionDialog = ({ fields, open, handleClose }) => {
+const FieldSelectionDialog = ({ fields, open, handleClose, cropId }) => {
     const text = useSelector(selectLang);
     // const { data: user } = useGetUserDataQuery()
     const [filter, setFilter] = useState('');
 
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(ROWS_PER_PAGE);
-
-
     const [selectFields, setSelectedFields] = useState([]);
 
-
-    const visableFields = fields.filter(e => filterField(e, filter));
+    const visableFields = fields.filter(e => filterField(e, filter, cropId));
     const visableSelectedFields = visableFields.filter(e => selectFields.includes(e));
     const numSelected = visableSelectedFields.length;
     const rowCount = visableFields.length;

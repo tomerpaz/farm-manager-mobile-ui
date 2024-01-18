@@ -37,7 +37,7 @@ const ActivityView = () => {
       });
 
       const act = { ...activity, fields }
-      console.log(activity);
+     // console.log(activity);
 
       act.execution = parseISO(activity.execution);
       if (IRRIGARION_TYPES.includes(activity.type)) {

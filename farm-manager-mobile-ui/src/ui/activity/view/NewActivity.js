@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 import { useParams, useSearchParams } from 'react-router-dom'
 import { selectCurrentYear } from '../../../features/app/appSlice'
 import ActivityForm from '../form/ActivityForm'
-import { firstDayOfThisMonth, getWinds, lastDayOfThisMonth, newDate, startOfDay } from '../../FarmUtil'
+import { SPRAY, firstDayOfThisMonth, getWinds, lastDayOfThisMonth, newDate, startOfDay } from '../../FarmUtil'
 import { useGetUserDataQuery } from '../../../features/auth/authApiSlice'
 import { useFieldsById } from '../../../features/fields/fieldsApiSlice'
 import { parseISO } from 'date-fns'
@@ -20,7 +20,7 @@ const NewActivity = () => {
   const field = useFieldsById(currentYear, Number(fid));
 
   const isPlan = type.includes("_PLAN")
-  const isSpray = type.includes("SPRAY")
+  const isSpray = type.includes(SPRAY)
   const isIrrigation = type.includes("IRRIGATION")
 
   const wind = isSpray ? getWinds()[0] : null;
@@ -30,8 +30,10 @@ const NewActivity = () => {
     type, plan: isPlan,
     execution: firstDayOfThisMonth(),
     executionEnd : isIrrigation ? lastDayOfThisMonth() : null,
+    endHour: isSpray ?  new Date(): null,
     irrigationParams: null,
-    activityDef: null, year: user.year, wind, customer: null, fields, resources: [], note: '', invoice: '', editable: true, waybill: ''
+    irrigationParams: isSpray ? {volumePerAreaUnit : null, volume: null, wind, crop: null} : null,
+    activityDef: null, year: user.year, customer: null, fields, resources: [], note: '', invoice: '', editable: true, waybill: ''
   };
 
   return (

@@ -20,14 +20,15 @@ const HEADER_CONFIG = [
   { type: MARKET, date: true, year: true, },
 ]
 
-const ActivityHeaderView = ({ activity, control, errors, customers, activityDefs, crops, reference, isDuplicate, execution, days, crop }) => {
+const ActivityHeaderView = ({ activity, control, errors, customers, activityDefs, crops, reference, isDuplicate, execution, days, crop, onCropCHange }) => {
 
   const text = useSelector(selectLang)
   const config = HEADER_CONFIG.filter(e => activity.type === e.type)[0];
 
-  const onCropChange = (onChange, data) => {
+  const _onCropChange = (onChange, data) => {
     onChange(data)
-    console.log('onCropChange', data, crop)
+    onCropCHange();
+    //console.log('onCropChange', data, crop)
 
   }
 
@@ -163,7 +164,7 @@ const ActivityHeaderView = ({ activity, control, errors, customers, activityDefs
             rules={{ required: true }}
             render={({ field: { ref, onChange, ...field } }) => <Autocomplete
               // disablePortal
-              onChange={(_, data) => onCropChange(onChange, data)}
+              onChange={(_, data) => _onCropChange(onChange, data)}
               options={crops.filter(e => e.active)}
               // sx={{ width: 150 }}
               fullWidth
@@ -176,7 +177,7 @@ const ActivityHeaderView = ({ activity, control, errors, customers, activityDefs
           <Box margin={1} />
           <Controller
             control={control}
-            name="wind"
+            name="sprayParams.wind"
             render={({ field }) => (
               <TextField
                 id="outlined-select-wind"

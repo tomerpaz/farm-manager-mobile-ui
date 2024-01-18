@@ -2,7 +2,7 @@ import { BottomNavigation, BottomNavigationAction, Box, TextField, Typography } 
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { selectLang, setSnackbar } from '../../../features/app/appSlice'
-import { asLocalDate, asLocalTime, daysDif, daysDiff } from '../../FarmUtil'
+import { PESTICIDE, asLocalDate, asLocalTime, daysDif, daysDiff } from '../../FarmUtil'
 import ActivityHeaderView from './header/ActivityHeaderView'
 import { useForm, Controller, useWatch } from "react-hook-form";
 import { Cancel, ControlPointDuplicate, Delete, Save } from '@mui/icons-material'
@@ -30,7 +30,6 @@ const ActivityForm = ({ activity }) => {
 
   const { data: activityDefs, isSuccess: isActivityDefsSuccess } = useGetActivityDefsQuery()
   const { data: crops, isSuccess: isCropsSuccess } = useGetCropsQuery()
-
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [isDuplicate, setIsDuplicate] = useState(false);
 
@@ -77,12 +76,10 @@ const ActivityForm = ({ activity }) => {
   }
 
   const saveActivity = (data) => {
-    console.log(data);
     data.execution = asLocalDate(data.execution, true);
     data.executionEnd = asLocalDate(data.executionEnd, true);
     data.endHour = asLocalTime(data.endHour, true);
 
-    console.log('saveActivity',data.endHour)
     if (data.uuid) {
       return updateActivity(data).unwrap();
     } else {
@@ -96,6 +93,12 @@ const ActivityForm = ({ activity }) => {
     setValue('reference', null);
     setValue('editable', true);
     setIsDuplicate(true);
+  }
+
+  const onCropCHange = () => {
+    setValue('fields', []);
+    console.log(resources)
+    setValue('resources', resources.filter(e=> e.resource.type !== PESTICIDE));
   }
 
 
@@ -130,8 +133,8 @@ const ActivityForm = ({ activity }) => {
 
 
           <ActivityHeaderView control={control} register={register} activity={activity} errors={errors} crops={crops} activityDefs={activityDefs} customers={customers} reference={reference} isDuplicate={isDuplicate}
-           execution={execution} days={days} crop={crop}/>
-          <ActivityFields control={control} register={register} activity={activity} getValues={getValues} activityArea={activityArea} errors={errors} />
+           execution={execution} days={days} crop={crop} onCropCHange={onCropCHange}/>
+          <ActivityFields control={control} register={register} activity={activity} getValues={getValues} activityArea={activityArea} errors={errors} crop={crop}/>
           <ActivityResources control={control} register={register} activity={activity} activityDef={activityDef}
             errors={errors} tariffs={tariffs} activityArea={activityArea} days={days}
             irrigationParams={irrigationParams} setValue={setValue} trigger={trigger}

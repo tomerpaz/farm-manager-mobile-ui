@@ -36,6 +36,8 @@ const ActivityResources = ({ activity, control, errors, register, tariffs, activ
     const [openIrrigationConfig, setOpenIrrigationConfig] = useState(false);
     const [showAlert, setShowAlert] = useState(false);
 
+    const disabledSelections = SPRAY_TYPES.includes(activity.type) && sprayParams?.crop === null;
+
     const handleOpenEditRow = (index, row) => {
         setSelectedRow(row);
         setSelectedIndex(index);
@@ -144,17 +146,17 @@ const ActivityResources = ({ activity, control, errors, register, tariffs, activ
             const alreadySelectedIDs = fields.map(e => e.resource.id);
             let newtlySelectedResources = selectedResources.filter(e => !alreadySelectedIDs.includes(e.resouece ? e.resource.id : e.id)).map(e => {
                 const r = e.resource ? e.resource : e;
-                const pesticide = e.pestId ? e : null;
+                const pesticideListItem = e.pestId ? e : null;
                 return {
                     resource: r,
                     qty: 0,
                     totalCost: 0,
                     note: null,
                     date: null,
-                    dosage: pesticide?.dosage,
+                    dosage: pesticideListItem?.dosage,
                     tariff: 0,
                     manualTariff: false,
-                    pesticide,
+                    pesticideListItem,
                     warehouse: WAREHOUSE_RESOURCE_TYPE.includes(r.type) ? user.warehouse : null,
                 }
             }
@@ -271,7 +273,7 @@ const ActivityResources = ({ activity, control, errors, register, tariffs, activ
             </Box>}
             <Box display={'flex'} flex={1} justifyContent={'space-between'} alignItems={'center'}>
                 <Box>
-                    <Button id={ELEMENT_ID} size='large' color={errors.resources ? 'error' : 'primary'} disableElevation={true} variant="contained" onClick={handleClickOpen}>{text.resources} </Button>
+                    <Button disabled={disabledSelections} id={ELEMENT_ID} size='large' color={errors.resources ? 'error' : 'primary'} disableElevation={true} variant="contained" onClick={handleClickOpen}>{text.resources} </Button>
                     {fields.length > TRASHHOLD &&
                         <IconButton sx={{ marginLeft: 1, marginRight: 1 }} onClick={() => setExpendFields(!expendFields)}>
                             <Badge badgeContent={fields.length} color="primary">

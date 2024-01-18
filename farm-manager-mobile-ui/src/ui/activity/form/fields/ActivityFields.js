@@ -9,13 +9,13 @@ import FieldSelectionDialog from "../../../dialog/FieldsSelectionDialog"
 import { useFieldArray } from "react-hook-form";
 import { Delete, DragHandle, Menu, MoreVert } from "@mui/icons-material"
 import ActivityFieldDialog from "./ActivityFieldDialog"
-import { HARVEST, isArrayEmpty } from "../../../FarmUtil"
+import { HARVEST, SPRAY_TYPES, isArrayEmpty } from "../../../FarmUtil"
 import UpdateAllFieldsDialog from "./UpdateAllFieldsDialog"
 import {  getTotalQty, getTotalweight } from "../ActivityUtil"
 
 const TRASHHOLD = 3;
 
-const ActivityFields = ({ activity, getValues, control, register, errors, activityArea }) => {
+const ActivityFields = ({ activity, getValues, control, register, errors, activityArea, crop }) => {
 
     const { fields, append, prepend, remove, swap, move, insert, update, replace } = useFieldArray({
         control, // control props comes from useForm (optional: if you are using FormContext)
@@ -81,11 +81,12 @@ const ActivityFields = ({ activity, getValues, control, register, errors, activi
         return (expendFields && fields.length > TRASHHOLD) ? fields : fields.slice(0, TRASHHOLD);
     }
 
+    const disabledSelections = SPRAY_TYPES.includes(activity.type) && crop === null;
     return (
         <Box margin={1} display={'flex'} flexDirection={'column'}>
             <Box display={'flex'} flex={1} justifyContent={'space-between'} alignItems={'center'}>
                 <Box>
-                    <Button size='large' color={errors.fields ? 'error' : 'primary'} disableElevation={true} variant="contained" onClick={handleClickOpen}>{text.fields} </Button>
+                    <Button disabled={disabledSelections} size='large' color={errors.fields ? 'error' : 'primary'} disableElevation={true} variant="contained" onClick={handleClickOpen}>{text.fields} </Button>
                     {fields.length > TRASHHOLD &&
                         <IconButton sx={{ marginLeft: 1, marginRight: 1 }} onClick={() => setExpendFields(!expendFields)}>
                             <Badge badgeContent={fields.length} color="primary">
@@ -118,7 +119,7 @@ const ActivityFields = ({ activity, getValues, control, register, errors, activi
                     </TableBody>
                 </Table>
             </TableContainer>
-            <FieldSelectionDialog open={open} fields={fieldsByYear} handleClose={handleClose} />
+            <FieldSelectionDialog open={open} fields={fieldsByYear} handleClose={handleClose} cropId={crop?.id} />
             {selectedRow && <ActivityFieldDialog selectedIndex={selectedIndex} selectedRow={selectedRow} activityType={activity.type} handleClose={handleCloseEditRow} update={update} remove={() => handleRemoveRow(selectedIndex)} prepend={prepend} />}
             {openBulkUpdateFields && <UpdateAllFieldsDialog open={openBulkUpdateFields} text={text} totalQty={getTotalQty(fields)}
                 fields={fields}

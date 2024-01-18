@@ -164,9 +164,9 @@ export const getActivityTypeText = (type, text, long) => {
     if (SCOUT === type) {
         return text.scouting;
     }
-    if(long){
-        if(IRRIGARION_TYPES.includes(type)){
-           return  `${text[type.toLowerCase()]} ${text.and}${text.fertilization}`
+    if (long) {
+        if (IRRIGARION_TYPES.includes(type)) {
+            return `${text[type.toLowerCase()]} ${text.and}${text.fertilization}`
         }
     }
     return [GENERAL].includes(type) ? text.activity : text[type.toLowerCase()];
@@ -250,14 +250,11 @@ export function asLocalDate(date, hyphen) {
 }
 
 export function asLocalTime(date, hyphen) {
-    console.log(date)
     if (date && date instanceof Date) {
         var hh = date.getHours().toString();
         var mm = (date.getMinutes()).toString(); // getMonth() is zero-based         
-       // var ss = date.getSeconds().toString();
         const space = hyphen ? "-" : "";
-        return (hh[1] ? hh : "0" + hh[0]) +":"+(mm[1] ? mm : "0" + mm[0]) +":00"
-        //return hh + ":" + mm (hh[1] ? hh : "0" + mm[0]) + space + (dd[1] ? dd : "0" + dd[0]);
+        return (hh[1] ? hh : "0" + hh[0]) + ":" + (mm[1] ? mm : "0" + mm[0]) + ":00"
     } else {
         return date;
     }
@@ -269,12 +266,12 @@ export function parseISOOrNull(date) {
 
 
 export const daysDiff = (before, after) => {
-   if(before && after){
-    let difference =  (endOfDay( after).getTime()) - (startOfDay(before).getTime());
-    let TotalDays = Math.ceil(difference / (1000 * 3600 * 24));
-    return TotalDays;
-   }
-   return 0;
+    if (before && after) {
+        let difference = (endOfDay(after).getTime()) - (startOfDay(before).getTime());
+        let TotalDays = Math.ceil(difference / (1000 * 3600 * 24));
+        return TotalDays;
+    }
+    return 0;
 }
 
 
@@ -391,17 +388,17 @@ export function isMobile() {
     return regex.test(navigator.userAgent);
 }
 
-export function getMinDateWidth(){
+export function getMinDateWidth() {
     return isMobile() ? 115 : 150;
 }
 
-export function firstDayOfThisMonth(){
+export function firstDayOfThisMonth() {
     var date = new Date();
     var firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
     return firstDay;
 }
 
-export function lastDayOfThisMonth(){
+export function lastDayOfThisMonth() {
     var date = new Date();
     var lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
     return lastDay;
