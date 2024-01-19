@@ -63,7 +63,7 @@ const ActivityHeaderView = ({ activity, control, errors, customers, activityDefs
           )}
         />
       </Box>
-      <Box paddingTop={1} display={'flex'} flex={1} alignContent={'center'} alignItems={'center'} flexDirection={'row'} justifyContent={'space-between'} >
+      <Box paddingTop={2} display={'flex'} flex={1} alignContent={'center'} alignItems={'center'} flexDirection={'row'} justifyContent={'space-between'} >
         <Controller
           name="execution"
           control={control}

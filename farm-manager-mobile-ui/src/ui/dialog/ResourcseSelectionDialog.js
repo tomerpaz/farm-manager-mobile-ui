@@ -78,7 +78,8 @@ const ResourcseSelectionDialog = ({ open, handleClose, resourceTypes, cropId }) 
     } = useGetResourcesQuery({ type: fetchType }, { skip: isPesticidelist })
 
 
-    const { data: cropPesticides, isSuccess: isContainersSuccess } = useGetCropPesticidesQuery({ cropId }, { skip: cropId === null })
+    const { data: cropPesticides, isSuccess: isCropPesticidesSuccess } = useGetCropPesticidesQuery({ cropId }, { skip: !cropId })
+
 
     const isSingular = [WATER, SPRAYER].includes(type);
 
