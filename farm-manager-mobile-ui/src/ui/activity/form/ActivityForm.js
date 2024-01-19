@@ -97,7 +97,6 @@ const ActivityForm = ({ activity }) => {
 
   const onCropCHange = () => {
     setValue('fields', []);
-    console.log(resources)
     setValue('resources', resources.filter(e=> e.resource.type !== PESTICIDE));
   }
 

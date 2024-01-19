@@ -3,10 +3,11 @@ import { useSelector } from 'react-redux'
 import { useParams, useSearchParams } from 'react-router-dom'
 import { selectCurrentYear } from '../../../features/app/appSlice'
 import ActivityForm from '../form/ActivityForm'
-import { SPRAY, firstDayOfThisMonth, getWinds, lastDayOfThisMonth, newDate, startOfDay } from '../../FarmUtil'
+import { IRRIGARION_TYPES, SPRAY, SPRAY_TYPES, firstDayOfThisMonth, getWinds, lastDayOfThisMonth, newDate, startOfDay } from '../../FarmUtil'
 import { useGetUserDataQuery } from '../../../features/auth/authApiSlice'
 import { useFieldsById } from '../../../features/fields/fieldsApiSlice'
 import { parseISO } from 'date-fns'
+import { fi } from 'date-fns/locale'
 
 const NewActivity = () => {
 
@@ -20,19 +21,21 @@ const NewActivity = () => {
   const field = useFieldsById(currentYear, Number(fid));
 
   const isPlan = type.includes("_PLAN")
-  const isSpray = type.includes(SPRAY)
-  const isIrrigation = type.includes("IRRIGATION")
+  const isSpray = SPRAY_TYPES.includes(type);
+  const isIrrigation = IRRIGARION_TYPES.includes(type);
 
   const wind = isSpray ? getWinds()[0] : null;
 
   const fields = field ? [{ field, activityArea: field.area, fieldNote: null, actualExecution: null }] : [];
+
+  const crop = field ?  {id: field?.cropId, name: field?.cropName} : null;
   const activity = {
     type, plan: isPlan,
-    execution: firstDayOfThisMonth(),
+    execution: isIrrigation ? firstDayOfThisMonth() : new Date(),
     executionEnd : isIrrigation ? lastDayOfThisMonth() : null,
     endHour: isSpray ?  new Date(): null,
-    irrigationParams: null,
-    irrigationParams: isSpray ? {volumePerAreaUnit : null, volume: null, wind, crop: null} : null,
+    irrigationParams: isIrrigation ? {} : null,
+    sprayParams: isSpray ? {volumePerAreaUnit : '', volume: '', wind, crop} : null,
     activityDef: null, year: user.year, customer: null, fields, resources: [], note: '', invoice: '', editable: true, waybill: ''
   };
 

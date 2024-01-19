@@ -171,7 +171,7 @@ const ActivityHeaderView = ({ activity, control, errors, customers, activityDefs
               size='small'
               getOptionLabel={(option) => option ? option.name : ''}
               isOptionEqualToValue={(option, value) => (value === undefined) || option?.id?.toString() === (value?.id ?? value)?.toString()}
-              renderInput={(params) => <TextFieldBase error={errors.crop ? true : false} sx={{ marginTop: 0.5 }} {...params} label={text.crop} />}
+              renderInput={(params) => <TextFieldBase error={errors.sprayParams?.crop ? true : false} sx={{ marginTop: 0.5 }} {...params} label={text.crop} />}
               {...field} />}
           />
           <Box margin={1} />
