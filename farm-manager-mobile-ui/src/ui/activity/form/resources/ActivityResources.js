@@ -267,9 +267,11 @@ const ActivityResources = ({ activity, control, errors, register, tariffs, activ
                 <Controller
                     control={control}
                     name="sprayParams.volumePerAreaUnit"
+                    rules={{ required: true }}
                     render={({ field }) => (
                         <TextField size='small'
                             id="spray-volume-per-area-unit"
+                            error={errors.sprayParams?.volumePerAreaUnit ? true : false}
                             label={text[`sprayVolume${user.areaUnit}`]}  {...field} />
                     )}
                 />
