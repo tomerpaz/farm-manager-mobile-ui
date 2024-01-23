@@ -3,7 +3,7 @@ import { useSelector } from "react-redux"
 import { selectLang } from "../../../../features/app/appSlice"
 import { cellSx, cellSxChange, cellSxLink, headerSx } from "../../view/FieldsView"
 import { Fragment, useEffect, useState } from "react"
-import { ACTIVITY_RESOURCES, AREA_UNIT, ENERGY, EQUIPMENT, FERTILIZER, HOUR, IRRIGARION_TYPES, IRRIGATION, IRRIGATION_PLAN, SPRAY, SPRAYER, SPRAY_TYPES, WAREHOUSE_RESOURCE_TYPE, WATER, getResourceTypeText, getResourceUsageUnit, getUnitText, isArrayEmpty } from "../../../FarmUtil"
+import { ACTIVITY_RESOURCES, AREA_UNIT, ENERGY, EQUIPMENT, FERTILIZER, HOUR, IRRIGARION_TYPES, IRRIGATION, IRRIGATION_PLAN, PESTICIDE, SPRAY, SPRAYER, SPRAY_TYPES, WAREHOUSE_RESOURCE_TYPE, WATER, getResourceTypeText, getResourceUsageUnit, getUnitText, isArrayEmpty } from "../../../FarmUtil"
 import { useGetUserDataQuery } from "../../../../features/auth/authApiSlice"
 import ResourcseSelectionDialog from "../../../dialog/ResourcseSelectionDialog"
 import { Controller, useFieldArray } from "react-hook-form"
@@ -14,7 +14,7 @@ import UpdateResourcesQtyDialog from "./UpdateResourcesQtyDialog"
 import Calculator from "../../../../icons/Calculator"
 import IrrigationConfigDialog from "./IrrigationConfigDialog"
 import AlertDialog from "../../../dialog/AlertDialog"
-import { calcIrrigationDays, calcTotalFertilizerQty, calcTotalWaterQtyUtilFunc } from "../../../FarmCalculator"
+import { calacTotalPesticideVolume, calcIrrigationDays, calcTotalFertilizerQty, calcTotalWaterQtyUtilFunc } from "../../../FarmCalculator"
 
 const TRASHHOLD = 3;
 const UNITS = [AREA_UNIT.toUpperCase(), HOUR.toUpperCase()]
@@ -66,7 +66,18 @@ const ActivityResources = ({ activity, control, errors, register, tariffs, activ
                 return 'waterQty';
             }
         }
+        if (SPRAY_TYPES.includes(act.type)) {
+            const sprayer = arr.find(e => e.resource.type === EQUIPMENT && e.resource.category === SPRAYER)
+            const pesticides = arr.find(e => e.resource.type === PESTICIDE)
 
+            if (!sprayer && !pesticides) {
+                return 'sprayer,pesticides';
+            } else if (!sprayer) {
+                return 'sprayer';
+            } else if (!pesticides) {
+                return 'pesticides';
+            }
+        }
         return null;
     }
 
@@ -147,9 +158,11 @@ const ActivityResources = ({ activity, control, errors, register, tariffs, activ
             let newtlySelectedResources = selectedResources.filter(e => !alreadySelectedIDs.includes(e.resouece ? e.resource.id : e.id)).map(e => {
                 const r = e.resource ? e.resource : e;
                 const pesticideListItem = e.pestId ? e : null;
+                const qty = pesticideListItem ? calacTotalPesticideVolume(
+                    pesticideListItem.unit, pesticideListItem.dosage, sprayParams.volume, activityArea) : 0;
                 return {
                     resource: r,
-                    qty: 0,
+                    qty,
                     totalCost: 0,
                     note: null,
                     date: null,
@@ -260,7 +273,7 @@ const ActivityResources = ({ activity, control, errors, register, tariffs, activ
                             label={text[`sprayVolume${user.areaUnit}`]}  {...field} />
                     )}
                 />
-                <Box margin={1}/>
+                <Box margin={1} />
                 <Controller
                     control={control}
                     name="sprayParams.volume"
@@ -316,7 +329,8 @@ const ActivityResources = ({ activity, control, errors, register, tariffs, activ
                 warehouses={warehouses} control={control} errors={errors} activityArea={activityArea}
                 resourceUnit={getResourceUsageUnit(selectedRow.resource, activityDef)}
                 remove={() => handleRemoveRow(selectedIndex)}
-                irrigationParams={irrigationParams} />}
+                irrigationParams={irrigationParams}
+                sprayParams={sprayParams} />}
             <UpdateResourcesQtyDialog open={openEditBulkQty} units={resourceBulkUnits} text={text} handleClose={handleBulkQtyUpdate} areaUnit={user.areaUnit} activityArea={activityArea}
             />
             {IRRIGARION_TYPES.includes(activity.type) && <IrrigationConfigDialog open={openIrrigationConfig} days={days} text={text} handleClose={handleIrrigationConfig} areaUnit={user.areaUnit} activityArea={activityArea}

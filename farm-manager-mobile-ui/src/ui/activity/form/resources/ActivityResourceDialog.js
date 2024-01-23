@@ -1,11 +1,12 @@
-import { Autocomplete, Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, MenuItem, TextField, Typography } from "@mui/material";
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, MenuItem, Typography } from "@mui/material";
 import TextFieldBase from "../../../../components/ui/TextField";
 import { useSelector } from "react-redux";
 import { selectLang } from "../../../../features/app/appSlice";
 import { useState } from "react";
 import { useGetUserDataQuery } from "../../../../features/auth/authApiSlice";
-import { FERTILIZER, HARVEST, MARKET, QTY_PER_AREA_UNIT_RESOURCE_TYPE, SECONDARY_QTY_RESOURCES, WAREHOUSE_RESOURCE_TYPE, WATER, WORKER_GROUP, getResourceTypeText, getUnitText, isStringEmpty, safeDiv } from "../../../FarmUtil";
+import { FERTILIZER, PESTICIDE, QTY_PER_AREA_UNIT_RESOURCE_TYPE, SECONDARY_QTY_RESOURCES, WAREHOUSE_RESOURCE_TYPE, WATER, WORKER_GROUP, getResourceTypeText, getUnitText, isStringEmpty, safeDiv } from "../../../FarmUtil";
 import { Cancel, Delete, Save } from "@mui/icons-material";
+import { calacTotalPesticideVolume } from "../../../FarmCalculator";
 
 const getQtyPerWorker = (selectedRow) => {
 
@@ -16,22 +17,26 @@ const getQtyPerWorker = (selectedRow) => {
 }
 
 const getSecondaryQtyConfig = (selectedRow, user) => {
-   const val = SECONDARY_QTY_RESOURCES.find(e => e.type === selectedRow.resource.type);
-   if(val && val.gg === true && user.gg === false){
-       return null;
-   }
-   return val;
+    const val = SECONDARY_QTY_RESOURCES.find(e => e.type === selectedRow.resource.type);
+    if (val && val.gg === true && user.gg === false) {
+        return null;
+    }
+    return val;
 }
 
 const isQtyPerAreaUnitFunc = (selectedRow, irrigationParams) => {
-    if(FERTILIZER === selectedRow.resource.type && !isStringEmpty(irrigationParams?.fertilizeMethod)){
+    if (FERTILIZER === selectedRow.resource.type && !isStringEmpty(irrigationParams?.fertilizeMethod)) {
         return false;
     }
-    
+
+    if (PESTICIDE === selectedRow.resource.type && selectedRow?.pesticideListItem) {
+        return false;
+    }
+
     return QTY_PER_AREA_UNIT_RESOURCE_TYPE.includes(selectedRow.resource.type)
 }
 
-const ActivityResourceDialog = ({ selectedRow, selectedIndex, handleClose, update, warehouses, activityArea, remove, resourceUnit, activityType, irrigationParams }) => {
+const ActivityResourceDialog = ({ selectedRow, selectedIndex, handleClose, update, warehouses, activityArea, remove, resourceUnit, activityType, irrigationParams, sprayParams }) => {
     const text = useSelector(selectLang);
     const { data: user } = useGetUserDataQuery()
     const [note, setNote] = useState(selectedRow.note ? selectedRow.note : '');
@@ -46,12 +51,14 @@ const ActivityResourceDialog = ({ selectedRow, selectedIndex, handleClose, updat
 
     const [manualTariff, setManualTariff] = useState(selectedRow.manualTariff);
     const [qtyPerWorker, setQtyPerWorker] = useState(getQtyPerWorker(selectedRow));
+    const [dosage, setDosage] = useState(selectedRow.dosage);
 
     const secondaryQtyConfig = getSecondaryQtyConfig(selectedRow, user);
     const isWarehouse = WAREHOUSE_RESOURCE_TYPE.includes(selectedRow.resource.type);
     const isQtyPerAreaUnit = isQtyPerAreaUnitFunc(selectedRow, irrigationParams);
     const isWorkerGropup = WORKER_GROUP === selectedRow.resource.type;
     const isWater = WATER === selectedRow.resource.type;
+    const isDosage = selectedRow?.pesticideListItem;
 
     const onAction = (save) => {
         if (save) {
@@ -64,7 +71,9 @@ const ActivityResourceDialog = ({ selectedRow, selectedIndex, handleClose, updat
             if (secondaryQtyConfig || isWorkerGropup) {
                 selectedRow.secondaryQty = secondaryQty;
             }
-
+            if (isDosage) {
+                selectedRow.dosage = dosage;
+            }
             update(selectedIndex, selectedRow);
         }
         handleClose(save);
@@ -79,6 +88,16 @@ const ActivityResourceDialog = ({ selectedRow, selectedIndex, handleClose, updat
         setQtyPerAreaUnit(value);
         if (value && activityArea) {
             setQty((value * activityArea).toFixed());
+        }
+    }
+
+    const onDosageChange = (value) => {
+        setDosage(value);
+        if (value && activityArea) {
+            const pesticideListItem = selectedRow.pesticideListItem;
+            const calcQty = calacTotalPesticideVolume(
+                pesticideListItem.unit, value, sprayParams.volume, activityArea)
+            setQty(calcQty);
         }
     }
 
@@ -135,6 +154,17 @@ const ActivityResourceDialog = ({ selectedRow, selectedIndex, handleClose, updat
                         fullWidth={true}
                     />
 
+                    {isDosage &&
+                        <TextFieldBase value={dosage} onChange={e => onDosageChange(Number(e.target.value))}
+                            type='number' label={`${text.dosage}`}
+                            fullWidth
+                            InputProps={{
+                                endAdornment: <InputAdornment position="end">{
+                                    getUnitText(selectedRow.pesticideListItem.unit, user.areaUnit, text)
+                                }
+                                </InputAdornment>,
+                            }}
+                        />}
                     {isQtyPerAreaUnit &&
                         <TextFieldBase value={qtyPerAreaUnit} onChange={e => onQtyPerAreUnitChange(Number(e.target.value))}
                             type='number' label={`${text.qty}/${text[user.areaUnit]}`}

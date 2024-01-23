@@ -3,6 +3,7 @@
 // import { sumBy } from 'lodash';
 // import { CONTRACTOR, WORKER, WORKER_GROUP } from "../modules/activity/types";
 
+import { el } from "date-fns/locale";
 import { CONTRACTOR, WORKER, WORKER_GROUP } from "./FarmUtil";
 
 
@@ -87,32 +88,43 @@ export function calcSprayerCount(area, sprayerCapacity, sprayVolume) {
 
 export function calacTotalPesticideVolume(unit, pesticideDosage, sprayVolume, area) {
 
+    const sprayVolumeValue = sprayVolume ? sprayVolume : 0;
+    const point = 2;
     switch (unit) {
         case 'PERCENT': {
-            return ((pesticideDosage * sprayVolume) / 100) * area;
+            return toFixed((((pesticideDosage * sprayVolumeValue) / 100) * area),point);
         }
         case 'CC': {
-            return (area * pesticideDosage) / 1000;
+            return toFixed((area * pesticideDosage) / 1000,point);;
         }
         case 'GRM': {
-            return (area * pesticideDosage) / 1000;
+            return toFixed((area * pesticideDosage) / 1000,point);
         }
         case 'LIT': {
-            return area * pesticideDosage;
+            return toFixed(area * pesticideDosage,toFixed(),point);
         }
         case 'KG': {
-            return area * pesticideDosage;
+            return toFixed(area * pesticideDosage,point);
         }
         // case 'PPM': {
         //     return ((pesticideDosage * sprayVolume * 0.001) / 1000) * area;
         // }
         case 'UNIT': {
-            return area * pesticideDosage;
+            return toFixed(area * pesticideDosage,point);
         }
         default: {
             return 0;
         }
     }
+}
+
+function toFixed (value, floatingPoint){
+    if(value){
+        return value.toFixed(floatingPoint);
+    }else {
+        return 0;
+    }
+
 }
 
 export function convertKelvin(value, toUnit) {
