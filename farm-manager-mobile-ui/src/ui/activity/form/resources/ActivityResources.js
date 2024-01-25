@@ -14,7 +14,7 @@ import UpdateResourcesQtyDialog from "./UpdateResourcesQtyDialog"
 import Calculator from "../../../../icons/Calculator"
 import IrrigationConfigDialog from "./IrrigationConfigDialog"
 import AlertDialog from "../../../dialog/AlertDialog"
-import { calacTotalPesticideVolume, calcIrrigationDays, calcTotalFertilizerQty, calcTotalWaterQtyUtilFunc } from "../../../FarmCalculator"
+import { calacTotalPesticideVolume, calcIrrigationDays, calcSprayVolume, calcSprayVolumePerArea, calcTotalFertilizerQty, calcTotalWaterQtyUtilFunc } from "../../../FarmCalculator"
 
 const TRASHHOLD = 3;
 const UNITS = [AREA_UNIT.toUpperCase(), HOUR.toUpperCase()]
@@ -247,8 +247,6 @@ const ActivityResources = ({ activity, control, errors, register, tariffs, activ
 
     const calcIrrigation = (irrigationParams?.irrigationMethod || irrigationParams?.fertilizeMethod) ? true : false;
 
-
-
     const caclTotalWater = () => {
         const water = fields.find(e => e.resource.type === WATER);
         if (calcIrrigation && water && water.qty && irrigationParams.irrigationMethod) {
@@ -258,6 +256,15 @@ const ActivityResources = ({ activity, control, errors, register, tariffs, activ
         return 0;
     }
 
+    const onSprayVolumeChange = (onChange, value) => {
+        onChange(value);
+        setValue('sprayParams.volumePerAreaUnit', calcSprayVolumePerArea(Number(value), Number(activityArea)))
+    }
+
+    const onSprayVolumePerAreaChange = (onChange, value) => {
+        onChange(value);
+        setValue('sprayParams.volume', calcSprayVolume(Number(value), Number(activityArea)))
+    }
 
     const totalWaterQty = caclTotalWater();
 
@@ -268,8 +275,10 @@ const ActivityResources = ({ activity, control, errors, register, tariffs, activ
                     control={control}
                     name="sprayParams.volumePerAreaUnit"
                     rules={{ required: true }}
-                    render={({ field }) => (
+                    render={({ field: { onChange, ...field } }) => (
                         <TextField size='small'
+                            onChange={(e) => onSprayVolumePerAreaChange(onChange, e.target.value)}
+                            type='number'
                             id="spray-volume-per-area-unit"
                             error={errors.sprayParams?.volumePerAreaUnit ? true : false}
                             label={text[`sprayVolume${user.areaUnit}`]}  {...field} />
@@ -279,9 +288,11 @@ const ActivityResources = ({ activity, control, errors, register, tariffs, activ
                 <Controller
                     control={control}
                     name="sprayParams.volume"
-                    render={({ field }) => (
+                    render={({ field: { onChange, ...field } }) => (
                         <TextField size='small'
+                            onChange={(e) => onSprayVolumeChange(onChange, e.target.value)}
                             id="spray-volume"
+                            type='number'
                             label={text.totalSprayVolume}  {...field} />
                     )}
                 />

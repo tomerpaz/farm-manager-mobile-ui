@@ -1,5 +1,5 @@
 import { BottomNavigation, BottomNavigationAction, Box, TextField, Typography } from '@mui/material'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { selectLang, setSnackbar } from '../../../features/app/appSlice'
 import { PESTICIDE, asLocalDate, asLocalTime, daysDif, daysDiff } from '../../FarmUtil'
@@ -18,6 +18,7 @@ import ActionApprovalDialog from '../../../components/ui/ActionApprovalDialog'
 import { useGetResourcesTariffQuery } from '../../../features/tariff/tariffApiSlice'
 import { useGetUserDataQuery } from '../../../features/auth/authApiSlice'
 import { getReference, getTotalActivityArea, isSkipTariffFetch } from './ActivityUtil'
+import { calcSprayVolume, calcSprayVolumePerArea } from '../../FarmCalculator'
 
 const ActivityForm = ({ activity }) => {
 
@@ -57,11 +58,12 @@ const ActivityForm = ({ activity }) => {
   const reference = useWatch({ control, name: "reference" })
   const executionEnd = useWatch({ control, name: "executionEnd" })
   const irrigationParams = useWatch({ control, name: "irrigationParams" })
-  const days = daysDiff(execution,executionEnd);
+  const days = daysDiff(execution, executionEnd);
   const sprayParams = useWatch({ control, name: "sprayParams" })
   const crop = useWatch({ control, name: "sprayParams.crop" })
+  const activityArea = getTotalActivityArea(fields);
 
-  const activityArea =  getTotalActivityArea(fields);
+
 
   const tariffResourceIds = resources.filter(e => e.manualTariff === false).map(e => e.resource.id);
   const { data: tariffs, isSuccess: isTariffsSuccess, isLoading: isTariffLoading, } = useGetResourcesTariffQuery({
@@ -97,7 +99,7 @@ const ActivityForm = ({ activity }) => {
 
   const onCropCHange = () => {
     setValue('fields', []);
-    setValue('resources', resources.filter(e=> e.resource.type !== PESTICIDE));
+    setValue('resources', resources.filter(e => e.resource.type !== PESTICIDE));
   }
 
 
@@ -132,13 +134,13 @@ const ActivityForm = ({ activity }) => {
 
 
           <ActivityHeaderView control={control} register={register} activity={activity} errors={errors} crops={crops} activityDefs={activityDefs} customers={customers} reference={reference} isDuplicate={isDuplicate}
-           execution={execution} days={days} crop={crop} onCropCHange={onCropCHange}/>
-          <ActivityFields control={control} register={register} activity={activity} getValues={getValues} activityArea={activityArea} errors={errors} crop={crop}/>
+            execution={execution} days={days} crop={crop} onCropCHange={onCropCHange} />
+          <ActivityFields control={control} register={register} activity={activity} getValues={getValues} activityArea={activityArea} errors={errors} crop={crop} />
           <ActivityResources control={control} register={register} activity={activity} activityDef={activityDef}
             errors={errors} tariffs={tariffs} activityArea={activityArea} days={days}
             irrigationParams={irrigationParams} setValue={setValue} trigger={trigger}
             fieldsCount={fields.length} sprayParams={sprayParams}
-            />
+          />
           <Box padding={1}>
             <Controller
               control={control}

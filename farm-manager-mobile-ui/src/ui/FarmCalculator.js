@@ -19,9 +19,9 @@ export function calcNPK(quntity, specificGravity, value, usageUnit) {
 }
 
 
-export function calcIrrigationDays(days, frequency){
-    if(days && frequency){
-        return (days/frequency).toFixed(0);
+export function calcIrrigationDays(days, frequency) {
+    if (days && frequency) {
+        return (days / frequency).toFixed(0);
     }
     return 1;
 }
@@ -92,25 +92,25 @@ export function calacTotalPesticideVolume(unit, pesticideDosage, sprayVolume, ar
     const point = 2;
     switch (unit) {
         case 'PERCENT': {
-            return toFixed((((pesticideDosage * sprayVolumeValue) / 100) * area),point);
+            return toFixed((((pesticideDosage * sprayVolumeValue) / 100) * area), point);
         }
         case 'CC': {
-            return toFixed((area * pesticideDosage) / 1000,point);;
+            return toFixed((area * pesticideDosage) / 1000, point);;
         }
         case 'GRM': {
-            return toFixed((area * pesticideDosage) / 1000,point);
+            return toFixed((area * pesticideDosage) / 1000, point);
         }
         case 'LIT': {
-            return toFixed(area * pesticideDosage,toFixed(),point);
+            return toFixed(area * pesticideDosage, toFixed(), point);
         }
         case 'KG': {
-            return toFixed(area * pesticideDosage,point);
+            return toFixed(area * pesticideDosage, point);
         }
         // case 'PPM': {
         //     return ((pesticideDosage * sprayVolume * 0.001) / 1000) * area;
         // }
         case 'UNIT': {
-            return toFixed(area * pesticideDosage,point);
+            return toFixed(area * pesticideDosage, point);
         }
         default: {
             return 0;
@@ -118,10 +118,10 @@ export function calacTotalPesticideVolume(unit, pesticideDosage, sprayVolume, ar
     }
 }
 
-function toFixed (value, floatingPoint){
-    if(value){
+function toFixed(value, floatingPoint) {
+    if (value) {
         return value.toFixed(floatingPoint);
-    }else {
+    } else {
         return 0;
     }
 
@@ -192,3 +192,16 @@ export function withinPerscentRange(first, second, percentage) {
     }
     return false;
 }
+
+export function calcSprayVolumePerArea(volume, area) {
+    if (volume && area && area > 0) {
+        return (volume / area).toFixed(2);
+    }
+}
+
+export function calcSprayVolume(volumePerArea, area) {
+    if (volumePerArea && area) {
+        return (volumePerArea * area).toFixed(0);
+    }
+}
+
