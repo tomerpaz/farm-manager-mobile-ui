@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { selectLang } from "../../../../features/app/appSlice";
 import { useState } from "react";
 import { useGetUserDataQuery } from "../../../../features/auth/authApiSlice";
-import { FERTILIZER, PESTICIDE, QTY_PER_AREA_UNIT_RESOURCE_TYPE, SECONDARY_QTY_RESOURCES, WAREHOUSE_RESOURCE_TYPE, WATER, WORKER_GROUP, getResourceTypeText, getUnitText, isStringEmpty, safeDiv } from "../../../FarmUtil";
+import { FERTILIZER, IRRIGARION_TYPES, PESTICIDE, QTY_PER_AREA_UNIT_RESOURCE_TYPE, SECONDARY_QTY_RESOURCES, SPRAY_TYPES, WAREHOUSE_RESOURCE_TYPE, WATER, WORKER_GROUP, getResourceTypeText, getUnitText, isStringEmpty, safeDiv } from "../../../FarmUtil";
 import { Cancel, Delete, Save } from "@mui/icons-material";
 import { calacTotalPesticideVolume } from "../../../FarmCalculator";
 
@@ -60,8 +60,15 @@ const ActivityResourceDialog = ({ selectedRow, selectedIndex, handleClose, updat
     const isWater = WATER === selectedRow.resource.type;
     const isDosage = selectedRow?.pesticideListItem;
 
+    const autoCalc = SPRAY_TYPES.concat(IRRIGARION_TYPES).includes(activityType) && [WATER, PESTICIDE, FERTILIZER].includes(selectedRow.resource.type);
     const onAction = (save) => {
         if (save) {
+            if (autoCalc) {
+                const qtyChanged = selectedRow.qty !== qty;
+                if (qtyChanged) {
+                    selectedRow.manualQty = true;
+                }
+            }
             selectedRow.qty = qty;
             selectedRow.note = note;
             selectedRow.tariff = tariff;
@@ -93,7 +100,7 @@ const ActivityResourceDialog = ({ selectedRow, selectedIndex, handleClose, updat
 
     const onDosageChange = (value) => {
         setDosage(value);
-        if (value && activityArea) {
+        if (value && activityArea && !selectedRow.manualQty) {
             const pesticideListItem = selectedRow.pesticideListItem;
             const calcQty = calacTotalPesticideVolume(
                 pesticideListItem.unit, value, sprayParams.volume, activityArea)

@@ -120,7 +120,7 @@ export function calacTotalPesticideVolume(unit, pesticideDosage, sprayVolume, ar
 
 function toFixed(value, floatingPoint) {
     if (value) {
-        return value.toFixed(floatingPoint);
+        return Number(value.toFixed(floatingPoint));
     } else {
         return 0;
     }

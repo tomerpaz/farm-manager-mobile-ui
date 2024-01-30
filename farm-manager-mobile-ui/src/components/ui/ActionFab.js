@@ -12,7 +12,7 @@ const ActionFab = (props) => {
     const text = useSelector(selectLang)
 
     if (map === true && SCOUT === activityType) {
-        console.log('activityType', activityType, map)
+//        console.log('activityType', activityType, map)
 
         return <Snackbar
             open

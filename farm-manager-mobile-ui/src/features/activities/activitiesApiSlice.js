@@ -80,7 +80,7 @@ export const activityApiSlice = apiSlice.injectEndpoints({
         deleteActivity: builder.mutation({
             query(uuid) {
               return {
-                url: `/api/farm/activity/${cccc(uuid)}`,
+                url: `/api/farm/activity/${uuid}`,
                 method: 'DELETE',
               }
             },
@@ -90,10 +90,6 @@ export const activityApiSlice = apiSlice.injectEndpoints({
     })
 })
 
-const cccc = (uuid) => {
-    console.log('delete uuid', uuid);
-    return uuid;
-}
 
 export const {
     useGetActivitiesFlatQuery,

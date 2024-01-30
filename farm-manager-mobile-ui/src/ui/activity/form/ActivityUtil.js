@@ -36,7 +36,7 @@ export function getReference  (type, resources,activityDef){
     const sum = values.reduce(function(a, b){
       return a + b;
     });
-    return sum.toFixed(decimalPiont? decimalPiont : 2);
+    return Number(sum.toFixed(decimalPiont? decimalPiont : 2));
   }
 
   export function getTotalQty (fields, decimalPiont){

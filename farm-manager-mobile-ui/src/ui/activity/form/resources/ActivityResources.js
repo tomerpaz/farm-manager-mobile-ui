@@ -169,6 +169,7 @@ const ActivityResources = ({ activity, control, errors, register, tariffs, activ
                     dosage: pesticideListItem?.dosage,
                     tariff: 0,
                     manualTariff: false,
+                    manualQty: false,
                     pesticideListItem,
                     warehouse: WAREHOUSE_RESOURCE_TYPE.includes(r.type) ? user.warehouse : null,
                 }
@@ -259,11 +260,30 @@ const ActivityResources = ({ activity, control, errors, register, tariffs, activ
     const onSprayVolumeChange = (onChange, value) => {
         onChange(value);
         setValue('sprayParams.volumePerAreaUnit', calcSprayVolumePerArea(Number(value), Number(activityArea)))
+        updatePesticideQty(Number(value))
+
     }
 
     const onSprayVolumePerAreaChange = (onChange, value) => {
         onChange(value);
-        setValue('sprayParams.volume', calcSprayVolume(Number(value), Number(activityArea)))
+        const sprayVolume = calcSprayVolume(Number(value), Number(activityArea));
+        setValue('sprayParams.volume', sprayVolume)
+        updatePesticideQty(sprayVolume)
+    }
+
+    const updatePesticideQty = (sprayVolume) => {
+        fields.map((row, index) => {
+            if (row.pesticideListItem && !row.manualQty) {
+                const newQty = calacTotalPesticideVolume(row.pesticideListItem.unit, row.dosage, sprayVolume, activityArea)
+                if (newQty && newQty !== row.qty) {
+                    row.qty = newQty;
+                    if (row.tariff) {
+                        row.totalCost = row.tariff * row.qty;
+                    }
+                    update(index, row);
+                }
+            }
+        })
     }
 
     const totalWaterQty = caclTotalWater();
@@ -441,12 +461,12 @@ function Row(props) {
                 {...register(`resource.${index}.note`)}
                 {...register(`resource.${index}.warehouse`)}
                 {...register(`resource.${index}.manualTariff`)}
-
+                
                 key={index}
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                 <TableCell onClick={onClick} sx={cellSxLink} >{row.resource.name}</TableCell>
                 <TableCell /*onClick={onClick}*/ sx={cellSx} >{getResourceTypeText(resourceType, text)}</TableCell>
-                <TableCell /*onClick={onClick}*/ sx={cellSx}>{row.qty}</TableCell>
+                <TableCell /*onClick={onClick}*/ sx={row.manualQty ? cellSxChange : cellSx}>{row.qty}</TableCell>
                 {calcIrrigation && <TableCell /*onClick={onClick}*/ sx={cellSx}>{calc ? calc : ''}</TableCell>}
                 <TableCell /*onClick={onClick}*/ sx={cellSx}>{getUnitText(getResourceUsageUnit(row.resource, activityDef), areaUnit, text)}</TableCell>
                 {financial && <TableCell /*onClick={onClick}*/ sx={row.manualTariff ? cellSxChange : cellSx}>{totalCost}</TableCell>}
