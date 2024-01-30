@@ -7,7 +7,7 @@ import { ACTIVITY_RESOURCES, AREA_UNIT, ENERGY, EQUIPMENT, FERTILIZER, HOUR, IRR
 import { useGetUserDataQuery } from "../../../../features/auth/authApiSlice"
 import ResourcseSelectionDialog from "../../../dialog/ResourcseSelectionDialog"
 import { Controller, useFieldArray } from "react-hook-form"
-import { Delete, DragHandle, Error, Menu, MoreVert } from "@mui/icons-material"
+import { Agriculture, Delete, DragHandle, Error, Menu, MoreVert } from "@mui/icons-material"
 import ActivityResourceDialog from "./ActivityResourceDialog"
 import { useGetWarehousesQuery } from "../../../../features/warehouses/warehouseApiSlice"
 import UpdateResourcesQtyDialog from "./UpdateResourcesQtyDialog"
@@ -15,6 +15,7 @@ import Calculator from "../../../../icons/Calculator"
 import IrrigationConfigDialog from "./IrrigationConfigDialog"
 import AlertDialog from "../../../dialog/AlertDialog"
 import { calacTotalPesticideVolume, calcIrrigationDays, calcSprayVolume, calcSprayVolumePerArea, calcTotalFertilizerQty, calcTotalWaterQtyUtilFunc } from "../../../FarmCalculator"
+import SprayParams from "./SprayParams"
 
 const TRASHHOLD = 3;
 const UNITS = [AREA_UNIT.toUpperCase(), HOUR.toUpperCase()]
@@ -34,6 +35,8 @@ const ActivityResources = ({ activity, control, errors, register, tariffs, activ
     const [loadTariffs, setLoadTariffs] = useState(false);
     const [openEditBulkQty, setOpenEditBulkQty] = useState(false);
     const [openIrrigationConfig, setOpenIrrigationConfig] = useState(false);
+    const [openSprayParams, setOpenSprayParams] = useState(false);
+
     const [showAlert, setShowAlert] = useState(false);
 
     const disabledSelections = SPRAY_TYPES.includes(activity.type) && sprayParams?.crop === null;
@@ -212,18 +215,18 @@ const ActivityResources = ({ activity, control, errors, register, tariffs, activ
                     shouldDirty: true
                 })
         }
-        // if (unit && qty) {
-        //     fields.map((row, index) => {
-        //         if (unit === getResourceUsageUnit(row.resource, activityDef)) {
-        //             row.qty = qty;
-        //             if (row.tariff) {
-        //                 row.totalCost = row.tariff * qty;
-        //             }
-        //             update(index, row);
-        //         }
-        //     })
-        // }
         setOpenIrrigationConfig(false)
+    }
+
+    const handleSprayParam = (data) => {
+        if (data) {
+            setValue('sprayParams.speed', data.speed);
+            setValue('sprayParams.psi', data.psi)
+            setValue('sprayParams.pto', data.pto, {
+                shouldDirty: true
+            })
+        }
+        setOpenSprayParams(false)
     }
 
     const getResourceTypes = () => {
@@ -318,7 +321,7 @@ const ActivityResources = ({ activity, control, errors, register, tariffs, activ
                 />
             </Box>}
             <Box display={'flex'} flex={1} justifyContent={'space-between'} alignItems={'center'}>
-                <Box>
+                <Box display={'flex'} flex={1} flexDirection={'row'}>
                     <Button disabled={disabledSelections} id={ELEMENT_ID} size='large' color={errors.resources ? 'error' : 'primary'} disableElevation={true} variant="contained" onClick={handleClickOpen}>{text.resources} </Button>
                     {fields.length > TRASHHOLD &&
                         <IconButton sx={{ marginLeft: 1, marginRight: 1 }} onClick={() => setExpendFields(!expendFields)}>
@@ -331,6 +334,9 @@ const ActivityResources = ({ activity, control, errors, register, tariffs, activ
                     {IRRIGARION_TYPES.includes(activity.type) && !['ICCPRO', 'TALGIL'].includes(activity.src) &&
                         <IconButton size='large' onClick={() => setOpenIrrigationConfig(true)}><Calculator color={calcIrrigation ? 'primary' : 'secondary'} fontSize='large' /></IconButton>
                     }
+                    {SPRAY_TYPES.includes(activity.type) &&
+                        <IconButton size='large' onClick={() => setOpenSprayParams(true)}><Agriculture fontSize='large' /></IconButton>
+                    }
                     {errorMsg &&
                         <IconButton color='error' size='large' onClick={() => setShowAlert(true)}>
                             <Badge badgeContent={errorMsg.length} color="secondary">
@@ -340,7 +346,7 @@ const ActivityResources = ({ activity, control, errors, register, tariffs, activ
                         </IconButton>
                     }
                 </Box>
-                <Box>
+                <Box display={'flex'} flex={1} flexDirection={'row'}>
                     <IconButton size='large' disabled={isArrayEmpty(resourceBulkUnits)} onClick={() => setOpenEditBulkQty(true)}><MoreVert fontSize='large' /></IconButton>
                     <IconButton size='large' disabled={isArrayEmpty(fields)} onClick={() => remove()}><Delete fontSize='large' /></IconButton>
                 </Box>
@@ -368,7 +374,9 @@ const ActivityResources = ({ activity, control, errors, register, tariffs, activ
             />
             {IRRIGARION_TYPES.includes(activity.type) && <IrrigationConfigDialog open={openIrrigationConfig} days={days} text={text} handleClose={handleIrrigationConfig} areaUnit={user.areaUnit} activityArea={activityArea}
                 irrigationParams={irrigationParams}
-            // {...register(`irrigationParams`)}
+            />}
+            {SPRAY_TYPES.includes(activity.type) && <SprayParams open={openSprayParams} days={days} text={text} handleClose={handleSprayParam} areaUnit={user.areaUnit} activityArea={activityArea}
+                sprayParams={sprayParams}
             />}
             <AlertDialog open={showAlert} title={'requiredFieldsMissing'} message={errorMsg} varieant={'error'} handleClose={_ => setShowAlert(false)} buttonText={text.close} />
             <Box marginTop={2} marginBottom={0} display={'flex'} flex={1} justifyContent={'space-between'} alignItems={'center'}>
@@ -461,7 +469,7 @@ function Row(props) {
                 {...register(`resource.${index}.note`)}
                 {...register(`resource.${index}.warehouse`)}
                 {...register(`resource.${index}.manualTariff`)}
-                
+
                 key={index}
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                 <TableCell onClick={onClick} sx={cellSxLink} >{row.resource.name}</TableCell>
