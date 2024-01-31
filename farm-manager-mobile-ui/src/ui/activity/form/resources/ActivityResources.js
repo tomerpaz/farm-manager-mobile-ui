@@ -322,7 +322,9 @@ const ActivityResources = ({ activity, control, errors, register, tariffs, activ
             </Box>}
             <Box display={'flex'} flex={1} justifyContent={'space-between'} alignItems={'center'}>
                 <Box display={'flex'} flex={1} flexDirection={'row'}>
-                    <Button disabled={disabledSelections} id={ELEMENT_ID} size='large' color={errors.resources ? 'error' : 'primary'} disableElevation={true} variant="contained" onClick={handleClickOpen}>{text.resources} </Button>
+                    <Box>
+                        <Button disabled={disabledSelections} id={ELEMENT_ID} size='large' color={errors.resources ? 'error' : 'primary'} disableElevation={true} variant="contained" onClick={handleClickOpen}>{text.resources} </Button>
+                    </Box>
                     {fields.length > TRASHHOLD &&
                         <IconButton sx={{ marginLeft: 1, marginRight: 1 }} onClick={() => setExpendFields(!expendFields)}>
                             <Badge badgeContent={fields.length} color="primary">
@@ -346,7 +348,8 @@ const ActivityResources = ({ activity, control, errors, register, tariffs, activ
                         </IconButton>
                     }
                 </Box>
-                <Box display={'flex'} flex={1} flexDirection={'row'}>
+                <Box flex={1}/>
+                <Box display={'flex'}  flexDirection={'row'}>
                     <IconButton size='large' disabled={isArrayEmpty(resourceBulkUnits)} onClick={() => setOpenEditBulkQty(true)}><MoreVert fontSize='large' /></IconButton>
                     <IconButton size='large' disabled={isArrayEmpty(fields)} onClick={() => remove()}><Delete fontSize='large' /></IconButton>
                 </Box>
