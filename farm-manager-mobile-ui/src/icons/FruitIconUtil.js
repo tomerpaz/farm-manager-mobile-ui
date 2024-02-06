@@ -79,7 +79,7 @@ const FRUITS = {
     corn: '🌽',
     pineapple: '🍍',
     'pine apple': '🍍',
-    mushroom: '🍄',
+    mushroom: '🍄‍🟫',
     cucumber: '🥒',
     lemon: '🍋',
     sunflower: '🌻' ,

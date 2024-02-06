@@ -68,11 +68,11 @@ const FieldDashboard = () => {
             />
           </Card>
         </Grid>
-        <Grid item xs={4}>
-          <Card elevation={elevation} >
+        <Grid item xs={4} >
+          <Card elevation={elevation}>
             <CardHeader sx={{ padding: cardHeaderPadding }}
-              avatar={<Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">N</Avatar>}
-              title={<Typography whiteSpace={'nowrap'} variant='body2'>{`${data.nperAreaUnit} /`}</Typography>}
+              avatar={<Avatar sx={{ bgcolor: 'inherit', color: blue[700], fontWeight: 'bolder' }} aria-label="recipe">K</Avatar>}
+              title={<Typography whiteSpace={'nowrap'} variant='body2'>{`${data.kperAreaUnit} /`}</Typography>}
               subheader={text[user.areaUnit]}
             />
           </Card>
@@ -80,17 +80,17 @@ const FieldDashboard = () => {
         <Grid item xs={4} >
           <Card elevation={elevation}>
             <CardHeader sx={{ padding: cardHeaderPadding }}
-              avatar={<Avatar sx={{ bgcolor: green[500] }} aria-label="recipe">P</Avatar>}
+              avatar={<Avatar sx={{ bgcolor: 'inherit', color: green[700], fontWeight: 'bolder' }} aria-label="recipe">P</Avatar>}
               title={<Typography whiteSpace={'nowrap'} variant='body2'>{`${data.pperAreaUnit} /`}</Typography>}
               subheader={text[user.areaUnit]}
             />
           </Card>
         </Grid>
-        <Grid item xs={4} >
-          <Card elevation={elevation}>
+        <Grid item xs={4}>
+          <Card elevation={elevation} >
             <CardHeader sx={{ padding: cardHeaderPadding }}
-              avatar={<Avatar sx={{ bgcolor: blue[500] }} aria-label="recipe">K</Avatar>}
-              title={<Typography whiteSpace={'nowrap'} variant='body2'>{`${data.kperAreaUnit} /`}</Typography>}
+              avatar={<Avatar sx={{ bgcolor: 'inherit', color: red[700], fontWeight: 'bolder' }} aria-label="recipe">N</Avatar>}
+              title={<Typography whiteSpace={'nowrap'} variant='body2'>{`${data.nperAreaUnit} /`}</Typography>}
               subheader={text[user.areaUnit]}
             />
           </Card>
@@ -123,7 +123,7 @@ const FieldDashboard = () => {
             />
             <Collapse in={expandedPesticides} timeout="auto" unmountOnExit>
               <CardContent>
-              <FieldPesticdeTable pesticides={data.pesticides} />
+                <FieldPesticdeTable pesticides={data.pesticides} />
               </CardContent>
             </Collapse>
           </Card>
