@@ -7,10 +7,12 @@ import { selectLang } from '../../../features/app/appSlice'
 import { isArrayEmpty, parseDate } from '../../FarmUtil'
 import FieldDialog from './FieldDialog'
 
-export const headerSx = { fontWeight: 'bold', padding: 1 };
-export const cellSx = { padding: 1 };
-export const cellSxLink = { padding: 1, textDecoration: 'underline', color: 'blue' };
-export const cellSxChange = { padding: 1, color: 'green', fontWeight: 'bold' };
+const p = 1.5;
+
+export const headerSx = { fontWeight: 'bold', padding: p };
+export const cellSx = { padding: p };
+export const cellSxLink = { padding: p, textDecoration: 'underline', color: 'blue' };
+export const cellSxChange = { padding: p, color: 'green', fontWeight: 'bold' };
 
 const TRASHHOLD = 3;
 

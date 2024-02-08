@@ -98,6 +98,13 @@ const ActivityResourceDialog = ({ selectedRow, selectedIndex, handleClose, updat
         }
     }
 
+    const onQtyChange = (value) => {
+        setQty(value);
+        if (isQtyPerAreaUnit && value && activityArea && activityArea !== 0) {
+            setQtyPerAreaUnit((value / activityArea).toFixed(2));
+        }
+    }
+
     const onDosageChange = (value) => {
         setDosage(value);
         if (value && activityArea && !selectedRow.manualQty) {
@@ -150,7 +157,7 @@ const ActivityResourceDialog = ({ selectedRow, selectedIndex, handleClose, updat
             </DialogTitle>
             <DialogContent /*sx={{ minHeight: isWarehouse ? height : null }}*/>
                 <Box display={'flex'} flex={1} flexDirection={'column'}  >
-                    <TextFieldBase value={qty} onChange={e => setQty(Number(e.target.value))}
+                    <TextFieldBase value={qty} onChange={e => onQtyChange(Number(e.target.value))}
                         type='number' label={text.qty}
                         InputProps={{
                             endAdornment: <InputAdornment position="end">{
