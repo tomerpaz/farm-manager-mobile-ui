@@ -375,6 +375,15 @@ export function getWinds() {
     return ['windSpeedNone', 'windSpeedCalm', 'windSpeedStrong']
 }
 
+export function getMarketingDestinations() {
+    return ['noneDestination', 'exportDestination', 'localMarketDestination', 'industryDestination']
+}
+
+export function getMarketingIncomeCalcOptions() {
+    return ['weight','amount','area']
+}
+
+
 export function safeDiv(numerator, denominator) {
     if (isNaN(numerator) || isNaN(denominator) || denominator === 0) {
         return 0;

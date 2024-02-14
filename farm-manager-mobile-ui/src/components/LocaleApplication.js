@@ -5,9 +5,9 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import rtlPlugin from 'stylis-plugin-rtl';
 import createCache from '@emotion/cache';
 import heLocale from 'date-fns/locale/he';
-// import esLocale from 'date-fns/locale/es';
+import esLocale from 'date-fns/locale/es';
 import enLocale from 'date-fns/locale/en-GB';
-// import ptLocale from 'date-fns/locale/pt';
+import ptLocale from 'date-fns/locale/pt';
 // import nlLocale from 'date-fns/locale/nl';
 // import frLocale from 'date-fns/locale/fr';
 import { selectLang } from '../features/app/appSlice';
@@ -23,8 +23,8 @@ import { prefixer } from 'stylis';
 const localeMap = {
     en: enLocale,
     he: heLocale,
-    // es: esLocale,
-    // pt: ptLocale,
+     es: esLocale,
+     pt: ptLocale,
     // nl: nlLocale,
     // fr: frLocale,
 };

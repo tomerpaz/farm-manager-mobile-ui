@@ -138,7 +138,20 @@
     "tractor": "Tractor",
     "listpesticide":"חומר הדברה",
     "pest":"פגע",
-    "capacity": "נפח"
-
+    "capacity": "נפח",
+    "export":"ייצוא",
+    "localMarket":"שוק מקומי",
+    "industry":"תעשייה",
+    "size":"גודל",
+    "quality":"איכות",
+    "destination":"יעד",
+    "income": "הכנסה",
+    "sortReference": "תעודת מיון",
+    "sort": "מיון",
+    "incomeCalc": "חישוב הכנסות",
+    "weight":"משקל",
+    "amount": "כמות",
+    "area": "שטח",
+    "none": "ללא"
 
 }

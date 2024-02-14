@@ -1,7 +1,7 @@
 import { Badge, Box, Button, IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from "@mui/material"
 import { useSelector } from "react-redux"
 import { selectLang } from "../../../../features/app/appSlice"
-import { cellSx, cellSxChange, cellSxLink, headerSx } from "../../view/FieldsView"
+import { cellSx, cellSxChange, cellSxLink, headerSx } from "../../../Util"
 import { Fragment, useState } from "react"
 import { useGetUserDataQuery } from "../../../../features/auth/authApiSlice"
 import { useFields } from "../../../../features/fields/fieldsApiSlice"
@@ -9,11 +9,18 @@ import FieldSelectionDialog from "../../../dialog/FieldsSelectionDialog"
 import { useFieldArray } from "react-hook-form";
 import { Delete, DragHandle, Menu, MoreVert } from "@mui/icons-material"
 import ActivityFieldDialog from "./ActivityFieldDialog"
-import { HARVEST, SPRAY_TYPES, isArrayEmpty } from "../../../FarmUtil"
+import { HARVEST, MARKET, SPRAY_TYPES, isArrayEmpty } from "../../../FarmUtil"
 import UpdateAllFieldsDialog from "./UpdateAllFieldsDialog"
-import {  getTotalQty, getTotalweight } from "../ActivityUtil"
+import { getTotalQty, getTotalweight } from "../ActivityUtil"
 
 const TRASHHOLD = 3;
+
+function newFieldMarketParams(activity){
+    if(MARKET === activity.type){
+        return { marketingDestination: '', marketingQuality: null, marketingSize: null, waybill: '', income: 0 }
+    }
+    return null;
+}
 
 const ActivityFields = ({ activity, getValues, control, register, errors, activityArea, crop }) => {
 
@@ -56,6 +63,7 @@ const ActivityFields = ({ activity, getValues, control, register, errors, activi
         remove(index)
     };
 
+
     const handleClose = (selectedFields) => {
         setOpen(false);
         if (selectedFields) {
@@ -65,7 +73,10 @@ const ActivityFields = ({ activity, getValues, control, register, errors, activi
                     field: e,
                     activityArea: e.area,
                     fieldNote: null,
-                    actualExecution: null
+                    actualExecution: null,
+                    qty: 0,
+                    weight: 0,
+                    fieldMarketParams: newFieldMarketParams(activity),
                 }
             }
             );
@@ -123,9 +134,9 @@ const ActivityFields = ({ activity, getValues, control, register, errors, activi
             {selectedRow && <ActivityFieldDialog selectedIndex={selectedIndex} selectedRow={selectedRow} activityType={activity.type} handleClose={handleCloseEditRow} update={update} remove={() => handleRemoveRow(selectedIndex)} prepend={prepend} />}
             {openBulkUpdateFields && <UpdateAllFieldsDialog open={openBulkUpdateFields} text={text} totalQty={getTotalQty(fields)}
                 fields={fields}
-                totalWeight={getTotalweight(fields)} 
-                weightUnit={user.weightUnit} 
-                activityArea={activityArea} 
+                totalWeight={getTotalweight(fields)}
+                weightUnit={user.weightUnit}
+                activityArea={activityArea}
                 handleClose={handleCloseBulkUpdateFields}
                 replace={replace} />}
         </Box>
@@ -138,8 +149,9 @@ function Row(props) {
     //        {...register(`test.${index}.value`)} 
 
     return (
-        <Fragment >
+        <Fragment   >
             <TableRow
+                {...register(`field.${index}.fieldMarketParams`)}
                 key={index}
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                 <TableCell onClick={onClick} sx={cellSxLink} >{row.field.name}</TableCell>

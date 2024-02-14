@@ -1,22 +1,22 @@
-import { Autocomplete, Avatar, Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Typography } from "@mui/material";
+import { Autocomplete, Avatar, Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, MenuItem, Typography } from "@mui/material";
 import TextFieldBase from "../../../../components/ui/TextField";
 import { useSelector } from "react-redux";
 import { selectLang } from "../../../../features/app/appSlice";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useGetUserDataQuery } from "../../../../features/auth/authApiSlice";
-import { HARVEST, MARKET, UI_SIZE, displayFieldName, getActivityTypeText, isArrayEmpty } from "../../../FarmUtil";
+import { HARVEST, MARKET, UI_SIZE, displayFieldName, getActivityTypeText, getMarketingDestinations, isArrayEmpty, safeDiv } from "../../../FarmUtil";
 import { DatePicker } from "@mui/x-date-pickers";
-import { getFruitIcon } from "../../../../icons/FruitIconUtil";
 import { Cancel, ControlPointDuplicate, Delete, Save } from "@mui/icons-material";
-import { useGetContainersQuery } from "../../../../features/containers/containersApiSlice";
+import { useGetContainersQuery, useGetQualitiesQuery, useGetSizesQuery } from "../../../../features/utils/containersApiSlice";
 import ActionApprovalDialog from "../../../../components/ui/ActionApprovalDialog";
-
-
-
 
 
 const ActivityFieldDialog = ({ selectedRow, selectedIndex, handleClose, activityType, update, remove, prepend }) => {
     const text = useSelector(selectLang);
+
+    const isMarket = activityType === MARKET
+
+
     const { data: user } = useGetUserDataQuery()
 
     const [note, setNote] = useState(selectedRow.fieldNote ? selectedRow.fieldNote : '');
@@ -27,7 +27,20 @@ const ActivityFieldDialog = ({ selectedRow, selectedIndex, handleClose, activity
     const [container, setContainer] = useState(activityType === HARVEST ? selectedRow.container : null);
     const [duplicateOpen, setDuplicateOpen] = useState(false);
 
+    const [quality, setQuality] = useState(isMarket ? selectedRow.fieldMarketParams.marketingQuality : null);
+    const [size, setSize] = useState(isMarket ? selectedRow.fieldMarketParams.marketingSize : null);
+    const [destination, setDestination] = useState(isMarket ? selectedRow.fieldMarketParams.marketingDestination : null);
+    const [income, setIncome] = useState(isMarket ? selectedRow.fieldMarketParams.income : null);
+    const [incomePerUnit, setIncomePerUnit] = useState(isMarket ? safeDiv(selectedRow.fieldMarketParams.income, selectedRow.qty) : null);
+    const [waybill, setWaybill] = useState(isMarket ? selectedRow.fieldMarketParams.waybill : null);
+
+
+
     const { data: containers, isSuccess: isContainersSuccess } = useGetContainersQuery({}, { skip: activityType !== HARVEST })
+    const { data: qualities, isSuccess: isQUalitiesSuccess } = useGetQualitiesQuery({}, { skip: !isMarket })
+    const { data: sizes, isSuccess: isSizesSuccess } = useGetSizesQuery({}, { skip: !isMarket })
+
+    const isExecute = activityType !== MARKET
 
     const onAction = (save) => {
         if (save) {
@@ -38,6 +51,16 @@ const ActivityFieldDialog = ({ selectedRow, selectedIndex, handleClose, activity
                 selectedRow.qty = qty;
                 selectedRow.weight = weight;
                 selectedRow.container = container;
+            } else if (MARKET === activityType) {
+                selectedRow.qty = qty;
+                selectedRow.weight = weight;
+                selectedRow.fieldMarketParams.marketingDestination = destination;
+                selectedRow.fieldMarketParams.marketingSize = size;
+                selectedRow.fieldMarketParams.marketingQuality = quality;
+                selectedRow.fieldMarketParams.income = income;
+                selectedRow.fieldMarketParams.waybill = waybill;
+
+
             }
             update(selectedIndex, selectedRow);
         }
@@ -45,16 +68,36 @@ const ActivityFieldDialog = ({ selectedRow, selectedIndex, handleClose, activity
     }
 
     const handleSetActivityArea = (val) => {
-        setActivityArea(val > 0  ? val : selectedRow.field.area )
+        setActivityArea(val > 0 ? val : selectedRow.field.area)
     }
 
     const handleDuplicate = (val) => {
         setDuplicateOpen(false);
-        if(val){
-            prepend({...selectedRow})
+        if (val) {
+            prepend({ ...selectedRow })
             handleClose();
         }
     }
+
+    const onIncomeChange = (value) => {
+        setIncome(value);
+        if (value && qty) {
+            setIncomePerUnit(safeDiv(value, qty));
+        }
+    }
+    const onIncomePerUnitChange = (value) => {
+        setIncomePerUnit(value);
+        if (value && qty) {
+            setIncome((value * qty).toFixed(0))
+        }
+    }
+
+    useEffect(() => {
+        if (incomePerUnit) {
+            setIncome((incomePerUnit * qty).toFixed(0))
+        }
+    }, [qty])
+
 
     return (
         <Box>
@@ -84,8 +127,7 @@ const ActivityFieldDialog = ({ selectedRow, selectedIndex, handleClose, activity
                     </Box>
                 </DialogTitle>
                 <DialogContent>
-                    <Box display={'flex'} flex={1} flexDirection={'row'} alignItems={'center'}>
-
+                    {!isMarket && <Box display={'flex'} flex={1} flexDirection={'row'} alignItems={'center'}>
                         <TextFieldBase sx={{ flex: 1 }} value={activityArea} onChange={e => handleSetActivityArea(Number(e.target.value))} type='number' label={text[user.areaUnit]} />
                         <Box margin={1}></Box>
                         <DatePicker
@@ -95,7 +137,6 @@ const ActivityFieldDialog = ({ selectedRow, selectedIndex, handleClose, activity
                                 cancelButtonLabel: text.cancel,
                                 clearButtonLabel: text.clear
                             }}
-
                             showToolbar={false}
                             value={actualExecution}
                             onChange={(e) => setActualExecution(e)}// asLocalDate(e, true)}
@@ -104,8 +145,30 @@ const ActivityFieldDialog = ({ selectedRow, selectedIndex, handleClose, activity
                                 actionBar: { actions: ["cancel", "clear"] }
                             }}
                         />
-                    </Box>
-                    {HARVEST === activityType &&
+                    </Box>}
+
+
+                    {isMarket && <Box display={'flex'} flex={1} flexDirection={'row'} alignItems={'center'}>
+                        <TextFieldBase sx={{ flex: 1 }} value={waybill} onChange={e => setWaybill(e.target.value)} label={text.waybill} />
+                        <Box margin={1}></Box>
+                        <TextFieldBase
+                            id="outlined-select-destination"
+                            select
+                            onChange={(e) => setDestination(e.target.value)}
+                            value={destination}
+                            label={text.destination}
+                            sx={{ flex: 1 }}
+                        >
+                            {getMarketingDestinations().map((option) => (
+                                <MenuItem key={option} value={option}>
+                                    {text[option.replace('Destination', '')]}
+                                </MenuItem>
+                            ))}
+                        </TextFieldBase>
+
+
+                    </Box>}
+                    {[HARVEST, MARKET].includes(activityType) &&
                         <Box display={'flex'} flexDirection={'row'} flex={1}>
                             <TextFieldBase sx={{ flex: 1 }} value={qty} onChange={e => setQty(Number(e.target.value))} type='number' label={text.qty} />
                             <Box margin={1}></Box>
@@ -122,9 +185,40 @@ const ActivityFieldDialog = ({ selectedRow, selectedIndex, handleClose, activity
                             isOptionEqualToValue={(option, value) => (value === undefined) || option?.id?.toString() === (value?.id ?? value)?.toString()}
                             renderInput={(params) => <TextFieldBase {...params} label={text.container} />}
                         />
-
                     }
-                    <TextFieldBase value={note} onChange={e => setNote(e.target.value)} fullWidth={true} label={text.note} />
+                    {isMarket &&
+                        <Box display={'flex'} flex={1} flexDirection={'row'} alignItems={'center'}>
+                            <Autocomplete
+                                value={size}
+                                onChange={(_, data) => setSize(data)}
+                                options={!isArrayEmpty(sizes) ? sizes : [size]}
+                                fullWidth
+                                getOptionLabel={(option) => option ? option.name : ''}
+                                isOptionEqualToValue={(option, value) => (value === undefined) || option?.id?.toString() === (value?.id ?? value)?.toString()}
+                                renderInput={(params) => <TextFieldBase {...params} label={text.size} />}
+                            />
+                            <Box margin={1}></Box>
+
+                            <Autocomplete
+                                value={quality}
+                                onChange={(_, data) => setQuality(data)}
+                                options={!isArrayEmpty(qualities) ? qualities : [quality]}
+                                fullWidth
+                                getOptionLabel={(option) => option ? option.name : ''}
+                                isOptionEqualToValue={(option, value) => (value === undefined) || option?.id?.toString() === (value?.id ?? value)?.toString()}
+                                renderInput={(params) => <TextFieldBase {...params} label={text.quality} />}
+                            />
+                        </Box>
+                    }
+                    {isMarket &&
+                        <Box display={'flex'} flexDirection={'row'} flex={1}>
+                            <TextFieldBase sx={{ flex: 1 }} value={incomePerUnit} onChange={e => onIncomePerUnitChange(Number(e.target.value))} type='number' label={`${text.unitCost}`} />
+                            <Box margin={1}></Box>
+                            <TextFieldBase sx={{ flex: 1 }} value={income} onChange={e => onIncomeChange(Number(e.target.value))} type='number' label={`${text.income}`} />
+                        </Box>
+                    }
+
+                    <TextFieldBase value={note} onChange={e => setNote(e.target.value)} fullWidth={true} label={`${text.fieldNote}`} />
                 </DialogContent>
                 <DialogActions sx={{ justifyContent: 'center' }}>
                     <Button size='large' endIcon={<Cancel />} variant='outlined' onClick={() => onAction(false)}>{text.cancel}</Button>
@@ -135,9 +229,9 @@ const ActivityFieldDialog = ({ selectedRow, selectedIndex, handleClose, activity
                 </DialogActions>
             </Dialog>
             <ActionApprovalDialog open={duplicateOpen} handleClose={handleDuplicate}
-                title={`${text.duplicate} ${text.field}?`}  okText={text.duplicate} cancelText={text.cancel} />
+                title={`${text.duplicate} ${text.field}?`} okText={text.duplicate} cancelText={text.cancel} />
 
-        </Box>
+        </Box >
     )
 
 }

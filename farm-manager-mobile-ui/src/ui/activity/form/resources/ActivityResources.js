@@ -1,7 +1,7 @@
 import { Box, Button, TextField, IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Badge, List, ListItemButton, ListItemText, ListItemIcon, ListItem } from "@mui/material"
 import { useSelector } from "react-redux"
 import { selectLang } from "../../../../features/app/appSlice"
-import { cellSx, cellSxChange, cellSxLink, headerSx } from "../../view/FieldsView"
+import { cellSx, cellSxChange, cellSxLink, headerSx } from "../../../Util"
 import { Fragment, useEffect, useState } from "react"
 import { ACTIVITY_RESOURCES, AREA_UNIT, ENERGY, EQUIPMENT, FERTILIZER, HOUR, IRRIGARION_TYPES, IRRIGATION, IRRIGATION_PLAN, PESTICIDE, SPRAY, SPRAYER, SPRAY_TYPES, WAREHOUSE_RESOURCE_TYPE, WATER, getResourceTypeText, getResourceUsageUnit, getUnitText, isArrayEmpty } from "../../../FarmUtil"
 import { useGetUserDataQuery } from "../../../../features/auth/authApiSlice"
@@ -321,7 +321,7 @@ const ActivityResources = ({ activity, control, errors, register, tariffs, activ
                 />
             </Box>}
             <Box display={'flex'} flex={1} justifyContent={'space-between'} alignItems={'center'}>
-                <Box display={'flex'} flex={1} flexDirection={'row'}>
+                <Box display={'flex'} flex={1} flexDirection={'row'} alignItems={'center'}>
                     <Box>
                         <Button disabled={disabledSelections} id={ELEMENT_ID} size='large' color={errors.resources ? 'error' : 'primary'} disableElevation={true} variant="contained" onClick={handleClickOpen}>{text.resources} </Button>
                     </Box>
@@ -349,7 +349,7 @@ const ActivityResources = ({ activity, control, errors, register, tariffs, activ
                     }
                 </Box>
                 <Box flex={1}/>
-                <Box display={'flex'}  flexDirection={'row'}>
+                <Box display={'flex'}  flexDirection={'row'} alignItems={'center'}>
                     <IconButton size='large' disabled={isArrayEmpty(resourceBulkUnits)} onClick={() => setOpenEditBulkQty(true)}><MoreVert fontSize='large' /></IconButton>
                     <IconButton size='large' disabled={isArrayEmpty(fields)} onClick={() => remove()}><Delete fontSize='large' /></IconButton>
                 </Box>

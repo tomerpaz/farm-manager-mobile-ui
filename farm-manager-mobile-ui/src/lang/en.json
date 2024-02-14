@@ -141,5 +141,19 @@
   "grm":"grm",
   "cc":"cc",
   "percent":"%",
-  "capacity": "Capacity"
+  "capacity": "Capacity",
+  "export":"Export",
+  "localMarket":"Local",
+  "industry":"Industry",
+  "size":"Size",
+  "quality":"Quality",
+  "destination":"Destination",
+  "income": "Income",
+  "sortReference": "Sort Reference",
+  "sort": "Sort",
+  "incomeCalc": "Income Calc",
+  "weight":"Weight",
+  "amount": "Qty",
+  "area": "Area",
+  "none": "None"
 }

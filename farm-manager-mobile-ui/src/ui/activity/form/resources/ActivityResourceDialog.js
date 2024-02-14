@@ -240,7 +240,7 @@ const ActivityResourceDialog = ({ selectedRow, selectedIndex, handleClose, updat
                         renderInput={(params) => <TextFieldBase  {...params}
                             label={text.warehouse} />}
                     />} */}
-                    <TextFieldBase value={note} onChange={e => setNote(e.target.value)} fullWidth={true} label={text.note} />
+                    <TextFieldBase value={note} onChange={e => setNote(e.target.value)} fullWidth={true} label={text.resourceNote} />
                 </Box>
             </DialogContent>
             <DialogActions sx={{ justifyContent: 'center' }}>

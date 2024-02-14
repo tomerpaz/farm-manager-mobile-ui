@@ -3,7 +3,7 @@ import TextFieldBase from "../../components/ui/TextField";
 import { useSelector } from "react-redux";
 import { selectLang } from "../../features/app/appSlice";
 import { Fragment, useEffect, useState } from "react";
-import { cellSx, headerSx } from "../activity/view/FieldsView";
+import { cellSx, headerSx } from "../Util";
 import { useGetUserDataQuery } from "../../features/auth/authApiSlice";
 import { Search } from "@mui/icons-material";
 import { EQUIPMENT, FERTILIZER, LIST_PESTICIDE, PESTICIDE, SPRAYER, VARIETY, WATER, getResourceTypeText, getUnitText, isStringEmpty } from "../FarmUtil";

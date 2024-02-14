@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 import { useParams, useSearchParams } from 'react-router-dom'
 import { selectCurrentYear } from '../../../features/app/appSlice'
 import ActivityForm from '../form/ActivityForm'
-import { IRRIGARION_TYPES, SPRAY, SPRAY_TYPES, firstDayOfThisMonth, getWinds, lastDayOfThisMonth, newDate, startOfDay } from '../../FarmUtil'
+import { IRRIGARION_TYPES, MARKET, SPRAY, SPRAY_TYPES, firstDayOfThisMonth, getWinds, lastDayOfThisMonth, newDate, startOfDay } from '../../FarmUtil'
 import { useGetUserDataQuery } from '../../../features/auth/authApiSlice'
 import { useFieldsById } from '../../../features/fields/fieldsApiSlice'
 import { parseISO } from 'date-fns'
@@ -23,6 +23,7 @@ const NewActivity = () => {
   const isPlan = type.includes("_PLAN")
   const isSpray = SPRAY_TYPES.includes(type);
   const isIrrigation = IRRIGARION_TYPES.includes(type);
+  const isMarket = MARKET === type;
 
   const wind = isSpray ? getWinds()[0] : null;
 
@@ -36,6 +37,7 @@ const NewActivity = () => {
     endHour: isSpray ?  new Date(): null,
     irrigationParams: isIrrigation ? {} : null,
     sprayParams: isSpray ? {volumePerAreaUnit : '', volume: '', wind, crop} : null,
+    marketParams: isMarket ? {incomeCalc: '', sortDate: null, sortReference: ''} : null,
     activityDef: null, year: user.year, customer: null, fields, resources: [], note: '', invoice: '', editable: true, waybill: ''
   };
 
