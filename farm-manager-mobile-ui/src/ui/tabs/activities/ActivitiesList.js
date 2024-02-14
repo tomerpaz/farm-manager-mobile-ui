@@ -32,8 +32,10 @@ const ActivitiesList = ({ plans }) => {
     const filter = buildActiviyFilter(startDateFilter, endDateFilter, typeFilter, activityFreeTextFilter, status);
 
     // useEffect(() => {
-    //     console.log('filter cahnged', filter)
-    // }, [typeFilter,startDateFilter,endDateFilter,status]);
+    //     if (page !== 0) {
+    //         navigate(`/tabs/activities/0`)
+    //     }
+    // }, [activityFreeTextFilter]);
 
     const {
         data,

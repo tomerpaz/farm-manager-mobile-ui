@@ -72,7 +72,7 @@ const Field = () => {
           title={
             <Box display={'flex'} flexDirection={'row'} justifyContent={'space-between'}>
               <Typography noWrap variant='h6'>
-                {maxLenghtStr(displayFieldName(field),20)}
+                {maxLenghtStr(displayFieldName(field), 20)}
               </Typography>
               <Typography noWrap variant='h6'>
                 {displayFieldArea(field, user.areaUnit, text)}
@@ -82,7 +82,7 @@ const Field = () => {
           subheader={
             <Box component={"span"} display={'flex'} flexDirection={'row'} justifyContent={'space-between'}>
               <Typography noWrap color='secondary' variant='subtitle1' component={"span"}>
-                { maxLenghtStr(`${field.cropName},${field.varietyName}`,22)}
+                {maxLenghtStr(`${field.cropName},${field.varietyName}`, 22)}
               </Typography>
               <Typography color='secondary' variant='subtitle1' component={"span"}>
                 {`${parseDate(field.startDate)}`}
@@ -97,29 +97,30 @@ const Field = () => {
           {pathname.includes("/imagery") && <FieldImagery field={field} />}
         </CardContent>
       </Card>
-      <BottomNavigation sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} value={value}
+      <BottomNavigation sx={{ position: 'fixed', bottom: 0, left: 0, right: 0, paddingTop: 2, paddingBottom: 2, borderTop: 1, borderTopColor: 'lightGray', backgroundColor: 'white', zIndex: 1000 }} value={-1}
+      // <BottomNavigation sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} value={value}
         showLabels>
         <BottomNavigationAction
-          label={text.details}
+          label={<Typography >{text.details}</Typography>}
           to={`/field/${src}/${fieldId}/info`} component={Link}
-          icon={<InfoOutlined />}
+          icon={<InfoOutlined fontSize='large' />}
         />
         <BottomNavigationAction
-          label={text.dashboard}
+          label={<Typography >{text.dashboard}</Typography>}
           to={`/field/${src}/${fieldId}/dash`} component={Link}
-          icon={<DashboardOutlined />}
+          icon={<DashboardOutlined fontSize='large' />}
         />
         <BottomNavigationAction
-          label={text.activities}
+          label={<Typography >{text.activities}</Typography>}
           to={`/field/${src}/${fieldId}/history/0`} component={Link}
-          icon={<RestoreIcon />}
+          icon={<RestoreIcon fontSize='large' />}
         />
         <BottomNavigationAction
           sx={getBottomNavigationSx(field.imageryId === null)}
           disabled={field.imageryId === null}
-          label={text.satellite}
+          label={<Typography >{text.satellite}</Typography>}
           to={`/field/${src}/${fieldId}/imagery`} component={Link}
-          icon={<SatelliteAltOutlined />}
+          icon={<SatelliteAltOutlined fontSize='large' />}
         />
       </BottomNavigation>
     </Box >

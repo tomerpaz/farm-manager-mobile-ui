@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React, { Fragment, useEffect } from 'react'
 import { Avatar, List, ListItem, ListItemText, ListItemAvatar, Box, Typography, Divider } from '@mui/material';
 import { useSelector } from 'react-redux';
 import { selectActivityFreeTextFilter, selectActivityTypeFilter, selectEndDateFilter, selectLang, selectStartDateFilter } from '../../features/app/appSlice';
@@ -27,6 +27,12 @@ const FieldHistory = () => {
   const activityTypeFilter = useSelector(selectActivityTypeFilter);
   const activityFreeTextFilter = useSelector(selectActivityFreeTextFilter);
   const filter = buildActiviyFilter(startDateFilter, endDateFilter, activityTypeFilter, activityFreeTextFilter);
+
+  // useEffect(() => {
+  //   if(page !== 0){
+  //     navigate(`/field/${src}/${fieldId}/history/0`)
+  //   }
+  // }, [activityFreeTextFilter]);
 
   const {
     data,
@@ -77,7 +83,7 @@ const FieldHistory = () => {
       <List sx={{ height, overflow: 'auto', width: '100%', bgcolor: 'background.paper' }}>
         {renderRows()}
       </List>
-      <ListPager bottom={70} page={Number(page)} totalPages={data.totalPages} setPage={(value) => navigate(`/field/${src}/${fieldId}/history/${value}`)} />
+      <ListPager bottom={90} page={Number(page)} totalPages={data.totalPages} setPage={(value) => navigate(`/field/${src}/${fieldId}/history/${value}`)} />
       <ActivitiesFilter />
     </Box>
   )

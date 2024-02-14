@@ -1,7 +1,7 @@
 
 
 const p = 1;
-const fontSize= 16;
+const fontSize= 17;
 
 export const headerSx = { fontWeight: 'bold', padding: p, fontSize };
 export const cellSx = { padding: p, fontSize };

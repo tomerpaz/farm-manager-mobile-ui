@@ -105,7 +105,7 @@ const ActivityFields = ({ activity, getValues, control, register, errors, activi
                     <Button disabled={disabledSelections} size='large' color={errors.fields ? 'error' : 'primary'} disableElevation={true} variant="contained" onClick={handleClickOpen}>{text.fields} </Button>
                     {fields.length > TRASHHOLD &&
                         <IconButton sx={{ marginLeft: 1, marginRight: 1 }} onClick={() => setExpendFields(!expendFields)}>
-                            <Badge badgeContent={fields.length} color="primary">
+                            <Badge badgeContent={fields.length} color="info">
                                 {expendFields && <Menu fontSize='large' />}
                                 {!expendFields && <DragHandle fontSize='large' />}                            </Badge>
                         </IconButton>

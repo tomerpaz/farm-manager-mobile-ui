@@ -327,7 +327,7 @@ const ActivityResources = ({ activity, control, errors, register, tariffs, activ
                     </Box>
                     {fields.length > TRASHHOLD &&
                         <IconButton sx={{ marginLeft: 1, marginRight: 1 }} onClick={() => setExpendFields(!expendFields)}>
-                            <Badge badgeContent={fields.length} color="primary">
+                            <Badge badgeContent={fields.length} color="info">
                                 {expendFields && <Menu fontSize='large' />}
                                 {!expendFields && <DragHandle fontSize='large' />}
                             </Badge>
