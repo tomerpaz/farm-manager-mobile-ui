@@ -15,11 +15,16 @@ import { getTotalQty, getTotalweight } from "../ActivityUtil"
 
 const TRASHHOLD = 3;
 
-function newFieldMarketParams(activity){
-    if(MARKET === activity.type){
-        return { marketingDestination: '', marketingQuality: null, marketingSize: null, waybill: '', income: 0 }
-    }
-    return null;
+// function newFieldMarketParams(activity) {
+//     if (MARKET === activity.type) {
+//         return { marketingDestination: '', marketingQuality: null, marketingSize: null, waybill: '', income: 0 }
+//     }
+//     return null;
+// }
+
+export function newFieldMarketParams() {
+    return { marketingDestination: '', marketingQuality: null, marketingSize: null, waybill: '', income: 0 }
+
 }
 
 const ActivityFields = ({ activity, getValues, control, register, errors, activityArea, crop }) => {
@@ -76,7 +81,7 @@ const ActivityFields = ({ activity, getValues, control, register, errors, activi
                     actualExecution: null,
                     qty: 0,
                     weight: 0,
-                    fieldMarketParams: newFieldMarketParams(activity),
+                    fieldMarketParams: MARKET === activity.type ? newFieldMarketParams() : null,
                 }
             }
             );

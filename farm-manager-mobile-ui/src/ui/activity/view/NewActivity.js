@@ -8,6 +8,7 @@ import { useGetUserDataQuery } from '../../../features/auth/authApiSlice'
 import { useFieldsById } from '../../../features/fields/fieldsApiSlice'
 import { parseISO } from 'date-fns'
 import { fi } from 'date-fns/locale'
+import { newFieldMarketParams } from '../form/fields/ActivityFields'
 
 const NewActivity = () => {
 
@@ -27,17 +28,20 @@ const NewActivity = () => {
 
   const wind = isSpray ? getWinds()[0] : null;
 
-  const fields = field ? [{ field, activityArea: field.area, fieldNote: null, actualExecution: null }] : [];
+  const fields = field ? [{
+    field, activityArea: field.area, fieldNote: null, actualExecution: null,
+    fieldMarketParams: isMarket ? newFieldMarketParams() : null
+  }] : [];
 
-  const crop = field ?  {id: field?.cropId, name: field?.cropName} : null;
+  const crop = field ? { id: field?.cropId, name: field?.cropName } : null;
   const activity = {
     type, plan: isPlan,
     execution: isIrrigation ? firstDayOfThisMonth() : new Date(),
-    executionEnd : isIrrigation ? lastDayOfThisMonth() : null,
-    endHour: isSpray ?  new Date(): null,
+    executionEnd: isIrrigation ? lastDayOfThisMonth() : null,
+    endHour: isSpray ? new Date() : null,
     irrigationParams: isIrrigation ? {} : null,
-    sprayParams: isSpray ? {volumePerAreaUnit : '', volume: '', wind, crop} : null,
-    marketParams: isMarket ? {incomeCalc: '', sortDate: null, sortReference: ''} : null,
+    sprayParams: isSpray ? { volumePerAreaUnit: '', volume: '', wind, crop } : null,
+    marketParams: isMarket ? { incomeCalc: '', sortDate: null, sortReference: '' } : null,
     activityDef: null, year: user.year, customer: null, fields, resources: [], note: '', invoice: '', editable: true, waybill: ''
   };
 
