@@ -36,7 +36,7 @@ function renderRow(props) {
                         </Avatar>
                     </ListItemAvatar>
                     <ListItemText primary={
-                        <Box  display={'flex'} flexDirection={'row'} justifyContent={'space-between'}>
+                        <Box sx={{backgroundColor: field.statusColor, borderRadius: 1, paddingLeft: 1,paddingRight: 1}}  display={'flex'} flexDirection={'row'} justifyContent={'space-between'}>
                             <Typography sx={{backgroundColor: field.statusColor, borderRadius: 1, paddingLeft: 1,paddingRight: 1}} >
                                 {displayFieldName(field)}
                             </Typography>
