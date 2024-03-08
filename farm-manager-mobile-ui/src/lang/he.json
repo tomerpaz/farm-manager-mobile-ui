@@ -152,6 +152,7 @@
     "weight":"משקל",
     "amount": "כמות",
     "area": "שטח",
-    "none": "ללא"
+    "none": "ללא",
+    "daysSinceSeedling": "ימים מזריעה"
 
 }

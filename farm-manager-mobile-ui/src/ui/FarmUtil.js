@@ -274,6 +274,16 @@ export const daysDiff = (before, after) => {
     return 0;
 }
 
+export const daysDiffToday = (before) => {
+    const after = newDate()
+    if (before) {
+        let difference = (endOfDay(after).getTime()) - (startOfDay(before).getTime());
+        let TotalDays = Math.ceil(difference / (1000 * 3600 * 24));
+        return TotalDays;
+    }
+    return 0;
+}
+
 
 export function parseDate(date) {
     if (date !== null) {

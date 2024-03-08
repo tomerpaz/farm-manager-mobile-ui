@@ -155,5 +155,7 @@
   "weight":"Weight",
   "amount": "Qty",
   "area": "Area",
-  "none": "None"
+  "none": "None",
+  "daysSinceSeedling": "Days Since Seedling"
+
 }

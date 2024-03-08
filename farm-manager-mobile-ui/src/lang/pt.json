@@ -133,7 +133,25 @@
   "every": "Todo",
   "fertilization": "Fertilização",
   "and": "e ",
-  "listpesticide":"Pesticidas"
-
-
+  "listpesticide":"Pesticidas",
+  "pest": "Praga",
+  "grm": "grama",
+  "cc": "CC",
+  "percent": "%",
+  "capacity": "Capacidade",
+  "export": "Exportar",
+  "localMarket": "Local",
+  "industry": "Indústria",
+  "size": "Tamanho",
+  "quality": "Qualidade",
+  "destination": "Destino",
+  "income": "Renda",
+  "sortReference": "Referência de classificação",
+  "sort": "Organizar",
+  "incomeCalc": "Cálculo de Renda",
+  "weight": "Peso",
+  "amount": "Quantidade",
+  "area": "Área",
+  "none": "Nenhum",
+  "daysSinceSeedling": "Dias desde a muda"
 }

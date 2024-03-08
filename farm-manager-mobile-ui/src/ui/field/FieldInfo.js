@@ -8,6 +8,7 @@ import { useSelector } from 'react-redux'
 import { selectLang } from '../../features/app/appSlice';
 import InfoLine from './InfoLine'
 import ActionSpeedDial from '../../components/ui/ActionSpeedDial'
+import { daysDiffToday, parseDate } from '../FarmUtil'
 
 const FieldInfo = ({ field }) => {
 
@@ -19,20 +20,20 @@ const FieldInfo = ({ field }) => {
 
 
 
-
     const height = (window.innerHeight - 120) / 2;
 
     const src = 'map'
     return (
         <Box display={'flex'} flex={1} alignItems={'stretch'} justifyContent={'space-between'} flexDirection={'column'}>
             {field.polygon && <FieldMap field={field} height={height} />}
+            {!field.plantation && !field.endDate && <InfoLine value={daysDiffToday(new Date(field.startDate))} title={text.daysSinceSeedling} />}
             <InfoLine value={field.siteName} title={text.site} />
             <InfoLine value={field.parentFieldName} title={text.parentField} />
             <InfoLine value={field.season} title={text.season} />
-            <InfoLine value={field.endDate} title={text.endDate} />
+           {field.endDate && <InfoLine value={`${parseDate(field.endDate)}`} title={text.end} />}
             <InfoLine value={field.tag1Name} title={field.tag1Type} />
             <InfoLine value={field.tag2Name} title={field.tag2Type} />
-            <InfoLine value={field.maturity} title={text.maturity} />
+            {field.maturity &&  <InfoLine value={`${parseDate(field.maturity)}`} title={text.maturity} />}
             <InfoLine value={field.density} title={text.density} />
             <InfoLine value={field.plantSpacing} title={text.plantSpacing} />
             <InfoLine value={field.rowSpacing} title={text.rowSpacing} />

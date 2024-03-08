@@ -133,6 +133,25 @@
   "every": "Cada",
   "fertilization": "Fertilización",
   "and": "y ",
-  "listpesticide":"Pesticidas"
-
+  "listpesticide":"Pesticidas",
+  "pest": "Parásito",
+  "grm": "grm",
+  "cc": "cc",
+  "percent": "%",
+  "capacity": "Capacidad",
+  "export": "Exportar",
+  "localMarket": "Local",
+  "industry": "Industria",
+  "size": "Tamaño",
+  "quality": "Calidad",
+  "destination": "Destino",
+  "income": "Ingreso",
+  "sortReference": "Ordenar referencia",
+  "sort": "Clasificar",
+  "incomeCalc": "cálculo de ingresos",
+  "weight": "Peso",
+  "amount": "Cantidad",
+  "area": "Área",
+  "none": "Ninguno",
+  "daysSinceSeedling": "Días desde la plántula"
 }

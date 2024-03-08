@@ -72,7 +72,7 @@ const Field = () => {
           }
           title={
             <Box display={'flex'} flexDirection={'row'} justifyContent={'space-between'}>
-              <Typography noWrap variant='h6'>
+              <Typography sx={{backgroundColor: field.statusColor, borderRadius: 1, paddingLeft: 1,paddingRight: 1}} noWrap variant='h6'>
                 {maxLenghtStr(displayFieldName(field), 20)}
               </Typography>
               <Typography noWrap variant='h6'>
