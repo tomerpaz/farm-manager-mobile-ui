@@ -29,15 +29,15 @@ function renderRow(props) {
             //     </IconButton>
             // }
             >
-                <ListItemButton to={`/field/fields/${field.id}/info`} component={Link}>
+                <ListItemButton  to={`/field/fields/${field.id}/info`} component={Link}>
                     <ListItemAvatar>
                         <Avatar sx={{backgroundColor:'white'}}>
                             {getFruitIcon(cropEngName)}
                         </Avatar>
                     </ListItemAvatar>
                     <ListItemText primary={
-                        <Box display={'flex'} flexDirection={'row'} justifyContent={'space-between'}>
-                            <Typography>
+                        <Box  display={'flex'} flexDirection={'row'} justifyContent={'space-between'}>
+                            <Typography sx={{backgroundColor: field.statusColor, borderRadius: 1, paddingLeft: 1,paddingRight: 1}} >
                                 {displayFieldName(field)}
                             </Typography>
                             <Typography>

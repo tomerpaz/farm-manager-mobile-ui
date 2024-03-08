@@ -9,7 +9,7 @@ import { Box, IconButton, Typography } from '@mui/material';
 import { useParams, Link, useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Loading from '../../components/Loading';
-import { DashboardOutlined, HighlightOffRounded, InfoOutlined, SatelliteAltOutlined } from '@mui/icons-material';
+import { Cancel, DashboardOutlined, HighlightOffRounded, InfoOutlined, PestControl, SatelliteAltOutlined } from '@mui/icons-material';
 import FieldInfo from './FieldInfo';
 import FieldDashboard from './dash/FieldDashboard';
 import FieldHistory from './FieldHistory';
@@ -66,7 +66,8 @@ const Field = () => {
           }
           action={
             <IconButton color='secondary' aria-label="settings" onClick={() => navigate(`/tabs/${src}`)}>
-              <HighlightOffRounded sx={{ marginTop: 1, fontSize: 35 }} />
+             {/* <HighlightOffRounded sx={{ marginTop: 1, fontSize: 35 }}*/ }
+             <Cancel sx={{ margin: 1}} fontSize='large' />
             </IconButton>
           }
           title={
@@ -98,7 +99,7 @@ const Field = () => {
         </CardContent>
       </Card>
       <BottomNavigation sx={{ position: 'fixed', bottom: 0, left: 0, right: 0, paddingTop: 2, paddingBottom: 2, borderTop: 1, borderTopColor: 'lightGray', backgroundColor: 'white', zIndex: 1000 }} value={-1}
-      // <BottomNavigation sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} value={value}
+        // <BottomNavigation sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} value={value}
         showLabels>
         <BottomNavigationAction
           label={<Typography >{text.details}</Typography>}
@@ -115,12 +116,18 @@ const Field = () => {
           to={`/field/${src}/${fieldId}/history/0`} component={Link}
           icon={<RestoreIcon fontSize='large' />}
         />
-        <BottomNavigationAction
+      {field.imageryId !== null &&  <BottomNavigationAction
           sx={getBottomNavigationSx(field.imageryId === null)}
           disabled={field.imageryId === null}
           label={<Typography >{text.satellite}</Typography>}
           to={`/field/${src}/${fieldId}/imagery`} component={Link}
           icon={<SatelliteAltOutlined fontSize='large' />}
+        />}
+        <BottomNavigationAction
+         // disabled={field.imageryId === null}
+          label={<Typography >{text.scouting}</Typography>}
+        //  to={`/field/${src}/${fieldId}/imagery`} component={Link}
+          icon={<PestControl fontSize='large' />}
         />
       </BottomNavigation>
     </Box >
