@@ -38,7 +38,7 @@ const FieldInfo = ({ field }) => {
             <InfoLine value={field.plantSpacing} title={text.plantSpacing} />
             <InfoLine value={field.rowSpacing} title={text.rowSpacing} />
             <InfoLine value={field.note} title={text.note} />
-
+            <Box height={150}/>
             <ActionSpeedDial bottom={100} map={true} plan={false} fieldId={fieldId} />
 
         </Box>

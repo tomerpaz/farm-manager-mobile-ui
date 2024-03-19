@@ -63,7 +63,7 @@ const ActionSpeedDial = ({ role, plan, map, bottom, fieldId }) => {
       <Backdrop open={open} />
       <SpeedDial
         ariaLabel="Activity tooltip example"
-        sx={{ position: 'absolute', bottom: bottom ? bottom : 16, right: 16 }}
+        sx={{ position: 'fixed', bottom: bottom ? bottom : 16, right: 16 }}
         icon={<SpeedDialIcon />}
         onClose={handleClose}
         onOpen={handleOpen}
