@@ -153,5 +153,6 @@
   "amount": "Cantidad",
   "area": "Área",
   "none": "Ninguno",
-  "daysSinceSeedling": "Días desde la plántula"
+  "daysSinceSeedling": "Días desde la plántula",
+  "inventory": "Inventario"
 }
