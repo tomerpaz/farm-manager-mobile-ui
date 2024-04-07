@@ -17,6 +17,8 @@ const filterData = (data, freeText, warehouseFilter) =>{
 
   if(warehouseFilter){
     result = result.filter(e=>e.warehouse.id === warehouseFilter);
+  } else {
+    result = result.filter(e=>true);
   }
   return result;
 
@@ -54,6 +56,8 @@ function InventoryTable() {
 
   const rowCount = visableData.length;
   const showPegination = rowCount > ROWS_PER_PAGE;
+
+  visableData.sort((a, b) => a.resource.name.localeCompare(b.resource.name));
 
 
   return (
