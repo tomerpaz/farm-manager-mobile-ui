@@ -8,6 +8,7 @@ import FieldsBar from './content/FieldsBar';
 import ActivitiesListBar from './content/ActivitiesListBar';
 import ActivityViewBar from './content/ActivityViewBar';
 import FieldViewBar from './content/FieldViewBar';
+import InventoryBar from './content/InventoryBar';
 
 const AppBar = () => {
 
@@ -33,6 +34,8 @@ const AppBar = () => {
         {pathname.includes(`/field/${src}/${fieldId}/info`) && <FieldViewBar share={true} layers={true} />}
         {pathname.includes(`/field/${src}/${fieldId}/imagery`) && <FieldViewBar share={true}  ayers={true} />}
         {pathname.includes(`/field/${src}/${fieldId}/history`) && <ActivitiesListBar plans={false} />}
+        {pathname.includes('/tabs/inventory') && <InventoryBar />}
+
       </>
     )
   }

@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit"
-import { newDate, PLAN } from "../../ui/FarmUtil";
+import { asLocalDate, newDate, PLAN } from "../../ui/FarmUtil";
 
 export const DEFAULT_PLAN_STATUS = PLAN
 export const DEFAULT_ACTIVITY_STATUS = ''
@@ -29,6 +29,11 @@ const appSlice = createSlice({
         snackbarMsg: '',
         snackbarSeverity: 'succsess',
         openSettings: false,
+        userConf: [],
+        inventoryFreeTextFilter: '',
+        inventoryDateFilter: asLocalDate(new Date(), true),
+        inventoryWarehouseFilter: 0,
+        showInventory: localStorage.getItem('showInventory') ? Boolean(localStorage.getItem('showInventory')) : false,
     },
     reducers: {
         setCredentials: (state, action) => {
@@ -101,12 +106,26 @@ const appSlice = createSlice({
             state.snackbarMsg = action.payload.msg;
             state.snackbarSeverity = action.payload.severity ? action.payload.severity : 'success' ;
         },
+        setInventoryFreeTextFilter: (state, action) => {
+            state.inventoryFreeTextFilter = action.payload
+        },
+        setInventoryDateFilter: (state, action) => {
+            state.inventoryDateFilter = action.payload
+        }, 
+        setInventoryWarehouseFilter: (state, action) => {
+            state.inventoryWarehouseFilter = action.payload ?  action.payload: 0;
+        },
+        setShowInventory: (state, action) => {
+            localStorage.setItem('showInventory', action.payload);
+            state.showInventory = action.payload;
+        }
     },
 })
 
 export const { setCredentials, logOut, setLang, setCurrentYear, setAppBarDialogOpen, setFieldFreeTextFilter, setActivityFreeTextFilter,
     setStartDateFilter, setEndDateFilter, setActivityTypeFilter, setFieldSiteFilter, setFieldBaseFieldFilter, setFieldDashboardYear, setFieldsViewStatus,
-    setActivityPlanStatusFilter, setActivityPlanTypeFilter, setActivityStatusFilter, setActivityType, setSnackbar, setOpenSettings } = appSlice.actions
+    setActivityPlanStatusFilter, setActivityPlanTypeFilter, setActivityStatusFilter, setActivityType, setSnackbar, setOpenSettings, setInventoryFreeTextFilter,
+    setInventoryDateFilter, setInventoryWarehouseFilter, setShowInventory } = appSlice.actions
 
 export default appSlice.reducer
 
@@ -130,3 +149,8 @@ export const selectActivityType = (state) => state.app.activityType
 export const selectSnackbarMsg = (state) => state.app.snackbarMsg
 export const selectSnackbarSeverity = (state) => state.app.snackbarSeverity
 export const selectOpenSettings = (state) => state.app.openSettings
+export const selectInventoryFreeTextFilter = (state) => state.app.inventoryFreeTextFilter
+export const selectInventoryDateFilter = (state) => state.app.inventoryDateFilter
+export const selectInventoryWarehouseFilter = (state) => state.app.inventoryWarehouseFilter
+export const selectShowInventory = (state) => state.app.showInventory
+

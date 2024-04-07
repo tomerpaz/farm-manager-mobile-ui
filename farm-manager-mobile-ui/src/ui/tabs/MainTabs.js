@@ -7,10 +7,12 @@ import { Link, useLocation, useParams } from 'react-router-dom';
 import FieldList from './fields/FieldList';
 import { DEFAULT_ROUTE } from "../../App";
 import ActivitiesList from './activities/ActivitiesList';
-import { selectLang } from '../../features/app/appSlice';
+import { selectLang, selectShowInventory } from '../../features/app/appSlice';
 import { useSelector } from 'react-redux';
 import ActionFab from '../../components/ui/ActionFab';
 import { useGetUserDataQuery } from '../../features/auth/authApiSlice';
+import { isInventoryPossible } from '../FarmUtil';
+import InventoryTable from './inventory/InventoryTable';
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
 
@@ -44,15 +46,25 @@ function a11yProps(index) {
     };
 }
 
+const inventoryPath = '/tabs/inventory';
+
 const MainTabs = () => {
 
     const { pathname } = useLocation();
     const { page } = useParams()
     const text = useSelector(selectLang)
-    const paths = ['/tabs/map', '/tabs/fields', `/tabs/activities/${page}`, `/tabs/plans/${page}`];
+    const paths = ['/tabs/map', '/tabs/fields', `/tabs/activities/${page}`/*, `/tabs/plans/${page}`*/];
+
+    const { data: {userConf,usePlans } } = useGetUserDataQuery()
+    const showInventory = useSelector(selectShowInventory);
+    const isInventory = showInventory && isInventoryPossible(userConf);
+
+    if(isInventory){
+        paths.push(inventoryPath)
+    }
+    const inventoryIndex = paths.findIndex((element) => element === inventoryPath)
     const getIndex = ((element) => element === pathname);
     const value = paths.findIndex(getIndex) > 0 ? paths.findIndex(getIndex) : 0;
-    const { data: user } = useGetUserDataQuery()
 
     return (
         <Box display={'flex'} flex={1} flexDirection={'column'}>
@@ -61,11 +73,17 @@ const MainTabs = () => {
                     // indicatorColor="secondary"
                     textColor="inherit"
                     variant="fullWidth"
+                    // variant="scrollable"
+                   // scrollButtons={true}
+                    // allowScrollButtonsMobile
                 >
                     <Tab label={text.map} to={DEFAULT_ROUTE} component={Link}   {...a11yProps(0)} />
                     <Tab label={text.fields} to="/tabs/fields" component={Link} {...a11yProps(1)} />
                     <Tab label={text.activities} to="/tabs/activities/0" component={Link}  {...a11yProps(2)} />
-                    {/* {user.usePlans && <Tab label={text.plans} to="/tabs/plans/0" component={Link}  {...a11yProps(2)} />} */}
+                    {/* {usePlans && <Tab label={text.plans} to="/tabs/plans/0" component={Link}  {...a11yProps(3)} />}  */}
+
+                 {isInventory &&   <Tab label={text.inventory} to={inventoryPath} component={Link}  {...a11yProps(inventoryIndex)} />}
+
                 </Tabs>
             </Box>
             <TabPanel component={'div'} value={value} index={0}>
@@ -80,7 +98,10 @@ const MainTabs = () => {
                 <ActivitiesList plans={false}/>
                 <ActionFab bottom={80} plan={false} />
             </TabPanel>
-            {/* {user.usePlans &&   <TabPanel value={value} index={3}>
+            {isInventory &&    <TabPanel value={value} index={inventoryIndex}>
+                <InventoryTable/>
+            </TabPanel> }
+            {/* {usePlans &&   <TabPanel value={value} index={3}>
                 <ActivitiesList plans={true}/>
                 <ActionFab bottom={80} plan={true} />
             </TabPanel>} */}

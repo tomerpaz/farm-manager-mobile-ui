@@ -1,5 +1,7 @@
 import { grey } from "@mui/material/colors";
 import { parseISO } from "date-fns";
+import { selectShowInventory } from "../features/app/appSlice";
+import { useSelector } from "react-redux";
 
 export const UI_SIZE = 'medium';
 
@@ -12,6 +14,8 @@ export const HARVEST = 'HARVEST';
 export const SCOUT = 'SCOUTING';
 export const IRRIGATION = 'IRRIGATION';
 export const IRRIGATION_PLAN = 'IRRIGATION_PLAN';
+
+export const INVENTORY = 'INVENTORY';
 
 
 const GROWER_ACTIVITY_TYPES = [GENERAL, SPRAY, IRRIGATION, HARVEST, MARKET];
@@ -422,6 +426,10 @@ export function lastDayOfThisMonth() {
     var lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
     return lastDay;
 
+}
+
+export function isInventoryPossible(userConf){
+    return userConf.find(e=>e.type === INVENTORY) ? true : false;
 }
 
 // export function daysDif(before, after){

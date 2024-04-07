@@ -40,7 +40,6 @@ const ActivityView = () => {
       if (MARKET === activity.type && act.marketParams?.sortDate) {
         act.marketParams.sortDate = parseISO(act.marketParams.sortDate);
       }
-      console.log(act);
 
       act.note = act.note ? act.note : '';
       act.invoice = act.invoice ? act.invoice : ''

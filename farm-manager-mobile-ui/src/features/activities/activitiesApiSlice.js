@@ -1,9 +1,7 @@
 import {
     createEntityAdapter
 } from "@reduxjs/toolkit";
-import { apiSlice } from "../../app/api/apiSlice";
-import { Activities_TAG, FieldActivities_TAG, SelectedActivity_TAG } from "../auth/authApiSlice";
-
+import { Activities_TAG, FieldActivities_TAG, SelectedActivity_TAG, apiSlice } from "../../app/api/apiSlice";
 
 export const activitiesAdapter = createEntityAdapter({
     selectId: e => e.uuid,

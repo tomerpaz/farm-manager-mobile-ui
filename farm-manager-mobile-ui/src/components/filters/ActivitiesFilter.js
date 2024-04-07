@@ -1,14 +1,12 @@
 import React, { useEffect } from 'react'
 import { AppBar, Box, Dialog, Divider, IconButton, InputAdornment, List, ListItem, ListItemText, MenuItem, Slide, TextField, Toolbar, Typography } from '@mui/material'
 import { DEFAULT_ACTIVITY_STATUS, DEFAULT_PLAN_STATUS, selectActivityPlanStatusFilter, selectActivityPlanTypeFilter, selectActivityStatusFilter, selectActivityTypeFilter, selectAppBarDialogOpen, selectEndDateFilter, selectLang, selectStartDateFilter, setActivityPlanStatusFilter, setActivityPlanTypeFilter, setActivityStatusFilter, setActivityTypeFilter, setAppBarDialogOpen, setEndDateFilter, setStartDateFilter } from '../../features/app/appSlice';
-import CloseIcon from '@mui/icons-material/Close';
 import DoneIcon from '@mui/icons-material/Done';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useParams } from 'react-router-dom';
 import { MobileDatePicker } from '@mui/x-date-pickers';
 import { asLocalDate, getActivityStatuses, getActivityStatusText, getActivityTypes, getActivityTypeText, isStringEmpty, parseISOOrNull, PLAN } from '../../ui/FarmUtil';
 import { FilterAltOff } from '@mui/icons-material';
-import { parseISO } from 'date-fns';
 
 
 const Transition = React.forwardRef(function Transition(props, ref) {

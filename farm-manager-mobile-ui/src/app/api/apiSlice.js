@@ -1,6 +1,21 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { logOut, setCredentials } from '../../features/app/appSlice'
 
+export const Field_TAG = 'Field';
+export const Activities_TAG = 'Activities';
+export const FieldActivities_TAG = 'FieldActivities';
+export const User_TAG = 'User';
+export const Dashboard_TAG = 'Dashboard';
+export const ActivityDefs_TAG = 'ActivityDefs';
+export const Crops_TAG = 'Crops';
+export const SelectedActivity_TAG = 'SelectedActivity';
+export const Warehouses_TAG = 'Warehouses';
+export const Resources_TAG = 'Resources';
+export const Containers_TAG = 'Containers';
+export const CropPesticides_TAG = 'CropPesticides_TAG';
+export const Qualities_TAG = 'Qualities';
+export const Sizes_TAG = 'Sizes';
+export const Inventory_TAG = 'Inventory_TAG';
 
 
 // export const FARM_MANAGER = 'http://localhost:8080'
@@ -58,8 +73,10 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
 export const apiSlice = createApi({
     reducerPath: 'api', // optional
     baseQuery: baseQueryWithReauth,
-    tagTypes: ['Field', 'Activities', 'User', 'FieldActivities',
-        'Dashboard', 'ActivityDefs', 'Crops', 'SelectedActivity', 'Warehouses', 'Containers'],
+    tagTypes: [Field_TAG, Activities_TAG, User_TAG, FieldActivities_TAG,
+        Dashboard_TAG, ActivityDefs_TAG, Crops_TAG, SelectedActivity_TAG, Warehouses_TAG, Containers_TAG,
+        Resources_TAG, CropPesticides_TAG, Qualities_TAG, Sizes_TAG, Inventory_TAG
+    ],
 
     endpoints: builder => ({})
 })

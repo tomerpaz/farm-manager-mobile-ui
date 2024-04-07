@@ -1,11 +1,11 @@
 import { createEntityAdapter } from "@reduxjs/toolkit";
-import { apiSlice } from "../../app/api/apiSlice";
+import { Activities_TAG, Field_TAG, apiSlice } from "../../app/api/apiSlice";
 
 
 // export const authAdapter = createEntityAdapter()
 // const initialState = authAdapter.getInitialState()
-export const Field_TAG = 'Field';
-export const Activities_TAG = 'Activities';
+//export const Field_TAG = 'Field';
+//export const Activities_TAG = 'Activities';
 export const FieldActivities_TAG = 'FieldActivities';
 export const User_TAG = 'User';
 export const Dashboard_TAG = 'Dashboard';

@@ -156,6 +156,7 @@
   "amount": "Qty",
   "area": "Area",
   "none": "None",
-  "daysSinceSeedling": "Days Since Seedling"
+  "daysSinceSeedling": "Days Since Seedling",
+  "inventory": "Inventory"
 
 }

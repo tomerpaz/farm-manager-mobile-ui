@@ -1,10 +1,11 @@
 import React from 'react'
-import { AppBar, Box, Dialog, DialogContent, IconButton, MenuItem, Select, Slide, Toolbar, Typography } from '@mui/material'
+import { AppBar, Box, Checkbox, Dialog, DialogContent, FormControlLabel, IconButton, MenuItem, Select, Slide, Toolbar, Typography } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux';
-import { selectLang, selectOpenSettings, setLang, setOpenSettings } from '../../features/app/appSlice';
+import { selectLang, selectOpenSettings, selectShowInventory, setLang, setOpenSettings, setShowInventory } from '../../features/app/appSlice';
 import { Close, DesktopWindowsOutlined, MobileFriendlyOutlined } from '@mui/icons-material';
 import { getUserLang } from '../../router/UserRoutes';
-import { isMobile } from '../FarmUtil';
+import { isInventoryPossible, isMobile } from '../FarmUtil';
+import { useGetUserDataQuery } from '../../features/auth/authApiSlice';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -25,13 +26,24 @@ const SettingsDialog = () => {
 
     const [showAgent, setShowAgent] = React.useState(false);
 
+    const { data: user, isSuccess: isUserSuccess} = useGetUserDataQuery()
+
+    const isInventory = isUserSuccess ? isInventoryPossible(user.userConf) : false;
+
+    const showInventory = useSelector(selectShowInventory);
+    
     const handleClose = () => {
         dispatch(setOpenSettings(false));
     }
 
     const handleLangChange = (lang) => {
-        dispatch(setOpenSettings(false));
         dispatch(setLang(getUserLang(lang)))
+        dispatch(setOpenSettings(false));
+    }
+
+    const handleInvenotryChange = () => {
+        dispatch(setShowInventory(!showInventory));
+        dispatch(setOpenSettings(false));
     }
 
     return (
@@ -76,9 +88,16 @@ const SettingsDialog = () => {
                         </MenuItem>
                     )}
                 </Select>
+                {isInventory &&
+                    <Box marginTop={2} display={'flex'} flexDirection={'row'} >
+                        <FormControlLabel control={<Checkbox checked={showInventory} onChange={handleInvenotryChange}  />} label={text.inventory} />
+
+
+                    </Box>
+                }
                 <Box marginTop={2} display={'flex'} flexDirection={'row'} >
                     <Box>
-                        <IconButton onClick={_ => setShowAgent(!showAgent)} >
+                        <IconButton sx={{padding: 0}} onClick={_ => setShowAgent(!showAgent)} >
                             {isMobile() ? <MobileFriendlyOutlined /> : <DesktopWindowsOutlined />}
                         </IconButton>
                     </Box>

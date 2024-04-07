@@ -9,6 +9,7 @@ import { GENERAL, HARVEST, IRRIGATION, MARKET, SCOUT, SPRAY, getActivityTypeText
 import { useDispatch, useSelector } from 'react-redux';
 import { selectActivityType, selectLang, setActivityType } from '../../features/app/appSlice';
 import { createSearchParams, useNavigate } from 'react-router-dom';
+import { useGetUserDataQuery } from '../../features/auth/authApiSlice';
 
 
 const actions = (role, map, plan, text) =>
@@ -31,6 +32,9 @@ const ActionSpeedDial = ({ role, plan, map, bottom, fieldId }) => {
   const handleClose = () => setOpen(false);
   const navigate = useNavigate()
 
+
+  const { data: user } = useGetUserDataQuery()
+  const actionTypes = user.userConf.filter(e=>e.write).map(e=>e.type);
 
   const handleAction = (e) => {
     //  console.log('new',e, 'map',map)
@@ -58,6 +62,12 @@ const ActionSpeedDial = ({ role, plan, map, bottom, fieldId }) => {
 
   const text = useSelector(selectLang)
 
+  const userActions = actions(role, map, plan, text).filter(e=>actionTypes.includes(e.type));
+ 
+  if(userActions.length === 0){
+    return <React.Fragment/>
+  }
+
   return (
     <Box >
       <Backdrop open={open} />
@@ -69,7 +79,7 @@ const ActionSpeedDial = ({ role, plan, map, bottom, fieldId }) => {
         onOpen={handleOpen}
         open={open}
       >
-        {actions(role, map, plan, text).map((action) => (
+        {userActions.map((action) => (
           <SpeedDialAction
             key={action.name}
             icon={action.icon}
