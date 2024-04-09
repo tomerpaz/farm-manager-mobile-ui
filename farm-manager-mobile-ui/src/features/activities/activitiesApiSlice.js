@@ -1,7 +1,7 @@
 import {
     createEntityAdapter
 } from "@reduxjs/toolkit";
-import { Activities_TAG, FieldActivities_TAG, SelectedActivity_TAG, apiSlice } from "../../app/api/apiSlice";
+import { Activities_TAG, FieldActivities_TAG, Inventory_TAG, SelectedActivity_TAG, apiSlice } from "../../app/api/apiSlice";
 
 export const activitiesAdapter = createEntityAdapter({
     selectId: e => e.uuid,
@@ -61,7 +61,7 @@ export const activityApiSlice = apiSlice.injectEndpoints({
                 body: { ...args },
                 
             }),
-            invalidatesTags: [Activities_TAG, SelectedActivity_TAG, FieldActivities_TAG]
+            invalidatesTags: [Activities_TAG, SelectedActivity_TAG, FieldActivities_TAG, Inventory_TAG]
                
         }),
         updateActivity: builder.mutation({
@@ -71,7 +71,7 @@ export const activityApiSlice = apiSlice.injectEndpoints({
                 body: { ...args },
                 
             }),
-            invalidatesTags: [Activities_TAG, SelectedActivity_TAG, FieldActivities_TAG]
+            invalidatesTags: [Activities_TAG, SelectedActivity_TAG, FieldActivities_TAG, Inventory_TAG]
 
         }),
 
@@ -82,7 +82,7 @@ export const activityApiSlice = apiSlice.injectEndpoints({
                 method: 'DELETE',
               }
             },
-           invalidatesTags: [Activities_TAG, SelectedActivity_TAG, FieldActivities_TAG]
+           invalidatesTags: [Activities_TAG, SelectedActivity_TAG, FieldActivities_TAG, Inventory_TAG]
           }),
 
     })

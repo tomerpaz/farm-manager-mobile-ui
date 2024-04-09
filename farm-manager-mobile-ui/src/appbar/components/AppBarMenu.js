@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { logOut, selectLang, setOpenSettings } from '../../features/app/appSlice';
 import SettingsDialog from '../../ui/settings/SettingsDialog';
+import { useGetUserDataQuery } from '../../features/auth/authApiSlice';
 
 
 
@@ -17,6 +18,8 @@ const AppBarMenu = () => {
     const text = useSelector(selectLang)
 
     const [anchorEl, setAnchorEl] = React.useState(null);
+
+    const { data: user, isSuccess } = useGetUserDataQuery()
 
     const handleMenu = (event) => {
         setAnchorEl(event.currentTarget);
@@ -75,7 +78,6 @@ const AppBarMenu = () => {
                     >
                         <Logout />
                     </IconButton>
-
                     {text.logout}
                 </MenuItem>
                 <MenuItem onClick={handleSettings}>
@@ -86,8 +88,7 @@ const AppBarMenu = () => {
                     >
                         <Settings />
                     </IconButton>
-
-                    {text.settings}
+                    {isSuccess ? user.displayName: text.settings}
                 </MenuItem>
             </Menu>
             <SettingsDialog/>
