@@ -108,8 +108,7 @@ const ResourcseSelectionDialog = ({ open, handleClose, resourceTypes, cropId }) 
     }
 
 
-    const visableResources = buildVisableResources();
-
+    const visableResources = buildVisableResources().filter(e=>e.active);
 
     const visableSelectedResources = visableResources.filter(e => selectedResources.includes(e));
     const numSelected = visableSelectedResources.length;
