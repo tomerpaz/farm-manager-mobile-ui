@@ -1,4 +1,4 @@
-import { Box, Button, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, InputAdornment, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
+import { Box, Button, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, FormControlLabel, InputAdornment, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
 import TextFieldBase from "../../components/ui/TextField";
 import { useSelector } from "react-redux";
 import { selectLang } from "../../features/app/appSlice";
@@ -7,19 +7,28 @@ import { cellSx, headerSx } from "../Util";
 import { Search } from "@mui/icons-material";
 import { isStringEmpty } from "../FarmUtil";
 import ListPager from "../../components/ui/ListPager";
+import { fi } from "date-fns/locale";
 
-const filterField = (field, filter, cropId) => {
+const filterActive = (field, active) => {
+    return active ? field.endDate === null : field.endDate !== null;
+}
+
+const filterField = (field, filter, cropId, active) => {
+    const isRelevant = filterActive(field, active)
+
     if (isStringEmpty(filter)) {
-        return cropId ? field.cropId === cropId : true;
+        return isRelevant && (cropId ? field.cropId === cropId : true);
     } else {
         const val = filter.toLowerCase();
-        return (cropId ? field.cropId === cropId : true) &&
+        return isRelevant && (
+            (cropId ? field.cropId === cropId : true) &&
             (field.name.toLowerCase().includes(val) ||
                 field.alias?.toLowerCase().includes(val) ||
                 field.siteName?.toLowerCase().includes(val) ||
                 field.cropName.toLowerCase().includes(val) ||
                 field.varietyName.toLowerCase().includes(val)
             )
+        )
     }
 };
 
@@ -37,12 +46,14 @@ const FieldSelectionDialog = ({ fields, open, handleClose, cropId }) => {
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(ROWS_PER_PAGE);
     const [selectFields, setSelectedFields] = useState([]);
+    const [active, setActive] = useState(true);
 
-    const visableFields = fields.filter(e => filterField(e, filter, cropId));
+    const visableFields = fields.filter(e => filterField(e, filter, cropId, active));
     const visableSelectedFields = visableFields.filter(e => selectFields.includes(e));
     const numSelected = visableSelectedFields.length;
     const rowCount = visableFields.length;
     const showPegination = rowCount > ROWS_PER_PAGE;
+
 
     const handleSetFilter = (value) => {
         setFilter(value);
@@ -85,7 +96,7 @@ const FieldSelectionDialog = ({ fields, open, handleClose, cropId }) => {
             fullScreen
         >
             <DialogTitle id="alert-dialog-title">
-                <Box>
+                <Box display={'flex'} flexDirection={'row'}>
 
                     <TextFieldBase fullWidth={true} label={text.filter} value={filter}
                         onChange={(e) => handleSetFilter(e.target.value)}
@@ -93,6 +104,8 @@ const FieldSelectionDialog = ({ fields, open, handleClose, cropId }) => {
                             startAdornment: <InputAdornment position="start"><Search /></InputAdornment>,
                         }}
                     />
+                    <FormControlLabel control={<Checkbox checked={active} onChange={() => setActive(!active)} />} labelPlacement="top" label={text.active} />
+
                 </Box>
             </DialogTitle>
             <DialogContent>
