@@ -2,11 +2,11 @@ import {  Box } from '@mui/material'
 import { useNavigate, useParams } from 'react-router-dom'
 import Loading from '../../../components/Loading'
 import { useGetActivityByIdQuery } from '../../../features/activities/activitiesApiSlice'
-import { GENERAL, HARVEST, IRRIGARION_TYPES, IRRIGATION, MARKET, SPRAY, SPRAY_TYPES, parseISOOrNull } from '../../FarmUtil'
+import { GENERAL, GENERAL_PLAN, HARVEST, IRRIGARION_TYPES, IRRIGATION, IRRIGATION_PLAN, MARKET, SPRAY, SPRAY_PLAN, SPRAY_TYPES, parseISOOrNull } from '../../FarmUtil'
 import ActivityForm from '../form/ActivityForm'
 import { parseISO } from 'date-fns'
 
-const SUPPORTED_TYPES = [GENERAL, HARVEST, IRRIGATION, SPRAY, MARKET]
+const SUPPORTED_TYPES = [GENERAL, HARVEST, IRRIGATION, SPRAY, MARKET, GENERAL_PLAN,IRRIGATION_PLAN,SPRAY_PLAN]
 
 const ActivityView = () => {
 
@@ -22,7 +22,7 @@ const ActivityView = () => {
 
 
     if (SUPPORTED_TYPES.includes(activity.type)) {
-
+      // const isPlan = activity.type.includes("_PLAN")
       const fields = activity.fields.map(e => {
         return { ...e, actualExecution: parseISOOrNull(e.actualExecution) }
       });
@@ -56,9 +56,7 @@ const ActivityView = () => {
       )
     }
 
-    const isPlan = activity.type.includes("_PLAN")
-
-    return (
+   return (
       <Box margin={1}>
         {activity.type}
       </Box>

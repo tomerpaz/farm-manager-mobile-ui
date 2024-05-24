@@ -35,7 +35,6 @@ const ActionSpeedDial = ({ role, plan, map, bottom, fieldId }) => {
 
   const { data: user } = useGetUserDataQuery()
   const actionTypes = user.userConf.filter(e=>e.write).map(e=>e.type);
-
   const handleAction = (e) => {
     //  console.log('new',e, 'map',map)
 
@@ -47,7 +46,7 @@ const ActionSpeedDial = ({ role, plan, map, bottom, fieldId }) => {
 
     dispatch(setActivityType(e.type));
     if (SCOUT !== e.type) {
-      if ([GENERAL, HARVEST, IRRIGATION, SPRAY, MARKET].includes(e.type)) {
+    //  if ([GENERAL, HARVEST, IRRIGATION, SPRAY, MARKET].includes(e.type)) {
         navigate(
           {
             pathname: `/activity/new/${e.type}`,
@@ -55,7 +54,7 @@ const ActionSpeedDial = ({ role, plan, map, bottom, fieldId }) => {
           }
         )
         // navigate(`/activity/new/${e.type}`)
-      }
+    //  }
     }
     setOpen(false);
   }

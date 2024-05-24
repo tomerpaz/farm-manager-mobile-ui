@@ -13,7 +13,7 @@ const HEADER_CONFIG = [
   { type: GENERAL, date: true, year: true, activity: true, activityType: GENERAL },
   { type: GENERAL_PLAN, date: true, year: true, activity: true, activityType: GENERAL },
   { type: SPRAY, date: true, year: true, endHour: true, startHour: true, crop: true, wind: true },
-  { type: SPRAY_PLAN, date: true, year: true, endHour: true, startHour: true, crop: true, wind: true },
+  { type: SPRAY_PLAN, date: true, year: true, endHour: true, startHour: true, crop: true, wind: false },
   { type: IRRIGATION, date: true, year: true, endDate: true, },
   { type: IRRIGATION_PLAN, date: true, year: true, endDate: true, },
   { type: HARVEST, date: true, year: true, activity: true, activityType: HARVEST, waybill: true, customer: true },
@@ -193,8 +193,8 @@ const ActivityHeaderView = ({ activity, control, errors, customers, activityDefs
               renderInput={(params) => <TextFieldBase error={errors.sprayParams?.crop ? true : false} sx={{ marginTop: 0.5 }} {...params} label={text.crop} />}
               {...field} />}
           />
-          <Box margin={1} />
-          <Controller
+          {config.wind && <Box margin={1} />}
+          {config.wind && <Controller
             control={control}
             name="sprayParams.wind"
             render={({ field }) => (
@@ -213,7 +213,7 @@ const ActivityHeaderView = ({ activity, control, errors, customers, activityDefs
                 ))}
               </TextField>
             )}
-          />
+          />}
         </Box>
       }
       {HARVEST === activity.type &&

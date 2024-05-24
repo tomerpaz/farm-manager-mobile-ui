@@ -116,6 +116,7 @@ const ActivityForm = ({ activity }) => {
 
   const onSubmit = async (data) => {
     try {
+      console.log(data);
       const result = await saveActivity(data);
       dispatch(setSnackbar({ msg: data.uuid ? text.recordUpdated : text.recordCreated, severity: 'success' }))
       navigate(-1)

@@ -34,6 +34,8 @@ const appSlice = createSlice({
         inventoryDateFilter: asLocalDate(new Date(), true),
         inventoryWarehouseFilter: 0,
         showInventory: localStorage.getItem('showInventory') ? Boolean(localStorage.getItem('showInventory')) : false,
+        showPlans: localStorage.getItem('showPlans') ? Boolean(localStorage.getItem('showPlans')) : false,
+
     },
     reducers: {
         setCredentials: (state, action) => {
@@ -118,6 +120,10 @@ const appSlice = createSlice({
         setShowInventory: (state, action) => {
             localStorage.setItem('showInventory', action.payload);
             state.showInventory = action.payload;
+        },
+        setShowPlans: (state, action) => {
+            localStorage.setItem('showPlans', action.payload);
+            state.showPlans = action.payload;
         }
     },
 })
@@ -125,7 +131,7 @@ const appSlice = createSlice({
 export const { setCredentials, logOut, setLang, setCurrentYear, setAppBarDialogOpen, setFieldFreeTextFilter, setActivityFreeTextFilter,
     setStartDateFilter, setEndDateFilter, setActivityTypeFilter, setFieldSiteFilter, setFieldBaseFieldFilter, setFieldDashboardYear, setFieldsViewStatus,
     setActivityPlanStatusFilter, setActivityPlanTypeFilter, setActivityStatusFilter, setActivityType, setSnackbar, setOpenSettings, setInventoryFreeTextFilter,
-    setInventoryDateFilter, setInventoryWarehouseFilter, setShowInventory } = appSlice.actions
+    setInventoryDateFilter, setInventoryWarehouseFilter, setShowInventory,setShowPlans } = appSlice.actions
 
 export default appSlice.reducer
 
@@ -153,4 +159,5 @@ export const selectInventoryFreeTextFilter = (state) => state.app.inventoryFreeT
 export const selectInventoryDateFilter = (state) => state.app.inventoryDateFilter
 export const selectInventoryWarehouseFilter = (state) => state.app.inventoryWarehouseFilter
 export const selectShowInventory = (state) => state.app.showInventory
+export const selectShowPlans = (state) => state.app.showPlans
 

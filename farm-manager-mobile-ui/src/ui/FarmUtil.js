@@ -16,6 +16,7 @@ export const IRRIGATION = 'IRRIGATION';
 export const IRRIGATION_PLAN = 'IRRIGATION_PLAN';
 
 export const INVENTORY = 'INVENTORY';
+export const PLANS = 'PLANS';
 
 
 const GROWER_ACTIVITY_TYPES = [GENERAL, SPRAY, IRRIGATION, HARVEST, MARKET];
@@ -429,6 +430,10 @@ export function lastDayOfThisMonth() {
 }
 
 export function isInventoryPossible(userConf){
+    return userConf.find(e=>e.type === INVENTORY) ? true : false;
+}
+
+export function isPlansPossible(userConf){
     return userConf.find(e=>e.type === INVENTORY) ? true : false;
 }
 

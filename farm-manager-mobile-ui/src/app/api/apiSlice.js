@@ -18,7 +18,7 @@ export const Sizes_TAG = 'Sizes';
 export const Inventory_TAG = 'Inventory_TAG';
 
 
-// export const FARM_MANAGER = 'http://localhost:8080'
+//  export const FARM_MANAGER = 'http://localhost:8080'
 
 export const FARM_MANAGER = 'https://api.manager.farm'
 

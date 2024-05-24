@@ -1,10 +1,10 @@
 import React from 'react'
 import { AppBar, Box, Checkbox, Dialog, DialogContent, FormControlLabel, IconButton, MenuItem, Select, Slide, Toolbar, Typography } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux';
-import { selectLang, selectOpenSettings, selectShowInventory, setLang, setOpenSettings, setShowInventory } from '../../features/app/appSlice';
+import { selectLang, selectOpenSettings, selectShowInventory, selectShowPlans, setLang, setOpenSettings, setShowInventory, setShowPlans } from '../../features/app/appSlice';
 import { Close, DesktopWindowsOutlined, MobileFriendlyOutlined } from '@mui/icons-material';
 import { getUserLang } from '../../router/UserRoutes';
-import { isInventoryPossible, isMobile } from '../FarmUtil';
+import { isInventoryPossible, isMobile, isPlansPossible } from '../FarmUtil';
 import { useGetUserDataQuery } from '../../features/auth/authApiSlice';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -29,9 +29,11 @@ const SettingsDialog = () => {
     const { data: user, isSuccess: isUserSuccess} = useGetUserDataQuery()
 
     const isInventory = isUserSuccess ? isInventoryPossible(user.userConf) : false;
+    const isPlans = isUserSuccess ? isPlansPossible(user.userConf) : false;
 
     const showInventory = useSelector(selectShowInventory);
-    
+    const showPlans = useSelector(selectShowPlans);
+
     const handleClose = () => {
         dispatch(setOpenSettings(false));
     }
@@ -43,6 +45,11 @@ const SettingsDialog = () => {
 
     const handleInvenotryChange = () => {
         dispatch(setShowInventory(!showInventory));
+        dispatch(setOpenSettings(false));
+    }
+
+    const handlePlansChange = () => {
+        dispatch(setShowPlans(!showPlans));
         dispatch(setOpenSettings(false));
     }
 
@@ -88,6 +95,13 @@ const SettingsDialog = () => {
                         </MenuItem>
                     )}
                 </Select>
+                {isPlans &&
+                    <Box marginTop={2} display={'flex'} flexDirection={'row'} >
+                        <FormControlLabel control={<Checkbox checked={showPlans} onChange={handlePlansChange}  />} label={text.plans} />
+
+
+                    </Box>
+                }
                 {isInventory &&
                     <Box marginTop={2} display={'flex'} flexDirection={'row'} >
                         <FormControlLabel control={<Checkbox checked={showInventory} onChange={handleInvenotryChange}  />} label={text.inventory} />
