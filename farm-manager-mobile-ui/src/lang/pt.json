@@ -154,5 +154,7 @@
   "area": "Área",
   "none": "Nenhum",
   "daysSinceSeedling": "Dias desde a muda",
-  "inventory": "Inventário"
+  "inventory": "Inventário",
+  "status": "Status"
+
 }

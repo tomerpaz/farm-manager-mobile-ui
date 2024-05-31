@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit"
 import { asLocalDate, newDate, PLAN } from "../../ui/FarmUtil";
 
-export const DEFAULT_PLAN_STATUS = PLAN
+export const DEFAULT_PLAN_STATUS = ''
 export const DEFAULT_ACTIVITY_STATUS = ''
 
 const appSlice = createSlice({

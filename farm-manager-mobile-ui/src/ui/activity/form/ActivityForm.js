@@ -2,10 +2,10 @@ import { BottomNavigation, BottomNavigationAction, Box, TextField, Typography } 
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { selectLang, setSnackbar } from '../../../features/app/appSlice'
-import { PESTICIDE, asLocalDate, asLocalTime, daysDif, daysDiff } from '../../FarmUtil'
+import { PESTICIDE, PLAN, asLocalDate, asLocalTime, daysDif, daysDiff } from '../../FarmUtil'
 import ActivityHeaderView from './header/ActivityHeaderView'
 import { useForm, Controller, useWatch } from "react-hook-form";
-import { Cancel, ControlPointDuplicate, Delete, Save } from '@mui/icons-material'
+import { Cancel, CheckCircleOutline, ControlPointDuplicate, Delete, Save } from '@mui/icons-material'
 import { useNavigate } from 'react-router-dom'
 import ActivityFields from './fields/ActivityFields'
 import ActivityResources from './resources/ActivityResources'
@@ -33,8 +33,11 @@ const ActivityForm = ({ activity }) => {
   const { data: crops, isSuccess: isCropsSuccess } = useGetCropsQuery()
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [isDuplicate, setIsDuplicate] = useState(false);
+  const [isExecutePlan, setIsExecutePlan] = useState(false);
 
   const dispatch = useDispatch()
+
+console.log(activity.status)
 
   const {
     data: customers,
@@ -62,6 +65,7 @@ const ActivityForm = ({ activity }) => {
   const sprayParams = useWatch({ control, name: "sprayParams" })
   const crop = useWatch({ control, name: "sprayParams.crop" })
   const activityArea = getTotalActivityArea(fields);
+  const editable = useWatch({ control, name: "editable" })
 
 
 
@@ -92,9 +96,20 @@ const ActivityForm = ({ activity }) => {
 
   const duplicate = () => {
     setValue('uuid', null);
+    setValue('planUuid', null);
     setValue('reference', null);
     setValue('editable', true);
+    setValue('status', null);
+
     setIsDuplicate(true);
+  }
+
+  const executePlan = () => {
+    setValue('planUuid', uuid);
+    setValue('uuid', null);
+    setValue('editable', true);
+    setValue('status', 'EXECUTING');
+    setIsExecutePlan(true);
   }
 
   const onCropCHange = () => {
@@ -125,6 +140,7 @@ const ActivityForm = ({ activity }) => {
     }
   }
 
+
   return (
     <Box sx={{ maxHeight: window.innerHeight - 130, overflow: 'auto' }}>
       <Box margin={1}>
@@ -134,7 +150,7 @@ const ActivityForm = ({ activity }) => {
             {...register(`reference`)} /> */}
 
 
-          <ActivityHeaderView control={control} register={register} activity={activity} errors={errors} crops={crops} activityDefs={activityDefs} customers={customers} reference={reference} isDuplicate={isDuplicate}
+          <ActivityHeaderView control={control} register={register} activity={activity} errors={errors} crops={crops} activityDefs={activityDefs} customers={customers} reference={reference} isDuplicate={isDuplicate} isExecutePlan={isExecutePlan}
             execution={execution} days={days} crop={crop} onCropCHange={onCropCHange} />
           <ActivityFields control={control} register={register} activity={activity} getValues={getValues} activityArea={activityArea} errors={errors} crop={crop} />
           <ActivityResources control={control} register={register} activity={activity} activityDef={activityDef}
@@ -171,7 +187,13 @@ const ActivityForm = ({ activity }) => {
               onClick={duplicate}
               icon={<ControlPointDuplicate fontSize='large' />}
             />}
-            {activity.editable && <BottomNavigationAction disabled={!isDirty} sx={{ color: !isDirty ? 'lightGray' : null }}
+            {uuid && activity.status === PLAN && <BottomNavigationAction
+
+              label={<Typography >{text.execute}</Typography>}
+              onClick={executePlan}
+              icon={<CheckCircleOutline fontSize='large' />}
+            />}
+            {editable && <BottomNavigationAction disabled={!isDirty} sx={{ color: !isDirty ? 'lightGray' : null }}
               type="submit"
               label={<Typography >{text.save}</Typography>}
               icon={<Save fontSize='large' />}

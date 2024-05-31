@@ -117,15 +117,19 @@ const ActivitiesFilter = () => {
                     <MobileDatePicker
                         label={text.fromDate}
                         closeOnSelect
-                        localeText={{cancelButtonLabel: text.cancel, 
-                            clearButtonLabel: text.clear  }}
-                            // okButtonLabel: text.save
-                  
+                        localeText={{
+                            cancelButtonLabel: text.cancel,
+                            clearButtonLabel: text.clear
+                        }}
+                        // okButtonLabel: text.save
+
                         showToolbar={false}
                         value={parseISOOrNull(startDateFilter)}
                         onChange={(e) => dispatch(setStartDateFilter(asLocalDate(e, true)))}
-                        slotProps={{ textField: {size: 'small', variant: 'outlined' },
-                        actionBar: { actions: ["cancel","clear"] } }}
+                        slotProps={{
+                            textField: { size: 'small', variant: 'outlined' },
+                            actionBar: { actions: ["cancel", "clear"] }
+                        }}
                     />
                     <Box marginLeft={1} />
                     <MobileDatePicker
@@ -133,11 +137,15 @@ const ActivitiesFilter = () => {
                         closeOnSelect
                         value={parseISOOrNull((endDateFilter))}
                         showToolbar={true}
-                        localeText={{cancelButtonLabel: text.cancel, 
-                        clearButtonLabel: text.clear  }}
+                        localeText={{
+                            cancelButtonLabel: text.cancel,
+                            clearButtonLabel: text.clear
+                        }}
                         onChange={(e) => dispatch(setEndDateFilter(asLocalDate(e, true)))}
-                        slotProps={{ textField: {size: 'small', variant: 'outlined' },
-                        actionBar: { actions: ["cancel","clear"] } }}
+                        slotProps={{
+                            textField: { size: 'small', variant: 'outlined' },
+                            actionBar: { actions: ["cancel", "clear"] }
+                        }}
                     />
                 </ListItem>
                 <Divider />
@@ -174,6 +182,11 @@ const ActivitiesFilter = () => {
                                 value={statusFilter}
                                 onChange={e => handleStatusChange(e.target.value)}
                             >
+                                <MenuItem value="">
+                                    <em></em>
+                                </MenuItem>
+
+
                                 {getActivityStatuses(role, isPlan).map((status) => (
                                     <MenuItem key={status} value={status}>
                                         {getActivityStatusText(status, text)}

@@ -8,7 +8,18 @@ import Loading from '../../../components/Loading';
 import ActivityTypeIcon from '../../../icons/ActivityTypeIcon';
 import { useNavigate, useParams } from 'react-router-dom';
 import ActivitiesFilter from '../../../components/filters/ActivitiesFilter';
-import { activityDescription, buildActiviyFilter, parseDate } from '../../FarmUtil';
+import { EXECUTED, PLAN, activityDescription, buildActiviyFilter, parseDate } from '../../FarmUtil';
+
+const color = (s) => {
+    if(PLAN === s){
+        return '#FF5733'
+    } else if(EXECUTED === s){
+            return 'green'
+    } else {
+        return null;
+    }
+    
+}
 
 const ActivitiesList = ({ plans }) => {
     const { page } = useParams()
@@ -59,7 +70,10 @@ const ActivitiesList = ({ plans }) => {
             const activities = data.content;
             return activities.map(e =>
                 <Fragment key={e.uuid}>
-                    <ListItem onClick={() => navigate(`/activity/al/${e.uuid}`)}>
+                    <ListItem onClick={() => navigate(`/activity/al/${e.uuid}`)}
+                    
+                    
+                    >
                         <ListItemAvatar>
                             <Avatar sx={{ bgcolor: 'white' }}>
                                 <ActivityTypeIcon type={e.type} />
@@ -70,7 +84,7 @@ const ActivitiesList = ({ plans }) => {
                                 <Typography >
                                     {`${activityDescription(e, text)} ${e.fieldDesc}`}
                                 </Typography>
-                                <Typography>
+                                <Typography color={color(e.status)}>
                                     {`${e.reference}`}
                                 </Typography>
                             </Box>

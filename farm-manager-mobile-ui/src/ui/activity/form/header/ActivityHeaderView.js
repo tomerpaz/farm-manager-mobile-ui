@@ -20,7 +20,17 @@ const HEADER_CONFIG = [
   { type: MARKET, date: true, year: true, customer: true, marketCalcMethod: true },
 ]
 
-const ActivityHeaderView = ({ activity, control, errors, customers, activityDefs, crops, reference, isDuplicate, execution, days, crop, onCropCHange }) => {
+const getColor = (isDuplicate, isExecutePlan) => {
+  if(isDuplicate){
+    return '#ffc107';
+  } else if(isExecutePlan){
+    return '#1ADE5B';
+  } else {
+    return null;
+  }
+}
+
+const ActivityHeaderView = ({ activity, control, errors, customers, activityDefs, crops, reference, isDuplicate, execution, days, crop, onCropCHange, isExecutePlan }) => {
 
   const text = useSelector(selectLang)
   const config = HEADER_CONFIG.filter(e => activity.type === e.type)[0];
@@ -36,7 +46,7 @@ const ActivityHeaderView = ({ activity, control, errors, customers, activityDefs
     <Box margin={1} paddingTop={1}>
       <Box display={'flex'} flex={1} alignItems={'center'} justifyContent={'space-between'} flexDirection={'row'} >
         <Box flex={1} display={'flex'} flexDirection={'row'} alignItems={'center'} >
-          <Typography sx={{ backgroundColor: isDuplicate ? '#ffc107' : null, borderRadius: 2, paddingLeft: 1, paddingRight: 1 }} variant='h6'>{getActivityTypeText(activity.type, text, true)}</Typography>
+          <Typography sx={{ backgroundColor: getColor(isDuplicate , isExecutePlan), borderRadius: 2, paddingLeft: 1, paddingRight: 1 }} variant='h6'>{getActivityTypeText(activity.type, text, true)}</Typography>
           <Avatar sx={{ bgcolor: 'white' }}>
             <ActivityTypeIcon type={activity.type} />
           </Avatar>
