@@ -37,8 +37,6 @@ const ActivityForm = ({ activity }) => {
 
   const dispatch = useDispatch()
 
-console.log(activity.status)
-
   const {
     data: customers,
     // isLoading,
@@ -66,6 +64,7 @@ console.log(activity.status)
   const crop = useWatch({ control, name: "sprayParams.crop" })
   const activityArea = getTotalActivityArea(fields);
   const editable = useWatch({ control, name: "editable" })
+  const type = useWatch({ control, name: "type" })
 
 
 
@@ -108,6 +107,7 @@ console.log(activity.status)
     setValue('planUuid', uuid);
     setValue('uuid', null);
     setValue('editable', true);
+    setValue('type', type.replaceAll('_PLAN', ''));
     setValue('status', 'EXECUTING');
     setIsExecutePlan(true);
   }
@@ -150,7 +150,7 @@ console.log(activity.status)
             {...register(`reference`)} /> */}
 
 
-          <ActivityHeaderView control={control} register={register} activity={activity} errors={errors} crops={crops} activityDefs={activityDefs} customers={customers} reference={reference} isDuplicate={isDuplicate} isExecutePlan={isExecutePlan}
+          <ActivityHeaderView control={control} register={register} type={type} activity={activity} errors={errors} crops={crops} activityDefs={activityDefs} customers={customers} reference={reference} isDuplicate={isDuplicate} isExecutePlan={isExecutePlan}
             execution={execution} days={days} crop={crop} onCropCHange={onCropCHange} />
           <ActivityFields control={control} register={register} activity={activity} getValues={getValues} activityArea={activityArea} errors={errors} crop={crop} />
           <ActivityResources control={control} register={register} activity={activity} activityDef={activityDef}

@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
 import { selectLang } from '../../../../features/app/appSlice'
 import ActivityTypeIcon from '../../../../icons/ActivityTypeIcon'
-import { CUSTOMER_TYPES, GENERAL, GENERAL_PLAN, getActivityTypeText, getMarketingCalcMethods, getMarketingDestinations, getMarketingIncomeCalcOptions, getMinDateWidth, getWinds, getYearArray, HARVEST, IRRIGARION_TYPES, IRRIGATION, IRRIGATION_PLAN, MARKET, SPRAY, SPRAY_PLAN, SPRAY_TYPES } from '../../../FarmUtil'
+import { GENERAL, GENERAL_PLAN, getActivityTypeText, getMarketingCalcMethods, getMarketingDestinations, getMarketingIncomeCalcOptions, getMinDateWidth, getWinds, getYearArray, HARVEST, IRRIGARION_TYPES, IRRIGATION, IRRIGATION_PLAN, MARKET, SPRAY, SPRAY_PLAN, SPRAY_TYPES } from '../../../FarmUtil'
 import { DatePicker, TimePicker } from '@mui/x-date-pickers';
 import { Controller } from 'react-hook-form'
 import TextFieldBase from '../../../../components/ui/TextField'
@@ -20,20 +20,23 @@ const HEADER_CONFIG = [
   { type: MARKET, date: true, year: true, customer: true, marketCalcMethod: true },
 ]
 
+export const PLAN_COLOR = '#c5e1a5';
+
 const getColor = (isDuplicate, isExecutePlan) => {
   if(isDuplicate){
     return '#ffc107';
   } else if(isExecutePlan){
-    return '#1ADE5B';
+    return PLAN_COLOR;
   } else {
     return null;
   }
 }
 
-const ActivityHeaderView = ({ activity, control, errors, customers, activityDefs, crops, reference, isDuplicate, execution, days, crop, onCropCHange, isExecutePlan }) => {
+const ActivityHeaderView = ({ activity, control, errors, customers, activityDefs,  type, crops, reference, isDuplicate, execution, days, crop, onCropCHange, isExecutePlan }) => {
 
   const text = useSelector(selectLang)
-  const config = HEADER_CONFIG.filter(e => activity.type === e.type)[0];
+  const config = HEADER_CONFIG.filter(e => type === e.type)[0];
+
 
   const _onCropChange = (onChange, data) => {
     onChange(data)
@@ -46,9 +49,9 @@ const ActivityHeaderView = ({ activity, control, errors, customers, activityDefs
     <Box margin={1} paddingTop={1}>
       <Box display={'flex'} flex={1} alignItems={'center'} justifyContent={'space-between'} flexDirection={'row'} >
         <Box flex={1} display={'flex'} flexDirection={'row'} alignItems={'center'} >
-          <Typography sx={{ backgroundColor: getColor(isDuplicate , isExecutePlan), borderRadius: 2, paddingLeft: 1, paddingRight: 1 }} variant='h6'>{getActivityTypeText(activity.type, text, true)}</Typography>
+          <Typography sx={{ backgroundColor: getColor(isDuplicate , isExecutePlan), borderRadius: 2, paddingLeft: 1, paddingRight: 1 }} variant='h6'>{getActivityTypeText(type, text, true)}</Typography>
           <Avatar sx={{ bgcolor: 'white' }}>
-            <ActivityTypeIcon type={activity.type} />
+            <ActivityTypeIcon type={type} />
           </Avatar>
         </Box>
         <Typography flex={1} variant='h6'>{reference}</Typography>
@@ -185,7 +188,7 @@ const ActivityHeaderView = ({ activity, control, errors, customers, activityDefs
         /> */}
 
       </Box>
-      {SPRAY_TYPES.includes(activity.type) &&
+      {SPRAY_TYPES.includes(type) &&
         < Box display={'flex'} marginTop={2} flex={1} alignItems={'center'} justifyContent={'space-between'} flexDirection={'row'} >
           <Controller
             name="sprayParams.crop"
@@ -226,7 +229,7 @@ const ActivityHeaderView = ({ activity, control, errors, customers, activityDefs
           />}
         </Box>
       }
-      {HARVEST === activity.type &&
+      {HARVEST === type &&
         <Box marginTop={2} display={'flex'} flex={1} alignItems={'center'} justifyContent={'space-between'} flexDirection={'row'} >
           <Box display={'flex'} flex={1} flexDirection={'row'} alignContent={'center'} alignItems={'center'}>
             <Controller
@@ -260,7 +263,7 @@ const ActivityHeaderView = ({ activity, control, errors, customers, activityDefs
           </Box>
         </Box>
       }
-      {MARKET === activity.type &&
+      {MARKET === type &&
         <Box marginTop={2} display={'flex'} flex={1} alignItems={'center'} justifyContent={'space-between'} flexDirection={'row'} >
 
           {/* <Box display={'flex'} flex={1} flexDirection={'row'} alignContent={'center'} alignItems={'center'}>
@@ -302,7 +305,7 @@ const ActivityHeaderView = ({ activity, control, errors, customers, activityDefs
 
         </Box>
       }
-      {MARKET === activity.type &&
+      {MARKET === type &&
         <Box marginTop={2} display={'flex'} flex={1} alignItems={'center'} justifyContent={'space-between'} flexDirection={'row'} >
 
           <Controller
