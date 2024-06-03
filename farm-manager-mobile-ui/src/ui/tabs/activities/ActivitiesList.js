@@ -9,13 +9,13 @@ import ActivityTypeIcon from '../../../icons/ActivityTypeIcon';
 import { useNavigate, useParams } from 'react-router-dom';
 import ActivitiesFilter from '../../../components/filters/ActivitiesFilter';
 import { EXECUTED, PLAN, activityDescription, buildActiviyFilter, parseDate } from '../../FarmUtil';
-import { PLAN_COLOR } from '../../activity/form/header/ActivityHeaderView';
+import { EXECUTE_STATUS_COLOR, PLAN_STATUS_COLOR } from '../../activity/form/header/ActivityHeaderView';
 
 const getColor = (s) => {
     if (PLAN === s) {
-        return '#ffc107'
+        return PLAN_STATUS_COLOR
     } else if (EXECUTED === s) {
-        return PLAN_COLOR;
+        return EXECUTE_STATUS_COLOR;
     }
     return null;
 
@@ -115,7 +115,7 @@ const ActivitiesList = ({ plans }) => {
             <List sx={{ height, overflow: 'auto', width: '100%', bgcolor: 'background.paper' }}>
                 {renderRows()}
             </List>
-            <ListPager bottom={0} dir={dir} page={Number(page)} totalPages={data.totalPages} setPage={(value) => navigate(`/tabs/activities/${value}`)} />
+            <ListPager bottom={0} dir={dir} page={Number(page)} totalPages={data.totalPages} setPage={(value) => navigate(`/tabs/${isPlan ? 'plans' : 'activities'}/${value}`)} />
             <ActivitiesFilter />
         </Box>
     )

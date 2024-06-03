@@ -20,13 +20,15 @@ const HEADER_CONFIG = [
   { type: MARKET, date: true, year: true, customer: true, marketCalcMethod: true },
 ]
 
-export const PLAN_COLOR = '#c5e1a5';
+export const PLAN_STATUS_COLOR = '#FFF59D';
+export const EXECUTE_STATUS_COLOR = '#C5E1A5';
+export const DUPLICATE_COLOR = '#ffc107';
 
 const getColor = (isDuplicate, isExecutePlan) => {
   if(isDuplicate){
-    return '#ffc107';
+    return DUPLICATE_COLOR;
   } else if(isExecutePlan){
-    return PLAN_COLOR;
+    return EXECUTE_STATUS_COLOR;
   } else {
     return null;
   }
