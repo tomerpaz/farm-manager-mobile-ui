@@ -11,13 +11,21 @@ import ActivitiesFilter from '../../../components/filters/ActivitiesFilter';
 import { EXECUTED, PLAN, activityDescription, buildActiviyFilter, parseDate } from '../../FarmUtil';
 import { PLAN_COLOR } from '../../activity/form/header/ActivityHeaderView';
 
-const color = (s) => {
+const getColor = (s) => {
     if (PLAN === s) {
-        return PLAN_COLOR
-    } else {
-        return null;
+        return '#ffc107'
+    } else if (EXECUTED === s) {
+        return PLAN_COLOR;
     }
+    return null;
 
+}
+
+const gerStatus = (s, text) => {
+    if (s) {
+        return `(${text[s.toLowerCase()]})`;
+    }
+    return null
 }
 
 const ActivitiesList = ({ plans }) => {
@@ -82,12 +90,19 @@ const ActivitiesList = ({ plans }) => {
                                 <Typography >
                                     {`${activityDescription(e, text)} ${e.fieldDesc}`}
                                 </Typography>
-                                <Typography sx={{paddingLeft: 1, paddingRight: 0.5, borderRadius: 1, backgroundColor: color(e.status) }}>
+                                <Typography whiteSpace={'nowrap'}  >
                                     {`${e.reference}`}
+                                    {e.status && <Box component={'span'} padding={0.5}></Box>}
+                                    {e.status && <Box borderRadius={1} backgroundColor={getColor(e.status)} component={'span'}>{gerStatus(e.status, text)}</Box>}
                                 </Typography>
                             </Box>
 
-                        } secondary={parseDate(e.execution)} />
+                        } secondary={parseDate(e.execution)}
+
+
+
+
+                        />
                     </ListItem>
                     <Divider />
                 </Fragment>
