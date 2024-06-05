@@ -155,6 +155,9 @@
   "none": "Nenhum",
   "daysSinceSeedling": "Dias desde a muda",
   "inventory": "Inventário",
-  "status": "Status"
+  "status": "Status",
+  "estimatedProduce": "Produto estimado",
+  "ripe": "Maduro",
+  "flash": "Clarão"
 
 }

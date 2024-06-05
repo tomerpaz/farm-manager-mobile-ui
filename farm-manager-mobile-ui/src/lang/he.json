@@ -155,7 +155,8 @@
     "none": "ללא",
     "daysSinceSeedling": "ימים מזריעה",
     "inventory": "מלאי",
-    "status": "סטטוס"
-
-
+    "status": "סטטוס",
+    "estimatedProduce": "הערכת יבול",
+    "ripe": "הבשלה",
+    "flash": "הצצה"
 }

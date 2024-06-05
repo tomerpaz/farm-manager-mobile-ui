@@ -16,11 +16,11 @@ export const CropPesticides_TAG = 'CropPesticides_TAG';
 export const Qualities_TAG = 'Qualities';
 export const Sizes_TAG = 'Sizes';
 export const Inventory_TAG = 'Inventory_TAG';
-
+export const Season_TAG = 'FieldSeason';
 
 // export const FARM_MANAGER = 'http://localhost:8080'
 
-export const FARM_MANAGER = 'https://api.manager.farm'
+ export const FARM_MANAGER = 'https://api.manager.farm'
 
 
 const baseQuery = fetchBaseQuery({

@@ -155,6 +155,9 @@
   "none": "Ninguno",
   "daysSinceSeedling": "Días desde la plántula",
   "inventory": "Inventario",
-  "status": "Status"
+  "status": "Status",
+  "estimatedProduce": "Geschätzte Produktion",
+  "ripe": "Reif",
+  "flash": "Blitz"
 
 }

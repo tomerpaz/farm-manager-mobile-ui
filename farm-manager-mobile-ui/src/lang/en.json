@@ -158,7 +158,8 @@
   "none": "None",
   "daysSinceSeedling": "Days Since Seedling",
   "inventory": "Inventory",
-  "status": "Status"
-
-
+  "status": "Status",
+  "estimatedProduce": "Estimated Produce",
+  "ripe": "Ripe",
+  "flash": "Flash"
 }

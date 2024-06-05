@@ -254,6 +254,18 @@ export function asLocalDate(date, hyphen) {
     }
 }
 
+export function setISODate(entity, param) {
+    if (entity && entity[param]){
+        entity[param] = parseISOOrNull(entity[param])
+    }
+}
+
+export function setEmptyIfNull(entity, param) {
+    if (entity && !entity[param]){
+        entity[param] = '';
+    }
+}
+
 export function asLocalTime(date, hyphen) {
     if (date && date instanceof Date) {
         var hh = date.getHours().toString();

@@ -15,6 +15,14 @@ import Loading from '../../../components/Loading';
 import FieldFertilizerTable from './FieldFertilizerTable';
 import FieldPesticdeTable from './FieldPesticdeTable';
 
+ const FIELD_DASH_PESTICIDES = 'field_dash_pesticides'
+ const FIELD_DASH_FERTILIZERS = 'field_dash_pesticides'
+
+// const element = document.getElementById(FIELD_DASH_PESTICIDES);
+// if (element) {
+//     // 👇 Will scroll smoothly to the top of the next section
+//     element.scrollIntoView({ behavior: 'smooth' });
+// }
 
 const elevation = 4;
 const cardHeaderPadding = 1;

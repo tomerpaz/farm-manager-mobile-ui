@@ -25,9 +25,9 @@ const ActivityForm = ({ activity }) => {
   const navigate = useNavigate()
   const text = useSelector(selectLang)
   const [createActivity] = useCreateActivityMutation();
-  const [updateActivity] = useUpdateActivityMutation()
-  const [deleteActivity] = useDeleteActivityMutation()
-  const { data: user } = useGetUserDataQuery()
+  const [updateActivity] = useUpdateActivityMutation();
+  const [deleteActivity] = useDeleteActivityMutation();
+  const { data: user } = useGetUserDataQuery();
 
   const { data: activityDefs, isSuccess: isActivityDefsSuccess } = useGetActivityDefsQuery()
   const { data: crops, isSuccess: isCropsSuccess } = useGetCropsQuery()
@@ -131,7 +131,6 @@ const ActivityForm = ({ activity }) => {
 
   const onSubmit = async (data) => {
     try {
-      console.log(data);
       const result = await saveActivity(data);
       dispatch(setSnackbar({ msg: data.uuid ? text.recordUpdated : text.recordCreated, severity: 'success' }))
       navigate(-1)
