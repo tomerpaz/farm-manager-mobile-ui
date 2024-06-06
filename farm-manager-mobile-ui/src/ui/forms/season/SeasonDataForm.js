@@ -1,4 +1,4 @@
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, Typography } from "@mui/material";
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, InputAdornment, Typography } from "@mui/material";
 import TextFieldBase from "../../../components/ui/TextField";
 import { useDispatch, useSelector } from "react-redux";
 import { selectLang, setSnackbar } from "../../../features/app/appSlice";
@@ -8,11 +8,12 @@ import { UI_SIZE, asLocalDate } from "../../FarmUtil";
 import { DatePicker } from "@mui/x-date-pickers";
 import { Controller, useForm } from "react-hook-form";
 import { useCreateSeasonDataMutation, useUpdateSeasonDataMutation } from "../../../features/season/seasonDataApiSlice";
+import { useGetUserDataQuery } from "../../../features/auth/authApiSlice";
 
 
 
 
-const SeasonDataForm = ({ defaultValues, open, handleClose }) => {
+const SeasonDataForm = ({ defaultValues, open, handleClose, plantation }) => {
     const text = useSelector(selectLang);
 
     const [createSeasonData] = useCreateSeasonDataMutation();
@@ -20,10 +21,11 @@ const SeasonDataForm = ({ defaultValues, open, handleClose }) => {
 
     const dispatch = useDispatch()
 
+    const { data: user } = useGetUserDataQuery()
+
     const { control, register, handleSubmit, getValues, watch, formState: { errors },
         formState: { isDirty, dirtyFields }, reset, setValue, trigger
     } = useForm({ defaultValues });
-
 
     const saveSeasonData = (data) => {
         data.ripe = asLocalDate(data.ripe, true);
@@ -35,6 +37,8 @@ const SeasonDataForm = ({ defaultValues, open, handleClose }) => {
             return updateSeasonData(data).unwrap();
         }
     }
+
+
 
     const onSubmit = async (data) => {
         try {
@@ -80,13 +84,21 @@ const SeasonDataForm = ({ defaultValues, open, handleClose }) => {
                                     fullWidth
                                     type="number"
                                     id="activity-estimateProducePerAreaUnit"
-                                    label={text.estimatedProduce}  {...field} />
+                                    label={text.estimatedProduce}  {...field}
+                                    InputProps={{
+                                        endAdornment: <InputAdornment position="end">{
+                                            `${text[user.weightUnit]}/${text[user.areaUnit]}`
+                                        }
+                                        </InputAdornment>,
+                                    }}
+
+                                />
                             )}
                         />
                     </Box>
-                    <Box margin={2} />
-                    <Box display={'flex'} flexDirection={'row'}>
-                        <Controller
+                    <Box margin={1} />
+                    <Box display={'flex'} flex={1} >
+                        {plantation && <Controller
                             name="ripe"
                             control={control}
                             render={({ field }) =>
@@ -103,9 +115,8 @@ const SeasonDataForm = ({ defaultValues, open, handleClose }) => {
                                         actionBar: { actions: ["cancel", "clear"] }
                                     }}
                                     {...field} />}
-                        />
-                        <Box margin={1} />
-                        <Controller
+                        />}
+                        {!plantation && <Controller
                             name="flash"
                             control={control}
                             render={({ field }) =>
@@ -122,9 +133,9 @@ const SeasonDataForm = ({ defaultValues, open, handleClose }) => {
                                         actionBar: { actions: ["cancel", "clear"] }
                                     }}
                                     {...field} />}
-                        />
+                        />}
                     </Box>
-                    <Box margin={2} />
+                    <Box margin={1} />
                     <Box display={'flex'} flexDirection={'row'} alignItems={'center'}>
                         <Controller
                             control={control}
@@ -147,7 +158,7 @@ const SeasonDataForm = ({ defaultValues, open, handleClose }) => {
                 </DialogActions>
             </form >
 
-        </Dialog>
+        </Dialog >
     )
 }
 
