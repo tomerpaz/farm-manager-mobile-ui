@@ -47,6 +47,10 @@ export function getReference  (type, resources,activityDef){
     return getTotalByField(fields, 'weight' ,decimalPiont )
   }
 
+  export function getTotalFieldArea (fields, decimalPiont){
+    return getTotalByField(fields, 'area' ,decimalPiont )
+  }
+
   export function getTotalActivityArea (fields, decimalPiont){
     return getTotalByField(fields, 'activityArea', decimalPiont)
   }

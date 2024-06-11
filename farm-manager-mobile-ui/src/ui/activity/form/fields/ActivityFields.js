@@ -7,11 +7,12 @@ import { useGetUserDataQuery } from "../../../../features/auth/authApiSlice"
 import { useFields } from "../../../../features/fields/fieldsApiSlice"
 import FieldSelectionDialog from "../../../dialog/FieldsSelectionDialog"
 import { useFieldArray } from "react-hook-form";
-import { Delete, DragHandle, Menu, MoreVert } from "@mui/icons-material"
+import { Delete, DragHandle, Menu, MoreVert, Percent } from "@mui/icons-material"
 import ActivityFieldDialog from "./ActivityFieldDialog"
 import { HARVEST, MARKET, SPRAY_TYPES, isArrayEmpty } from "../../../FarmUtil"
 import UpdateAllFieldsDialog from "./UpdateAllFieldsDialog"
 import { getTotalQty, getTotalweight } from "../ActivityUtil"
+import UpdateAllFieldsAreaDialog from "./UpdateAllFieldsAreaDialog"
 
 const TRASHHOLD = 3;
 
@@ -43,6 +44,8 @@ const ActivityFields = ({ activity, getValues, control, register, errors, activi
 
     const [open, setOpen] = useState(false);
     const [openBulkUpdateFields, setOpenBulkUpdateFields] = useState(false);
+    const [openBulkUpdateFieldsArea, setOpenBulkUpdateFieldsArea] = useState(false);
+
     const [selectedRow, setSelectedRow] = useState(null);
     const [selectedIndex, setSelectedIndex] = useState(null);
     const [expendFields, setExpendFields] = useState(false);
@@ -93,6 +96,10 @@ const ActivityFields = ({ activity, getValues, control, register, errors, activi
         setOpenBulkUpdateFields(false);
     };
 
+    const handleCloseBulkUpdateFieldsArea = () => {
+        setOpenBulkUpdateFieldsArea(false);
+    };
+
     const getFields = () => {
         return (expendFields && fields.length > TRASHHOLD) ? fields : fields.slice(0, TRASHHOLD);
     }
@@ -113,6 +120,8 @@ const ActivityFields = ({ activity, getValues, control, register, errors, activi
                 </Box>
                 <Box>
                     {[HARVEST].includes(activity.type) && <IconButton size='large' disabled={isArrayEmpty(fields)} onClick={_ => setOpenBulkUpdateFields(true)}><MoreVert fontSize='large' /></IconButton>}
+                    {![MARKET].includes(activity.type) && <IconButton size='large' disabled={isArrayEmpty(fields)} onClick={_ => setOpenBulkUpdateFieldsArea(true)}><Percent fontSize='large' /></IconButton>}
+
                     <IconButton size='large' disabled={isArrayEmpty(fields)} onClick={e => remove()}><Delete fontSize='large' /></IconButton>
                 </Box>
             </Box>
@@ -143,6 +152,12 @@ const ActivityFields = ({ activity, getValues, control, register, errors, activi
                 weightUnit={user.weightUnit}
                 activityArea={activityArea}
                 handleClose={handleCloseBulkUpdateFields}
+                replace={replace} />}
+            {openBulkUpdateFieldsArea && <UpdateAllFieldsAreaDialog open={openBulkUpdateFieldsArea} text={text}
+                activityArea={activityArea}
+                fields={fields}
+                areaUnit={user.areaUnit}
+                handleClose={handleCloseBulkUpdateFieldsArea}
                 replace={replace} />}
         </Box>
     )
