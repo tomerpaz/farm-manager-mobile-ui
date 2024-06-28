@@ -32,8 +32,9 @@ const AppBar = () => {
         {pathname.includes('/activity/') && <ActivityViewBar />}
         {pathname.includes(`/field/${src}/${fieldId}/dash`) && <FieldViewBar share={false} years={true}/>}
         {pathname.includes(`/field/${src}/${fieldId}/info`) && <FieldViewBar share={true} layers={true} />}
-        {pathname.includes(`/field/${src}/${fieldId}/imagery`) && <FieldViewBar share={true}  ayers={true} />}
+        {pathname.includes(`/field/${src}/${fieldId}/imagery`) && <FieldViewBar share={true}  layers={true} />}
         {pathname.includes(`/field/${src}/${fieldId}/history`) && <ActivitiesListBar plans={false} />}
+        {pathname.includes(`/field/${src}/${fieldId}/layers`) && <FieldViewBar share={true} layers={true} />}
         {pathname.includes('/tabs/inventory') && <InventoryBar />}
 
       </>

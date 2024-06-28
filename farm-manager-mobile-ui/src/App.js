@@ -58,7 +58,6 @@ function App() {
 
   const dispatch = useDispatch()
   
-  // const dir = 'ltr'//;'rtl'
   document.body.dir = dir;
   theme.direction = dir;
   return (

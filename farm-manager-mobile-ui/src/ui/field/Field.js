@@ -9,7 +9,7 @@ import { Box, IconButton, Typography } from '@mui/material';
 import { useParams, Link, useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Loading from '../../components/Loading';
-import { Cancel, DashboardOutlined, HighlightOffRounded, InfoOutlined, PestControl, SatelliteAltOutlined } from '@mui/icons-material';
+import { AddLocationAlt, Cancel, DashboardOutlined, HighlightOffRounded, InfoOutlined, PestControl, SatelliteAltOutlined } from '@mui/icons-material';
 import FieldInfo from './FieldInfo';
 import FieldDashboard from './dash/FieldDashboard';
 import FieldHistory from './FieldHistory';
@@ -20,6 +20,7 @@ import { selectCurrentYear, selectLang, setFieldDashboardYear } from '../../feat
 import { useGetUserDataQuery } from '../../features/auth/authApiSlice';
 import { displayFieldArea, displayFieldName, getBottomNavigationSx, maxLenghtStr, parseDate } from '../FarmUtil';
 import { useEffect } from 'react';
+import FieldLayers from './FieldLayers';
 
 const height = (window.innerHeight - 100);
 
@@ -96,6 +97,8 @@ const Field = () => {
           {pathname.includes("/dash") && <FieldDashboard />}
           {pathname.includes("/history") && <FieldHistory />}
           {pathname.includes("/imagery") && <FieldImagery field={field} />}
+          {pathname.includes("/layers") && <FieldLayers field={field} />}
+
         </CardContent>
       </Card>
       <BottomNavigation sx={{ position: 'fixed', bottom: 0, left: 0, right: 0, paddingTop: 2, paddingBottom: 2, borderTop: 1, borderTopColor: 'lightGray', backgroundColor: 'white', zIndex: 1000 }} value={-1}
@@ -126,12 +129,11 @@ const Field = () => {
         <BottomNavigationAction
          // disabled={field.imageryId === null}
           label={<Typography >{text.scouting}</Typography>}
-        //  to={`/field/${src}/${fieldId}/imagery`} component={Link}
+          to={`/field/${src}/${fieldId}/layers`} component={Link}
           icon={<PestControl fontSize='large' />}
         />
       </BottomNavigation>
     </Box >
-
   );
 }
 

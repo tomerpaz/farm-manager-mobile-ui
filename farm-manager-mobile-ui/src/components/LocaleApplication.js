@@ -61,7 +61,6 @@ const LocaleApplication = (props) => {
     }, [lang]);
 
 
-
     return cacheRtl ?
         <CacheProvider value={cacheRtl}>
             <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={fnsLocaleValue}  {...props} />

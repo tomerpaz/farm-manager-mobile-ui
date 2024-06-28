@@ -4,10 +4,13 @@ import { asLocalDate, newDate, PLAN } from "../../ui/FarmUtil";
 export const DEFAULT_PLAN_STATUS = ''
 export const DEFAULT_ACTIVITY_STATUS = ''
 
+const lang  = localStorage.getItem('lang')
+const showInventory = 'true' === localStorage.getItem('showInventory');
+const showPlans = 'true' === localStorage.getItem('showPlans');
 const appSlice = createSlice({
     name: 'auth',
     initialState: {
-        lang: { lang: 'en', dir: 'rtl', },
+        lang: { lang: 'en', dir: lang === 'he' ? 'rtl' : 'ltr', },
         token: localStorage.getItem('token'),
         refreshToken: localStorage.getItem('refreshToken'),
         fieldFreeTextFilter: '',
@@ -33,8 +36,8 @@ const appSlice = createSlice({
         inventoryFreeTextFilter: '',
         inventoryDateFilter: asLocalDate(new Date(), true),
         inventoryWarehouseFilter: 0,
-        showInventory: localStorage.getItem('showInventory') ? Boolean(localStorage.getItem('showInventory')) : false,
-        showPlans: localStorage.getItem('showPlans') ? Boolean(localStorage.getItem('showPlans')) : false,
+        showInventory,
+        showPlans,
 
     },
     reducers: {

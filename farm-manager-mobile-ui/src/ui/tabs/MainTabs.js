@@ -82,13 +82,17 @@ const MainTabs = () => {
     const getIndex = ((element) => element === pathname);
     const value = paths.findIndex(getIndex) > 0 ? paths.findIndex(getIndex) : 0;
 
+    const addScroll = paths.length > 4;
+
     return (
         <Box display={'flex'} flex={1} flexDirection={'column'}>
             <Box alignItems={'stretch'} display={'flex'} flex={1} flexDirection={'column'} sx={{ borderBottom: 1, borderColor: 'divider' }}>
                 <Tabs value={value} aria-label="basic tabs example"
                     // indicatorColor="secondary"
                     textColor="inherit"
-                    variant="fullWidth"
+                    variant={addScroll ? 'scrollable' : 'fullWidth'}
+                    scrollButtons={addScroll}
+                    allowScrollButtonsMobile={addScroll}                    
                 // variant="scrollable"
                 // scrollButtons={true}
                 // allowScrollButtonsMobile
