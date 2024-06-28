@@ -8,12 +8,15 @@ import Loading from '../../../components/Loading';
 import ActivityTypeIcon from '../../../icons/ActivityTypeIcon';
 import { useNavigate, useParams } from 'react-router-dom';
 import ActivitiesFilter from '../../../components/filters/ActivitiesFilter';
-import { EXECUTED, PLAN, activityDescription, buildActiviyFilter, parseDate } from '../../FarmUtil';
-import { EXECUTE_STATUS_COLOR, PLAN_STATUS_COLOR } from '../../activity/form/header/ActivityHeaderView';
+import { EXECUTED, PLAN, activityDescription, buildActiviyFilter, daysDiffToday, parseDate, parseISOOrNull } from '../../FarmUtil';
+import { EXECUTE_STATUS_COLOR, PLAN_PASSED_STATUS_COLOR, PLAN_STATUS_COLOR } from '../../activity/form/header/ActivityHeaderView';
 
-const getColor = (s) => {
+const getColor = (e ) => {
+    const s = e.status;
     if (PLAN === s) {
-        return PLAN_STATUS_COLOR
+        const daysPassed = daysDiffToday(parseISOOrNull(e.execution));
+         
+        return daysPassed > 0 ? PLAN_PASSED_STATUS_COLOR : PLAN_STATUS_COLOR;
     } else if (EXECUTED === s) {
         return EXECUTE_STATUS_COLOR;
     }
@@ -93,7 +96,7 @@ const ActivitiesList = ({ plans }) => {
                                 <Typography whiteSpace={'nowrap'}  >
                                     {`${e.reference}`}
                                     {e.status && <Box component={'span'} padding={0.5}></Box>}
-                                    {e.status && <Box borderRadius={1} backgroundColor={getColor(e.status)} component={'span'}>{gerStatus(e.status, text)}</Box>}
+                                    {e.status && <Box borderRadius={1} backgroundColor={getColor(e)} component={'span'}>{gerStatus(e.status, text)}</Box>}
                                 </Typography>
                             </Box>
 
