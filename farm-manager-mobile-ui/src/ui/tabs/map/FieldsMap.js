@@ -34,7 +34,7 @@ const FieldsMap = (props) => {
     const displayFields = filterFields(fields, freeText, fieldSiteFilter, fieldBaseFieldFilter, fieldsViewStatus);
 
 
-    function HandleMapEvents(e) {
+    function HandleMapEvents() {
         const m = useMapEvents({
             zoomend: () => {
                 setZoom(m.getZoom())
@@ -42,10 +42,10 @@ const FieldsMap = (props) => {
             // dragend: (e) => {
             //     setCenter(e.target.getCenter())
             // },
-            // click: (e) => {
-            //     change('lng', e.latlng.lng.toFixed(5));
-            //     change('lat', e.latlng.lat.toFixed(5));
-            // }
+            click: (e) => {
+                console.log('lng', e.latlng.lng.toFixed(5));
+                console.log('lat', e.latlng.lat.toFixed(5));
+            }
         })
         return <div></div>
     }

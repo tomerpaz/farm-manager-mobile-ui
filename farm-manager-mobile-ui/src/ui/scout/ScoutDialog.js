@@ -8,7 +8,7 @@ import { selectLang } from '../../features/app/appSlice';
 import TextFieldBase from '../../components/ui/TextField';
 import { useGetUserDataQuery } from '../../features/auth/authApiSlice';
 
-const ScoutDialog = ({open, scout,  onClose  }) => {
+const ScoutDialog = ({ open, scout, onClose }) => {
 
   const text = useSelector(selectLang)
 
@@ -16,50 +16,50 @@ const ScoutDialog = ({open, scout,  onClose  }) => {
 
 
 
-//  useEffect(() => {
-//    setOpen(row !== null);
-//    if (row !== null) {
-      // const record = activity.resources[row];
-      // console.log('record', record)
+  //  useEffect(() => {
+  //    setOpen(row !== null);
+  //    if (row !== null) {
+  // const record = activity.resources[row];
+  // console.log('record', record)
 
-      // setResourceName(record.resource.name);
-      // setResourceType(record.resource.type);
-      // setQty(record.qty);
-      // setUnit(record.resource.usageUnit);
-      // setActivityType(activity.type);
-      // setResourceNote(isStringEmpty(record.note) ? '' : record.note);
-      // setTariff(record.tariff);
-      // setManualTariff(record.manualTariff);
+  // setResourceName(record.resource.name);
+  // setResourceType(record.resource.type);
+  // setQty(record.qty);
+  // setUnit(record.resource.usageUnit);
+  // setActivityType(activity.type);
+  // setResourceNote(isStringEmpty(record.note) ? '' : record.note);
+  // setTariff(record.tariff);
+  // setManualTariff(record.manualTariff);
 
-      
-      // setActualExecution(record.actualExecution);
 
-      // setField(record.field);
-      // setFieldName(displayFieldName(record.field));
-      // setQty(record.qty);
-      // setWeight(record.weight);
-      // setActivityArea(record.activityArea);
+  // setActualExecution(record.actualExecution);
+
+  // setField(record.field);
+  // setFieldName(displayFieldName(record.field));
+  // setQty(record.qty);
+  // setWeight(record.weight);
+  // setActivityArea(record.activityArea);
 
   //  }
-//  }, [row])
+  //  }, [row])
 
 
   const onAction = (save) => {
     if (save) {
       console.log('Save...')
 
-     // onClose({ qty, resourceNote, tariff })
+      onClose()
     } else {
-      //onClose(null)
+      onClose(null)
     }
-  //  setOpen(false)
+    //  setOpen(false)
   }
 
 
   return (
 
     <Dialog open={open}>
-      <DialogTitle>{`${'hi'}: ${'bye'}`}</DialogTitle>
+      <DialogTitle>{text.scouting}</DialogTitle>
 
       <DialogContent>
         {/* <DialogContentText>
@@ -82,9 +82,11 @@ const ScoutDialog = ({open, scout,  onClose  }) => {
 
 
       </DialogContent>
-      <DialogActions>
-        <Button onClick={() => onAction(false)}>{text.cancel}</Button>
-        <Button onClick={() => onAction(true)}>{text.save}</Button>
+      <DialogActions sx={{ justifyContent: 'center' }}>
+        <Button size='large' variant='outlined' onClick={() => onAction(false)}>{text.cancel}</Button>
+        <Button size='large' disableElevation={true} variant='contained' onClick={() => onAction(true)} autoFocus>
+          {text.save}
+        </Button>
       </DialogActions>
     </Dialog>
   );

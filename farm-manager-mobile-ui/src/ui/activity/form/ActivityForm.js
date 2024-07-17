@@ -18,7 +18,6 @@ import ActionApprovalDialog from '../../../components/ui/ActionApprovalDialog'
 import { useGetResourcesTariffQuery } from '../../../features/tariff/tariffApiSlice'
 import { useGetUserDataQuery } from '../../../features/auth/authApiSlice'
 import { getReference, getTotalActivityArea, isSkipTariffFetch } from './ActivityUtil'
-import { calcSprayVolume, calcSprayVolumePerArea } from '../../FarmCalculator'
 
 const ActivityForm = ({ activity }) => {
 

@@ -134,13 +134,17 @@ const ActivityFields = ({ activity, getValues, control, register, errors, activi
                             <TableCell sx={headerSx}>{text.alias}</TableCell>
                             <TableCell sx={headerSx}>{text.crop}</TableCell>
                             <TableCell sx={headerSx}>{text.variety}</TableCell>
-                            <TableCell sx={headerSx}>{text[user.areaUnit]}</TableCell>
+                            <TableCell sx={headerSx}>{`${text[user.areaUnit]}`}</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {getFields().map((row, index) =>
                             <Row key={row.key} index={index} row={row} text={text} register={register} remove={remove} onClick={() => handleOpenEditRow(index, row)} />
                         )}
+                        <TableRow>
+                            <TableCell sx={headerSx} colSpan={4}>{`${text.total} ${text[user.areaUnit]}`}</TableCell>
+                            <TableCell sx={headerSx} >{activityArea}</TableCell>
+                        </TableRow>
                     </TableBody>
                 </Table>
             </TableContainer>

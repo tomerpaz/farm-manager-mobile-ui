@@ -20,7 +20,7 @@ import { selectCurrentYear, selectLang, setFieldDashboardYear } from '../../feat
 import { useGetUserDataQuery } from '../../features/auth/authApiSlice';
 import { displayFieldArea, displayFieldName, getBottomNavigationSx, maxLenghtStr, parseDate } from '../FarmUtil';
 import { useEffect } from 'react';
-import FieldLayers from './FieldLayers';
+import FieldScouting from './FieldScouting';
 
 const height = (window.innerHeight - 100);
 
@@ -97,7 +97,7 @@ const Field = () => {
           {pathname.includes("/dash") && <FieldDashboard />}
           {pathname.includes("/history") && <FieldHistory />}
           {pathname.includes("/imagery") && <FieldImagery field={field} />}
-          {pathname.includes("/layers") && <FieldLayers field={field} />}
+          {pathname.includes("/scouting") && <FieldScouting field={field} />}
 
         </CardContent>
       </Card>
@@ -129,7 +129,7 @@ const Field = () => {
         <BottomNavigationAction
          // disabled={field.imageryId === null}
           label={<Typography >{text.scouting}</Typography>}
-          to={`/field/${src}/${fieldId}/layers`} component={Link}
+          to={`/field/${src}/${fieldId}/scouting`} component={Link}
           icon={<PestControl fontSize='large' />}
         />
       </BottomNavigation>
