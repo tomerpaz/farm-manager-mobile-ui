@@ -1,12 +1,12 @@
 import React from 'react'
 import { Box } from '@mui/material'
-import { MapContainer, Polygon, TileLayer, useMapEvents } from 'react-leaflet'
+import { Circle, CircleMarker, MapContainer, Polygon, TileLayer, useMapEvents } from 'react-leaflet'
 import SatelliteMapProvider from '../../components/map/SatelliteMapProvider'
 import fi from 'date-fns/esm/locale/fi/index.js'
 
-const FieldMap = ({ field, height, tile, setMap, onClick }) => {
+const FieldMap = ({ field, height, tile, setMap, onClick, points }) => {
 
-
+    console.log('FieldMap', points)
     function HandleMapEvents(d) {
         const m = useMapEvents({
 
@@ -26,6 +26,9 @@ const FieldMap = ({ field, height, tile, setMap, onClick }) => {
         return <div></div>
     }
 
+
+    const hasPoints = Array.isArray(points)
+
     return (
         <Box flex={1} id="map" dir='ltr'>
             <MapContainer style={{ height: height, width: '100%' }} center={[field.lat, field.lng]} zoom={field.zoom} scrollWheelZoom={false}
@@ -37,7 +40,7 @@ const FieldMap = ({ field, height, tile, setMap, onClick }) => {
                     url={tile}
                     bounds={field.geoPoints}
                 />}
-                <Polygon id={33}
+                <Polygon
                     eventHandlers={{
                         click: (e) => {
                             if (onClick) {
@@ -52,6 +55,34 @@ const FieldMap = ({ field, height, tile, setMap, onClick }) => {
                     fillColor={field.color}
                     positions={field.geoPoints}>
                 </Polygon>
+                { hasPoints&& points.map(e =>
+                //    <Circle center={[e.lat, e.lng]} radius={10}  />
+                {
+                    return (
+                        <CircleMarker
+
+                            eventHandlers={{
+                                click: (e) => {
+                                    if (onClick) {
+                                        onClick(e, field, 'point');
+                                        e.originalEvent.view.L.DomEvent.stopPropagation(e)
+                                    }
+                                    // mapCliecked(e, f, 'polygon');
+                                    // navigate(`/field/map/${f.id}/info`)
+                                }
+                            }}
+                            key={e.id} radius={12}
+                            color={'blue'}
+                            weight={2}
+                            fillColor={'blue'}
+                            fillOpacity={1}
+                            center={[e.lat, e.lng]}
+                        ></CircleMarker>
+                    )
+                }
+
+
+                )}
                 <HandleMapEvents />
 
             </MapContainer>

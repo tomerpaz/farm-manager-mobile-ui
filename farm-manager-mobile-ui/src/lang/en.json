@@ -163,5 +163,8 @@
   "ripe": "Ripe",
   "flash": "Flash",
   "of": "Of",
-  "layers": "Layers"
+  "layers": "Layers",
+  "generic": "Generic",
+  "trap": "Trap",
+  "tree": "Tree"
 }

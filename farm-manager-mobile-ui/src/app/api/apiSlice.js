@@ -17,6 +17,7 @@ export const Qualities_TAG = 'Qualities';
 export const Sizes_TAG = 'Sizes';
 export const Inventory_TAG = 'Inventory_TAG';
 export const Season_TAG = 'FieldSeason';
+export const Points_TAG = 'FieldPoints';
 
 // export const FARM_MANAGER = 'http://localhost:8080'
 
@@ -75,7 +76,7 @@ export const apiSlice = createApi({
     baseQuery: baseQueryWithReauth,
     tagTypes: [Field_TAG, Activities_TAG, User_TAG, FieldActivities_TAG,
         Dashboard_TAG, ActivityDefs_TAG, Crops_TAG, SelectedActivity_TAG, Warehouses_TAG, Containers_TAG,
-        Resources_TAG, CropPesticides_TAG, Qualities_TAG, Sizes_TAG, Inventory_TAG, Season_TAG
+        Resources_TAG, CropPesticides_TAG, Qualities_TAG, Sizes_TAG, Inventory_TAG, Season_TAG, Points_TAG
     ],
 
     endpoints: builder => ({})

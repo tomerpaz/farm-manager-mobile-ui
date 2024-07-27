@@ -449,6 +449,10 @@ export function isPlansPossible(userConf){
     return userConf.find(e=>e.type === INVENTORY) ? true : false;
 }
 
+export function getPointTypes() {
+    return ['generic', 'tree', 'trap']
+}
+
 // export function daysDif(before, after){
 //     if(after && before){
 //         return (((after.getTime() - before .getTime())/(1000 * 3600 * 24))+2).toFixed(0) 
