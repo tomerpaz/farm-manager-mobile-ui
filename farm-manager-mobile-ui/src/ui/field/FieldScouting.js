@@ -57,7 +57,6 @@ const FieldScouting = ({ field }) => {
             setPoint(element);
             setDialog('pointScouting')
         }
-
     }
 
     
