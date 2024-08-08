@@ -27,7 +27,7 @@ const FieldsMap = (props) => {
     const fieldBaseFieldFilter = useSelector(selectFieldBaseFieldFilter);
     const fieldsViewStatus = useSelector(selectFieldsViewStatus);
     const activityType = useSelector(selectActivityType);
-    const showPests = useSelector(selectShowsPestLayer);
+//const showPests = useSelector(selectShowsPestLayer);
 
     const [center, setCenter] = useState([user.lat, user.lng]);
     const [zoom, setZoom] = useState(user.zoom);
