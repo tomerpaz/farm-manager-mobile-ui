@@ -28,31 +28,31 @@ export default function RecipeReviewCard({ scout, onEdit, index }) {
                     </Avatar>
                 }
                 action={
-                    <IconButton aria-label="settings">
-                        <Edit onClick={onEdit} />
+                    <IconButton onClick={onEdit} aria-label="settings">
+                        <Edit  />
                     </IconButton>
                 }
                 title={scout.finding.name}
                 subheader={parseDate(scout.date)}
 
             />
-            <CardMedia
+            <CardMedia onClick={e=>console.log('CardMedia clicked')}
         component="img"
         height="194"
         image={`/images/pest${index%2}.jpg`}
         alt="Paella dish"
       />
             <CardContent>
-                <Typography >
+                <Typography variant="body1" color="text.secondary" >
                     {` ${text.location}:  ${text[scout.location]}`}
                 </Typography>
-                <Typography >
+                <Typography variant="body1" color="text.secondary" >
                     {` ${text.infectionLevel}:  ${text[scout.infectionLevel]}`}
                 </Typography>
-                <Typography >
+                <Typography variant="body1" color="text.secondary"  >
                     {` ${text.phenologicalStage}:  ${scout.stage.name}`}
                 </Typography>
-                <Typography >
+                <Typography variant="body1" color="text.secondary" >
                     {` ${text.note}:  ${scout.note}`}
                 </Typography>
                 {/* <Typography variant="body2" color="text.secondary">

@@ -9,10 +9,11 @@ import TextFieldBase from '../../components/ui/TextField';
 import { useGetUserDataQuery } from '../../features/auth/authApiSlice';
 import { Controller, useForm } from 'react-hook-form';
 import { Cancel, Close, Save } from '@mui/icons-material';
-import { getYearArray, UI_SIZE } from '../FarmUtil';
+import { getYearArray, isMobile, UI_SIZE } from '../FarmUtil';
 import { useGetInfectionLevelsQuery, useGetPestsQuery, useGetPestStagesQuery, useGetPlantLocationsQuery, useGetPlantPartsQuery } from '../../features/pests/pestsApiSlice';
 import { DatePicker } from '@mui/x-date-pickers';
 import { useCreateFieldScoutMutation, useUpdateFieldScoutMutation } from '../../features/scout/scoutsApiSlice';
+import Loading from '../../components/Loading';
 
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -25,7 +26,7 @@ const ScoutingForm = ({ defaultValues, open, handleClose }) => {
 
   const { data: user } = useGetUserDataQuery()
 
-  const { data: pests } = useGetPestsQuery();
+  const { data: pests, isLoading: isPestsLoading } = useGetPestsQuery();
   const { data: infectionLevels } = useGetInfectionLevelsQuery()
   const { data: stages } = useGetPestStagesQuery()
   const { data: plantLocations } = useGetPlantLocationsQuery()
@@ -39,9 +40,6 @@ const ScoutingForm = ({ defaultValues, open, handleClose }) => {
     formState: { isDirty, dirtyFields }, reset, setValue, trigger
   } = useForm({ defaultValues });
 
-  //  console.log('pests', pests)
-
-  console.log(infectionLevels)
 
   const saveFieldScout = (data) => {
     console.log('saveFieldScout', data)
@@ -71,20 +69,20 @@ const ScoutingForm = ({ defaultValues, open, handleClose }) => {
 
   return (
 
-    <Dialog fullScreen open={open} /*TransitionComponent={Transition}*/ >
+    <Dialog fullScreen={isMobile()} fullWidth={!isMobile()} open={open} /*TransitionComponent={Transition}*/ >
       <AppBar sx={{ position: 'relative' }} elevation={0}>
         <Toolbar>
           <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-          {text.scouting}
+            {text.scouting}
           </Typography>
           <IconButton
-                        edge="start"
-                        onClick={() => onAction(false)}
-                        color="inherit"
-                        aria-label="done"
-                    >
-                        <Close />
-                    </IconButton>
+            edge="start"
+            onClick={() => onAction(false)}
+            color="inherit"
+            aria-label="done"
+          >
+            <Close />
+          </IconButton>
         </Toolbar>
       </AppBar>
       <form onSubmit={handleSubmit(onSubmit)} >

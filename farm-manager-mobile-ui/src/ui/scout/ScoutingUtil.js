@@ -1,4 +1,4 @@
-import { isArrayEmpty } from "../FarmUtil";
+import { isArrayEmpty, newDate } from "../FarmUtil";
 
 export const infectionLevels = [{ level: 'high', color: '#f44336', dark: '#b71c1c' },
 { level: 'medium', color: '#ff8f00', dark: '#e65100' },
@@ -24,10 +24,10 @@ export function getPestMonitorInfectionLevelColor(pestMonitors, dark) {
 }
 
 export function getPointColor(point, scouts, dark) {
-    if(point.active === false){
-        return dark ? 'black':'gray';
-    } else if(isArrayEmpty(scouts)){
-        return dark ? 'black':'white';
+    if (point.active === false) {
+        return dark ? 'black' : 'gray';
+    } else if (isArrayEmpty(scouts)) {
+        return dark ? 'black' : 'white';
     } else {
         const level = scouts[0].infectionLevel
         return getInfectionLevelColor(level, dark);
@@ -39,7 +39,12 @@ export function buildScoutPoints(points, scouts) {
     return points?.map(e => {
 
         const fieldScouts = scouts?.filter(s => s.point.id === e.id)
-        const val = { ...e, color: getPointColor(e,fieldScouts, true), fillColor: getPointColor(e,fieldScouts, false) }
+        const val = { ...e, color: getPointColor(e, fieldScouts, true), fillColor: getPointColor(e, fieldScouts, false) }
         return val;
     });
+}
+
+export function newScouting(point, stages, currentYear) {
+    return { id: null, point: point, date: newDate(), note: '', finding: null, location: 'none', infectionLevel: "none", value: '', year: currentYear, stage: stages[0] }
+
 }

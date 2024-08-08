@@ -43,7 +43,7 @@ const FieldPointDialog = ({ defaultValues, open, handleClose, deletable }) => {
       const result = await saveFieldPoint(data);
 
       dispatch(setSnackbar({ msg: data.id ? text.recordUpdated : text.recordCreated, severity: 'success' }))
-      handleClose(true);
+      handleClose('save',result);
     } catch (err) {
       console.log(err);
     }
@@ -53,7 +53,7 @@ const FieldPointDialog = ({ defaultValues, open, handleClose, deletable }) => {
     if (action === 'delete') {
       deleteFieldPoint({ id: defaultValues.id })
     }
-    handleClose(false);
+    handleClose('delete');
     //  setOpen(false)
   }
 
