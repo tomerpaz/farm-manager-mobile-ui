@@ -60,6 +60,7 @@ const FieldScouting = ({ field }) => {
 
     }
 
+    
     const clear = () => {
         setDialog(null);
         setPoint(null);
