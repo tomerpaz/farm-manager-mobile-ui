@@ -11,11 +11,11 @@ import FieldsFilter from "../../../components/filters/FieldsFilter";
 import { filterFields, getFillColor, getOpacity, isArrayEmpty, isStringEmpty, SCOUT } from "../../FarmUtil";
 import SatelliteMapProvider from "../../../components/map/SatelliteMapProvider";
 import ScoutDialog from "../../scout/ScoutingForm";
-
-
+import { isEqual } from "date-fns";
 
 
 const FieldsMap = (props) => {
+
     const [map, setSetMap] = useState(0);
 
     const { data: user } = useGetUserDataQuery()
@@ -27,10 +27,12 @@ const FieldsMap = (props) => {
     const fieldBaseFieldFilter = useSelector(selectFieldBaseFieldFilter);
     const fieldsViewStatus = useSelector(selectFieldsViewStatus);
     const activityType = useSelector(selectActivityType);
-//const showPests = useSelector(selectShowsPestLayer);
+    //const showPests = useSelector(selectShowsPestLayer);
 
     const [center, setCenter] = useState([user.lat, user.lng]);
     const [zoom, setZoom] = useState(user.zoom);
+
+    console.log('center', center)
 
     const displayFields = filterFields(fields, freeText, fieldSiteFilter, fieldBaseFieldFilter, fieldsViewStatus);
 
@@ -51,8 +53,12 @@ const FieldsMap = (props) => {
     }
 
     useEffect(() => {
-        const c = (fields.length === displayFields.length) || isArrayEmpty(displayFields) ? [user.lat, user.lng] : [displayFields[0].lat, displayFields[0].lng];
-        setCenter(c);
+        if (isStringEmpty(freeText) && isArrayEmpty(fieldSiteFilter) && isArrayEmpty(fieldBaseFieldFilter)) {
+            setCenter([user.lat, user.lng]);
+        } else {
+            const c = (fields.length === displayFields.length) || isArrayEmpty(displayFields) ? [user.lat, user.lng] : [displayFields[0].lat, displayFields[0].lng];
+            setCenter(c);
+        }
     }, [freeText, fieldSiteFilter, fieldBaseFieldFilter])
 
 
