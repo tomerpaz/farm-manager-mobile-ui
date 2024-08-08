@@ -234,6 +234,13 @@ export function asShortStringDate(time) {
     return null;
 }
 
+export function asShortStringDateTime(time) {
+    if (time !== null) {
+        return new Date(time).toLocaleDateString('en-GB', { day: "2-digit", month: "2-digit", year: "2-digit", hour: "2-digit", minute: "2-digit" })
+    }
+    return null;
+}
+
 
 export function dateToString(date) {
     if (date && date instanceof Date && !isNaN(date.valueOf())) {
@@ -255,13 +262,13 @@ export function asLocalDate(date, hyphen) {
 }
 
 export function setISODate(entity, param) {
-    if (entity && entity[param]){
+    if (entity && entity[param]) {
         entity[param] = parseISOOrNull(entity[param])
     }
 }
 
 export function setEmptyIfNull(entity, param) {
-    if (entity && !entity[param]){
+    if (entity && !entity[param]) {
         entity[param] = '';
     }
 }
@@ -305,6 +312,13 @@ export const daysDiffToday = (before) => {
 export function parseDate(date) {
     if (date !== null) {
         return asShortStringDate(Date.parse(date));
+    }
+    return null;
+}
+
+export function parseDateTime(date) {
+    if (date !== null) {
+        return asShortStringDateTime(Date.parse(date));
     }
     return null;
 }
@@ -407,7 +421,7 @@ export function getMarketingDestinations() {
 }
 
 export function getMarketingIncomeCalcOptions() {
-    return ['weight','amount','area']
+    return ['weight', 'amount', 'area']
 }
 
 
@@ -441,12 +455,12 @@ export function lastDayOfThisMonth() {
 
 }
 
-export function isInventoryPossible(userConf){
-    return userConf.find(e=>e.type === INVENTORY) ? true : false;
+export function isInventoryPossible(userConf) {
+    return userConf.find(e => e.type === INVENTORY) ? true : false;
 }
 
-export function isPlansPossible(userConf){
-    return userConf.find(e=>e.type === INVENTORY) ? true : false;
+export function isPlansPossible(userConf) {
+    return userConf.find(e => e.type === INVENTORY) ? true : false;
 }
 
 export function getPointTypes() {

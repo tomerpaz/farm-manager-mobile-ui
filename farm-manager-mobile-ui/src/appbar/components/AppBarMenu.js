@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { logOut, selectLang, setOpenSettings } from '../../features/app/appSlice';
 import SettingsDialog from '../../ui/settings/SettingsDialog';
 import { useGetUserDataQuery } from '../../features/auth/authApiSlice';
+import LayersDialog from '../../ui/layers/LayersDialog';
 
 
 
@@ -92,6 +93,7 @@ const AppBarMenu = () => {
                 </MenuItem>
             </Menu>
             <SettingsDialog/>
+            <LayersDialog/>
         </Box>)
 }
 

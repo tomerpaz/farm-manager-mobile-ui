@@ -5,12 +5,12 @@ import { useNavigate } from "react-router-dom";
 import { Box } from "@mui/material";
 import { useFields } from "../../../features/fields/fieldsApiSlice";
 import { useGetUserDataQuery } from '../../../features/auth/authApiSlice'
-import { selectActivityType, selectCurrentYear, selectFieldBaseFieldFilter, selectFieldFreeTextFilter, selectFieldSiteFilter, selectFieldsViewStatus } from "../../../features/app/appSlice";
+import { selectActivityType, selectCurrentYear, selectFieldBaseFieldFilter, selectFieldFreeTextFilter, selectFieldSiteFilter, selectFieldsViewStatus, selectShowsPestLayer } from "../../../features/app/appSlice";
 import { useSelector } from "react-redux";
 import FieldsFilter from "../../../components/filters/FieldsFilter";
 import { filterFields, getFillColor, getOpacity, isArrayEmpty, isStringEmpty, SCOUT } from "../../FarmUtil";
 import SatelliteMapProvider from "../../../components/map/SatelliteMapProvider";
-import ScoutDialog from "../../scout/ScoutDialog";
+import ScoutDialog from "../../scout/ScoutingForm";
 
 
 
@@ -27,12 +27,12 @@ const FieldsMap = (props) => {
     const fieldBaseFieldFilter = useSelector(selectFieldBaseFieldFilter);
     const fieldsViewStatus = useSelector(selectFieldsViewStatus);
     const activityType = useSelector(selectActivityType);
+    const showPests = useSelector(selectShowsPestLayer);
 
     const [center, setCenter] = useState([user.lat, user.lng]);
     const [zoom, setZoom] = useState(user.zoom);
 
     const displayFields = filterFields(fields, freeText, fieldSiteFilter, fieldBaseFieldFilter, fieldsViewStatus);
-
 
     function HandleMapEvents() {
         const m = useMapEvents({

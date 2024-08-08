@@ -1,7 +1,7 @@
 import {
     createEntityAdapter
 } from "@reduxjs/toolkit";
-import { Points_TAG, apiSlice } from "../../app/api/apiSlice";
+import { FieldPoints_TAG, apiSlice } from "../../app/api/apiSlice";
 
 export const adapter = createEntityAdapter()
 
@@ -14,7 +14,7 @@ export const pointsApiSlice = apiSlice.injectEndpoints({
 
         getFieldPoints: builder.query({
             query: (args) => `/api/farm/points/field/${args.fieldId}`,
-            providesTags: [Points_TAG],
+            providesTags: [FieldPoints_TAG],
         }),
 
         createFieldPoint: builder.mutation({
@@ -24,7 +24,7 @@ export const pointsApiSlice = apiSlice.injectEndpoints({
                 body: { ...args },
                 
             }),
-            invalidatesTags: [Points_TAG]
+            invalidatesTags: [FieldPoints_TAG]
                
         }),
         updateFieldPoint: builder.mutation({
@@ -34,7 +34,16 @@ export const pointsApiSlice = apiSlice.injectEndpoints({
                 body: { ...args },
                 
             }),
-            invalidatesTags: [Points_TAG]
+            invalidatesTags: [FieldPoints_TAG]
+        }),
+        deleteFieldPoint: builder.mutation({
+            query: args => ({
+                url: `/api/farm/points/${args.id}`,
+                method: 'DELETE' ,
+                body: { ...args },
+                
+            }),
+            invalidatesTags: [FieldPoints_TAG]
         }),
     })
 })
@@ -44,6 +53,7 @@ export const {
     useGetFieldPointsQuery,
     useCreateFieldPointMutation,
     useUpdateFieldPointMutation,
+    useDeleteFieldPointMutation
 } = pointsApiSlice
 
 

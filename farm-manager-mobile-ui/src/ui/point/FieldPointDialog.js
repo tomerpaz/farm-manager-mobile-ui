@@ -2,17 +2,17 @@ import { useEffect, useState } from 'react';
 import Button from '@mui/material/Button';
 import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
-import { Box, DialogActions, DialogContent, InputAdornment, MenuItem, TextField } from '@mui/material';
+import { AppBar, Box, Checkbox, DialogActions, DialogContent, FormControlLabel, IconButton, InputAdornment, MenuItem, TextField, Toolbar, Typography } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectLang, setSnackbar } from '../../features/app/appSlice';
 import TextFieldBase from '../../components/ui/TextField';
 import { useGetUserDataQuery } from '../../features/auth/authApiSlice';
-import { useCreateFieldPointMutation, useUpdateFieldPointMutation } from '../../features/points/pointsApiSlice';
+import { useCreateFieldPointMutation, useDeleteFieldPointMutation, useUpdateFieldPointMutation } from '../../features/points/pointsApiSlice';
 import { Controller, useForm } from 'react-hook-form';
-import { Cancel, Save } from '@mui/icons-material';
+import { Cancel, Close, Delete, Save } from '@mui/icons-material';
 import { getPointTypes, UI_SIZE } from '../FarmUtil';
 
-const FieldPointDialog = ({ defaultValues, open, handleClose }) => {
+const FieldPointDialog = ({ defaultValues, open, handleClose, deletable }) => {
 
   const text = useSelector(selectLang)
 
@@ -21,6 +21,7 @@ const FieldPointDialog = ({ defaultValues, open, handleClose }) => {
 
   const [createFieldPoint] = useCreateFieldPointMutation();
   const [updateFieldPoint] = useUpdateFieldPointMutation()
+  const [deleteFieldPoint] = useDeleteFieldPointMutation()
 
   const dispatch = useDispatch()
 
@@ -30,7 +31,7 @@ const FieldPointDialog = ({ defaultValues, open, handleClose }) => {
 
 
   const saveFieldPoint = (data) => {
-    if (data.id) {
+    if (data.id === null) {
       return createFieldPoint(data).unwrap();
     } else {
       return updateFieldPoint(data).unwrap();
@@ -42,30 +43,47 @@ const FieldPointDialog = ({ defaultValues, open, handleClose }) => {
       const result = await saveFieldPoint(data);
 
       dispatch(setSnackbar({ msg: data.id ? text.recordUpdated : text.recordCreated, severity: 'success' }))
-      handleClose(null);
+      handleClose(true);
     } catch (err) {
       console.log(err);
     }
   }
 
-  const onAction = (save) => {
-    handleClose(null);
+  const onAction = (action) => {
+    if (action === 'delete') {
+      deleteFieldPoint({ id: defaultValues.id })
+    }
+    handleClose(false);
     //  setOpen(false)
   }
 
 
   return (
 
-    <Dialog open={open}>
-      <DialogTitle>{"point"}</DialogTitle>
-      <form onSubmit={handleSubmit(onSubmit)} >
+    <Dialog fullWidth open={open}>
+        <AppBar sx={{ position: 'relative' }} elevation={0}>
+          <Toolbar>
+            <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
+              {`${text.waypoint}`}
+            </Typography>
+            <IconButton
+              edge="start"
+              onClick={() => handleClose(null)}
+              color="inherit"
+              aria-label="done"
+            >
+              <Close />
+            </IconButton>
+          </Toolbar>
+        </AppBar>      <form onSubmit={handleSubmit(onSubmit)} >
 
         <DialogContent>
+          <Typography variant='h6'>{text.waypoint}</Typography>
           {/* <DialogContentText>
           {`${text.field} ${fieldName}`}
         </DialogContentText> */}
 
-          <Box display={'flex'} flexDirection={'row'} alignItems={'center'}>
+          {/* <Box display={'flex'} flexDirection={'row'} alignItems={'center'}>
             <Controller
               control={control}
               name="type"
@@ -86,7 +104,7 @@ const FieldPointDialog = ({ defaultValues, open, handleClose }) => {
                 </TextField>
               )}
             />
-          </Box>
+          </Box> */}
           <Box display={'flex'} flexDirection={'row'} alignItems={'center'}>
             <Controller
               control={control}
@@ -99,6 +117,18 @@ const FieldPointDialog = ({ defaultValues, open, handleClose }) => {
               )}
             />
           </Box>
+          {defaultValues.id !== null && <Box display={'flex'} flexDirection={'row'} alignItems={'center'}>
+            <Controller
+              control={control}
+              name="active"
+              render={({ field: { ref, value, onChange, ...field } }) => (
+                <FormControlLabel control={
+                  <Checkbox checked={value} onChange={onChange} />
+                } label={text.active} />
+
+              )}
+            />
+          </Box>}
 
 
 
@@ -106,7 +136,8 @@ const FieldPointDialog = ({ defaultValues, open, handleClose }) => {
 
         </DialogContent>
         <DialogActions sx={{ justifyContent: 'center' }}>
-          <Button size='large' endIcon={<Cancel />} variant='outlined' onClick={() => onAction(false)}>{text.cancel}</Button>
+          {defaultValues.id && deletable && <Button size='large' endIcon={<Delete />} variant='outlined' onClick={() => onAction('delete')}>{text.delete}</Button>}
+
           <Button size='large' disabled={!isDirty} endIcon={<Save />} disableElevation={true} variant='contained' type="submit" >
             {text.save}
           </Button>

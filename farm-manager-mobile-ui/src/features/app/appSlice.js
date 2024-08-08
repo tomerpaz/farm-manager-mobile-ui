@@ -38,6 +38,8 @@ const appSlice = createSlice({
         inventoryWarehouseFilter: 0,
         showInventory,
         showPlans,
+        openLayers: false,
+        showPestsLayer: false,
 
     },
     reducers: {
@@ -58,6 +60,9 @@ const appSlice = createSlice({
         },
         setOpenSettings: (state, action) => {
             state.openSettings = action.payload
+        },
+        setOpenLayers: (state, action) => {
+            state.openLayers = action.payload
         },
         logOut: (state, action) => {
             localStorage.removeItem('token')
@@ -127,6 +132,9 @@ const appSlice = createSlice({
         setShowPlans: (state, action) => {
             localStorage.setItem('showPlans', action.payload);
             state.showPlans = action.payload;
+        },
+        setShowPestsLayer: (state, action) => {
+            state.showPestsLayer = action.payload;
         }
     },
 })
@@ -134,7 +142,7 @@ const appSlice = createSlice({
 export const { setCredentials, logOut, setLang, setCurrentYear, setAppBarDialogOpen, setFieldFreeTextFilter, setActivityFreeTextFilter,
     setStartDateFilter, setEndDateFilter, setActivityTypeFilter, setFieldSiteFilter, setFieldBaseFieldFilter, setFieldDashboardYear, setFieldsViewStatus,
     setActivityPlanStatusFilter, setActivityPlanTypeFilter, setActivityStatusFilter, setActivityType, setSnackbar, setOpenSettings, setInventoryFreeTextFilter,
-    setInventoryDateFilter, setInventoryWarehouseFilter, setShowInventory,setShowPlans } = appSlice.actions
+    setInventoryDateFilter, setInventoryWarehouseFilter, setShowInventory,setShowPlans, setOpenLayers,setShowPestsLayer } = appSlice.actions
 
 export default appSlice.reducer
 
@@ -163,4 +171,6 @@ export const selectInventoryDateFilter = (state) => state.app.inventoryDateFilte
 export const selectInventoryWarehouseFilter = (state) => state.app.inventoryWarehouseFilter
 export const selectShowInventory = (state) => state.app.showInventory
 export const selectShowPlans = (state) => state.app.showPlans
+export const selectOpenLayers = (state) => state.app.openLayers
+export const selectShowsPestLayer = (state) => state.app.showPestsLayer
 
