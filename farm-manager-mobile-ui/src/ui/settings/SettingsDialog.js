@@ -26,7 +26,7 @@ const SettingsDialog = () => {
 
     const [showAgent, setShowAgent] = React.useState(false);
 
-    const { data: user, isSuccess: isUserSuccess} = useGetUserDataQuery()
+    const { data: user, isSuccess: isUserSuccess } = useGetUserDataQuery()
 
     const isInventory = isUserSuccess ? isInventoryPossible(user.userConf) : false;
     const isPlans = isUserSuccess ? isPlansPossible(user.userConf) : false;
@@ -55,7 +55,7 @@ const SettingsDialog = () => {
 
     return (
         <Dialog
-            fullScreen
+            fullScreen={isMobile()} fullWidth={!isMobile()}
             open={open}
             onClose={handleClose}
             TransitionComponent={Transition}
@@ -97,21 +97,19 @@ const SettingsDialog = () => {
                 </Select>
                 {isPlans &&
                     <Box marginTop={2} display={'flex'} flexDirection={'row'} >
-                        <FormControlLabel control={<Checkbox checked={showPlans} onChange={handlePlansChange}  />} label={text.plans} />
-
-
+                        <FormControlLabel control={<Checkbox checked={showPlans} onChange={handlePlansChange} />} label={text.plans} />
                     </Box>
                 }
                 {isInventory &&
                     <Box marginTop={2} display={'flex'} flexDirection={'row'} >
-                        <FormControlLabel control={<Checkbox checked={showInventory} onChange={handleInvenotryChange}  />} label={text.inventory} />
+                        <FormControlLabel control={<Checkbox checked={showInventory} onChange={handleInvenotryChange} />} label={text.inventory} />
 
 
                     </Box>
                 }
                 <Box marginTop={2} display={'flex'} flexDirection={'row'} >
                     <Box>
-                        <IconButton sx={{padding: 0}} onClick={_ => setShowAgent(!showAgent)} >
+                        <IconButton sx={{ padding: 0 }} onClick={_ => setShowAgent(!showAgent)} >
                             {isMobile() ? <MobileFriendlyOutlined /> : <DesktopWindowsOutlined />}
                         </IconButton>
                     </Box>

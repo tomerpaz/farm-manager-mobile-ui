@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { selectAppBarDialogOpen, selectCurrentYear, selectFieldBaseFieldFilter, selectFieldSiteFilter, selectFieldsViewStatus, selectLang, setAppBarDialogOpen, setCurrentYear, setFieldBaseFieldFilter, setFieldSiteFilter, setFieldsViewStatus } from '../../features/app/appSlice';
 import DoneIcon from '@mui/icons-material/Done';
 import { FilterAltOff } from '@mui/icons-material';
-import { ACTIVE, ALL, getYearArray, INACTIVE } from '../../ui/FarmUtil';
+import { ACTIVE, ALL, getYearArray, INACTIVE, isMobile } from '../../ui/FarmUtil';
 import { useGetUserDataQuery } from '../../features/auth/authApiSlice';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -52,7 +52,7 @@ const FieldsFilter = ({ fields, }) => {
 
     return (
         <Dialog
-            fullScreen
+            fullScreen={isMobile()} fullWidth={!isMobile()}
             open={open}
             onClose={handleClose}
             TransitionComponent={Transition}

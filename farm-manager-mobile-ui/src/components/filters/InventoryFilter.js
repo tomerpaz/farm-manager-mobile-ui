@@ -5,7 +5,7 @@ import DoneIcon from '@mui/icons-material/Done';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useParams } from 'react-router-dom';
 import { MobileDatePicker } from '@mui/x-date-pickers';
-import { asLocalDate, getActivityStatuses, getActivityStatusText, getActivityTypes, getActivityTypeText, isStringEmpty, parseISOOrNull, PLAN } from '../../ui/FarmUtil';
+import { asLocalDate, getActivityStatuses, getActivityStatusText, getActivityTypes, getActivityTypeText, isMobile, isStringEmpty, parseISOOrNull, PLAN } from '../../ui/FarmUtil';
 import { FilterAltOff } from '@mui/icons-material';
 import { getWarehousesState, useGetWarehousesQuery } from '../../features/warehouses/warehouseApiSlice';
 
@@ -58,7 +58,7 @@ const InventoryFilter = () => {
 
     return (
         <Dialog
-            fullScreen
+            fullScreen={isMobile()} fullWidth={!isMobile()}
             open={open}
             onClose={handleClose}
             TransitionComponent={Transition}

@@ -1,8 +1,8 @@
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, InputAdornment, Typography } from "@mui/material";
+import { AppBar, Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, IconButton, InputAdornment, Toolbar, Typography } from "@mui/material";
 import TextFieldBase from "../../../components/ui/TextField";
 import { useDispatch, useSelector } from "react-redux";
 import { selectLang, setSnackbar } from "../../../features/app/appSlice";
-import { Cancel, Save } from "@mui/icons-material";
+import { Cancel, Close, Save } from "@mui/icons-material";
 import { UI_SIZE, asLocalDate } from "../../FarmUtil";
 
 import { DatePicker } from "@mui/x-date-pickers";
@@ -60,16 +60,28 @@ const SeasonDataForm = ({ defaultValues, open, handleClose, plantation }) => {
             aria-describedby="alert-dialog-description"
             fullWidth
         >
-            <DialogTitle id="alert-dialog-title">
-                <Box display={'flex'} flex={1} justifyContent={'space-between'}>
-                    <Box>
-                        {text.season}
+
+            <AppBar sx={{ position: 'relative' }} elevation={0}>
+                <Toolbar>
+                    <Box display={'flex'} flex={1} justifyContent={'space-between'}>
+                        <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
+                            {text.season}
+                        </Typography>
+                        <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
+                            {defaultValues.year}
+                        </Typography>
                     </Box>
-                    <Box>
-                        {defaultValues.year}
-                    </Box>
-                </Box>
-            </DialogTitle>
+                    <IconButton
+                        edge="start"
+                        onClick={() => onAction(false)}
+                        color="inherit"
+                        aria-label="done"
+                    >
+                        <Close />
+                    </IconButton>
+                </Toolbar>
+            </AppBar>
+
             <form onSubmit={handleSubmit(onSubmit)} >
 
                 <DialogContent>
@@ -151,7 +163,6 @@ const SeasonDataForm = ({ defaultValues, open, handleClose, plantation }) => {
 
                 </DialogContent>
                 <DialogActions sx={{ justifyContent: 'center' }}>
-                    <Button size='large' endIcon={<Cancel />} variant='outlined' onClick={() => onAction(false)}>{text.cancel}</Button>
                     <Button size='large' disabled={!isDirty} endIcon={<Save />} disableElevation={true} variant='contained' type="submit" >
                         {text.save}
                     </Button>

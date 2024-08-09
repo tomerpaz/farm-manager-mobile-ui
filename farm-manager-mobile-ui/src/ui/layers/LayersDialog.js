@@ -2,7 +2,7 @@ import React from 'react'
 import { AppBar, Box, Checkbox, Dialog, DialogContent, FormControlLabel, IconButton, MenuItem, Select, Slide, Toolbar, Typography } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux';
 import { selectLang, selectOpenLayers, selectOpenSettings, selectShowInventory, selectShowPlans, selectShowsPestLayer, setOpenLayers, setShowPestsLayer } from '../../features/app/appSlice';
-import { Close, DesktopWindowsOutlined, MobileFriendlyOutlined } from '@mui/icons-material';
+import DoneIcon from '@mui/icons-material/Done';
 import { getUserLang } from '../../router/UserRoutes';
 import { isInventoryPossible, isMobile, isPlansPossible } from '../FarmUtil';
 import { useGetUserDataQuery } from '../../features/auth/authApiSlice';
@@ -30,12 +30,11 @@ const LayersDialog = () => {
 
     const handlePestsChange = () => {
         dispatch(setShowPestsLayer(!showPests));
-        dispatch(setOpenLayers(false));
     }
 
     return (
         <Dialog
-            fullScreen
+            fullScreen={isMobile()} fullWidth={!isMobile()}
             open={open}
             onClose={handleClose}
             TransitionComponent={Transition}
@@ -44,7 +43,7 @@ const LayersDialog = () => {
                 <Toolbar>
 
                     <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-                        {/* Filter */}
+                        {text.layers}
                     </Typography>
                     <IconButton
                         edge="start"
@@ -52,7 +51,7 @@ const LayersDialog = () => {
                         color="inherit"
                         aria-label="done"
                     >
-                        <Close />
+                        <DoneIcon />
                     </IconButton>
                 </Toolbar>
             </AppBar>
