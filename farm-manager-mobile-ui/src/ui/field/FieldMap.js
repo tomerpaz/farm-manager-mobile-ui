@@ -2,6 +2,7 @@ import React from 'react'
 import { Box } from '@mui/material'
 import { CircleMarker, MapContainer, Polygon, TileLayer, useMapEvents } from 'react-leaflet'
 import SatelliteMapProvider from '../../components/map/SatelliteMapProvider'
+import GeoLocation from '../../components/GeoLocation'
 
 const FieldMap = ({ field, height, tile, setMap, onClick, points }) => {
 
@@ -34,6 +35,7 @@ const FieldMap = ({ field, height, tile, setMap, onClick, points }) => {
                 ref={setMap}
             >
                 <SatelliteMapProvider />
+                <GeoLocation />
                 {tile && <TileLayer
                     attribution='Farm Manager'
                     url={tile}

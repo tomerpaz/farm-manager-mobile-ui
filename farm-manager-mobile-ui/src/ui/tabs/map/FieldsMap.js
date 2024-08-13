@@ -10,8 +10,6 @@ import { useSelector } from "react-redux";
 import FieldsFilter from "../../../components/filters/FieldsFilter";
 import { filterFields, getFillColor, getOpacity, isArrayEmpty, isStringEmpty, SCOUT } from "../../FarmUtil";
 import SatelliteMapProvider from "../../../components/map/SatelliteMapProvider";
-import ScoutDialog from "../../scout/ScoutingForm";
-import { isEqual } from "date-fns";
 
 
 const FieldsMap = (props) => {

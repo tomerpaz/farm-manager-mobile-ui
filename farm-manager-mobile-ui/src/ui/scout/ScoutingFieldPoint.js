@@ -58,7 +58,7 @@ const ScoutingFieldPoint = ({ open, point, scouts, handleClose, stages, setPoint
             </IconButton>
           </Toolbar>
         </AppBar>
-        <DialogContent sx={{ padding: 0, bgcolor: grey[100] }}  >
+        <DialogContent sx={{ padding: 0, bgcolor: grey[100],minHeight: 150 }}  >
           {scouts.map((e, index) => {
             return (
               <ScoutingCard key={e.id} scout={e} index={index} onEdit={() => setScout(e)} />
