@@ -31,7 +31,7 @@ export function getPestMonitorInfectionLevelColor(pestMonitors, dark) {
 
 export function getPointColor(point, scouts, dark) {
     if (point.active === false) {
-        return  'gray';
+        return dark && point.type === 'trap' ? 'black' :  'gray';
     } else if (isArrayEmpty(scouts)) {
         return  'white';
     } else {

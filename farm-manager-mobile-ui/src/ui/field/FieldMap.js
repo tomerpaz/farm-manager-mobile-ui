@@ -4,7 +4,7 @@ import { CircleMarker, MapContainer, Polygon, TileLayer, useMapEvents } from 're
 import SatelliteMapProvider from '../../components/map/SatelliteMapProvider'
 import GeoLocation from '../../components/GeoLocation'
 
-const FieldMap = ({ field, height, tile, setMap, onClick, points }) => {
+const FieldMap = ({ field, height, tile, setMap, onClick, points, setCenter, center }) => {
 
     function HandleMapEvents(d) {
 
@@ -15,9 +15,11 @@ const FieldMap = ({ field, height, tile, setMap, onClick, points }) => {
                     onClick(e, field, 'map');
                 }
             },
-            // dragend: (e) => {
-            //     setCenter(e.target.getCenter())
-            // },
+            dragend: (e) => {
+                if(setCenter){
+                    setCenter(e.target.getCenter())
+                }
+            },
             // click: (e) => {
             //     change('lng', e.latlng.lng.toFixed(5));
             //     change('lat', e.latlng.lat.toFixed(5));
@@ -31,7 +33,7 @@ const FieldMap = ({ field, height, tile, setMap, onClick, points }) => {
 
     return (
         <Box flex={1} id="map" dir='ltr'>
-            <MapContainer style={{ height: height, width: '100%' }} center={[field.lat, field.lng]} zoom={field.zoom} scrollWheelZoom={false}
+            <MapContainer style={{ height: height, width: '100%' }} center={center ? center : [field.lat, field.lng]} zoom={field.zoom} scrollWheelZoom={false}
                 ref={setMap}
             >
                 <SatelliteMapProvider />

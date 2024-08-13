@@ -24,6 +24,7 @@ const FieldScouting = ({ field }) => {
     const [map, setMap] = useState(null);
 
 
+    const [center, setCenter] = useState()
 
     const { data: user } = useGetUserDataQuery()
 
@@ -47,6 +48,7 @@ const FieldScouting = ({ field }) => {
     }
 
 
+console.log('hi',center)
 
     const onScoutMapClick = (event, element, type) => {
         console.log('onScoutMapClick', type, event);
@@ -74,7 +76,7 @@ const FieldScouting = ({ field }) => {
 
     return (
         <Box display={'flex'} flex={1} alignItems={'stretch'} justifyContent={'space-between'} flexDirection={'column'}>
-            {field.polygon && <FieldMap field={field} height={height} onClick={onScoutMapClick} points={buildScoutPoints(points, scouts)} setMap={setMap} />}
+            {field.polygon && <FieldMap field={field} height={height} onClick={onScoutMapClick} points={buildScoutPoints(points, scouts)} setMap={setMap} center={center} setCenter={setCenter} />}
             {point && <FieldPointDialog open={dialog === 'point'} deletable={isArrayEmpty(pointScouts)} defaultValues={point} handleClose={clear} types={SCOUT_TYPES}/>}
             {point && <ScoutingFieldPoint stages={stages} open={dialog === 'pointScouting'} point={point} scouts={pointScouts} handleClose={() => clear(null)} setPoint={setPoint} />}
         </Box>
