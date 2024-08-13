@@ -9,6 +9,7 @@ import { DatePicker } from "@mui/x-date-pickers";
 import { Cancel, Close, ControlPointDuplicate, Delete, Save } from "@mui/icons-material";
 import { useGetContainersQuery, useGetQualitiesQuery, useGetSizesQuery } from "../../../../features/utils/containersApiSlice";
 import ActionApprovalDialog from "../../../../components/ui/ActionApprovalDialog";
+import DialogAppBar from "../../../dialog/DialogAppBar";
 
 
 const ActivityFieldDialog = ({ selectedRow, selectedIndex, handleClose, activityType, update, remove, prepend }) => {
@@ -108,21 +109,12 @@ const ActivityFieldDialog = ({ selectedRow, selectedIndex, handleClose, activity
                 aria-describedby="alert-dialog-description"
                 fullWidth
             >
-                <AppBar sx={{ position: 'relative' }} elevation={0}>
-                    <Toolbar>
-                        <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-                            {displayFieldName(selectedRow.field)}
-                        </Typography>
-                        <IconButton
-                            edge="start"
-                            onClick={() => onAction(false)}
-                            color="inherit"
-                            aria-label="done"
-                        >
-                            <Close />
-                        </IconButton>
-                    </Toolbar>
-                </AppBar>
+                <DialogAppBar onClose={() => onAction(false)}
+                    title={
+                        displayFieldName(selectedRow.field)}
+                />
+
+
                 <DialogTitle id="alert-dialog-title">
                     <Box display={'flex'} flexDirection={'row'} justifyContent={'space-between'}>
                         <Box>

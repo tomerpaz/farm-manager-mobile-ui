@@ -1,8 +1,9 @@
-import { AppBar, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, Toolbar, Typography } from "@mui/material";
+import { Button, Dialog, DialogActions, DialogContent, InputAdornment } from "@mui/material";
 import TextFieldBase from "../../../../components/ui/TextField";
-import { Cancel, Close, Save } from "@mui/icons-material";
+import { Save } from "@mui/icons-material";
 import { useState } from "react";
 import { getTotalFieldArea } from "../ActivityUtil";
+import DialogAppBar from "../../../dialog/DialogAppBar";
 
 const UpdateAllFieldsAreaDialog = ({ open, text, handleClose, areaUnit, fields, replace }) => {
 
@@ -38,21 +39,7 @@ const UpdateAllFieldsAreaDialog = ({ open, text, handleClose, areaUnit, fields, 
             aria-describedby="alert-dialog-description"
             fullWidth
         >
-            <AppBar sx={{ position: 'relative' }} elevation={0}>
-                <Toolbar>
-                    <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-                        {`% ${text.of} ${getTotalFieldArea(fields.map(e => e.field))} ${text[areaUnit]}`}
-                    </Typography>
-                    <IconButton
-                        edge="start"
-                        onClick={() => onAction(false)}
-                        color="inherit"
-                        aria-label="done"
-                    >
-                        <Close />
-                    </IconButton>
-                </Toolbar>
-            </AppBar>
+            <DialogAppBar onClose={() => onAction(false)} title={`% ${text.of} ${getTotalFieldArea(fields.map(e => e.field))} ${text[areaUnit]}`}/>
             <DialogContent>
                 <TextFieldBase type='number' value={_percent} onChange={e => handlePercent(Number(e.target.value))} fullWidth={true}
                     InputProps={{

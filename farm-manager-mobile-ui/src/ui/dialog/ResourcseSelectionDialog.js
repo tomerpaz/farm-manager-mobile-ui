@@ -10,6 +10,7 @@ import { EQUIPMENT, FERTILIZER, LIST_PESTICIDE, PESTICIDE, SPRAYER, VARIETY, WAT
 import { useGetResourcesQuery } from "../../features/resources/resourcesApiSlice";
 import ListPager from "../../components/ui/ListPager";
 import { useGetCropPesticidesQuery } from "../../features/pesticides/pecticidesApiSlice";
+import DialogAppBar from "./DialogAppBar";
 
 const filterResource = (e, filter, type, text, isSprayer) => {
     const categopryOk = (isSprayer ? e.category === SPRAYER : e.category !== SPRAYER);
@@ -143,21 +144,8 @@ const ResourcseSelectionDialog = ({ open, handleClose, resourceTypes, cropId }) 
             aria-describedby="alert-dialog-description"
             fullScreen={isMobile()} fullWidth={!isMobile()}
         >
-            <AppBar sx={{ position: 'relative' }} elevation={0}>
-                <Toolbar>
-                    <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-                        {`${text.resources}`}
-                    </Typography>
-                    <IconButton
-                        edge="start"
-                        onClick={() => onAction(false)}
-                        color="inherit"
-                        aria-label="done"
-                    >
-                        <Close />
-                    </IconButton>
-                </Toolbar>
-            </AppBar>
+            <DialogAppBar onClose={() => onAction(false)}
+                title={`${text.resources}`} />
             <DialogTitle id="alert-dialog-title">
                 <Box>
                     <TextFieldBase

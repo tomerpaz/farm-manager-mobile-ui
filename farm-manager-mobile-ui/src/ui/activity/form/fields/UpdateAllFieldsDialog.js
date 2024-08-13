@@ -3,6 +3,7 @@ import TextFieldBase from "../../../../components/ui/TextField";
 import { Cancel, Save } from "@mui/icons-material";
 import { useEffect, useState } from "react";
 import { AREA_UNIT, getUnitText } from "../../../FarmUtil";
+import DialogAppBar from "../../../dialog/DialogAppBar";
 
 const UpdateAllFieldsDialog = ({ open, text, handleClose, areaUnit, activityArea, totalWeight, totalQty, weightUnit, fields, replace }) => {
 
@@ -25,12 +26,12 @@ const UpdateAllFieldsDialog = ({ open, text, handleClose, areaUnit, activityArea
     }
 
     const onAction = (val) => {
-        if(val){
+        if (val) {
             const newFields = fields.slice();
             const qtyPerAreaUnit = _totalQty / activityArea;
             const weightPerAreaUnit = _totalWeight / activityArea;
 
-            newFields.forEach((e,index,arr) => {
+            newFields.forEach((e, index, arr) => {
                 e.qty = Number((qtyPerAreaUnit * e.activityArea).toFixed(2));
                 e.weight = Number((weightPerAreaUnit * e.activityArea).toFixed(2));
 
@@ -49,19 +50,17 @@ const UpdateAllFieldsDialog = ({ open, text, handleClose, areaUnit, activityArea
             aria-describedby="alert-dialog-description"
             fullWidth
         >
-            <DialogTitle id="alert-dialog-title">
-                <Typography component={'div'} variant="h5">  {text.updateFields}</Typography>
-            </DialogTitle>
+            <DialogAppBar onClose={() => onAction(false)}
+                title={text.updateFields}/>
             <DialogContent>
                 <Box display={'flex'} flexDirection={'row'}>
                     <TextFieldBase type='number' value={_totalQty} onChange={e => handleTotalQty(Number(e.target.value))} fullWidth={true} label={`${text.total} ${text.qty}`} />
-                    <Box margin={1}/>
+                    <Box margin={1} />
                     <TextFieldBase type='number' value={_totalWeight} onChange={e => handleTotalWeight(Number(e.target.value))} fullWidth={true} label={`${text.total} ${text[weightUnit]}`} />
                 </Box>
 
             </DialogContent>
             <DialogActions sx={{ justifyContent: 'center' }}>
-                <Button size='large' endIcon={<Cancel />} variant='outlined' onClick={() => onAction(false)}>{text.cancel}</Button>
                 <Button disabled={!touched} size='large' endIcon={<Save />} disableElevation={true} variant='contained' onClick={() => onAction(true)} >
                     {text.save}
                 </Button>

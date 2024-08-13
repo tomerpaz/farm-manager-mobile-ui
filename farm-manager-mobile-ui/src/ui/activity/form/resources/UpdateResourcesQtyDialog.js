@@ -3,6 +3,7 @@ import TextFieldBase from "../../../../components/ui/TextField";
 import { Cancel, Close, Save } from "@mui/icons-material";
 import { useState } from "react";
 import { AREA_UNIT, getUnitText } from "../../../FarmUtil";
+import DialogAppBar from "../../../dialog/DialogAppBar";
 
 const UpdateResourcesQtyDialog = ({ open, units, text, handleClose, areaUnit, activityArea }) => {
 
@@ -29,21 +30,10 @@ const UpdateResourcesQtyDialog = ({ open, units, text, handleClose, areaUnit, ac
             aria-describedby="alert-dialog-description"
             fullWidth
         >
-            <AppBar sx={{ position: 'relative' }} elevation={0}>
-                <Toolbar>
-                    <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-                        {text.bulkQtyUpdate}
-                    </Typography>
-                    <IconButton
-                        edge="start"
-                        onClick={() => onAction(false)}
-                        color="inherit"
-                        aria-label="done"
-                    >
-                        <Close />
-                    </IconButton>
-                </Toolbar>
-            </AppBar>
+            <DialogAppBar onClose={() => onAction(false)}
+                title=
+                {text.bulkQtyUpdate}
+            />
             <DialogContent>
                 <Box display={'flex'} flexDirection={'row'} alignItems={'center'} >
                     <TextField

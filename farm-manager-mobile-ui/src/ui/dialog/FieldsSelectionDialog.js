@@ -8,6 +8,7 @@ import { Close, Search } from "@mui/icons-material";
 import { isMobile, isStringEmpty } from "../FarmUtil";
 import ListPager from "../../components/ui/ListPager";
 import { fi } from "date-fns/locale";
+import DialogAppBar from "./DialogAppBar";
 
 const filterActive = (field, active) => {
     return active ? field.endDate === null : field.endDate !== null;
@@ -95,21 +96,9 @@ const FieldSelectionDialog = ({ fields, open, handleClose, cropId }) => {
             aria-describedby="alert-dialog-description"
             fullScreen={isMobile()} fullWidth={!isMobile()}
         >
-            <AppBar sx={{ position: 'relative' }} elevation={0}>
-                <Toolbar>
-                    <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-                        {`${text.fields}`}
-                    </Typography>
-                    <IconButton
-                        edge="start"
-                        onClick={() => onAction(false)}
-                        color="inherit"
-                        aria-label="done"
-                    >
-                        <Close />
-                    </IconButton>
-                </Toolbar>
-            </AppBar>
+            <DialogAppBar onClose={() => onAction(false)}
+                title={`${text.fields}`} />
+
             <DialogTitle id="alert-dialog-title">
                 <Box display={'flex'} flexDirection={'row'}>
 

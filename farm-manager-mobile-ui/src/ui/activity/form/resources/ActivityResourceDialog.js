@@ -7,6 +7,7 @@ import { useGetUserDataQuery } from "../../../../features/auth/authApiSlice";
 import { FERTILIZER, IRRIGARION_TYPES, PESTICIDE, QTY_PER_AREA_UNIT_RESOURCE_TYPE, SECONDARY_QTY_RESOURCES, SPRAY_TYPES, WAREHOUSE_RESOURCE_TYPE, WATER, WORKER_GROUP, getResourceTypeText, getUnitText, isStringEmpty, safeDiv } from "../../../FarmUtil";
 import { Cancel, Close, Delete, Save } from "@mui/icons-material";
 import { calacTotalPesticideVolume } from "../../../FarmCalculator";
+import DialogAppBar from "../../../dialog/DialogAppBar";
 
 const getQtyPerWorker = (selectedRow) => {
 
@@ -152,21 +153,10 @@ const ActivityResourceDialog = ({ selectedRow, selectedIndex, handleClose, updat
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
         >
-            <AppBar sx={{ position: 'relative' }} elevation={0}>
-                <Toolbar>
-                    <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-                        {`${getResourceTypeText(selectedRow.resource.type, text)}:  ${selectedRow.resource.name}`}
-                    </Typography>
-                    <IconButton
-                        edge="start"
-                        onClick={() => onAction(false)}
-                        color="inherit"
-                        aria-label="done"
-                    >
-                        <Close />
-                    </IconButton>
-                </Toolbar>
-            </AppBar>
+            <DialogAppBar onClose={() => onAction(false)}
+                title=
+                {`${getResourceTypeText(selectedRow.resource.type, text)}:  ${selectedRow.resource.name}`}
+            />
             <DialogContent /*sx={{ minHeight: isWarehouse ? height : null }}*/>
                 <Box display={'flex'} flex={1} flexDirection={'column'}  >
                     <TextFieldBase value={qty} onChange={e => onQtyChange(Number(e.target.value))}

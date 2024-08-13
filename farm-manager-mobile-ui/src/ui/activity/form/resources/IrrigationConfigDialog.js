@@ -4,6 +4,7 @@ import { Cancel, Clear, Save } from "@mui/icons-material";
 import { useEffect, useState } from "react";
 import { PER_AREA_UNIT_PER_DAY, PER_AREA_UNIT_PER_IRREGATION_DAY, PER_WATER_UNIT, TOTAL_PER_AREA_UNIT, TOTAL_PER_FIELD, calcIrrigationDays } from "../../../FarmCalculator";
 import DecoratedBox from "../../../../components/ui/DecoratedBox";
+import DialogAppBar from "../../../dialog/DialogAppBar";
 
 
 
@@ -38,9 +39,9 @@ const IrrigationConfigDialog = ({ open, units, text, handleClose, areaUnit, acti
     }
 
     const handleSetFrequency = (val) => {
-        if(val < 1){
+        if (val < 1) {
             setFrequency(1);
-        } else if( val > days) {
+        } else if (val > days) {
             setFrequency(days);
         } else {
             setFrequency(val)
@@ -55,9 +56,10 @@ const IrrigationConfigDialog = ({ open, units, text, handleClose, areaUnit, acti
             aria-describedby="alert-dialog-description"
             fullWidth
         >
-            {/* <DialogTitle id="alert-dialog-title">
-                <Typography component={'div'} variant="h6">  {text.days.toLowerCase()}: {days}</Typography>
-            </DialogTitle> */}
+            <DialogAppBar onClose={() => onAction(false)}
+                title=
+                {''}
+            />
             <DialogContent>
                 <TextField
                     value={irrigationMethod}
@@ -67,7 +69,7 @@ const IrrigationConfigDialog = ({ open, units, text, handleClose, areaUnit, acti
                     select
                     label={text.irrigationMethod}
                 >
-                    <MenuItem key={''} value={''}><em  style={{height: 20}}/></MenuItem>
+                    <MenuItem key={''} value={''}><em style={{ height: 20 }} /></MenuItem>
                     <MenuItem value={PER_AREA_UNIT_PER_DAY}>{`${text[areaUnit]}/${text.day}`}</MenuItem>
                     <MenuItem value={PER_AREA_UNIT_PER_IRREGATION_DAY}>{`${text[areaUnit]}/${text.irrigationDay}`}</MenuItem>
                     <MenuItem value={TOTAL_PER_AREA_UNIT}>{`${text.total}/${text[areaUnit]}`}</MenuItem>
@@ -90,7 +92,7 @@ const IrrigationConfigDialog = ({ open, units, text, handleClose, areaUnit, acti
                             }}
                         />
                         <Box >
-                            <DecoratedBox value={`${text.irrigationDays}: ${calcIrrigationDays(days,frequency)}`} />
+                            <DecoratedBox value={`${text.irrigationDays}: ${calcIrrigationDays(days, frequency)}`} />
                         </Box>
 
                     </Box>
@@ -105,7 +107,7 @@ const IrrigationConfigDialog = ({ open, units, text, handleClose, areaUnit, acti
                     select
                     label={text.fertilizeMethod}
                 >
-                    <MenuItem key={''} value={''}>{<em style={{height: 20}}/>}</MenuItem>
+                    <MenuItem key={''} value={''}>{<em style={{ height: 20 }} />}</MenuItem>
                     <MenuItem value={PER_WATER_UNIT}>{`${text.per}${text.m3}`}</MenuItem>
                     <MenuItem value={PER_AREA_UNIT_PER_DAY}>{`${text[areaUnit]}/${text.day}`}</MenuItem>
                     <MenuItem value={PER_AREA_UNIT_PER_IRREGATION_DAY}>{`${text[areaUnit]}/${text.irrigationDay}`}</MenuItem>
@@ -115,10 +117,6 @@ const IrrigationConfigDialog = ({ open, units, text, handleClose, areaUnit, acti
 
             </DialogContent>
             <DialogActions sx={{ justifyContent: 'center' }}>
-                <Button size='large' endIcon={<Cancel />} variant='outlined' onClick={() => onAction(false)}>{text.cancel}</Button>
-                {/* <Button size='large' endIcon={<Clear />} variant='outlined' onClick={clear} >
-                    {text.clear}
-                </Button> */}
                 <Button size='large' endIcon={<Save />} disableElevation={true} variant='contained' onClick={() => onAction(true)} >
                     {text.save}
                 </Button>
