@@ -7,7 +7,7 @@ import { Close, Edit } from '@mui/icons-material';
 import { isArrayEmpty, isMobile } from '../FarmUtil';
 import ScoutingForm from './ScoutingForm';
 import { parseISO } from 'date-fns';
-import { newScouting } from './ScoutingUtil';
+import { newScouting, SCOUT_TYPES } from './ScoutingUtil';
 import ScoutingCard from './ScoutingCard';
 import { grey } from '@mui/material/colors';
 import AddIcon from '@mui/icons-material/Add';
@@ -70,7 +70,7 @@ const ScoutingFieldPoint = ({ open, point, scouts, handleClose, stages, setPoint
         </Fab>}
       </Dialog>
       {scout && <ScoutingForm open={true} defaultValues={{ ...scout, date: scout.id ? parseISO(scout.date) : scout.date }} handleClose={() => setScout(null)} />}
-      {editPoint &&  <FieldPointDialog open={editPoint} deletable={isArrayEmpty(scouts)} defaultValues={point} handleClose={handleCloseEditPoint} />}
+      {editPoint &&  <FieldPointDialog open={editPoint} deletable={isArrayEmpty(scouts)} defaultValues={point} handleClose={handleCloseEditPoint} types={SCOUT_TYPES} />}
     </Box>
   );
 

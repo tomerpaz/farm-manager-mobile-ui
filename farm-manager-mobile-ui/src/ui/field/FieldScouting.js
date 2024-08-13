@@ -8,7 +8,7 @@ import FieldPointDialog from '../point/FieldPointDialog';
 import ScoutingFieldPoint from '../scout/ScoutingFieldPoint';
 import { useGetFieldScoutsQuery } from '../../features/scout/scoutsApiSlice';
 import { displayFieldName, isArrayEmpty } from '../FarmUtil';
-import { buildScoutPoints } from '../scout/ScoutingUtil';
+import { buildScoutPoints, SCOUT_TYPES } from '../scout/ScoutingUtil';
 import { useGetInfectionLevelsQuery, useGetPestsQuery, useGetPestStagesQuery, useGetPlantLocationsQuery } from '../../features/pests/pestsApiSlice';
 import Loading from '../../components/Loading';
 import { selectLang } from '../../features/app/appSlice';
@@ -53,7 +53,7 @@ const FieldScouting = ({ field }) => {
         if (type === 'map') {
             const p = { id: null, lat: event.latlng.lat, lng: event.latlng.lng, fieldId, 
                 name: `${displayFieldName(field)} ${text.scouting} - ${points.length} `, 
-                active: true, type: 'scout' };
+                active: true, type: 'scouting' };
             setPoint(p);
             setDialog('point')
         }
@@ -75,7 +75,7 @@ const FieldScouting = ({ field }) => {
     return (
         <Box display={'flex'} flex={1} alignItems={'stretch'} justifyContent={'space-between'} flexDirection={'column'}>
             {field.polygon && <FieldMap field={field} height={height} onClick={onScoutMapClick} points={buildScoutPoints(points, scouts)} setMap={setMap} />}
-            {point && <FieldPointDialog open={dialog === 'point'} deletable={isArrayEmpty(pointScouts)} defaultValues={point} handleClose={clear} />}
+            {point && <FieldPointDialog open={dialog === 'point'} deletable={isArrayEmpty(pointScouts)} defaultValues={point} handleClose={clear} types={SCOUT_TYPES}/>}
             {point && <ScoutingFieldPoint stages={stages} open={dialog === 'pointScouting'} point={point} scouts={pointScouts} handleClose={() => clear(null)} setPoint={setPoint} />}
         </Box>
     )

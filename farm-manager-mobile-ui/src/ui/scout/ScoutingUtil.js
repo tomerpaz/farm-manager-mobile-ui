@@ -6,10 +6,16 @@ export const infectionLevels = [{ level: 'high', color: '#f44336', dark: '#b71c1
 { level: 'none', color: '#7cb342', dark: '#1b5e20' }]
 
 
-export function getInfectionLevelColor(infectionLevel, dark) {
+export const SCOUT_TYPES = ['scouting', 'trap'];
+
+export function getInfectionLevelColor(infectionLevel, perimeter, type) {
     const level = infectionLevels.find(level => infectionLevel === level.level);
     if (level) {
-        return dark ? level.dark : level.color;
+        if (perimeter && type === 'trap') {
+            return 'black'
+        } else {
+            return perimeter ? level.dark : level.color;
+        }
     }
 }
 export function getPestMonitorInfectionLevelColor(pestMonitors, dark) {
@@ -25,12 +31,12 @@ export function getPestMonitorInfectionLevelColor(pestMonitors, dark) {
 
 export function getPointColor(point, scouts, dark) {
     if (point.active === false) {
-        return dark ? 'black' : 'gray';
+        return  'gray';
     } else if (isArrayEmpty(scouts)) {
-        return dark ? 'black' : 'white';
+        return  'white';
     } else {
         const level = scouts[0].infectionLevel
-        return getInfectionLevelColor(level, dark);
+        return getInfectionLevelColor(level, dark, point.type);
     }
 
 }

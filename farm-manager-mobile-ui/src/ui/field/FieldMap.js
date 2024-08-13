@@ -73,7 +73,7 @@ const FieldMap = ({ field, height, tile, setMap, onClick, points }) => {
                             }}
                             key={e.id} radius={12}
                             color={e.color}
-                            weight={2}
+                            weight={4}
                             fillColor={e.fillColor}
                             fillOpacity={1}
                             center={[e.lat, e.lng]}

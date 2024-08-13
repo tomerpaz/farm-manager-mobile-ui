@@ -12,7 +12,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { Cancel, Close, Delete, PestControl, Save } from '@mui/icons-material';
 import { getPointTypes, UI_SIZE } from '../FarmUtil';
 
-const FieldPointDialog = ({ defaultValues, open, handleClose, deletable }) => {
+const FieldPointDialog = ({ defaultValues, open, handleClose, deletable, types }) => {
 
   const text = useSelector(selectLang)
 
@@ -75,36 +75,10 @@ const FieldPointDialog = ({ defaultValues, open, handleClose, deletable }) => {
             <Close />
           </IconButton>
         </Toolbar>
-      </AppBar>      <form onSubmit={handleSubmit(onSubmit)} >
+      </AppBar>
+      <form onSubmit={handleSubmit(onSubmit)} >
 
         <DialogContent>
-          <Typography variant='h6'>{text.waypoint}</Typography>
-          {/* <DialogContentText>
-          {`${text.field} ${fieldName}`}
-        </DialogContentText> */}
-
-          {/* <Box display={'flex'} flexDirection={'row'} alignItems={'center'}>
-            <Controller
-              control={control}
-              name="type"
-              render={({ field }) => (
-                <TextField
-                  id="field-point-type"
-                  select
-                  {...field}
-                  size={UI_SIZE}
-                  label={text.type}
-                  fullWidth
-                >
-                  {getPointTypes().map((option) => (
-                    <MenuItem key={option} value={option}>
-                      {text[option]}
-                    </MenuItem>
-                  ))}
-                </TextField>
-              )}
-            />
-          </Box> */}
           <Box display={'flex'} flexDirection={'row'} alignItems={'center'}>
             <Controller
               control={control}
@@ -117,6 +91,30 @@ const FieldPointDialog = ({ defaultValues, open, handleClose, deletable }) => {
               )}
             />
           </Box>
+          <Box margin={2}/>
+          <Box display={'flex'} flexDirection={'row'} alignItems={'center'}>
+            <Controller
+              control={control}
+              name="type"
+              render={({ field }) => (
+                <TextField
+                  id="field-point-type"
+                  select
+                  {...field}
+                  size={UI_SIZE}
+                  label={text.type}
+                  fullWidth
+                >
+                  {types.map((option) => (
+                    <MenuItem key={option} value={option}>
+                      {text[option]}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              )}
+            />
+          </Box>
+
           {defaultValues.id !== null && <Box display={'flex'} flexDirection={'row'} alignItems={'center'}>
             <Controller
               control={control}
@@ -138,7 +136,7 @@ const FieldPointDialog = ({ defaultValues, open, handleClose, deletable }) => {
         <DialogActions sx={{ justifyContent: 'center' }}>
           {defaultValues.id && deletable && <Button size='large' endIcon={<Delete />} variant='outlined' onClick={() => onAction('delete')}>{text.delete}</Button>}
 
-          <Button size='large'  endIcon={<Save />} disableElevation={true} variant='contained' type="submit" >
+          <Button size='large' endIcon={<Save />} disableElevation={true} variant='contained' type="submit" >
             {text.save}
           </Button>
           {/* {!defaultValues.id &&
