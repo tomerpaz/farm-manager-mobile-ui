@@ -6,6 +6,7 @@ import DoneIcon from '@mui/icons-material/Done';
 import { getUserLang } from '../../router/UserRoutes';
 import { isInventoryPossible, isMobile, isPlansPossible } from '../FarmUtil';
 import { useGetUserDataQuery } from '../../features/auth/authApiSlice';
+import DialogAppBar from '../dialog/DialogAppBar';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -39,22 +40,8 @@ const LayersDialog = () => {
             onClose={handleClose}
             TransitionComponent={Transition}
         >
-            <AppBar sx={{ position: 'relative' }} elevation={0}>
-                <Toolbar>
+            <DialogAppBar onClose={handleClose} title={text.layers} />
 
-                    <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-                        {text.layers}
-                    </Typography>
-                    <IconButton
-                        edge="start"
-                        onClick={handleClose}
-                        color="inherit"
-                        aria-label="done"
-                    >
-                        <DoneIcon />
-                    </IconButton>
-                </Toolbar>
-            </AppBar>
 
             <DialogContent>
 

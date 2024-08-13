@@ -8,11 +8,10 @@ import { MobileDatePicker } from '@mui/x-date-pickers';
 import { asLocalDate, getActivityStatuses, getActivityStatusText, getActivityTypes, getActivityTypeText, isMobile, isStringEmpty, parseISOOrNull, PLAN } from '../../ui/FarmUtil';
 import { FilterAltOff } from '@mui/icons-material';
 import { getWarehousesState, useGetWarehousesQuery } from '../../features/warehouses/warehouseApiSlice';
+import { Transition } from '../../ui/Util';
 
 
-const Transition = React.forwardRef(function Transition(props, ref) {
-    return <Slide direction="up" ref={ref} {...props} />;
-});
+
 const InventoryFilter = () => {
 
     const dispatch = useDispatch()

@@ -2,6 +2,7 @@ import { Box, Button, Dialog, DialogActions, DialogContent } from "@mui/material
 import TextFieldBase from "../../../../components/ui/TextField";
 import { Cancel, Save } from "@mui/icons-material";
 import { useEffect, useState } from "react";
+import DialogAppBar from "../../../dialog/DialogAppBar";
 
 
 const SprayParams = ({ open, units, text, handleClose, areaUnit, activityArea, days, sprayParams }) => {
@@ -20,6 +21,8 @@ const SprayParams = ({ open, units, text, handleClose, areaUnit, activityArea, d
             aria-describedby="alert-dialog-description"
             fullWidth
         >
+            <DialogAppBar onClose={() => onAction(false)} title={""} />
+
             <DialogContent>
                 <Box display={'flex'} flexDirection={'row'} alignItems={'center'}>
                     <TextFieldBase sx={{ flex: 1 }}
@@ -48,7 +51,6 @@ const SprayParams = ({ open, units, text, handleClose, areaUnit, activityArea, d
 
             </DialogContent>
             <DialogActions sx={{ justifyContent: 'center' }}>
-                <Button size='large' endIcon={<Cancel />} variant='outlined' onClick={() => onAction(false)}>{text.cancel}</Button>
                 <Button size='large' endIcon={<Save />} disableElevation={true} variant='contained' onClick={() => onAction(true)} >
                     {text.save}
                 </Button>

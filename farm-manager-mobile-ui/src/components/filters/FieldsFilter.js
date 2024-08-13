@@ -6,10 +6,9 @@ import DoneIcon from '@mui/icons-material/Done';
 import { FilterAltOff } from '@mui/icons-material';
 import { ACTIVE, ALL, getYearArray, INACTIVE, isMobile } from '../../ui/FarmUtil';
 import { useGetUserDataQuery } from '../../features/auth/authApiSlice';
+import { Transition } from '../../ui/Util';
 
-const Transition = React.forwardRef(function Transition(props, ref) {
-    return <Slide direction="up" ref={ref} {...props} />;
-});
+
 
 const FieldsFilter = ({ fields, }) => {
 

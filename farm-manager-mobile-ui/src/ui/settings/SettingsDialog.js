@@ -6,10 +6,12 @@ import { Close, DesktopWindowsOutlined, MobileFriendlyOutlined } from '@mui/icon
 import { getUserLang } from '../../router/UserRoutes';
 import { isInventoryPossible, isMobile, isPlansPossible } from '../FarmUtil';
 import { useGetUserDataQuery } from '../../features/auth/authApiSlice';
+import DialogAppBar from '../dialog/DialogAppBar';
+import { Transition } from '../Util';
 
-const Transition = React.forwardRef(function Transition(props, ref) {
-    return <Slide direction="up" ref={ref} {...props} />;
-});
+// const Transition = React.forwardRef(function Transition(props, ref) {
+//     return <Slide direction="up" ref={ref} {...props} />;
+// });
 
 const flagMap = [
     { id: 'en', flag: 'GB', label: 'English', emoji: '🇬🇧' },
@@ -60,22 +62,7 @@ const SettingsDialog = () => {
             onClose={handleClose}
             TransitionComponent={Transition}
         >
-            <AppBar sx={{ position: 'relative' }} elevation={0}>
-                <Toolbar>
-
-                    <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-                        {/* Filter */}
-                    </Typography>
-                    <IconButton
-                        edge="start"
-                        onClick={handleClose}
-                        color="inherit"
-                        aria-label="done"
-                    >
-                        <Close />
-                    </IconButton>
-                </Toolbar>
-            </AppBar>
+            <DialogAppBar onClose={handleClose} title={""} />
 
             <DialogContent>
                 <Select

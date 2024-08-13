@@ -3,7 +3,7 @@ import TextFieldBase from "../../components/ui/TextField";
 import { useSelector } from "react-redux";
 import { selectLang } from "../../features/app/appSlice";
 import { Fragment, useEffect, useState } from "react";
-import { cellSx, headerSx } from "../Util";
+import { cellSx, headerSx, Transition } from "../Util";
 import { useGetUserDataQuery } from "../../features/auth/authApiSlice";
 import { Close, Search } from "@mui/icons-material";
 import { EQUIPMENT, FERTILIZER, LIST_PESTICIDE, PESTICIDE, SPRAYER, VARIETY, WATER, getResourceTypeText, getUnitText, isMobile, isStringEmpty } from "../FarmUtil";
@@ -143,6 +143,8 @@ const ResourcseSelectionDialog = ({ open, handleClose, resourceTypes, cropId }) 
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
             fullScreen={isMobile()} fullWidth={!isMobile()}
+            TransitionComponent={Transition}
+
         >
             <DialogAppBar onClose={() => onAction(false)}
                 title={`${text.resources}`} />

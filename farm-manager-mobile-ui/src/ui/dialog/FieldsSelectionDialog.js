@@ -3,7 +3,7 @@ import TextFieldBase from "../../components/ui/TextField";
 import { useSelector } from "react-redux";
 import { selectLang } from "../../features/app/appSlice";
 import { Fragment, useState } from "react";
-import { cellSx, headerSx } from "../Util";
+import { cellSx, headerSx, Transition } from "../Util";
 import { Close, Search } from "@mui/icons-material";
 import { isMobile, isStringEmpty } from "../FarmUtil";
 import ListPager from "../../components/ui/ListPager";
@@ -95,6 +95,7 @@ const FieldSelectionDialog = ({ fields, open, handleClose, cropId }) => {
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
             fullScreen={isMobile()} fullWidth={!isMobile()}
+            TransitionComponent={Transition}
         >
             <DialogAppBar onClose={() => onAction(false)}
                 title={`${text.fields}`} />
