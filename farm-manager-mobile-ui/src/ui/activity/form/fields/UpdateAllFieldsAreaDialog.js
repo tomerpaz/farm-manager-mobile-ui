@@ -1,6 +1,6 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, InputAdornment, Typography } from "@mui/material";
+import { AppBar, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, Toolbar, Typography } from "@mui/material";
 import TextFieldBase from "../../../../components/ui/TextField";
-import { Cancel, Save } from "@mui/icons-material";
+import { Cancel, Close, Save } from "@mui/icons-material";
 import { useState } from "react";
 import { getTotalFieldArea } from "../ActivityUtil";
 
@@ -38,9 +38,21 @@ const UpdateAllFieldsAreaDialog = ({ open, text, handleClose, areaUnit, fields, 
             aria-describedby="alert-dialog-description"
             fullWidth
         >
-            <DialogTitle id="alert-dialog-title">
-                <Typography component={'div'} variant="h5">{`% ${text.of} ${getTotalFieldArea(fields.map(e => e.field))} ${text[areaUnit]}`}</Typography>
-            </DialogTitle>
+            <AppBar sx={{ position: 'relative' }} elevation={0}>
+                <Toolbar>
+                    <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
+                        {`% ${text.of} ${getTotalFieldArea(fields.map(e => e.field))} ${text[areaUnit]}`}
+                    </Typography>
+                    <IconButton
+                        edge="start"
+                        onClick={() => onAction(false)}
+                        color="inherit"
+                        aria-label="done"
+                    >
+                        <Close />
+                    </IconButton>
+                </Toolbar>
+            </AppBar>
             <DialogContent>
                 <TextFieldBase type='number' value={_percent} onChange={e => handlePercent(Number(e.target.value))} fullWidth={true}
                     InputProps={{
@@ -50,7 +62,6 @@ const UpdateAllFieldsAreaDialog = ({ open, text, handleClose, areaUnit, fields, 
                 />
             </DialogContent>
             <DialogActions sx={{ justifyContent: 'center' }}>
-                <Button size='large' endIcon={<Cancel />} variant='outlined' onClick={() => onAction(false)}>{text.cancel}</Button>
                 <Button disabled={!touched} size='large' endIcon={<Save />} disableElevation={true} variant='contained' onClick={() => onAction(true)} >
                     {text.save}
                 </Button>

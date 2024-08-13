@@ -1,12 +1,12 @@
-import { Box, Button, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, InputAdornment, MenuItem, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
+import { AppBar, Box, Button, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, MenuItem, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Toolbar, Typography } from "@mui/material";
 import TextFieldBase from "../../components/ui/TextField";
 import { useSelector } from "react-redux";
 import { selectLang } from "../../features/app/appSlice";
 import { Fragment, useEffect, useState } from "react";
 import { cellSx, headerSx } from "../Util";
 import { useGetUserDataQuery } from "../../features/auth/authApiSlice";
-import { Search } from "@mui/icons-material";
-import { EQUIPMENT, FERTILIZER, LIST_PESTICIDE, PESTICIDE, SPRAYER, VARIETY, WATER, getResourceTypeText, getUnitText, isStringEmpty } from "../FarmUtil";
+import { Close, Search } from "@mui/icons-material";
+import { EQUIPMENT, FERTILIZER, LIST_PESTICIDE, PESTICIDE, SPRAYER, VARIETY, WATER, getResourceTypeText, getUnitText, isMobile, isStringEmpty } from "../FarmUtil";
 import { useGetResourcesQuery } from "../../features/resources/resourcesApiSlice";
 import ListPager from "../../components/ui/ListPager";
 import { useGetCropPesticidesQuery } from "../../features/pesticides/pecticidesApiSlice";
@@ -39,7 +39,7 @@ const ResourcseSelectionDialog = ({ open, handleClose, resourceTypes, cropId }) 
     const [type, setType] = useState(resourceTypes[0]);
 
     const [selectedResources, setSelectedResources] = useState([]);
-  //  const [selectedPesticides, setSelectedPesticides] = useState([]);
+    //  const [selectedPesticides, setSelectedPesticides] = useState([]);
 
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(ROWS_PER_PAGE);
@@ -108,7 +108,7 @@ const ResourcseSelectionDialog = ({ open, handleClose, resourceTypes, cropId }) 
     }
 
 
-    const visableResources = buildVisableResources().filter(e=>e.active);
+    const visableResources = buildVisableResources().filter(e => e.active);
 
     const visableSelectedResources = visableResources.filter(e => selectedResources.includes(e));
     const numSelected = visableSelectedResources.length;
@@ -141,8 +141,23 @@ const ResourcseSelectionDialog = ({ open, handleClose, resourceTypes, cropId }) 
             onClose={handleClose}
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
-            fullScreen
+            fullScreen={isMobile()} fullWidth={!isMobile()}
         >
+            <AppBar sx={{ position: 'relative' }} elevation={0}>
+                <Toolbar>
+                    <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
+                        {`${text.resources}`}
+                    </Typography>
+                    <IconButton
+                        edge="start"
+                        onClick={() => onAction(false)}
+                        color="inherit"
+                        aria-label="done"
+                    >
+                        <Close />
+                    </IconButton>
+                </Toolbar>
+            </AppBar>
             <DialogTitle id="alert-dialog-title">
                 <Box>
                     <TextFieldBase
@@ -227,7 +242,6 @@ const ResourcseSelectionDialog = ({ open, handleClose, resourceTypes, cropId }) 
 
             </DialogContent>
             <DialogActions sx={{ justifyContent: 'center' }}>
-                <Button size='large' variant='outlined' onClick={() => onAction(false)}>{text.cancel}</Button>
                 <Button size='large' disableElevation={true} variant='contained' onClick={() => onAction(true)} autoFocus>
                     {text.save}
                 </Button>

@@ -1,11 +1,11 @@
-import { Box, Button, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, FormControlLabel, InputAdornment, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
+import { AppBar, Box, Button, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, FormControlLabel, IconButton, InputAdornment, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Toolbar, Typography } from "@mui/material";
 import TextFieldBase from "../../components/ui/TextField";
 import { useSelector } from "react-redux";
 import { selectLang } from "../../features/app/appSlice";
 import { Fragment, useState } from "react";
 import { cellSx, headerSx } from "../Util";
-import { Search } from "@mui/icons-material";
-import { isStringEmpty } from "../FarmUtil";
+import { Close, Search } from "@mui/icons-material";
+import { isMobile, isStringEmpty } from "../FarmUtil";
 import ListPager from "../../components/ui/ListPager";
 import { fi } from "date-fns/locale";
 
@@ -93,8 +93,23 @@ const FieldSelectionDialog = ({ fields, open, handleClose, cropId }) => {
             onClose={handleClose}
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
-            fullScreen
+            fullScreen={isMobile()} fullWidth={!isMobile()}
         >
+            <AppBar sx={{ position: 'relative' }} elevation={0}>
+                <Toolbar>
+                    <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
+                        {`${text.fields}`}
+                    </Typography>
+                    <IconButton
+                        edge="start"
+                        onClick={() => onAction(false)}
+                        color="inherit"
+                        aria-label="done"
+                    >
+                        <Close />
+                    </IconButton>
+                </Toolbar>
+            </AppBar>
             <DialogTitle id="alert-dialog-title">
                 <Box display={'flex'} flexDirection={'row'}>
 
@@ -145,7 +160,6 @@ const FieldSelectionDialog = ({ fields, open, handleClose, cropId }) => {
 
             </DialogContent>
             <DialogActions sx={{ justifyContent: 'center' }}>
-                <Button size='large' variant='outlined' onClick={() => onAction(false)}>{text.cancel}</Button>
                 <Button size='large' disableElevation={true} variant='contained' onClick={() => onAction(true)} autoFocus>
                     {text.save}
                 </Button>

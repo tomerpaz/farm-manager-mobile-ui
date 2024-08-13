@@ -1,4 +1,4 @@
-import { Autocomplete, Avatar, Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, MenuItem, Typography } from "@mui/material";
+import { AppBar, Autocomplete, Avatar, Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, MenuItem, Toolbar, Typography } from "@mui/material";
 import TextFieldBase from "../../../../components/ui/TextField";
 import { useSelector } from "react-redux";
 import { selectLang } from "../../../../features/app/appSlice";
@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { useGetUserDataQuery } from "../../../../features/auth/authApiSlice";
 import { HARVEST, MARKET, UI_SIZE, displayFieldName, getActivityTypeText, getMarketingDestinations, isArrayEmpty, safeDiv } from "../../../FarmUtil";
 import { DatePicker } from "@mui/x-date-pickers";
-import { Cancel, ControlPointDuplicate, Delete, Save } from "@mui/icons-material";
+import { Cancel, Close, ControlPointDuplicate, Delete, Save } from "@mui/icons-material";
 import { useGetContainersQuery, useGetQualitiesQuery, useGetSizesQuery } from "../../../../features/utils/containersApiSlice";
 import ActionApprovalDialog from "../../../../components/ui/ActionApprovalDialog";
 
@@ -108,14 +108,26 @@ const ActivityFieldDialog = ({ selectedRow, selectedIndex, handleClose, activity
                 aria-describedby="alert-dialog-description"
                 fullWidth
             >
+                <AppBar sx={{ position: 'relative' }} elevation={0}>
+                    <Toolbar>
+                        <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
+                            {displayFieldName(selectedRow.field)}
+                        </Typography>
+                        <IconButton
+                            edge="start"
+                            onClick={() => onAction(false)}
+                            color="inherit"
+                            aria-label="done"
+                        >
+                            <Close />
+                        </IconButton>
+                    </Toolbar>
+                </AppBar>
                 <DialogTitle id="alert-dialog-title">
                     <Box display={'flex'} flexDirection={'row'} justifyContent={'space-between'}>
                         <Box>
-                            <Typography component={'div'} variant="h6"> {displayFieldName(selectedRow.field)}</Typography>
                             <Typography component={'div'} > {selectedRow.field.cropName} / {selectedRow.field.varietyName} - {selectedRow.field.area} {text[user.areaUnit]}
-                                {/* <Avatar sx={{ backgroundColor: 'white' }}>
-                        {getFruitIcon(selectedRow.field.cropEngName)}
-                    </Avatar> */}
+
                             </Typography>
                         </Box>
                         {[HARVEST, MARKET].includes(activityType) &&
@@ -221,7 +233,6 @@ const ActivityFieldDialog = ({ selectedRow, selectedIndex, handleClose, activity
                     <TextFieldBase value={note} onChange={e => setNote(e.target.value)} fullWidth={true} label={`${text.fieldNote}`} />
                 </DialogContent>
                 <DialogActions sx={{ justifyContent: 'center' }}>
-                    <Button size='large' endIcon={<Cancel />} variant='outlined' onClick={() => onAction(false)}>{text.cancel}</Button>
                     <Button size='large' endIcon={<Delete />} disableElevation={true} variant='outlined' onClick={remove}>{text.delete}</Button>
                     <Button size='large' endIcon={<Save />} disableElevation={true} variant='contained' onClick={() => onAction(true)} >
                         {text.save}

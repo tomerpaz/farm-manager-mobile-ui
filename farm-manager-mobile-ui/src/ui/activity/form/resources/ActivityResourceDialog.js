@@ -1,11 +1,11 @@
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, MenuItem, Typography } from "@mui/material";
+import { AppBar, Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, MenuItem, Toolbar, Typography } from "@mui/material";
 import TextFieldBase from "../../../../components/ui/TextField";
 import { useSelector } from "react-redux";
 import { selectLang } from "../../../../features/app/appSlice";
 import { useState } from "react";
 import { useGetUserDataQuery } from "../../../../features/auth/authApiSlice";
 import { FERTILIZER, IRRIGARION_TYPES, PESTICIDE, QTY_PER_AREA_UNIT_RESOURCE_TYPE, SECONDARY_QTY_RESOURCES, SPRAY_TYPES, WAREHOUSE_RESOURCE_TYPE, WATER, WORKER_GROUP, getResourceTypeText, getUnitText, isStringEmpty, safeDiv } from "../../../FarmUtil";
-import { Cancel, Delete, Save } from "@mui/icons-material";
+import { Cancel, Close, Delete, Save } from "@mui/icons-material";
 import { calacTotalPesticideVolume } from "../../../FarmCalculator";
 
 const getQtyPerWorker = (selectedRow) => {
@@ -152,9 +152,21 @@ const ActivityResourceDialog = ({ selectedRow, selectedIndex, handleClose, updat
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
         >
-            <DialogTitle id="alert-dialog-title">
-                <Typography component={'div'} variant="h6">{`${getResourceTypeText(selectedRow.resource.type, text)}:  ${selectedRow.resource.name}`}</Typography>
-            </DialogTitle>
+            <AppBar sx={{ position: 'relative' }} elevation={0}>
+                <Toolbar>
+                    <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
+                        {`${getResourceTypeText(selectedRow.resource.type, text)}:  ${selectedRow.resource.name}`}
+                    </Typography>
+                    <IconButton
+                        edge="start"
+                        onClick={() => onAction(false)}
+                        color="inherit"
+                        aria-label="done"
+                    >
+                        <Close />
+                    </IconButton>
+                </Toolbar>
+            </AppBar>
             <DialogContent /*sx={{ minHeight: isWarehouse ? height : null }}*/>
                 <Box display={'flex'} flex={1} flexDirection={'column'}  >
                     <TextFieldBase value={qty} onChange={e => onQtyChange(Number(e.target.value))}
@@ -244,7 +256,6 @@ const ActivityResourceDialog = ({ selectedRow, selectedIndex, handleClose, updat
                 </Box>
             </DialogContent>
             <DialogActions sx={{ justifyContent: 'center' }}>
-                <Button size='large' variant='outlined' endIcon={<Cancel />} onClick={() => onAction(false)}>{text.cancel}</Button>
                 <Button size='large' endIcon={<Delete />} disableElevation={true} variant='outlined' onClick={remove}>{text.delete}
                 </Button>
                 <Button size='large' disableElevation={true} variant='contained'
