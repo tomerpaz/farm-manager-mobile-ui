@@ -28,8 +28,6 @@ const FieldMap = ({ field, height, tile, setMap, onClick, points }) => {
 
     const hasPoints = Array.isArray(points);
 
-    console.log(hasPoints)
-
     return (
         <Box flex={1} id="map" dir='ltr'>
             <MapContainer style={{ height: height, width: '100%' }} center={[field.lat, field.lng]} zoom={field.zoom} scrollWheelZoom={false}

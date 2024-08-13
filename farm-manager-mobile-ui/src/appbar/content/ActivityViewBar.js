@@ -1,11 +1,10 @@
 import { AppBar, Toolbar, IconButton } from '@mui/material'
-import { PictureAsPdfOutlined } from '@mui/icons-material'
+import { Close, PictureAsPdfOutlined } from '@mui/icons-material'
 import { newDate } from '../../ui/FarmUtil';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken, selectLang } from '../../features/app/appSlice';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { FARM_MANAGER } from '../../app/api/apiSlice';
-import AppBarMenu from '../components/AppBarMenu';
 
 
 const doanlaodFile =(lang, uuid, token)=>{
@@ -61,6 +60,7 @@ const ActivityViewBar = () => {
     const token = useSelector(selectCurrentToken);
     const { activityId, src } = useParams()
     const { lang, dir } = useSelector(selectLang)
+    const navigate = useNavigate()
 
     return (
         <AppBar position="static" elevation={0}>
@@ -75,7 +75,9 @@ const ActivityViewBar = () => {
                 >
                   {activityId  && <PictureAsPdfOutlined />}
                 </IconButton>
-                <AppBarMenu />
+                <IconButton color="inherit" onClick={() => navigate(-1)}>
+                    <Close />
+                </IconButton>
             </Toolbar>
         </AppBar>
     )

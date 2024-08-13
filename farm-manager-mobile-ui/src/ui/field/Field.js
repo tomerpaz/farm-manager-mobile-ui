@@ -65,12 +65,12 @@ const Field = () => {
               {getFruitIcon(field.cropEngName)}
             </Avatar>
           }
-          action={
-            <IconButton color='secondary' aria-label="settings" onClick={() => navigate(`/tabs/${src}`)}>
-             {/* <HighlightOffRounded sx={{ marginTop: 1, fontSize: 35 }}*/ }
-             <Cancel sx={{ margin: 1}} fontSize='large' />
-            </IconButton>
-          }
+          // action={
+          //   <IconButton color='secondary' aria-label="settings" onClick={() => navigate(`/tabs/${src}`)}>
+          //    {/* <HighlightOffRounded sx={{ marginTop: 1, fontSize: 35 }}*/ }
+          //    <Cancel sx={{ margin: 1}} fontSize='large' />
+          //   </IconButton>
+          // }
           title={
             <Box sx={{backgroundColor: field.statusColor, borderRadius: 1, paddingLeft: 1,paddingRight: 1}} display={'flex'} flexDirection={'row'} justifyContent={'space-between'}>
               <Typography noWrap variant='h6'>

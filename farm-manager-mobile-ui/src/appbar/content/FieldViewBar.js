@@ -1,8 +1,7 @@
 import { AppBar, Toolbar, IconButton, Box } from '@mui/material'
-import { AddCommentOutlined, Layers, Share } from '@mui/icons-material'
-import AppBarMenu from '../components/AppBarMenu'
+import { AddCommentOutlined, Close, Layers, Share } from '@mui/icons-material'
 import ShareLocationMenu from '../components/ShareLocationMenu'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { selectCurrentYear, selectFieldDashboardYear } from '../../features/app/appSlice'
 import { useFieldsById } from '../../features/fields/fieldsApiSlice'
 import { useSelector } from 'react-redux'
@@ -22,6 +21,8 @@ const FieldViewBar = ({ layers, share, years }) => {
     const currentDashboardYear = useSelector(selectFieldDashboardYear)
 
     const { data: user } = useGetUserDataQuery()
+
+    const navigate = useNavigate()
 
     const noFilter = user && user.year === currentYear;
 
@@ -61,9 +62,14 @@ const FieldViewBar = ({ layers, share, years }) => {
                         <AddCommentOutlined />
                     </IconButton>}
                 </Box>
-                <AppBarMenu />
+                {/* <AppBarMenu /> */}
+
+                <IconButton color="inherit" onClick={() => navigate(`/tabs/${src}`)}>
+                    <Close />
+                </IconButton>
+
             </Toolbar>
-            {openSeason && <SeasonData open={openSeason} handleClose={closeSeasonData} fieldId={fieldId} year={years ? currentDashboardYear : currentYear}  />}
+            {openSeason && <SeasonData open={openSeason} handleClose={closeSeasonData} fieldId={fieldId} year={years ? currentDashboardYear : currentYear} />}
         </AppBar>
     )
 }

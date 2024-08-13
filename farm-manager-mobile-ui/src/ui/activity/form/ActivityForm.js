@@ -170,11 +170,11 @@ const ActivityForm = ({ activity }) => {
           </Box>
           <BottomNavigation sx={{ position: 'fixed', bottom: 0, left: 0, right: 0, paddingTop: 2, paddingBottom: 2, borderTop: 1, borderTopColor: 'lightGray', backgroundColor: 'white', zIndex: 1000 }} value={-1}
             showLabels>
-            <BottomNavigationAction
+            {/* <BottomNavigationAction
               label={<Typography>{text.cancel}</Typography>}
               onClick={() => navigate(-1)}
               icon={<Cancel fontSize='large' />}
-            />
+            /> */}
             {activity.editable && uuid && <BottomNavigationAction
               label={<Typography>{text.delete}</Typography>}
               onClick={() => setDeleteOpen(true)}

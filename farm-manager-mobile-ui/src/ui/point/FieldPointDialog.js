@@ -9,7 +9,7 @@ import TextFieldBase from '../../components/ui/TextField';
 import { useGetUserDataQuery } from '../../features/auth/authApiSlice';
 import { useCreateFieldPointMutation, useDeleteFieldPointMutation, useUpdateFieldPointMutation } from '../../features/points/pointsApiSlice';
 import { Controller, useForm } from 'react-hook-form';
-import { Cancel, Close, Delete, Save } from '@mui/icons-material';
+import { Cancel, Close, Delete, PestControl, Save } from '@mui/icons-material';
 import { getPointTypes, UI_SIZE } from '../FarmUtil';
 
 const FieldPointDialog = ({ defaultValues, open, handleClose, deletable }) => {
@@ -43,7 +43,7 @@ const FieldPointDialog = ({ defaultValues, open, handleClose, deletable }) => {
       const result = await saveFieldPoint(data);
 
       dispatch(setSnackbar({ msg: data.id ? text.recordUpdated : text.recordCreated, severity: 'success' }))
-      handleClose('save',result);
+      handleClose('save', result);
     } catch (err) {
       console.log(err);
     }
@@ -61,21 +61,21 @@ const FieldPointDialog = ({ defaultValues, open, handleClose, deletable }) => {
   return (
 
     <Dialog fullWidth open={open}>
-        <AppBar sx={{ position: 'relative' }} elevation={0}>
-          <Toolbar>
-            <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-              {`${text.waypoint}`}
-            </Typography>
-            <IconButton
-              edge="start"
-              onClick={() => handleClose(null)}
-              color="inherit"
-              aria-label="done"
-            >
-              <Close />
-            </IconButton>
-          </Toolbar>
-        </AppBar>      <form onSubmit={handleSubmit(onSubmit)} >
+      <AppBar sx={{ position: 'relative' }} elevation={0}>
+        <Toolbar>
+          <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
+            {`${text.waypoint}`}
+          </Typography>
+          <IconButton
+            edge="start"
+            onClick={() => handleClose(null)}
+            color="inherit"
+            aria-label="done"
+          >
+            <Close />
+          </IconButton>
+        </Toolbar>
+      </AppBar>      <form onSubmit={handleSubmit(onSubmit)} >
 
         <DialogContent>
           <Typography variant='h6'>{text.waypoint}</Typography>
@@ -138,9 +138,13 @@ const FieldPointDialog = ({ defaultValues, open, handleClose, deletable }) => {
         <DialogActions sx={{ justifyContent: 'center' }}>
           {defaultValues.id && deletable && <Button size='large' endIcon={<Delete />} variant='outlined' onClick={() => onAction('delete')}>{text.delete}</Button>}
 
-          <Button size='large' disabled={!isDirty} endIcon={<Save />} disableElevation={true} variant='contained' type="submit" >
+          <Button size='large'  endIcon={<Save />} disableElevation={true} variant='contained' type="submit" >
             {text.save}
           </Button>
+          {/* {!defaultValues.id &&
+            <Button size='large' endIcon={<PestControl />} variant='contained' type="submit" onClick={() => console.log('save +')}>{`${text.save} +`}</Button>
+          } */}
+
         </DialogActions>
       </form >
 

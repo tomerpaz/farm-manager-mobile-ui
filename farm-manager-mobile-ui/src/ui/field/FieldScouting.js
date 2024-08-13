@@ -7,14 +7,17 @@ import { useGetFieldPointsQuery } from '../../features/points/pointsApiSlice';
 import FieldPointDialog from '../point/FieldPointDialog';
 import ScoutingFieldPoint from '../scout/ScoutingFieldPoint';
 import { useGetFieldScoutsQuery } from '../../features/scout/scoutsApiSlice';
-import { isArrayEmpty } from '../FarmUtil';
+import { displayFieldName, isArrayEmpty } from '../FarmUtil';
 import { buildScoutPoints } from '../scout/ScoutingUtil';
 import { useGetInfectionLevelsQuery, useGetPestsQuery, useGetPestStagesQuery, useGetPlantLocationsQuery } from '../../features/pests/pestsApiSlice';
 import Loading from '../../components/Loading';
+import { selectLang } from '../../features/app/appSlice';
+import { useSelector } from 'react-redux';
 
 const FieldScouting = ({ field }) => {
 
     const { fieldId } = useParams()
+    const text = useSelector(selectLang);
 
     const [point, setPoint] = useState(null);
     //  const [reloadMap, setReloadMap] = useState(false);
@@ -48,7 +51,9 @@ const FieldScouting = ({ field }) => {
     const onScoutMapClick = (event, element, type) => {
         console.log('onScoutMapClick', type, event);
         if (type === 'map') {
-            const p = { id: null, lat: event.latlng.lat, lng: event.latlng.lng, fieldId, name: '', active: true, type: 'scout' };
+            const p = { id: null, lat: event.latlng.lat, lng: event.latlng.lng, fieldId, 
+                name: `${displayFieldName(field)} ${text.scouting} - ${points.length} `, 
+                active: true, type: 'scout' };
             setPoint(p);
             setDialog('point')
         }

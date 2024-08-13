@@ -18,7 +18,6 @@ export default function RecipeReviewCard({ scout, onEdit, index }) {
 
     const text = useSelector(selectLang)
 
-    console.log(`/images/pest${index%2}.jpg`)
     return (
         <Card sx={{ margin: 2 }}>
             <CardHeader
