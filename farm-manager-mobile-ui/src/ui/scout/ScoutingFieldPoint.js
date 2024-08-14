@@ -69,7 +69,7 @@ const ScoutingFieldPoint = ({ open, point, scouts, handleClose, stages, setPoint
           <AddIcon />
         </Fab>}
       </Dialog>
-      {scout && <ScoutingForm open={true} defaultValues={{ ...scout, date: scout.id ? parseISO(scout.date) : scout.date }} handleClose={() => setScout(null)} />}
+      {scout && <ScoutingForm open={true} defaultValues={{ ...scout, date: scout.id ? parseISO(scout.date) : scout.date, qty: scout.qty ? scout.qty : '' }} handleClose={() => setScout(null)} />}
       {editPoint &&  <FieldPointDialog open={editPoint} deletable={isArrayEmpty(scouts)} defaultValues={point} handleClose={handleCloseEditPoint} types={SCOUT_TYPES} />}
     </Box>
   );

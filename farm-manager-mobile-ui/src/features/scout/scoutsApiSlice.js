@@ -20,21 +20,28 @@ export const scoutsApiSlice = apiSlice.injectEndpoints({
         createFieldScout: builder.mutation({
             query: args => ({
                 url: '/api/farm/scouts',
-                method: 'POST' ,
+                method: 'POST',
                 body: { ...args },
-                
+
             }),
             invalidatesTags: [FieldScouts_TAG, FieldPoints_TAG]
-               
+
         }),
         updateFieldScout: builder.mutation({
             query: args => ({
                 url: '/api/farm/scouts',
-                method: 'PUT' ,
+                method: 'PUT',
                 body: { ...args },
-                
+
             }),
-            invalidatesTags: [FieldScouts_TAG,FieldPoints_TAG]
+            invalidatesTags: [FieldScouts_TAG, FieldPoints_TAG]
+        }),
+        deleteFieldScout: builder.mutation({
+            query: args => ({
+                url: `/api/farm/scouts/${args.id}`,
+                method: 'DELETE',
+            }),
+            invalidatesTags: [FieldScouts_TAG, FieldPoints_TAG]
         }),
     })
 })
@@ -44,6 +51,7 @@ export const {
     useGetFieldScoutsQuery,
     useCreateFieldScoutMutation,
     useUpdateFieldScoutMutation,
+    useDeleteFieldScoutMutation
 } = scoutsApiSlice
 
 

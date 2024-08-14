@@ -1,19 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import Button from '@mui/material/Button';
-import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
-import { AppBar, Autocomplete, Box, DialogActions, DialogContent, IconButton, InputAdornment, MenuItem, Slide, TextField, Toolbar, Typography } from '@mui/material';
+import { AppBar, Autocomplete, Box, DialogActions, DialogContent, IconButton, MenuItem, Slide, TextField, Toolbar, Typography } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectLang, setSnackbar } from '../../features/app/appSlice';
 import TextFieldBase from '../../components/ui/TextField';
 import { useGetUserDataQuery } from '../../features/auth/authApiSlice';
 import { Controller, useForm } from 'react-hook-form';
-import { Cancel, Close, Save } from '@mui/icons-material';
+import { Close, Delete, Save } from '@mui/icons-material';
 import { getYearArray, isMobile, UI_SIZE } from '../FarmUtil';
-import { useGetInfectionLevelsQuery, useGetPestsQuery, useGetPestStagesQuery, useGetPlantLocationsQuery, useGetPlantPartsQuery } from '../../features/pests/pestsApiSlice';
+import { useGetInfectionLevelsQuery, useGetPestsQuery, useGetPestStagesQuery, useGetPlantLocationsQuery } from '../../features/pests/pestsApiSlice';
 import { DatePicker } from '@mui/x-date-pickers';
-import { useCreateFieldScoutMutation, useUpdateFieldScoutMutation } from '../../features/scout/scoutsApiSlice';
-import Loading from '../../components/Loading';
+import { useCreateFieldScoutMutation, useDeleteFieldScoutMutation, useUpdateFieldScoutMutation } from '../../features/scout/scoutsApiSlice';
+import ActionApprovalDialog from '../../components/ui/ActionApprovalDialog';
 
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -30,9 +29,11 @@ const ScoutingForm = ({ defaultValues, open, handleClose }) => {
   const { data: infectionLevels } = useGetInfectionLevelsQuery()
   const { data: stages } = useGetPestStagesQuery()
   const { data: plantLocations } = useGetPlantLocationsQuery()
+  const [deleteOpen, setDeleteOpen] = useState(false);
 
   const [createFieldScout] = useCreateFieldScoutMutation();
   const [updateFieldScout] = useUpdateFieldScoutMutation()
+  const [deleteFieldScout] = useDeleteFieldScoutMutation()
 
   const dispatch = useDispatch()
 
@@ -61,12 +62,14 @@ const ScoutingForm = ({ defaultValues, open, handleClose }) => {
     }
   }
 
-  const onAction = (save) => {
-    handleClose(false);
-    //  setOpen(false)
+  const handleDelete = (value) => {
+    setDeleteOpen(false)
+    if (value) {
+      deleteFieldScout({ id: defaultValues.id });
+      handleClose(false);
+      dispatch(setSnackbar({ msg: text.recordDeleted }))
+    }
   }
-
-
   return (
 
     <Dialog fullScreen={isMobile()} fullWidth={!isMobile()} open={open} /*TransitionComponent={Transition}*/ >
@@ -77,7 +80,7 @@ const ScoutingForm = ({ defaultValues, open, handleClose }) => {
           </Typography>
           <IconButton
             edge="start"
-            onClick={() => onAction(false)}
+            onClick={() => handleClose(false)}
             color="inherit"
             aria-label="done"
           >
@@ -274,12 +277,14 @@ const ScoutingForm = ({ defaultValues, open, handleClose }) => {
 
         </DialogContent>
         <DialogActions sx={{ justifyContent: 'center' }}>
-          {/* <Button size='large' endIcon={<Cancel />} variant='outlined' onClick={() => onAction(false)}>{text.cancel}</Button> */}
+          {defaultValues.id && <Button size='large' endIcon={<Delete />} variant='outlined' onClick={() => setDeleteOpen(true)}>{text.delete}</Button>}
           <Button size='large' disabled={!isDirty} endIcon={<Save />} disableElevation={true} variant='contained' type="submit" >
             {text.save}
           </Button>
         </DialogActions>
       </form >
+      <ActionApprovalDialog open={deleteOpen} handleClose={handleDelete}
+        title={text.deleteFormTitle} body={text.deleteFormBody} okText={text.delete} cancelText={text.cancel} />
 
     </Dialog>
   );

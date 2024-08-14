@@ -48,7 +48,6 @@ const FieldScouting = ({ field }) => {
     }
 
 
-console.log('hi',center)
 
     const onScoutMapClick = (event, element, type) => {
         console.log('onScoutMapClick', type, event);

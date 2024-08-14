@@ -1,27 +1,24 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText } from "@mui/material";
+import DialogAppBar from "../../ui/dialog/DialogAppBar";
 
-//title={text.deleteFormTitle} body={text.deleteFormBody} okText={text.delete} cancelText={text.cancel}
-const ActionApprovalDialog = ({ open, handleClose, title, body, okText, cancelText }) => {
+const ActionApprovalDialog = ({ open, handleClose, title, body, okText }) => {
 
     return (
         <Dialog
             open={open}
-            //maxWidth='lg'
             fullWidth={true}
-            // onClose={handleClose}
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
         >
-            <DialogTitle id="alert-dialog-title">
-                {title}
-            </DialogTitle>
+            <DialogAppBar onClose={() => handleClose(false)}
+                title={title}
+            />
             <DialogContent>
                 <DialogContentText id="alert-dialog-description">
                     {body}
                 </DialogContentText>
             </DialogContent>
             <DialogActions>
-                <Button size='large' variant='outlined' onClick={() => handleClose(false)}>{cancelText}</Button>
                 <Button size='large' variant='contained' disableElevation onClick={() => handleClose(true)} autoFocus>
                     {okText}
                 </Button>

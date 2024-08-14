@@ -39,9 +39,7 @@ export const pointsApiSlice = apiSlice.injectEndpoints({
         deleteFieldPoint: builder.mutation({
             query: args => ({
                 url: `/api/farm/points/${args.id}`,
-                method: 'DELETE' ,
-                body: { ...args },
-                
+                method: 'DELETE' ,    
             }),
             invalidatesTags: [FieldPoints_TAG]
         }),
