@@ -25,6 +25,7 @@ const FieldScouting = ({ field }) => {
 
 
     const [center, setCenter] = useState()
+    const [zoom, setZoom] = useState(field.zoom)
 
     const { data: user } = useGetUserDataQuery()
 
@@ -42,12 +43,9 @@ const FieldScouting = ({ field }) => {
 
     const height = (window.innerHeight - 180);
 
-
     if (isLoadingInfectionLevels || isLoadingPlantLocations || isLoadingPests || isLoadingPoints || isLoadingScouts || isFetchingPoints || isFetchingScouts || isLoadingStages || isFetchingStages) {
         return <Loading/>
     }
-
-
 
     const onScoutMapClick = (event, element, type) => {
         console.log('onScoutMapClick', type, event);
@@ -75,7 +73,7 @@ const FieldScouting = ({ field }) => {
 
     return (
         <Box display={'flex'} flex={1} alignItems={'stretch'} justifyContent={'space-between'} flexDirection={'column'}>
-            {field.polygon && <FieldMap field={field} height={height} onClick={onScoutMapClick} points={buildScoutPoints(points, scouts)} setMap={setMap} center={center} setCenter={setCenter} />}
+            {field.polygon && <FieldMap field={field} height={height} onClick={onScoutMapClick} points={buildScoutPoints(points, scouts)} setMap={setMap} center={center} setCenter={setCenter} zoom={zoom} setZoom={setZoom} />}
             {point && <FieldPointDialog open={dialog === 'point'} deletable={isArrayEmpty(pointScouts)} defaultValues={point} handleClose={clear} types={SCOUT_TYPES}/>}
             {point && <ScoutingFieldPoint stages={stages} open={dialog === 'pointScouting'} point={point} scouts={pointScouts} handleClose={() => clear(null)} setPoint={setPoint} />}
         </Box>
