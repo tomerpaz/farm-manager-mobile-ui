@@ -33,6 +33,8 @@ const height = window.innerHeight - 252;
 
 export const ROWS_PER_PAGE = 100;
 const ResourcseSelectionDialog = ({ open, handleClose, resourceTypes, cropId }) => {
+
+    console.log('cropId', cropId)
     const text = useSelector(selectLang);
     const { data: user } = useGetUserDataQuery()
 
@@ -78,10 +80,13 @@ const ResourcseSelectionDialog = ({ open, handleClose, resourceTypes, cropId }) 
         // error
     } = useGetResourcesQuery({ type: fetchType }, { skip: isPesticidelist })
 
+    const { data: cropPesticides, isSuccess: isCropPesticidesSuccess, isLoading: isLoadingesticideList } = useGetCropPesticidesQuery({ cropId }, { skip: !cropId })
+    console.log(isCropPesticidesSuccess,isLoadingesticideList)
 
-    const { data: cropPesticides, isSuccess: isCropPesticidesSuccess } = useGetCropPesticidesQuery({ cropId }, { skip: !cropId })
 
-
+    if (isLoadingesticideList && !isCropPesticidesSuccess) {
+        return <></>
+    }
     const isSingular = [WATER, SPRAYER].includes(type);
 
     const onSelectRow = (e) => {
@@ -100,8 +105,13 @@ const ResourcseSelectionDialog = ({ open, handleClose, resourceTypes, cropId }) 
 
     const buildVisableResources = () => {
         if (isPesticidelist) {
+    
+            if(cropPesticides){
             return cropPesticides.filter(e => filterResource(e.resource, filter, PESTICIDE, text, false));
-            // return cropPesticides ? cropPesticides : [];
+            }
+            else {
+                return [];
+            }// return cropPesticides ? cropPesticides : [];
 
         } else {
             return data ? data.filter(e => filterResource(e, filter, fetchType, text, type === SPRAYER)) : [];

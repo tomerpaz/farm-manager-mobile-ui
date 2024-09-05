@@ -14,22 +14,24 @@ import AddIcon from '@mui/icons-material/Add';
 import FieldPointDialog from '../point/FieldPointDialog';
 
 const ScoutingFieldPoint = ({ open, point, scouts, handleClose, stages, setPoint }) => {
+  const currentYear = useSelector(selectCurrentYear)
 
   const text = useSelector(selectLang)
-  const [scout, setScout] = useState(null);
-  const currentYear = useSelector(selectCurrentYear)
+  const [scout, setScout] = useState(null);//isArrayEmpty(scouts) ? newScouting(point, stages, currentYear) : null );
   const [editPoint, setEditPoint] = useState(false);
 
-  const handleCloseEditPoint = (action, e) =>{
+  const handleCloseEditPoint = (action, e) => {
     setEditPoint(false);
-    if(action === 'delete'){
+    if (action === 'delete') {
       handleClose(null);
-    } else if((action === 'save')) {
+    } else if ((action === 'save')) {
       setPoint(e);
     }
 
   }
 
+  const emptyScouts = isArrayEmpty(scouts);
+  console.log('emptyScouts', emptyScouts, scouts)
   return (
 
     <Box >
@@ -58,19 +60,21 @@ const ScoutingFieldPoint = ({ open, point, scouts, handleClose, stages, setPoint
             </IconButton>
           </Toolbar>
         </AppBar>
-        <DialogContent sx={{ padding: 0, bgcolor: grey[100],minHeight: 150 }}  >
+        <DialogContent sx={{ padding: 0, bgcolor: grey[100], minHeight: 150 }}  >
           {scouts.map((e, index) => {
             return (
               <ScoutingCard key={e.id} scout={e} index={index} onEdit={() => setScout(e)} />
             )
           })}
         </DialogContent>
-        {point.active  &&<Fab onClick={()=>setScout(newScouting(point, stages, currentYear))} sx={{ position: 'absolute', bottom: 30, left: 30, right: 30 }} color="primary" aria-label="add">
+        {point.active && <Fab onClick={() => setScout(newScouting(point, stages, currentYear))}
+          sx={{ position: 'fixed', bottom: 30, right: 30 }}
+          color="primary" aria-label="add">
           <AddIcon />
         </Fab>}
       </Dialog>
       {scout && <ScoutingForm open={true} defaultValues={{ ...scout, date: scout.id ? parseISO(scout.date) : scout.date, qty: scout.qty ? scout.qty : '' }} handleClose={() => setScout(null)} />}
-      {editPoint &&  <FieldPointDialog open={editPoint} deletable={isArrayEmpty(scouts)} defaultValues={point} handleClose={handleCloseEditPoint} types={SCOUT_TYPES} />}
+      {editPoint && <FieldPointDialog open={editPoint} deletable={isArrayEmpty(scouts)} defaultValues={point} handleClose={handleCloseEditPoint} types={SCOUT_TYPES} />}
     </Box>
   );
 

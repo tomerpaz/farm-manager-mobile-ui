@@ -3,7 +3,7 @@ import { useSelector } from "react-redux"
 import { selectLang } from "../../../../features/app/appSlice"
 import { cellSx, cellSxChange, cellSxLink, headerSx } from "../../../Util"
 import { Fragment, useEffect, useState } from "react"
-import { ACTIVITY_RESOURCES, AREA_UNIT, ENERGY, EQUIPMENT, FERTILIZER, HOUR, IRRIGARION_TYPES, IRRIGATION, IRRIGATION_PLAN, PESTICIDE, SPRAY, SPRAYER, SPRAY_TYPES, WAREHOUSE_RESOURCE_TYPE, WATER, getResourceTypeText, getResourceUsageUnit, getUnitText, isArrayEmpty } from "../../../FarmUtil"
+import { ACTIVITY_RESOURCES, AREA_UNIT, ENERGY, EQUIPMENT, FERTILIZER, HOUR, IRRIGARION_TYPES, IRRIGATION, IRRIGATION_PLAN, PESTICIDE, SCOUT, SPRAY, SPRAYER, SPRAY_TYPES, WAREHOUSE_RESOURCE_TYPE, WATER, getResourceTypeText, getResourceUsageUnit, getUnitText, isArrayEmpty } from "../../../FarmUtil"
 import { useGetUserDataQuery } from "../../../../features/auth/authApiSlice"
 import ResourcseSelectionDialog from "../../../dialog/ResourcseSelectionDialog"
 import { Controller, useFieldArray } from "react-hook-form"
@@ -24,7 +24,7 @@ const UNITS = [AREA_UNIT.toUpperCase(), HOUR.toUpperCase()]
 
 const ELEMENT_ID = 'resources'
 
-const ActivityResources = ({ activity, control, errors, register, tariffs, activityArea, activityDef, days, irrigationParams, setValue, trigger, fieldsCount, sprayParams }) => {
+const ActivityResources = ({ activity, control, errors, register, tariffs, activityArea, activityDef, days, irrigationParams, setValue, trigger, fieldsCount, sprayParams, scoutParams }) => {
     const text = useSelector(selectLang)
     const { data: user } = useGetUserDataQuery()
     const [open, setOpen] = useState(false);
@@ -39,7 +39,9 @@ const ActivityResources = ({ activity, control, errors, register, tariffs, activ
 
     const [showAlert, setShowAlert] = useState(false);
 
-    const disabledSelections = SPRAY_TYPES.includes(activity.type) && sprayParams?.crop === null;
+    const disabledSelections = SPRAY_TYPES.concat([SCOUT]).includes(activity.type) && sprayParams?.crop === null;
+
+console.log('sprayParams', sprayParams)
 
     const handleOpenEditRow = (index, row) => {
         setSelectedRow(row);

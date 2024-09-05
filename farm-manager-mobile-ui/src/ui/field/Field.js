@@ -126,12 +126,12 @@ const Field = () => {
           to={`/field/${src}/${fieldId}/imagery`} component={Link}
           icon={<SatelliteAltOutlined fontSize='large' />}
         />}
-        <BottomNavigationAction
+        {/* <BottomNavigationAction
          // disabled={field.imageryId === null}
           label={<Typography >{text.scouting}</Typography>}
           to={`/field/${src}/${fieldId}/scouting`} component={Link}
           icon={<PestControl fontSize='large' />}
-        />
+        /> */}
       </BottomNavigation>
     </Box >
   );

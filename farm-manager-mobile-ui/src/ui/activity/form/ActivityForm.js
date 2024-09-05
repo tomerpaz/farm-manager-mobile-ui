@@ -2,7 +2,7 @@ import { BottomNavigation, BottomNavigationAction, Box, TextField, Typography } 
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { selectLang, setSnackbar } from '../../../features/app/appSlice'
-import { PESTICIDE, PLAN, asLocalDate, asLocalTime, daysDif, daysDiff } from '../../FarmUtil'
+import { PESTICIDE, PLAN, SCOUT, asLocalDate, asLocalTime, daysDif, daysDiff } from '../../FarmUtil'
 import ActivityHeaderView from './header/ActivityHeaderView'
 import { useForm, Controller, useWatch } from "react-hook-form";
 import { Cancel, CheckCircleOutline, ControlPointDuplicate, Delete, Save } from '@mui/icons-material'
@@ -18,6 +18,7 @@ import ActionApprovalDialog from '../../../components/ui/ActionApprovalDialog'
 import { useGetResourcesTariffQuery } from '../../../features/tariff/tariffApiSlice'
 import { useGetUserDataQuery } from '../../../features/auth/authApiSlice'
 import { getReference, getTotalActivityArea, isSkipTariffFetch } from './ActivityUtil'
+import ActivityScouts from './scouts/ActivityScouts'
 
 const ActivityForm = ({ activity }) => {
 
@@ -65,6 +66,8 @@ const ActivityForm = ({ activity }) => {
   const editable = useWatch({ control, name: "editable" })
   const type = useWatch({ control, name: "type" })
 
+  const scoutParams = useWatch({ control, name: "scoutParams" })
+
 
 
   const tariffResourceIds = resources.filter(e => e.manualTariff === false).map(e => e.resource.id);
@@ -84,10 +87,13 @@ const ActivityForm = ({ activity }) => {
     data.executionEnd = asLocalDate(data.executionEnd, true);
     data.endHour = asLocalTime(data.endHour, true);
 
+
     if (data.uuid) {
       return updateActivity(data).unwrap();
     } else {
       data.src = 'MUI'
+      console.log('create',data)
+
       return createActivity(data).unwrap();
     }
   }
@@ -127,7 +133,6 @@ const ActivityForm = ({ activity }) => {
     }
   }
 
-
   const onSubmit = async (data) => {
     try {
       const result = await saveActivity(data);
@@ -151,6 +156,9 @@ const ActivityForm = ({ activity }) => {
           <ActivityHeaderView control={control} register={register} type={type} activity={activity} errors={errors} crops={crops} activityDefs={activityDefs} customers={customers} reference={reference} isDuplicate={isDuplicate} isExecutePlan={isExecutePlan}
             execution={execution} days={days} crop={crop} onCropCHange={onCropCHange} />
           <ActivityFields control={control} register={register} activity={activity} getValues={getValues} activityArea={activityArea} errors={errors} crop={crop} />
+
+         { activity.type === SCOUT && <ActivityScouts control={control} register={register} activity={activity} getValues={getValues}  />}
+
           <ActivityResources control={control} register={register} activity={activity} activityDef={activityDef}
             errors={errors} tariffs={tariffs} activityArea={activityArea} days={days}
             irrigationParams={irrigationParams} setValue={setValue} trigger={trigger}

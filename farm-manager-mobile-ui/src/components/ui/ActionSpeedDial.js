@@ -34,37 +34,34 @@ const ActionSpeedDial = ({ role, plan, map, bottom, fieldId }) => {
 
 
   const { data: user } = useGetUserDataQuery()
-  const actionTypes = user.userConf.filter(e=>e.write).map(e=>e.type);
+  const actionTypes = user.userConf.filter(e => e.write).map(e => e.type);
   const handleAction = (e) => {
     //  console.log('new',e, 'map',map)
 
-  //  console.log('handleAction',fieldId)
+    //  console.log('handleAction',fieldId)
     const searchParams = fieldId ?
-      createSearchParams({fid: fieldId}).toString() :
+      createSearchParams({ fid: fieldId }).toString() :
       null
 
 
     dispatch(setActivityType(e.type));
-    if (SCOUT !== e.type) {
-    //  if ([GENERAL, HARVEST, IRRIGATION, SPRAY, MARKET].includes(e.type)) {
-        navigate(
-          {
-            pathname: `/activity/new/${e.type}`,
-            search: searchParams
-          }
-        )
-        // navigate(`/activity/new/${e.type}`)
-    //  }
-    }
+    navigate(
+      {
+        pathname: `/activity/new/${e.type}`,
+        search: searchParams
+      }
+    )
+
+
     setOpen(false);
   }
 
   const text = useSelector(selectLang)
 
-  const userActions = actions(role, map, plan, text).filter(e=>actionTypes.includes(e.type));
- 
-  if(userActions.length === 0){
-    return <React.Fragment/>
+  const userActions = actions(role, map, plan, text).filter(e => actionTypes.includes(e.type));
+
+  if (userActions.length === 0) {
+    return <React.Fragment />
   }
 
   return (

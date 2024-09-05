@@ -3,11 +3,12 @@ import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
 import { selectLang } from '../../../../features/app/appSlice'
 import ActivityTypeIcon from '../../../../icons/ActivityTypeIcon'
-import { GENERAL, GENERAL_PLAN, getActivityTypeText, getMarketingCalcMethods, getMarketingDestinations, getMarketingIncomeCalcOptions, getMinDateWidth, getWinds, getYearArray, HARVEST, IRRIGARION_TYPES, IRRIGATION, IRRIGATION_PLAN, MARKET, SPRAY, SPRAY_PLAN, SPRAY_TYPES } from '../../../FarmUtil'
+import { GENERAL, GENERAL_PLAN, getActivityTypeText, getMarketingCalcMethods, getMarketingDestinations, getMarketingIncomeCalcOptions, getMinDateWidth, getWinds, getYearArray, HARVEST, IRRIGARION_TYPES, IRRIGATION, IRRIGATION_PLAN, MARKET, SCOUT, SPRAY, SPRAY_PLAN, SPRAY_TYPES } from '../../../FarmUtil'
 import { DatePicker, TimePicker } from '@mui/x-date-pickers';
 import { Controller } from 'react-hook-form'
 import TextFieldBase from '../../../../components/ui/TextField'
 import DecoratedBox from '../../../../components/ui/DecoratedBox'
+import { SCOUT_TYPES } from '../../../scout/ScoutingUtil'
 
 const HEADER_CONFIG = [
   { type: GENERAL, date: true, year: true, activity: true, activityType: GENERAL },
@@ -18,6 +19,8 @@ const HEADER_CONFIG = [
   { type: IRRIGATION_PLAN, date: true, year: true, endDate: true, },
   { type: HARVEST, date: true, year: true, activity: true, activityType: HARVEST, waybill: true, customer: true },
   { type: MARKET, date: true, year: true, customer: true, marketCalcMethod: true },
+  { type: SCOUT, date: true, year: true, crop: true },
+
 ]
 
 export const PLAN_PASSED_STATUS_COLOR = '#EF9A9A';
@@ -99,6 +102,26 @@ const ActivityHeaderView = ({ activity, control, errors, customers, activityDefs
               {...field} />}
         />
         <Box margin={1} />
+        {SCOUT === type &&
+        < Box display={'flex'} flex={1} alignItems={'center'} justifyContent={'space-between'} flexDirection={'row'} >
+          <Controller
+            name="sprayParams.crop"
+            control={control}
+            rules={{ required: true }}
+            render={({ field: { ref, onChange, ...field } }) => <Autocomplete
+              onChange={(_, data) => _onCropChange(onChange, data)}
+              options={crops.filter(e => e.active)}
+              fullWidth
+              size='small'
+              getOptionLabel={(option) => option ? option.name : ''}
+              isOptionEqualToValue={(option, value) => (value === undefined) || option?.id?.toString() === (value?.id ?? value)?.toString()}
+              renderInput={(params) => <TextFieldBase error={errors.sprayParams?.crop ? true : false} sx={{ marginTop: 0.5 }} {...params} label={text.crop} />}
+              {...field} />}
+          />
+         </Box>
+      }
+
+
         {config.endDate &&
           <Controller
             control={control}
@@ -191,6 +214,7 @@ const ActivityHeaderView = ({ activity, control, errors, customers, activityDefs
         /> */}
 
       </Box>
+
       {SPRAY_TYPES.includes(type) &&
         < Box display={'flex'} marginTop={2} flex={1} alignItems={'center'} justifyContent={'space-between'} flexDirection={'row'} >
           <Controller
