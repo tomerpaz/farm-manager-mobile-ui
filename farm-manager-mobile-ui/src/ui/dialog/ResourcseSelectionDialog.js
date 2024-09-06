@@ -149,7 +149,6 @@ const ResourcseSelectionDialog = ({ open, handleClose, resourceTypes, cropId }) 
     return (
         <Dialog
             open={open}
-            onClose={handleClose}
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
             fullScreen={isMobile()} fullWidth={!isMobile()}

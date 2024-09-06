@@ -88,13 +88,15 @@ const FieldSelectionDialog = ({ fields, open, handleClose, cropId }) => {
         setPage(0);
     }
 
+
+
     return (
         <Dialog
             open={open}
-            onClose={handleClose}
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
             fullScreen={isMobile()} fullWidth={!isMobile()}
+            disableEscapeKeyDown={false}
             TransitionComponent={Transition}
         >
             <DialogAppBar onClose={() => onAction(false)}
