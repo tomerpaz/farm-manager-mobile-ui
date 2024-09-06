@@ -9,7 +9,7 @@ import FieldSelectionDialog from "../../../dialog/FieldsSelectionDialog"
 import { useFieldArray } from "react-hook-form";
 import { Delete, DragHandle, Menu, MoreVert, Percent } from "@mui/icons-material"
 import ActivityFieldDialog from "./ActivityFieldDialog"
-import { HARVEST, MARKET, SPRAY_TYPES, isArrayEmpty } from "../../../FarmUtil"
+import { HARVEST, MARKET, SCOUT, SPRAY_TYPES, isArrayEmpty } from "../../../FarmUtil"
 import UpdateAllFieldsDialog from "./UpdateAllFieldsDialog"
 import { getTotalQty, getTotalweight } from "../ActivityUtil"
 import UpdateAllFieldsAreaDialog from "./UpdateAllFieldsAreaDialog"
@@ -104,7 +104,7 @@ const ActivityFields = ({ activity, getValues, control, register, errors, activi
         return (expendFields && fields.length > TRASHHOLD) ? fields : fields.slice(0, TRASHHOLD);
     }
 
-    const disabledSelections = SPRAY_TYPES.includes(activity.type) && crop === null;
+    const disabledSelections = SPRAY_TYPES.concat(SCOUT).includes(activity.type) && crop === null;
     return (
         <Box margin={1} display={'flex'} flexDirection={'column'}>
             <Box display={'flex'} flex={1} justifyContent={'space-between'} alignItems={'center'}>
