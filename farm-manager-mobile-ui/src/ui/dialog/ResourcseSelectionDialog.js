@@ -1,4 +1,4 @@
-import { AppBar, Box, Button, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, MenuItem, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Toolbar, Typography } from "@mui/material";
+import { AppBar, Box, Button, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, Divider, IconButton, InputAdornment, MenuItem, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Toolbar, Typography } from "@mui/material";
 import TextFieldBase from "../../components/ui/TextField";
 import { useSelector } from "react-redux";
 import { selectLang } from "../../features/app/appSlice";
@@ -81,7 +81,7 @@ const ResourcseSelectionDialog = ({ open, handleClose, resourceTypes, cropId }) 
     } = useGetResourcesQuery({ type: fetchType }, { skip: isPesticidelist })
 
     const { data: cropPesticides, isSuccess: isCropPesticidesSuccess, isLoading: isLoadingesticideList } = useGetCropPesticidesQuery({ cropId }, { skip: !cropId })
-    console.log(isCropPesticidesSuccess,isLoadingesticideList)
+    console.log(isCropPesticidesSuccess, isLoadingesticideList)
 
 
     if (isLoadingesticideList && !isCropPesticidesSuccess) {
@@ -105,9 +105,9 @@ const ResourcseSelectionDialog = ({ open, handleClose, resourceTypes, cropId }) 
 
     const buildVisableResources = () => {
         if (isPesticidelist) {
-    
-            if(cropPesticides){
-            return cropPesticides.filter(e => filterResource(e.resource, filter, PESTICIDE, text, false));
+
+            if (cropPesticides) {
+                return cropPesticides.filter(e => filterResource(e.resource, filter, PESTICIDE, text, false));
             }
             else {
                 return [];
@@ -186,7 +186,7 @@ const ResourcseSelectionDialog = ({ open, handleClose, resourceTypes, cropId }) 
                 </Box>
             </DialogTitle>
             <DialogContent sx={{ padding: 0, margin: 0 }}>
-                <TableContainer sx={{ padding: 0, maxHeight: height }}>
+                <TableContainer sx={{ padding: 0, }}>
                     <Table stickyHeader size="small" sx={{ width: '100%', margin: 0, padding: 0 }} aria-label="a dense table">
                         <TableHead >
                             <TableRow
@@ -236,14 +236,18 @@ const ResourcseSelectionDialog = ({ open, handleClose, resourceTypes, cropId }) 
                         </TableBody>
                     </Table>
                 </TableContainer>
-                {showPegination && <ListPager bottom={50} page={Number(page)}
-                    totalPages={Math.ceil(visableResources.length / ROWS_PER_PAGE)} setPage={setPage} />}
-
             </DialogContent>
-            <DialogActions sx={{ justifyContent: 'center' }}>
-                <Button size='large' disableElevation={true} variant='contained' onClick={() => onAction(true)} autoFocus>
-                    {text.save}
-                </Button>
+            <DialogActions>
+                <Box display={'flex'} flex={1} flexDirection={'column'} justifyContent={'center'}>
+                    {showPegination && <Divider />}
+                    {showPegination && <ListPager bottom={50} page={Number(page)}
+                        totalPages={Math.ceil(visableResources.length / ROWS_PER_PAGE)} setPage={setPage} />}
+                    <Box display={'flex'} justifyContent={'center'}>
+                        <Button size='large' disableElevation={true} variant='contained' onClick={() => onAction(true)} autoFocus>
+                            {text.save}
+                        </Button>
+                    </Box>
+                </Box>
             </DialogActions>
         </Dialog >
     )

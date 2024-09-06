@@ -4,7 +4,7 @@ import { ROWS_PER_PAGE } from '../../dialog/FieldsSelectionDialog';
 import { selectInventoryDateFilter, selectInventoryFreeTextFilter, selectInventoryWarehouseFilter, selectLang } from '../../../features/app/appSlice';
 import { useSelector } from 'react-redux';
 import { useGetUserDataQuery } from '../../../features/auth/authApiSlice';
-import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+import { Box, Divider, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 import { cellSx, cellSxColor, headerSx } from '../../Util';
 import { isStringEmpty } from '../../FarmUtil';
 import InventoryFilter from '../../../components/filters/InventoryFilter';
@@ -26,7 +26,7 @@ const filterData = (data, freeText, warehouseFilter) =>{
 
 function InventoryTable() {
 
-  const height = window.innerHeight - 115;
+  const height = window.innerHeight - 170;
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(ROWS_PER_PAGE);
@@ -85,6 +85,7 @@ function InventoryTable() {
           </TableBody>
         </Table>
       </TableContainer>
+      {showPegination && <Divider/>}
       {showPegination && <ListPager bottom={0} page={Number(page)}
         totalPages={Math.ceil(visableData.length / ROWS_PER_PAGE)} setPage={setPage} />}
 

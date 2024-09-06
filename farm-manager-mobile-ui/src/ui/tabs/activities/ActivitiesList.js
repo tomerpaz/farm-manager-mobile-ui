@@ -35,7 +35,7 @@ const ActivitiesList = ({ plans }) => {
     const { page } = useParams()
     const navigate = useNavigate();
 
-    const height = window.innerHeight - 180;
+    const height = window.innerHeight - 190;
     const maxResult = 20;
     const isPlan = plans;
     const orderBy = 'execution';
@@ -114,10 +114,11 @@ const ActivitiesList = ({ plans }) => {
     }
 
     return (
-        <Box display={'flex'} flex={1}>
+        <Box display={'flex'} flexDirection={'column'} flex={1}>
             <List sx={{ height, overflow: 'auto', width: '100%', bgcolor: 'background.paper' }}>
                 {renderRows()}
             </List>
+            <Divider/>
             <ListPager bottom={0} dir={dir} page={Number(page)} totalPages={data.totalPages} setPage={(value) => navigate(`/tabs/${isPlan ? 'plans' : 'activities'}/${value}`)} />
             <ActivitiesFilter />
         </Box>

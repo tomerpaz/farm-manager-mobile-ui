@@ -1,4 +1,4 @@
-import { AppBar, Box, Button, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, FormControlLabel, IconButton, InputAdornment, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Toolbar, Typography } from "@mui/material";
+import { AppBar, Box, Button, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, Divider, FormControlLabel, IconButton, InputAdornment, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Toolbar, Typography } from "@mui/material";
 import TextFieldBase from "../../components/ui/TextField";
 import { useSelector } from "react-redux";
 import { selectLang } from "../../features/app/appSlice";
@@ -17,12 +17,12 @@ const isElementSelected = (entity, selected) => {
 };
 
 const filterElement = (element, filter) => {
-    if(isStringEmpty(filter)){
+    if (isStringEmpty(filter)) {
         return true;
     }
     return element.name.toLowerCase().includes(filter.toLowerCase());
 }
-   
+
 
 export const ROWS_PER_PAGE = 100;
 
@@ -66,7 +66,7 @@ const PestSelectionDialog = ({ open, handleClose }) => {
 
     //const visableFields = pestst.filter(e => filterField(e, filter, cropId, active));
 
-    const visableDataElements = pests.filter(e=>filterElement(e, filter));
+    const visableDataElements = pests.filter(e => filterElement(e, filter));
 
     const visableSelectedDataElements = visableDataElements.filter(e => selected.includes(e));
     const rowCount = visableDataElements.length;
@@ -83,7 +83,7 @@ const PestSelectionDialog = ({ open, handleClose }) => {
             TransitionComponent={Transition}
         >
             <DialogAppBar onClose={() => onAction(false)}
-                title={`${text.fields}`} />
+                title={`${text.pests}`} />
 
             <DialogTitle id="alert-dialog-title">
                 <Box display={'flex'} flexDirection={'row'}>
@@ -112,20 +112,25 @@ const PestSelectionDialog = ({ open, handleClose }) => {
                         <TableBody>
                             {visableDataElements.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) =>
 
-                                <Row key={index} index={index} row={row} text={text} onClick={() => onSelectRow(row, index)} 
-                                isItemSelected={isElementSelected(row, selected)}
+                                <Row key={index} index={index} row={row} text={text} onClick={() => onSelectRow(row, index)}
+                                    isItemSelected={isElementSelected(row, selected)}
                                 />
                             )}
                         </TableBody>
                     </Table>
                 </TableContainer>
-                {showPegination && <ListPager bottom={50} page={Number(page)}
-                    totalPages={Math.ceil(visableDataElements.length / ROWS_PER_PAGE)} setPage={setPage} />}
             </DialogContent>
-            <DialogActions sx={{ justifyContent: 'center' }}>
-                <Button size='large' disableElevation={true} variant='contained' onClick={() => onAction(true)} autoFocus>
-                    {text.save}
-                </Button>
+            <DialogActions>
+                <Box display={'flex'} flex={1} flexDirection={'column'} justifyContent={'center'}>
+                    {showPegination && <Divider />}
+                    {showPegination && <ListPager bottom={50} page={Number(page)}
+                        totalPages={Math.ceil(visableDataElements.length / ROWS_PER_PAGE)} setPage={setPage} />}
+                    <Box display={'flex'} justifyContent={'center'}>
+                        <Button size='large' disableElevation={true} variant='contained' onClick={() => onAction(true)} autoFocus>
+                            {text.save}
+                        </Button>
+                    </Box>
+                </Box>
             </DialogActions>
         </Dialog>
     )
@@ -150,7 +155,6 @@ function Row(props) {
                     />
                 </TableCell>
                 <TableCell sx={cellSx} >{row.name}</TableCell>
-
             </TableRow>
         </Fragment>
     );

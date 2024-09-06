@@ -1,4 +1,4 @@
-import { AppBar, Box, Button, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, FormControlLabel, IconButton, InputAdornment, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Toolbar, Typography } from "@mui/material";
+import { AppBar, Box, Button, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, Divider, FormControlLabel, IconButton, InputAdornment, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Toolbar, Typography } from "@mui/material";
 import TextFieldBase from "../../components/ui/TextField";
 import { useSelector } from "react-redux";
 import { selectLang } from "../../features/app/appSlice";
@@ -147,14 +147,18 @@ const FieldSelectionDialog = ({ fields, open, handleClose, cropId }) => {
                         </TableBody>
                     </Table>
                 </TableContainer>
-                {showPegination && <ListPager bottom={50} page={Number(page)}
-                    totalPages={Math.ceil(rowCount / ROWS_PER_PAGE)} setPage={setPage} />}
-
             </DialogContent>
             <DialogActions sx={{ justifyContent: 'center' }}>
-                <Button size='large' disableElevation={true} variant='contained' onClick={() => onAction(true)} autoFocus>
-                    {text.save}
-                </Button>
+                <Box display={'flex'} flex={1} flexDirection={'column'} justifyContent={'center'}>
+                    {showPegination && <Divider />}
+                    {showPegination && <ListPager bottom={50} page={Number(page)}
+                        totalPages={Math.ceil(rowCount / ROWS_PER_PAGE)} setPage={setPage} />}
+                    <Box display={'flex'} justifyContent={'center'}>
+                        <Button size='large' disableElevation={true} variant='contained' onClick={() => onAction(true)} autoFocus>
+                            {text.save}
+                        </Button>
+                    </Box>
+                </Box>
             </DialogActions>
         </Dialog>
     )
