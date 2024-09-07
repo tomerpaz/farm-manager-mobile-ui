@@ -100,14 +100,6 @@ const ActivityScouts = ({ activity, control, errors, register, setValue, trigger
     }
 
 
-    if (isLoadingStages) {
-        return <></>
-    }
-
-
-
-console.log('default stage', stages.find(e=>e.code === 'none'))
-
     return (
         <Box margin={1} paddingTop={2} display={'flex'} flexDirection={'column'}>
 
@@ -140,7 +132,7 @@ console.log('default stage', stages.find(e=>e.code === 'none'))
             <PestSelectionDialog open={open} handleClose={handleClose} />
 
 
-            {selectedRow && <ActivityScoutDialog selectedIndex={selectedIndex} selectedRow={selectedRow} handleClose={handleCloseEditRow} update={update} remove={() => handleRemoveRow(selectedIndex)} stages={stages} />}
+            {selectedRow && <ActivityScoutDialog selectedIndex={selectedIndex} selectedRow={selectedRow} handleClose={handleCloseEditRow} update={update} remove={() => handleRemoveRow(selectedIndex)} stages={isLoadingStages ? [] : stages} />}
 
 
         </Box>

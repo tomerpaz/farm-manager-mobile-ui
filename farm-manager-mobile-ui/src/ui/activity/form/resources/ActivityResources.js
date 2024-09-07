@@ -384,7 +384,7 @@ console.log('sprayParams', sprayParams)
                 sprayParams={sprayParams}
             />}
             <AlertDialog open={showAlert} title={'requiredFieldsMissing'} message={errorMsg} varieant={'error'} handleClose={_ => setShowAlert(false)} buttonText={text.close} />
-            <Box marginTop={2} marginBottom={0} display={'flex'} flex={1} justifyContent={'space-between'} alignItems={'center'}>
+          { SCOUT !== activity.type && <Box marginTop={2} marginBottom={0} display={'flex'} flex={1} justifyContent={'space-between'} alignItems={'center'}>
                 <Controller
                     control={control}
                     name="invoice"
@@ -395,7 +395,7 @@ console.log('sprayParams', sprayParams)
                             label={text.invoice} fullWidth {...field} />
                     )}
                 />
-            </Box>
+            </Box>}
         </Box>
     )
 }
