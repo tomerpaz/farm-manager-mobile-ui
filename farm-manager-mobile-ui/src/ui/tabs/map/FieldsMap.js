@@ -30,8 +30,6 @@ const FieldsMap = (props) => {
     const [center, setCenter] = useState([user.lat, user.lng]);
     const [zoom, setZoom] = useState(user.zoom);
 
-    console.log('center', center)
-
     const displayFields = filterFields(fields, freeText, fieldSiteFilter, fieldBaseFieldFilter, fieldsViewStatus);
 
     function HandleMapEvents() {

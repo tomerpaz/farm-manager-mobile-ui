@@ -8,14 +8,15 @@ import Loading from '../../../components/Loading';
 import ActivityTypeIcon from '../../../icons/ActivityTypeIcon';
 import { useNavigate, useParams } from 'react-router-dom';
 import ActivitiesFilter from '../../../components/filters/ActivitiesFilter';
-import { EXECUTED, PLAN, activityDescription, buildActiviyFilter, daysDiffToday, parseDate, parseISOOrNull } from '../../FarmUtil';
+import { EXECUTED, PLAN, activityDescription, buildActiviyFilter, daysDiffToday, isArrayEmpty, parseDate, parseISOOrNull } from '../../FarmUtil';
 import { EXECUTE_STATUS_COLOR, PLAN_PASSED_STATUS_COLOR, PLAN_STATUS_COLOR } from '../../activity/form/header/ActivityHeaderView';
+import { LocationOn } from '@mui/icons-material';
 
-const getColor = (e ) => {
+const getColor = (e) => {
     const s = e.status;
     if (PLAN === s) {
         const daysPassed = daysDiffToday(parseISOOrNull(e.execution));
-         
+
         return daysPassed > 0 ? PLAN_PASSED_STATUS_COLOR : PLAN_STATUS_COLOR;
     } else if (EXECUTED === s) {
         return EXECUTE_STATUS_COLOR;
@@ -93,7 +94,9 @@ const ActivitiesList = ({ plans }) => {
                                 <Typography >
                                     {`${activityDescription(e, text)} ${e.fieldDesc}`}
                                 </Typography>
+
                                 <Typography whiteSpace={'nowrap'}  >
+                                    {!isArrayEmpty(e.points) && <LocationOn color='secondary' fontSize={'small'} />}
                                     {`${e.reference}`}
                                     {e.status && <Box component={'span'} padding={0.5}></Box>}
                                     {e.status && <Box borderRadius={1} backgroundColor={getColor(e)} component={'span'}>{gerStatus(e.status, text)}</Box>}
@@ -118,7 +121,7 @@ const ActivitiesList = ({ plans }) => {
             <List sx={{ height, overflow: 'auto', width: '100%', bgcolor: 'background.paper' }}>
                 {renderRows()}
             </List>
-            <Divider/>
+            <Divider />
             <ListPager bottom={0} dir={dir} page={Number(page)} totalPages={data.totalPages} setPage={(value) => navigate(`/tabs/${isPlan ? 'plans' : 'activities'}/${value}`)} />
             <ActivitiesFilter />
         </Box>

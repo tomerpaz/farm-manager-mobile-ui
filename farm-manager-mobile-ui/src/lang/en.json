@@ -188,6 +188,8 @@
   "infectionLevel":"Infection Level",
   "phenologicalStage": "Phenological Stage",
   "perennial": "Perennial",
-  "pests": "Pests"
-
+  "pests": "Pests",
+  "traps": "Traps",
+  "irrigationHeads": "Irrigation Heads",
+  "irrigationHead": "Irrigation Head"
 }

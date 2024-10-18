@@ -60,7 +60,6 @@ const PestSelectionDialog = ({ open, handleClose }) => {
     }
 
     if (isPestsLoading) {
-        console.log('isPestsLoading', isPestsLoading)
         return <></>
     }
 
@@ -71,8 +70,6 @@ const PestSelectionDialog = ({ open, handleClose }) => {
     const visableSelectedDataElements = visableDataElements.filter(e => selected.includes(e));
     const rowCount = visableDataElements.length;
     const showPegination = rowCount > ROWS_PER_PAGE;
-
-    console.log('isPestsLoading', pests.length)
 
     return (
         <Dialog

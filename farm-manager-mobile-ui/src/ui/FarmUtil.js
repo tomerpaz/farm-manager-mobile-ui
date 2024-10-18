@@ -286,6 +286,22 @@ export function asLocalTime(date, hyphen) {
     }
 }
 
+export function asLocalDateTime(date, hyphen) {
+    if (date && date instanceof Date) {
+
+        var yyyy = date.getFullYear().toString();
+        var MM = (date.getMonth() + 1).toString(); // getMonth() is zero-based         
+        var dd = date.getDate().toString();
+
+        var hh = date.getHours().toString();
+        var mm = (date.getMinutes()).toString(); // getMonth() is zero-based         
+        const space = hyphen ? "-" : "";
+        return yyyy + space + (MM[1] ? MM : "0" + MM[0]) + space + (dd[1] ? dd : "0" + dd[0]) + 'T' +(hh[1] ? hh : "0" + hh[0]) + ":" + (mm[1] ? mm : "0" + mm[0]) + ":00"
+    } else {
+        return date;
+    }
+}
+
 export function parseISOOrNull(date) {
     return date ? parseISO(date) : null;
 }
@@ -465,8 +481,21 @@ export function isPlansPossible(userConf) {
     return userConf.find(e => e.type === INVENTORY) ? true : false;
 }
 
+export const trap = 'trap';
+export const generic = 'generic';
+export const tree = 'tree';
+export const irrigationHead = 'irrigationHead';
+
+
+export const pointTypeColor = [{type: trap, color: "red"},{type: tree, color: "green"},{type: irrigationHead, color: "blue"}, {type: generic, color: "orange"}]
+
+
+export const getPointTypeColor = (type) =>{
+    return pointTypeColor.find(e=>e.type === type)?.color;
+}
+
 export function getPointTypes() {
-    return ['generic', 'tree', 'trap']
+    return [generic, tree, trap, irrigationHead]
 }
 
 // export function daysDif(before, after){

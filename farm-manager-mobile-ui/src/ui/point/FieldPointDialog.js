@@ -1,16 +1,18 @@
-import { useEffect, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import Button from '@mui/material/Button';
 import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
-import { AppBar, Box, Checkbox, DialogActions, DialogContent, FormControlLabel, IconButton, InputAdornment, MenuItem, TextField, Toolbar, Typography } from '@mui/material';
+import { AppBar, Autocomplete, Box, Checkbox, DialogActions, DialogContent, FormControlLabel, IconButton, InputAdornment, MenuItem, TextField, Toolbar, Typography } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectLang, setSnackbar } from '../../features/app/appSlice';
 import TextFieldBase from '../../components/ui/TextField';
 import { useGetUserDataQuery } from '../../features/auth/authApiSlice';
 import { useCreateFieldPointMutation, useDeleteFieldPointMutation, useUpdateFieldPointMutation } from '../../features/points/pointsApiSlice';
-import { Controller, useForm } from 'react-hook-form';
+import { Controller, useForm, useWatch } from 'react-hook-form';
 import { Cancel, Close, Delete, PestControl, Save } from '@mui/icons-material';
-import { getPointTypes, UI_SIZE } from '../FarmUtil';
+import { getPointTypes, trap, UI_SIZE } from '../FarmUtil';
+import { useGetPestsQuery } from '../../features/pests/pestsApiSlice';
+import { DatePicker } from '@mui/x-date-pickers';
 
 const FieldPointDialog = ({ defaultValues, open, handleClose, deletable, types }) => {
 
@@ -18,6 +20,7 @@ const FieldPointDialog = ({ defaultValues, open, handleClose, deletable, types }
 
   const { data: user } = useGetUserDataQuery()
 
+  const { data: pests, isLoading: isPestsLoading } = useGetPestsQuery();
 
   const [createFieldPoint] = useCreateFieldPointMutation();
   const [updateFieldPoint] = useUpdateFieldPointMutation()
@@ -29,7 +32,9 @@ const FieldPointDialog = ({ defaultValues, open, handleClose, deletable, types }
     formState: { isDirty, dirtyFields }, reset, setValue, trigger
   } = useForm({ defaultValues });
 
+  const type = useWatch({ control, name: "type" })
 
+  console.log(type);
   const saveFieldPoint = (data) => {
     if (data.id === null) {
       return createFieldPoint(data).unwrap();
@@ -91,7 +96,7 @@ const FieldPointDialog = ({ defaultValues, open, handleClose, deletable, types }
               )}
             />
           </Box>
-          <Box margin={2}/>
+          <Box margin={2} />
           <Box display={'flex'} flexDirection={'row'} alignItems={'center'}>
             <Controller
               control={control}
@@ -114,6 +119,52 @@ const FieldPointDialog = ({ defaultValues, open, handleClose, deletable, types }
               )}
             />
           </Box>
+          {type === trap &&
+            <Fragment>
+
+              <Box margin={2} />
+
+              <Box display={'flex'} flexDirection={'row'} justifyContent={'space-between'}>
+                <Controller
+                  name="pest"
+                  control={control}
+                  rules={{ required: true }}
+                  render={({ field: { ref, onChange, ...field } }) => <Autocomplete
+                    // disablePortal
+                    onChange={(_, data) => onChange(data)}
+                    options={pests.filter(e => e.active)}
+
+                    // fullWidth
+                    size={UI_SIZE}
+                    sx={{ flex: 2 }}
+                    getOptionLabel={(option) => option ? option.name : ''}
+                    isOptionEqualToValue={(option, value) => (value === undefined) || option?.id?.toString() === (value?.id ?? value)?.toString()}
+                    renderInput={(params) => <TextFieldBase error={errors.pest ? true : false} sx={{ marginTop: 0.5 }} {...params} label={text.pest} />}
+                    {...field} />}
+                />
+                <Box margin={1}></Box>
+
+                <Controller
+                  name="expiry"
+                  control={control}
+                  render={({ field }) =>
+                    <DatePicker label={text.expiery}
+                      closeOnSelect
+                      showToolbar={false}
+                      localeText={{
+                        cancelButtonLabel: text.cancel,
+                        clearButtonLabel: text.clear,
+                        okButtonLabel: text.save
+                      }}
+                      slotProps={{
+                        textField: { size: UI_SIZE, variant: 'outlined', sx: { marginTop: 0.5, flex: 1 } },
+                        actionBar: { actions: ["cancel", "clear"] }
+                      }}
+                      {...field} />}
+                />
+              </Box>
+            </Fragment>
+          }
 
           {defaultValues.id !== null && <Box display={'flex'} flexDirection={'row'} alignItems={'center'}>
             <Controller

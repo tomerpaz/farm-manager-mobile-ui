@@ -34,7 +34,6 @@ const height = window.innerHeight - 252;
 export const ROWS_PER_PAGE = 100;
 const ResourcseSelectionDialog = ({ open, handleClose, resourceTypes, cropId }) => {
 
-    console.log('cropId', cropId)
     const text = useSelector(selectLang);
     const { data: user } = useGetUserDataQuery()
 
@@ -81,8 +80,6 @@ const ResourcseSelectionDialog = ({ open, handleClose, resourceTypes, cropId }) 
     } = useGetResourcesQuery({ type: fetchType }, { skip: isPesticidelist })
 
     const { data: cropPesticides, isSuccess: isCropPesticidesSuccess, isLoading: isLoadingesticideList } = useGetCropPesticidesQuery({ cropId }, { skip: !cropId })
-    console.log(isCropPesticidesSuccess, isLoadingesticideList)
-
 
     if (isLoadingesticideList && !isCropPesticidesSuccess) {
         return <></>

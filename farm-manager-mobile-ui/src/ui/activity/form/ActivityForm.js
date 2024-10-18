@@ -8,6 +8,8 @@ import { useForm, Controller, useWatch } from "react-hook-form";
 import { Cancel, CheckCircleOutline, ControlPointDuplicate, Delete, Save } from '@mui/icons-material'
 import { useNavigate } from 'react-router-dom'
 import ActivityFields from './fields/ActivityFields'
+import ActivityWaypoints from './waypoints/ActivityWaypoints'
+
 import ActivityResources from './resources/ActivityResources'
 import { useCreateActivityMutation, useDeleteActivityMutation, useUpdateActivityMutation } from '../../../features/activities/activitiesApiSlice'
 import { useGetCropsQuery } from '../../../features/crops/cropsApiSlice'
@@ -35,6 +37,9 @@ const ActivityForm = ({ activity }) => {
   const [isDuplicate, setIsDuplicate] = useState(false);
   const [isExecutePlan, setIsExecutePlan] = useState(false);
 
+
+
+  const [openWaypointSelection, setOpenWaypointSelection] = useState(false);
   const dispatch = useDispatch()
 
   const {
@@ -92,7 +97,7 @@ const ActivityForm = ({ activity }) => {
       return updateActivity(data).unwrap();
     } else {
       data.src = 'MUI'
-      console.log('create',data)
+      console.log('create', data)
 
       return createActivity(data).unwrap();
     }
@@ -155,9 +160,16 @@ const ActivityForm = ({ activity }) => {
 
           <ActivityHeaderView control={control} register={register} type={type} activity={activity} errors={errors} crops={crops} activityDefs={activityDefs} customers={customers} reference={reference} isDuplicate={isDuplicate} isExecutePlan={isExecutePlan}
             execution={execution} days={days} crop={crop} onCropCHange={onCropCHange} />
-          <ActivityFields control={control} register={register} activity={activity} getValues={getValues} activityArea={activityArea} errors={errors} crop={crop} />
+          <ActivityFields control={control} register={register} activity={activity} getValues={getValues} activityArea={activityArea} errors={errors} crop={crop}
+            openWaypointSelection={openWaypointSelection} setOpenWaypointSelection={setOpenWaypointSelection}
+          />
 
-         { activity.type === SCOUT && <ActivityScouts control={control} register={register} activity={activity} getValues={getValues}  />}
+          {openWaypointSelection && <ActivityWaypoints
+            control={control} register={register} activity={activity} getValues={getValues} errors={errors} crop={crop}
+            openWaypointSelection={openWaypointSelection} setOpenWaypointSelection={setOpenWaypointSelection}
+
+          />}
+          {activity.type === SCOUT && <ActivityScouts control={control} register={register} activity={activity} getValues={getValues} />}
 
           <ActivityResources control={control} register={register} activity={activity} activityDef={activityDef}
             errors={errors} tariffs={tariffs} activityArea={activityArea} days={days}

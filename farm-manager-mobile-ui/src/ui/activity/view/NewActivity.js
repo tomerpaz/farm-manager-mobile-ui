@@ -44,7 +44,8 @@ const NewActivity = () => {
     sprayParams: isSpray || isScout ? { volumePerAreaUnit: '', volume: '', wind, crop } : null,
     scoutParams: isScout ? { scouts: [] } : null,
     marketParams: isMarket ? { incomeCalc: '', sortDate: null, sortReference: '' } : null,
-    activityDef: null, year: user.year, customer: null, fields, resources: [], note: '', invoice: '', editable: true, waybill: ''
+    activityDef: null, year: user.year, customer: null, fields, resources: [], note: '', invoice: '', editable: true, waybill: '',
+    points: []
   };
 
   return (

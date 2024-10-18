@@ -41,13 +41,10 @@ const ActivityResources = ({ activity, control, errors, register, tariffs, activ
 
     const disabledSelections = SPRAY_TYPES.concat([SCOUT]).includes(activity.type) && sprayParams?.crop === null;
 
-console.log('sprayParams', sprayParams)
-
     const handleOpenEditRow = (index, row) => {
         setSelectedRow(row);
         setSelectedIndex(index);
     };
-
 
     const handleCloseEditRow = () => {
         setSelectedRow(null);

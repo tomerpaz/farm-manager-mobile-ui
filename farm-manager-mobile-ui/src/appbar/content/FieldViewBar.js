@@ -2,9 +2,9 @@ import { AppBar, Toolbar, IconButton, Box } from '@mui/material'
 import { AddCommentOutlined, Close, Layers, Share } from '@mui/icons-material'
 import ShareLocationMenu from '../components/ShareLocationMenu'
 import { useNavigate, useParams } from 'react-router-dom'
-import { selectCurrentYear, selectFieldDashboardYear } from '../../features/app/appSlice'
+import { selectCurrentYear, selectFieldDashboardYear, setOpenLayers } from '../../features/app/appSlice'
 import { useFieldsById } from '../../features/fields/fieldsApiSlice'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import SelectYearMenu from '../components/SelectYearMenu'
 import { useGetUserDataQuery } from '../../features/auth/authApiSlice'
 import SeasonData from '../../ui/forms/season/SeasonData'
@@ -21,6 +21,8 @@ const FieldViewBar = ({ layers, share, years }) => {
     const currentDashboardYear = useSelector(selectFieldDashboardYear)
 
     const { data: user } = useGetUserDataQuery()
+
+    const dispatch = useDispatch()
 
     const navigate = useNavigate()
 
@@ -46,7 +48,7 @@ const FieldViewBar = ({ layers, share, years }) => {
                         edge="start"
                         color="inherit"
                         aria-label="open drawer"
-                        onClick={() => console.log('click')}
+                        onClick={() => dispatch(setOpenLayers(true))}
                         sx={{ mr: 1 }}
                     >
                         <Layers />

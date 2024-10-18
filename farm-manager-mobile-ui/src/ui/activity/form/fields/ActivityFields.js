@@ -7,12 +7,13 @@ import { useGetUserDataQuery } from "../../../../features/auth/authApiSlice"
 import { useFields } from "../../../../features/fields/fieldsApiSlice"
 import FieldSelectionDialog from "../../../dialog/FieldsSelectionDialog"
 import { useFieldArray } from "react-hook-form";
-import { Delete, DragHandle, Menu, MoreVert, Percent } from "@mui/icons-material"
+import { Delete, DragHandle, Menu, MoreVert, Percent, AddLocation } from "@mui/icons-material"
 import ActivityFieldDialog from "./ActivityFieldDialog"
-import { HARVEST, MARKET, SCOUT, SPRAY_TYPES, isArrayEmpty } from "../../../FarmUtil"
+import { HARVEST, MARKET, SCOUT, GENERAL, SPRAY_TYPES, isArrayEmpty } from "../../../FarmUtil"
 import UpdateAllFieldsDialog from "./UpdateAllFieldsDialog"
 import { getTotalQty, getTotalweight } from "../ActivityUtil"
 import UpdateAllFieldsAreaDialog from "./UpdateAllFieldsAreaDialog"
+import WaypointSelectionDialog from "../../../dialog/WaypointSelectionDialog"
 
 const TRASHHOLD = 3;
 
@@ -28,7 +29,7 @@ export function newFieldMarketParams() {
 
 }
 
-const ActivityFields = ({ activity, getValues, control, register, errors, activityArea, crop }) => {
+const ActivityFields = ({ activity, getValues, control, register, errors, activityArea, crop, openWaypointSelection, setOpenWaypointSelection }) => {
 
     const { fields, append, prepend, remove, swap, move, insert, update, replace } = useFieldArray({
         control, // control props comes from useForm (optional: if you are using FormContext)
@@ -120,8 +121,8 @@ const ActivityFields = ({ activity, getValues, control, register, errors, activi
                 </Box>
                 <Box>
                     {[HARVEST].includes(activity.type) && <IconButton size='large' disabled={isArrayEmpty(fields)} onClick={_ => setOpenBulkUpdateFields(true)}><MoreVert fontSize='large' /></IconButton>}
+                    {[SCOUT, GENERAL].includes(activity.type) && <IconButton size='large' disabled={isArrayEmpty(fields)} onClick={() => setOpenWaypointSelection(true)}><AddLocation fontSize='large' /></IconButton>}
                     {![MARKET].includes(activity.type) && <IconButton size='large' disabled={isArrayEmpty(fields)} onClick={_ => setOpenBulkUpdateFieldsArea(true)}><Percent fontSize='large' /></IconButton>}
-
                     <IconButton size='large' disabled={isArrayEmpty(fields)} onClick={e => remove()}><Delete fontSize='large' /></IconButton>
                 </Box>
             </Box>
@@ -165,7 +166,6 @@ const ActivityFields = ({ activity, getValues, control, register, errors, activi
                 replace={replace} />}
         </Box>
     )
-
 }
 function Row(props) {
     const { row, index, text, onClick, register, remove } = props;

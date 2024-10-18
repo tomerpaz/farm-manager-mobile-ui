@@ -188,5 +188,9 @@
     "infectionLevel":"רמת נגיעות",
     "phenologicalStage": "שלב פנולוגי",
     "perennial": "רב שנתי",
-    "pests": "פגעים"
+    "pests": "פגעים",
+    "traps": "מלכודות",
+    "irrigationHeads":"ראשי השקיה",
+    "irrigationHead": "ראש השקיה"
+
 }

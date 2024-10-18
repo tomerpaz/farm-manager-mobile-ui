@@ -1,16 +1,22 @@
 import React from 'react'
-import { AppBar, Box, Checkbox, Dialog, DialogContent, FormControlLabel, IconButton, MenuItem, Select, Slide, Toolbar, Typography } from '@mui/material'
+import { Box, Checkbox, Dialog, DialogContent, FormControlLabel, Slide } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux';
-import { selectLang, selectOpenLayers, selectOpenSettings, selectShowInventory, selectShowPlans, selectShowsPestLayer, setOpenLayers, setShowPestsLayer } from '../../features/app/appSlice';
-import DoneIcon from '@mui/icons-material/Done';
-import { getUserLang } from '../../router/UserRoutes';
-import { isInventoryPossible, isMobile, isPlansPossible } from '../FarmUtil';
+import {
+    selectLang, selectOpenLayers, selectShowPestsLayer, setOpenLayers, setShowPestsLayer,
+    selectShowTrapsLayer, selectShowIrrigationHeadsLayer, setShowTrapsLayer, setShowIrrigationHeadsLayer
+} from '../../features/app/appSlice';
+import { isMobile } from '../FarmUtil';
 import { useGetUserDataQuery } from '../../features/auth/authApiSlice';
 import DialogAppBar from '../dialog/DialogAppBar';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
+
+const pests = 'pests'
+const irrigationHeads = 'irrigationHeads'
+const traps = 'traps'
+//const irrigationHeads = 'irrigationHeads'
 
 const LayersDialog = () => {
 
@@ -22,15 +28,23 @@ const LayersDialog = () => {
     const { data: user, isSuccess: isUserSuccess } = useGetUserDataQuery()
 
 
-    const showPests = useSelector(selectShowsPestLayer);
+    const showPests = useSelector(selectShowPestsLayer);
+    const showTraps = useSelector(selectShowTrapsLayer);
+    const showIrrigationHeads = useSelector(selectShowIrrigationHeadsLayer);
 
     const handleClose = () => {
         dispatch(setOpenLayers(false));
     }
 
 
-    const handlePestsChange = () => {
-        dispatch(setShowPestsLayer(!showPests));
+    const handleChange = (layer) => {
+        if (layer === pests) {
+            dispatch(setShowPestsLayer(!showPests));
+        } if (layer === traps) {
+            dispatch(setShowTrapsLayer(!showTraps));
+        } if (layer === irrigationHeads) {
+            dispatch(setShowIrrigationHeadsLayer(!showIrrigationHeads));
+        }
     }
 
     return (
@@ -46,7 +60,13 @@ const LayersDialog = () => {
             <DialogContent>
 
                 <Box marginTop={2} display={'flex'} flexDirection={'row'} >
-                    <FormControlLabel control={<Checkbox checked={showPests} onChange={handlePestsChange} />} label={text.pests} />
+                    <FormControlLabel control={<Checkbox checked={showPests} onChange={() => handleChange(pests)} />} label={text.pests} />
+                </Box>
+                <Box marginTop={2} display={'flex'} flexDirection={'row'} >
+                    <FormControlLabel control={<Checkbox checked={showTraps} onChange={() => handleChange(traps)} />} label={text.traps} />
+                </Box>
+                <Box marginTop={2} display={'flex'} flexDirection={'row'} >
+                    <FormControlLabel control={<Checkbox checked={showIrrigationHeads} onChange={() => handleChange(irrigationHeads)} />} label={text.irrigationHeads} />
                 </Box>
 
                 {/* {isInventory &&

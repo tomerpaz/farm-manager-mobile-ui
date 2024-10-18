@@ -40,7 +40,8 @@ const appSlice = createSlice({
         showPlans,
         openLayers: false,
         showPestsLayer: false,
-
+        showTrapsLayer: false,
+        showIrrigationHeadsLayer: false,
     },
     reducers: {
         setCredentials: (state, action) => {
@@ -135,6 +136,12 @@ const appSlice = createSlice({
         },
         setShowPestsLayer: (state, action) => {
             state.showPestsLayer = action.payload;
+        },
+        setShowTrapsLayer: (state, action) => {
+            state.showTrapsLayer = action.payload;
+        },
+        setShowIrrigationHeadsLayer: (state, action) => {
+            state.showIrrigationHeadsLayer = action.payload;
         }
     },
 })
@@ -142,7 +149,7 @@ const appSlice = createSlice({
 export const { setCredentials, logOut, setLang, setCurrentYear, setAppBarDialogOpen, setFieldFreeTextFilter, setActivityFreeTextFilter,
     setStartDateFilter, setEndDateFilter, setActivityTypeFilter, setFieldSiteFilter, setFieldBaseFieldFilter, setFieldDashboardYear, setFieldsViewStatus,
     setActivityPlanStatusFilter, setActivityPlanTypeFilter, setActivityStatusFilter, setActivityType, setSnackbar, setOpenSettings, setInventoryFreeTextFilter,
-    setInventoryDateFilter, setInventoryWarehouseFilter, setShowInventory,setShowPlans, setOpenLayers,setShowPestsLayer } = appSlice.actions
+    setInventoryDateFilter, setInventoryWarehouseFilter, setShowInventory,setShowPlans, setOpenLayers,setShowPestsLayer, setShowTrapsLayer, setShowIrrigationHeadsLayer } = appSlice.actions
 
 export default appSlice.reducer
 
@@ -172,5 +179,7 @@ export const selectInventoryWarehouseFilter = (state) => state.app.inventoryWare
 export const selectShowInventory = (state) => state.app.showInventory
 export const selectShowPlans = (state) => state.app.showPlans
 export const selectOpenLayers = (state) => state.app.openLayers
-export const selectShowsPestLayer = (state) => state.app.showPestsLayer
+export const selectShowPestsLayer = (state) => state.app.showPestsLayer
+export const selectShowTrapsLayer = (state) => state.app.showTrapsLayer
+export const selectShowIrrigationHeadsLayer = (state) => state.app.showIrrigationHeadsLayer
 

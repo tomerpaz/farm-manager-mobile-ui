@@ -24,7 +24,6 @@ const ActivitiesListBar = ({ plans }) => {
 
     const noFilter = isStringEmpty(startDateFilter) && isStringEmpty(endDateFilter) && isStringEmpty(typeFilter) && isDefault;
 
-    console.log(fieldId, src)
     return (
         <AppBar position="static" elevation={0}>
             <Toolbar>
