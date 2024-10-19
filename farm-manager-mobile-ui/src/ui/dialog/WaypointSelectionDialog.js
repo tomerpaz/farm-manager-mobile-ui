@@ -149,6 +149,9 @@ const WaypointSelectionDialog = ({ open, handleClose, fields, waypoints }) => {
         setSelectedPoint(null);
     }
 
+    // const customMarkerIcon = divIcon({
+    //     html: "<div>HI</div>"
+    //   });
 
     return (
         <Dialog

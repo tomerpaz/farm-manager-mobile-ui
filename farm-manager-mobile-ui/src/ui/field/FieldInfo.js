@@ -71,7 +71,7 @@ const buildFieldPoints = (arr)=> {
     const src = 'map'
     return (
         <Box display={'flex'} flex={1} alignItems={'stretch'} justifyContent={'space-between'} flexDirection={'column'}>
-            {field.polygon && <FieldMap field={field} height={height} onClick={onFieldMapClick}  points={buildFieldPoints(points)} />}
+            {field.polygon && <FieldMap field={field} height={height} onClick={onFieldMapClick}  points={[]/*buildFieldPoints(points)*/} />}
             {!field.plantation && !field.endDate && <InfoLine value={daysDiffToday(new Date(field.startDate))} title={text.daysSinceSeedling} />}
             <InfoLine value={field.siteName} title={text.site} />
             <InfoLine value={field.parentFieldName} title={text.parentField} />
