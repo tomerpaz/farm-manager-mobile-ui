@@ -1,23 +1,19 @@
-import { AppBar, Box, Button, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, Divider, FormControlLabel, IconButton, InputAdornment, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Toolbar, Typography } from "@mui/material";
-import TextFieldBase from "../../components/ui/TextField";
+import { AppBar, Box, Button, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
 import { useSelector } from "react-redux";
 import { selectLang } from "../../features/app/appSlice";
 import { Fragment, useState } from "react";
-import { cellSx, headerSx, Transition } from "../Util";
-import { Close, ContactSupportOutlined, Delete, Save, Search } from "@mui/icons-material";
+import { Transition } from "../Util";
+import { Delete, Save } from "@mui/icons-material";
 import { asLocalDateTime, getFillColor, getOpacity, isMobile, isStringEmpty, newDate } from "../FarmUtil";
 
 import DialogAppBar from "./DialogAppBar";
 
-import { useGetInfectionLevelsQuery, useGetPestsQuery, useGetPestStagesQuery, useGetPlantLocationsQuery } from '../../features/pests/pestsApiSlice';
-import ListPager from "../../components/ui/ListPager";
 import { useGetUserDataQuery } from "../../features/auth/authApiSlice";
 import { CircleMarker, MapContainer, Marker, Polygon, Popup, useMapEvents } from "react-leaflet";
 import SatelliteMapProvider from "../../components/map/SatelliteMapProvider";
 import GeoLocation from "../../components/GeoLocation";
 import { safeParseJson } from "../../features/fields/fieldsApiSlice";
 import WaypointDialog from "./WaypointDialog";
-import { fi } from "date-fns/locale";
 
 
 

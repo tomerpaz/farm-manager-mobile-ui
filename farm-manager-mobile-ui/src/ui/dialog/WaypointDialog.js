@@ -2,7 +2,7 @@ import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, MenuIte
 import TextFieldBase from "../../components/ui/TextField";
 import { Cancel, Delete, Save } from "@mui/icons-material";
 import { useEffect, useState } from "react";
-import { AREA_UNIT, getUnitText } from "../FarmUtil";
+import { AREA_UNIT, asShortStringDateTime, getUnitText, parseISOOrNull } from "../FarmUtil";
 import DialogAppBar from "./DialogAppBar";
 import { selectLang } from "../../features/app/appSlice";
 import { useSelector } from "react-redux";
@@ -38,11 +38,20 @@ const WaypointDialog = ({ open, handleClose, selectedPoint, handleDelete }) => {
             fullWidth
         >
             <DialogAppBar onClose={() => onAction(false)}
-                title={text.note} />
+                title={
+                    <Box display={'flex'} flexDirection={'row'} justifyContent={'space-between'}>
+                        <Typography variant="h6">
+                            {text.note}
+                        </Typography>
+                        <Typography marginLeft={3} marginRight={3} variant="h6">
+                            {asShortStringDateTime(parseISOOrNull(selectedPoint.date))}
+                        </Typography>
+                    </Box>
+                } />
             <DialogContent>
                 <TextFieldBase value={note} onChange={e => handleSetNote(e.target.value)} fullWidth={true} /*label={`${text.total} ${text.qty}`}*/ />
 
-{/* {selectedPoint.date} */}
+                {/* {selectedPoint.date} */}
             </DialogContent>
             <DialogActions sx={{ justifyContent: 'center' }}>
                 <Button size='large' endIcon={<Delete />} disableElevation={true} variant='outlined' onClick={handleDelete}>{text.delete}</Button>
