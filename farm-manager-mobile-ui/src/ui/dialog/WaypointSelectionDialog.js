@@ -64,9 +64,9 @@ const WaypointSelectionDialog = ({ open, handleClose, fields, waypoints }) => {
 
     const height = window.innerHeight - 65;
 
-
     const deleteWaypoint = () => {
         const arr = [...points]
+       
         arr.splice(selectedIndex, 1);
         //handleDelete(selectedIndex);
         setSelectedIndex(null);
@@ -121,7 +121,7 @@ const WaypointSelectionDialog = ({ open, handleClose, fields, waypoints }) => {
 
 
     const mapCliecked = (e, element, type, index) => {
-        console.log('mapCliecked', type)
+        console.log('mapCliecked', type, index)
         if (type === 'point') {
             e.originalEvent.view.L.DomEvent.stopPropagation(e);
             setSelectedPoint(element);
@@ -227,13 +227,13 @@ const WaypointSelectionDialog = ({ open, handleClose, fields, waypoints }) => {
                                         eventHandlers={{
                                             click: (event) => {
 
-                                                mapCliecked(event, e, 'point');
+                                                mapCliecked(event, e, 'point', index);
 
                                                 // mapCliecked(e, f, 'polygon');
                                                 // navigate(`/field/map/${f.id}/info`)
                                             }
                                         }}
-                                        key={index} radius={12}
+                                        key={index} radius={14}
                                         color={'white'}
                                         weight={4}
                                         // fillColor={'lightGray'}
