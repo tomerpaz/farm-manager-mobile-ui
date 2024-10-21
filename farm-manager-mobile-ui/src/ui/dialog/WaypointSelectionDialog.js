@@ -1,15 +1,15 @@
-import { AppBar, Box, Button, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
+import { AppBar, Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from "@mui/material";
 import { useSelector } from "react-redux";
 import { selectLang } from "../../features/app/appSlice";
 import { Fragment, useState } from "react";
 import { Transition } from "../Util";
-import { Delete, Save } from "@mui/icons-material";
+import { BugReport, BugReportOutlined, Delete, Nature, PestControl, Save } from "@mui/icons-material";
 import { asLocalDateTime, getFillColor, getOpacity, isMobile, isStringEmpty, newDate } from "../FarmUtil";
 
 import DialogAppBar from "./DialogAppBar";
 
 import { useGetUserDataQuery } from "../../features/auth/authApiSlice";
-import { CircleMarker, MapContainer, Marker, Polygon, Popup, useMapEvents } from "react-leaflet";
+import { CircleMarker, MapContainer, Marker, Polygon, Popup, Tooltip, useMapEvents } from "react-leaflet";
 import SatelliteMapProvider from "../../components/map/SatelliteMapProvider";
 import GeoLocation from "../../components/GeoLocation";
 import { safeParseJson } from "../../features/fields/fieldsApiSlice";
@@ -200,40 +200,54 @@ const WaypointSelectionDialog = ({ open, handleClose, fields, waypoints }) => {
 
                             {
                                 points.map((e, index, arr) =>
-                                    <Marker key={index} position={[e.point.lat, e.point.lng]}
-                                        eventHandlers={{
-                                            click: (event) => {
-
-                                                mapCliecked(event, e, 'point', index);
-
-                                                // mapCliecked(e, f, 'polygon');
-                                                // navigate(`/field/map/${f.id}/info`)
-                                            }
-                                        }}
-                                    >
-
-                                        {/* <Popup>
-                                            A pretty CSS3 popup. <br /> Easily customizable.
-                                        </Popup> */}
-                                    </Marker>
-                                    // <CircleMarker
-
+                                    // <Marker key={index} position={[e.point.lat, e.point.lng]}
                                     //     eventHandlers={{
                                     //         click: (event) => {
 
-                                    //             mapCliecked(event, e, 'point');
+                                    //             mapCliecked(event, e, 'point', index);
 
                                     //             // mapCliecked(e, f, 'polygon');
                                     //             // navigate(`/field/map/${f.id}/info`)
                                     //         }
                                     //     }}
-                                    //     key={index} radius={12}
-                                    //     color={'white'}
-                                    //     weight={4}
-                                    //     fillColor={'white'}
-                                    //     fillOpacity={1}
-                                    //     center={[e.point.lat, e.point.lng]}
-                                    // ></CircleMarker>
+                                    // >
+
+                                    //     {/* <Popup>
+                                    //         A pretty CSS3 popup. <br /> Easily customizable.
+                                    //     </Popup> */}
+                                    //     <Tooltip
+                                    //         //className={'empty-tooltip'}
+                                    //         direction="center" opacity={0.8} permanent>
+                                    //         <Save/>
+
+                                    //     </Tooltip>
+                                    // </Marker>
+                                    <CircleMarker
+
+                                        eventHandlers={{
+                                            click: (event) => {
+
+                                                mapCliecked(event, e, 'point');
+
+                                                // mapCliecked(e, f, 'polygon');
+                                                // navigate(`/field/map/${f.id}/info`)
+                                            }
+                                        }}
+                                        key={index} radius={12}
+                                        color={'white'}
+                                        weight={4}
+                                        // fillColor={'lightGray'}
+                                        fillOpacity={1}
+                                        center={[e.point.lat, e.point.lng]}
+                                    >
+                                        <Tooltip 
+                                            className={'empty-tooltip'}
+                                            direction="center" opacity={1} permanent>
+                                            <BugReportOutlined fontSize="medium"/*sx={{color: 'orange'}}*/ />
+{/* <Box fontSize={25}> 🪰</Box> */}
+
+                                        </Tooltip>
+                                    </CircleMarker>
                                 )
                             }
 
@@ -250,9 +264,9 @@ const WaypointSelectionDialog = ({ open, handleClose, fields, waypoints }) => {
                 {openWaypointDialog && <WaypointDialog open={openWaypointDialog} selectedPoint={selectedPoint} handleClose={handleCloseWaypointDialog} handleDelete={deleteWaypoint} />}
             </DialogContent>
             <DialogActions sx={{ justifyContent: 'center' }}>
-                <Button size='large' endIcon={<Delete />} disableElevation={true} variant='outlined' onClick={()=>setPoints([])}>{`${text.delete} ${text.all}`}</Button>
+                <Button size='large' endIcon={<Delete />} disableElevation={true} variant='outlined' onClick={() => setPoints([])}>{`${text.delete} ${text.all}`}</Button>
 
-                <Button size='large' endIcon={<Save />}  disableElevation={true} variant='contained' onClick={() => onAction(true)} autoFocus>
+                <Button size='large' endIcon={<Save />} disableElevation={true} variant='contained' onClick={() => onAction(true)} autoFocus>
                     {text.save}
                 </Button>
 
