@@ -152,7 +152,7 @@ const FieldPointDialog = ({ defaultValues, open, handleClose, deletable,/*, type
                   name="expiry"
                   control={control}
                   render={({ field }) =>
-                    <DatePicker label={text.expiery}
+                    <DatePicker label={text.expiry}
                       closeOnSelect
                       showToolbar={false}
                       localeText={{

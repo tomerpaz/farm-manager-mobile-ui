@@ -191,5 +191,7 @@
   "pests": "Pests",
   "traps": "Traps",
   "irrigationHeads": "Irrigation Heads",
-  "irrigationHead": "Irrigation Head"
+  "irrigationHead": "Irrigation Head",
+  "expiry": "Expiry"
+
 }
