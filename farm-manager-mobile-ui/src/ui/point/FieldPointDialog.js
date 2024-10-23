@@ -14,7 +14,7 @@ import { getPointTypes, trap, UI_SIZE } from '../FarmUtil';
 import { useGetPestsQuery } from '../../features/pests/pestsApiSlice';
 import { DatePicker } from '@mui/x-date-pickers';
 
-const FieldPointDialog = ({ defaultValues, open, handleClose, deletable, types }) => {
+const FieldPointDialog = ({ defaultValues, open, handleClose, deletable,/*, types*/ }) => {
 
   const text = useSelector(selectLang)
 
@@ -32,9 +32,10 @@ const FieldPointDialog = ({ defaultValues, open, handleClose, deletable, types }
     formState: { isDirty, dirtyFields }, reset, setValue, trigger
   } = useForm({ defaultValues });
 
-  const type = useWatch({ control, name: "type" })
+  //const type = useWatch({ control, name: "type" })
+  // const [type, setType] = useState(defaultValues.type);
 
-  console.log(type);
+//  console.log(type);
   const saveFieldPoint = (data) => {
     if (data.id === null) {
       return createFieldPoint(data).unwrap();
@@ -62,6 +63,9 @@ const FieldPointDialog = ({ defaultValues, open, handleClose, deletable, types }
     //  setOpen(false)
   }
 
+  if(defaultValues.type === trap && isPestsLoading){
+    return <></>
+  }
 
   return (
 
@@ -69,7 +73,7 @@ const FieldPointDialog = ({ defaultValues, open, handleClose, deletable, types }
       <AppBar sx={{ position: 'relative' }} elevation={0}>
         <Toolbar>
           <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-            {`${text.waypoint}`}
+            {`${text[defaultValues.type]}`}
           </Typography>
           <IconButton
             edge="start"
@@ -96,7 +100,7 @@ const FieldPointDialog = ({ defaultValues, open, handleClose, deletable, types }
               )}
             />
           </Box>
-          <Box margin={2} />
+          {/* <Box margin={2} />
           <Box display={'flex'} flexDirection={'row'} alignItems={'center'}>
             <Controller
               control={control}
@@ -118,8 +122,8 @@ const FieldPointDialog = ({ defaultValues, open, handleClose, deletable, types }
                 </TextField>
               )}
             />
-          </Box>
-          {type === trap &&
+          </Box> */}
+          {defaultValues.type === trap &&
             <Fragment>
 
               <Box margin={2} />

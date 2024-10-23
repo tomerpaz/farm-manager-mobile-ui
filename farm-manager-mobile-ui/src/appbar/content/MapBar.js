@@ -19,7 +19,6 @@ const MapBar = () => {
 
     const noFilter = fieldSiteFilter === 0 && fieldBaseFieldFilter === 0 && user && user.year === currentYear && user.fieldsViewStatus === fieldsViewStatus;
 
-
     return (
         <AppBar position="static" elevation={0}>
             <Toolbar>

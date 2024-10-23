@@ -1,18 +1,26 @@
-import { MapContainer, TileLayer, Polygon, useMapEvents, Circle } from "react-leaflet";
+import { MapContainer, TileLayer, Polygon, useMapEvents, Circle, CircleMarker, Tooltip } from "react-leaflet";
 import { useEffect, useState } from "react";
 import GeoLocation from "../../../components/GeoLocation";
 import { useNavigate } from "react-router-dom";
-import { Box } from "@mui/material";
+import { Alert, Box, Button, IconButton, Snackbar, Typography } from "@mui/material";
 import { useFields } from "../../../features/fields/fieldsApiSlice";
 import { useGetUserDataQuery } from '../../../features/auth/authApiSlice'
-import { selectActivityType, selectCurrentYear, selectFieldBaseFieldFilter, selectFieldFreeTextFilter, selectFieldSiteFilter, selectFieldsViewStatus, selectShowsPestLayer } from "../../../features/app/appSlice";
-import { useSelector } from "react-redux";
+import { selectActivityType, selectCurrentYear, selectEditLayer, selectFieldBaseFieldFilter, selectFieldFreeTextFilter, selectFieldSiteFilter, selectFieldsViewStatus, selectLang, selectShowLayers, selectShowsPestLayer, setEditLayer } from "../../../features/app/appSlice";
+import { useDispatch, useSelector } from "react-redux";
 import FieldsFilter from "../../../components/filters/FieldsFilter";
-import { filterFields, getFillColor, getOpacity, isArrayEmpty, isStringEmpty, SCOUT } from "../../FarmUtil";
+import { asLocalDateTime, buildPointFilter, displayFieldName, filterFields, getFillColor, getOpacity, isArrayEmpty, isStringEmpty, MapToolTip, MAX_PER_MAP, parseISOOrNull, SCOUT, stopMapEventPropagation, trap } from "../../FarmUtil";
 import SatelliteMapProvider from "../../../components/map/SatelliteMapProvider";
+import { useGetPointsQuery } from "../../../features/points/pointsApiSlice";
+import WaypointSelectionDialog from "../../dialog/WaypointSelectionDialog";
+import { BugReportOutlined, Close } from "@mui/icons-material";
+import FieldPointDialog from "../../point/FieldPointDialog";
+import PointIcon from "../../layers/PointIcon";
 
 
 const FieldsMap = (props) => {
+
+    const dispatch = useDispatch()
+    const text = useSelector(selectLang)
 
     const [map, setSetMap] = useState(0);
 
@@ -24,13 +32,19 @@ const FieldsMap = (props) => {
     const fieldSiteFilter = useSelector(selectFieldSiteFilter);
     const fieldBaseFieldFilter = useSelector(selectFieldBaseFieldFilter);
     const fieldsViewStatus = useSelector(selectFieldsViewStatus);
-    const activityType = useSelector(selectActivityType);
-    //const showPests = useSelector(selectShowsPestLayer);
+    // const activityType = useSelector(selectActivityType);
+    const showLayers = useSelector(selectShowLayers);
+    const editLayer = useSelector(selectEditLayer);
+
+    const [selectedPoint, setSelectedPoint] = useState(null);
+
 
     const [center, setCenter] = useState([user.lat, user.lng]);
     const [zoom, setZoom] = useState(user.zoom);
 
     const displayFields = filterFields(fields, freeText, fieldSiteFilter, fieldBaseFieldFilter, fieldsViewStatus);
+
+    const { data: points, isLoading: isLoadingPoints, isFetching: isFetchingPoints } = useGetPointsQuery({ types: showLayers }, { skip: isArrayEmpty(showLayers) });
 
     function HandleMapEvents() {
         const m = useMapEvents({
@@ -41,8 +55,11 @@ const FieldsMap = (props) => {
             //     setCenter(e.target.getCenter())
             // },
             click: (e) => {
-                console.log('lng', e.latlng.lng.toFixed(5));
-                console.log('lat', e.latlng.lat.toFixed(5));
+
+                // console.log('lng', e.latlng.lng.toFixed(5));
+                // console.log('lat', e.latlng.lat.toFixed(5));
+
+                mapCliecked(e, null, 'map')
             }
         })
         return <div></div>
@@ -67,17 +84,74 @@ const FieldsMap = (props) => {
 
     const mapCliecked = (e, f, type) => {
         console.log('mapCliecked', type)
-        if (isStringEmpty(activityType)) {
-            navigate(`/field/map/${f.id}/info`)
-        } else {
-            console.log(e)
+        if (editLayer !== null) {
+            if (type === 'polygon') {
+                const p = {
+                    id: null,
+                    lat: e.latlng.lat, lng: e.latlng.lng,
+                    fieldId: f.id,
+                    name: `${text[editLayer]} - ${displayFieldName(f)}: ${points.length + 1} `,
+                    pest: null,
+                    expiry: null,
+                    active: true, type: editLayer
+                };
+                setSelectedPoint(p);
+            }
+            else if (type === 'point') {
+                setSelectedPoint(f);
+            } else if (editLayer !== trap && type === 'map') {
+                const p = {
+                    id: null,
+                    lat: e.latlng.lat, lng: e.latlng.lng,
+                    //fieldId: f.id,
+                    name: `${text[editLayer]}: ${points.length + 1} `,
+                    pest: null,
+                    expiry: null,
+                    active: true, type: editLayer
+                };
+                setSelectedPoint(p);
+            }
+
+
+            stopMapEventPropagation(e);
+
+        } else if (type === 'point') {
+            console.log('point lng', e.latlng.lng.toFixed(5), ' lat', e.latlng.lat.toFixed(5));
+            console.log(f);
+            stopMapEventPropagation(e);
         }
+
+        else if (type === 'polygon') {
+            navigate(`/field/map/${f.id}/info`)
+        }
+
+    }
+
+    const handleCloseEditPoint = () => {
+        setSelectedPoint(null);
+    }
+
+    const handleCloseEditLayer = () => {
+        dispatch(setEditLayer(null));
 
     }
 
     let navigate = useNavigate();
 
     const height = window.innerHeight - 115;
+
+   // console.log(points)
+
+    const getDisplayPoints = () => {
+        if (isArrayEmpty(showLayers) || !points || isLoadingPoints || isFetchingPoints) {
+            return [];
+        }
+        else if (editLayer) {
+            return points;
+        } else {
+            return points.filter(e => e.active === true);
+        }
+    }
 
     return (
         <Box display={'flex'} flex={1} alignItems={'stretch'} flexDirection={'column'} justifyContent={'space-between'}>
@@ -89,7 +163,7 @@ const FieldsMap = (props) => {
 
                     <SatelliteMapProvider />
                     <GeoLocation />
-                    {displayFields.map(f =>
+                    {displayFields.map((f, index) =>
                         <Polygon field={f} key={f.id}
                             color={f.color}
                             fillColor={getFillColor(f)}
@@ -97,52 +171,76 @@ const FieldsMap = (props) => {
                             eventHandlers={{
                                 click: (e) => {
                                     mapCliecked(e, f, 'polygon');
-                                    navigate(`/field/map/${f.id}/info`)
                                 }
                             }}
-                            //     fillOpacity={opacity}
                             positions={f.geoPoints}>
-                            {/* // {index < MAX_PER_MAP && <MapTooltip textArr={textArr}>  </MapTooltip>}
-                            // <Popup className={LEAFLET_POPUP_CLASS}>
-                            //     <FieldCard
-                            //         dir={dir}
-                            //         domain={domain}
-                            //         crops={crops} yearFilter={yearFilter}
-                            //         text={text} history={history}
-                            //         areaUnit={areaUnit}
-                            //         caller={MAP}
-                            //         user={user}
-                            //         documentor={documentor}
-                            //         className={classes.popup} />
-                            // </Popup> */}
-
+                            {index < MAX_PER_MAP && <Tooltip
+                                className={'empty-tooltip'}
+                                direction="center" opacity={1} permanent>
+                                <MapToolTip textArr={[displayFieldName(f)]} />
+                            </Tooltip>}
                         </Polygon>
                     )}
 
-                    {/* {displayFields.map(f =>
+                    {getDisplayPoints().map((e, index, arr) =>
 
-<Circle eventHandlers={{
-                                click: (e) => {
-                                    mapCliecked(e, f, 'circle');
-                                    //navigate(`/field/map/${f.id}/info`)
+                        <CircleMarker
+
+                            eventHandlers={{
+                                click: (event) => {
+
+                                    mapCliecked(event, e, 'point', index);
                                 }
-                            }}key={f.id} center={[f.lat, f.lng]} radius={20} pathOptions={{ color: 'blue' }} />
-
-
-
-                    )} */}
+                            }}
+                            key={index} radius={14}
+                            color={e.active ? 'white' : 'gray'}
+                            weight={4}
+                            fillColor={e.active ? 'white' : 'gray'}
+                            fillOpacity={1}
+                            center={[e.lat, e.lng]}
+                        >
+                            <Tooltip
+                                className={'empty-tooltip'}
+                                direction="center" opacity={1} permanent>
+                                <PointIcon point={e} />
+                            </Tooltip>
+                        </CircleMarker>
+                    )}
                     <HandleMapEvents />
                 </MapContainer>
 
             </Box>
             {fields && <FieldsFilter fields={fields} />}
-            {/* <ScoutDialog open={activityType === SCOUT} /> */}
+            <Snackbar
+                open={editLayer !== null}
+                message={<Typography variant="h6">{text[editLayer + 's']}</Typography>}
+                action={
+                    <IconButton color="inherit" size="large" onClick={handleCloseEditLayer}>
+                        <Close />
+                    </IconButton>
+                }
+                // sx={{ bottom: { xs: 10, sm: 0 } }}
+                sx={{ width: '100%', bottom: { xs: 10, sm: 0 } }}
+            />
+
+            {selectedPoint && <FieldPointDialog open={selectedPoint !== null} deletable={true} defaultValues={{...selectedPoint, expiry : parseISOOrNull(selectedPoint.expiry)}} handleClose={handleCloseEditPoint} />}
+
         </Box>
     )
 }
 export default FieldsMap;
 
+/*
+<Snackbar open={editLayer !== null} >
+<Alert
+    onClose={handleCloseEditLayer}
+    severity="success"
+    variant="filled"
+    sx={{ width: '100%' }}
+>
+   {editLayer}
+</Alert>
+</Snackbar>
 
-
-
+*/
 

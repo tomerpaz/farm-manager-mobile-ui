@@ -39,9 +39,11 @@ const appSlice = createSlice({
         showInventory,
         showPlans,
         openLayers: false,
-        showPestsLayer: false,
-        showTrapsLayer: false,
-        showIrrigationHeadsLayer: false,
+        showLayers: [],
+        editLayer: null,
+        // showPestsLayer: false,
+        // showTrapsLayer: false,
+        // showIrrigationHeadsLayer: false,
     },
     reducers: {
         setCredentials: (state, action) => {
@@ -63,7 +65,8 @@ const appSlice = createSlice({
             state.openSettings = action.payload
         },
         setOpenLayers: (state, action) => {
-            state.openLayers = action.payload
+            state.openLayers = action.payload;
+            state.editLayer = null;
         },
         logOut: (state, action) => {
             localStorage.removeItem('token')
@@ -131,25 +134,21 @@ const appSlice = createSlice({
             state.showInventory = action.payload;
         },
         setShowPlans: (state, action) => {
-            localStorage.setItem('showPlans', action.payload);
             state.showPlans = action.payload;
         },
-        setShowPestsLayer: (state, action) => {
-            state.showPestsLayer = action.payload;
+        setShowLayers: (state, action) => {
+            state.showLayers = action.payload
         },
-        setShowTrapsLayer: (state, action) => {
-            state.showTrapsLayer = action.payload;
+        setEditLayer: (state, action) => {
+            state.editLayer = action.payload
         },
-        setShowIrrigationHeadsLayer: (state, action) => {
-            state.showIrrigationHeadsLayer = action.payload;
-        }
     },
 })
 
 export const { setCredentials, logOut, setLang, setCurrentYear, setAppBarDialogOpen, setFieldFreeTextFilter, setActivityFreeTextFilter,
     setStartDateFilter, setEndDateFilter, setActivityTypeFilter, setFieldSiteFilter, setFieldBaseFieldFilter, setFieldDashboardYear, setFieldsViewStatus,
     setActivityPlanStatusFilter, setActivityPlanTypeFilter, setActivityStatusFilter, setActivityType, setSnackbar, setOpenSettings, setInventoryFreeTextFilter,
-    setInventoryDateFilter, setInventoryWarehouseFilter, setShowInventory,setShowPlans, setOpenLayers,setShowPestsLayer, setShowTrapsLayer, setShowIrrigationHeadsLayer } = appSlice.actions
+    setInventoryDateFilter, setInventoryWarehouseFilter, setShowInventory,setShowPlans, setOpenLayers, setShowLayers, setEditLayer} = appSlice.actions
 
 export default appSlice.reducer
 
@@ -179,7 +178,5 @@ export const selectInventoryWarehouseFilter = (state) => state.app.inventoryWare
 export const selectShowInventory = (state) => state.app.showInventory
 export const selectShowPlans = (state) => state.app.showPlans
 export const selectOpenLayers = (state) => state.app.openLayers
-export const selectShowPestsLayer = (state) => state.app.showPestsLayer
-export const selectShowTrapsLayer = (state) => state.app.showTrapsLayer
-export const selectShowIrrigationHeadsLayer = (state) => state.app.showIrrigationHeadsLayer
-
+export const selectShowLayers = (state) => state.app.showLayers
+export const selectEditLayer = (state) => state.app.editLayer

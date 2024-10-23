@@ -2,6 +2,8 @@ import { grey } from "@mui/material/colors";
 import { parseISO } from "date-fns";
 import { selectShowInventory } from "../features/app/appSlice";
 import { useSelector } from "react-redux";
+import { Tooltip } from "react-leaflet";
+import { Typography } from "@mui/material";
 
 export const UI_SIZE = 'medium';
 
@@ -19,7 +21,7 @@ export const INVENTORY = 'INVENTORY';
 export const PLANS = 'PLANS';
 
 
-const GROWER_ACTIVITY_TYPES = [GENERAL, SPRAY, SCOUT,IRRIGATION, HARVEST, MARKET];
+const GROWER_ACTIVITY_TYPES = [GENERAL, SPRAY, SCOUT, IRRIGATION, HARVEST, MARKET];
 
 const GROWER_ACTIVITY_TYPES_MAP = [GENERAL, SPRAY, SCOUT, IRRIGATION, HARVEST, MARKET];//.concat(SCOUT)
 
@@ -105,6 +107,27 @@ export const maxLenghtStr = (str, maxLenght) => {
 
 export const displayFieldName = (field) => {
     return field.alias ? `${field.name}, ${field.alias}` : field.name;
+}
+
+
+export const mapTextStyle = {
+    color: 'white',
+    textShadow: '-1px 1px 0 #000,1px 1px 0 #000,1px -1px 0 #000,-1px -1px 0 #000'
+}
+
+export const MAX_PER_MAP = 600;
+
+
+export const MapToolTip = ({textArr, large}) => {
+    const variant  = large ? 'h6' : 'subtitle1';
+
+    return <Tooltip
+        className={'empty-tooltip'}
+        direction="center" opacity={0.8} permanent>
+        {textArr.map((e, index) =>
+            <Typography key={index} variant={variant} style={mapTextStyle} >{e}</Typography>
+        )}
+    </Tooltip>
 }
 
 export const displayFieldArea = (field, areaUnit, text) => {
@@ -296,7 +319,7 @@ export function asLocalDateTime(date, hyphen) {
         var hh = date.getHours().toString();
         var mm = (date.getMinutes()).toString(); // getMonth() is zero-based         
         const space = hyphen ? "-" : "";
-        return yyyy + space + (MM[1] ? MM : "0" + MM[0]) + space + (dd[1] ? dd : "0" + dd[0]) + 'T' +(hh[1] ? hh : "0" + hh[0]) + ":" + (mm[1] ? mm : "0" + mm[0]) + ":00"
+        return yyyy + space + (MM[1] ? MM : "0" + MM[0]) + space + (dd[1] ? dd : "0" + dd[0]) + 'T' + (hh[1] ? hh : "0" + hh[0]) + ":" + (mm[1] ? mm : "0" + mm[0]) + ":00"
     } else {
         return date;
     }
@@ -487,15 +510,20 @@ export const tree = 'tree';
 export const irrigationHead = 'irrigationHead';
 
 
-export const pointTypeColor = [{type: trap, color: "red"},{type: tree, color: "green"},{type: irrigationHead, color: "blue"}, {type: generic, color: "orange"}]
+export const pointTypeColor = [{ type: trap, color: "red" }, { type: tree, color: "green" }, { type: irrigationHead, color: "blue" }, { type: generic, color: "orange" }]
 
 
-export const getPointTypeColor = (type) =>{
-    return pointTypeColor.find(e=>e.type === type)?.color;
+export const getPointTypeColor = (type) => {
+    return pointTypeColor.find(e => e.type === type)?.color;
 }
 
 export function getPointTypes() {
     return [generic, tree, trap, irrigationHead]
+}
+
+
+export function stopMapEventPropagation(e) {
+    e.originalEvent.view.L.DomEvent.stopPropagation(e);
 }
 
 // export function daysDif(before, after){

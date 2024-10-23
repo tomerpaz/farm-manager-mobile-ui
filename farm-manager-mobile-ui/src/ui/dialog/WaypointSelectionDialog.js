@@ -4,7 +4,7 @@ import { selectLang } from "../../features/app/appSlice";
 import { Fragment, useState } from "react";
 import { Transition } from "../Util";
 import { BugReport, BugReportOutlined, Delete, Nature, PestControl, Save } from "@mui/icons-material";
-import { asLocalDateTime, getFillColor, getOpacity, isMobile, isStringEmpty, newDate } from "../FarmUtil";
+import { asLocalDateTime, getFillColor, getOpacity, isMobile, isStringEmpty, newDate, stopMapEventPropagation } from "../FarmUtil";
 
 import DialogAppBar from "./DialogAppBar";
 
@@ -123,7 +123,7 @@ const WaypointSelectionDialog = ({ open, handleClose, fields, waypoints }) => {
     const mapCliecked = (e, element, type, index) => {
         console.log('mapCliecked', type, index)
         if (type === 'point') {
-            e.originalEvent.view.L.DomEvent.stopPropagation(e);
+            stopMapEventPropagation(e);
             setSelectedPoint(element);
             setOpenWaypointDialog(true);
             setSelectedIndex(index);
@@ -200,37 +200,13 @@ const WaypointSelectionDialog = ({ open, handleClose, fields, waypoints }) => {
 
                             {
                                 points.map((e, index, arr) =>
-                                    // <Marker key={index} position={[e.point.lat, e.point.lng]}
-                                    //     eventHandlers={{
-                                    //         click: (event) => {
 
-                                    //             mapCliecked(event, e, 'point', index);
-
-                                    //             // mapCliecked(e, f, 'polygon');
-                                    //             // navigate(`/field/map/${f.id}/info`)
-                                    //         }
-                                    //     }}
-                                    // >
-
-                                    //     {/* <Popup>
-                                    //         A pretty CSS3 popup. <br /> Easily customizable.
-                                    //     </Popup> */}
-                                    //     <Tooltip
-                                    //         //className={'empty-tooltip'}
-                                    //         direction="center" opacity={0.8} permanent>
-                                    //         <Save/>
-
-                                    //     </Tooltip>
-                                    // </Marker>
                                     <CircleMarker
 
                                         eventHandlers={{
                                             click: (event) => {
 
                                                 mapCliecked(event, e, 'point', index);
-
-                                                // mapCliecked(e, f, 'polygon');
-                                                // navigate(`/field/map/${f.id}/info`)
                                             }
                                         }}
                                         key={index} radius={14}
@@ -244,8 +220,6 @@ const WaypointSelectionDialog = ({ open, handleClose, fields, waypoints }) => {
                                             className={'empty-tooltip'}
                                             direction="center" opacity={1} permanent>
                                             <BugReportOutlined fontSize="medium"/*sx={{color: 'orange'}}*/ />
-{/* <Box fontSize={25}> 🪰</Box> */}
-
                                         </Tooltip>
                                     </CircleMarker>
                                 )

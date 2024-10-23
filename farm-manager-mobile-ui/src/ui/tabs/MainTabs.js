@@ -7,7 +7,7 @@ import { Link, useLocation, useParams } from 'react-router-dom';
 import FieldList from './fields/FieldList';
 import { DEFAULT_ROUTE } from "../../App";
 import ActivitiesList from './activities/ActivitiesList';
-import { selectLang, selectShowInventory, selectShowPlans } from '../../features/app/appSlice';
+import { selectEditLayer, selectLang, selectShowInventory, selectShowPlans } from '../../features/app/appSlice';
 import { useSelector } from 'react-redux';
 import ActionFab from '../../components/ui/ActionFab';
 import { useGetUserDataQuery } from '../../features/auth/authApiSlice';
@@ -64,10 +64,11 @@ const MainTabs = () => {
     const { data: { userConf, usePlans } } = useGetUserDataQuery()
     const showInventory = useSelector(selectShowInventory);
     const isInventory = showInventory && isInventoryPossible(userConf);
-    
-    
+
+
     const showPlans = useSelector(selectShowPlans);
     const isPlans = showPlans && isPlansPossible(userConf);
+    const editLayer = useSelector(selectEditLayer);
 
     if (isPlans) {
         paths.push(plansPath)
@@ -92,7 +93,7 @@ const MainTabs = () => {
                     textColor="inherit"
                     variant={addScroll ? 'scrollable' : 'fullWidth'}
                     scrollButtons={addScroll}
-                    allowScrollButtonsMobile={addScroll}                    
+                    allowScrollButtonsMobile={addScroll}
                 // variant="scrollable"
                 // scrollButtons={true}
                 // allowScrollButtonsMobile
@@ -110,7 +111,7 @@ const MainTabs = () => {
             </Box>
             <TabPanel component={'div'} value={value} index={0}>
                 <FieldsMap />
-                <ActionFab map={true} plan={false} />
+                {editLayer === null && <ActionFab map={true} plan={false} />}
             </TabPanel>
             <TabPanel value={value} index={1}>
                 <FieldList />

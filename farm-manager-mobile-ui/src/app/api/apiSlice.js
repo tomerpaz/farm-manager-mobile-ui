@@ -18,6 +18,7 @@ export const Sizes_TAG = 'Sizes';
 export const Inventory_TAG = 'Inventory_TAG';
 export const Season_TAG = 'FieldSeason';
 export const FieldPoints_TAG = 'FieldPoints';
+export const Points_TAG = 'Points';
 export const FieldScouts_TAG = 'FieldScouts';
 export const Pests_TAG = 'Pests';
 export const PestsStages_TAG = 'PestsStages';

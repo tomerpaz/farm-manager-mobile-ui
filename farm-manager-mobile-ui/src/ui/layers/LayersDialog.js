@@ -1,21 +1,24 @@
 import React from 'react'
-import { Box, Checkbox, Dialog, DialogContent, FormControlLabel, Slide } from '@mui/material'
+import { Box, Checkbox, Dialog, DialogContent, FormControlLabel, IconButton, Slide } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux';
 import {
     selectLang, selectOpenLayers, selectShowPestsLayer, setOpenLayers, setShowPestsLayer,
-    selectShowTrapsLayer, selectShowIrrigationHeadsLayer, setShowTrapsLayer, setShowIrrigationHeadsLayer
+    selectShowLayers,
+    setShowLayers,
+    setEditLayer
 } from '../../features/app/appSlice';
 import { isMobile } from '../FarmUtil';
 import { useGetUserDataQuery } from '../../features/auth/authApiSlice';
 import DialogAppBar from '../dialog/DialogAppBar';
+import { Edit, EditLocationAlt } from '@mui/icons-material';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const pests = 'pests'
-const irrigationHeads = 'irrigationHeads'
-const traps = 'traps'
+const pest = 'pest'
+const irrigationHead = 'irrigationHead'
+const trap = 'trap'
 //const irrigationHeads = 'irrigationHeads'
 
 const LayersDialog = () => {
@@ -28,23 +31,26 @@ const LayersDialog = () => {
     const { data: user, isSuccess: isUserSuccess } = useGetUserDataQuery()
 
 
-    const showPests = useSelector(selectShowPestsLayer);
-    const showTraps = useSelector(selectShowTrapsLayer);
-    const showIrrigationHeads = useSelector(selectShowIrrigationHeadsLayer);
+    const showLayers = useSelector(selectShowLayers);
 
     const handleClose = () => {
         dispatch(setOpenLayers(false));
     }
 
+    const handleEditLayer = (layer) => {
+        dispatch(setOpenLayers(false));
+        dispatch(setEditLayer(layer));
+        dispatch(setShowLayers([layer]));
+
+
+    }
 
     const handleChange = (layer) => {
-        if (layer === pests) {
-            dispatch(setShowPestsLayer(!showPests));
-        } if (layer === traps) {
-            dispatch(setShowTrapsLayer(!showTraps));
-        } if (layer === irrigationHeads) {
-            dispatch(setShowIrrigationHeadsLayer(!showIrrigationHeads));
-        }
+         if(showLayers.includes(layer)){
+            dispatch( setShowLayers(showLayers.filter(e=>e!==layer)));
+         } else {
+            dispatch(setShowLayers(showLayers.concat(layer)));
+         }
     }
 
     return (
@@ -60,13 +66,15 @@ const LayersDialog = () => {
             <DialogContent>
 
                 <Box marginTop={2} display={'flex'} flexDirection={'row'} >
-                    <FormControlLabel control={<Checkbox checked={showPests} onChange={() => handleChange(pests)} />} label={text.pests} />
+                    <FormControlLabel control={<Checkbox checked={showLayers.includes(pest)} onChange={() => handleChange(pest)} />} label={text.pests} />
                 </Box>
-                <Box marginTop={2} display={'flex'} flexDirection={'row'} >
-                    <FormControlLabel control={<Checkbox checked={showTraps} onChange={() => handleChange(traps)} />} label={text.traps} />
+                <Box marginTop={2} display={'flex'} flexDirection={'row'} justifyContent={'space-between'} >
+                    <FormControlLabel control={<Checkbox checked={showLayers.includes(trap)} onChange={() => handleChange(trap)} />} label={text.traps} />
+                    <IconButton onClick={()=>handleEditLayer(trap)}><EditLocationAlt /></IconButton>
                 </Box>
-                <Box marginTop={2} display={'flex'} flexDirection={'row'} >
-                    <FormControlLabel control={<Checkbox checked={showIrrigationHeads} onChange={() => handleChange(irrigationHeads)} />} label={text.irrigationHeads} />
+                <Box marginTop={2} display={'flex'} flexDirection={'row'} justifyContent={'space-between'} >
+                    <FormControlLabel control={<Checkbox checked={showLayers.includes(irrigationHead)} onChange={() => handleChange(irrigationHead)} />} label={text.irrigationHeads} />
+                    <IconButton onClick={()=>handleEditLayer(irrigationHead)}><EditLocationAlt /></IconButton>
                 </Box>
 
                 {/* {isInventory &&
