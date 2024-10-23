@@ -3,7 +3,7 @@ import { parseISO } from "date-fns";
 import { selectShowInventory } from "../features/app/appSlice";
 import { useSelector } from "react-redux";
 import { Tooltip } from "react-leaflet";
-import { Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 
 export const UI_SIZE = 'medium';
 
@@ -524,6 +524,10 @@ export function getPointTypes() {
 
 export function stopMapEventPropagation(e) {
     e.originalEvent.view.L.DomEvent.stopPropagation(e);
+}
+
+export const FormSpacer = () => {
+    return <Box margin={1} />
 }
 
 // export function daysDif(before, after){

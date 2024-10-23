@@ -10,7 +10,7 @@ import { useGetUserDataQuery } from '../../features/auth/authApiSlice';
 import { useCreateFieldPointMutation, useDeleteFieldPointMutation, useUpdateFieldPointMutation } from '../../features/points/pointsApiSlice';
 import { Controller, useForm, useWatch } from 'react-hook-form';
 import { Cancel, Close, Delete, PestControl, Save } from '@mui/icons-material';
-import { getPointTypes, trap, UI_SIZE } from '../FarmUtil';
+import { FormSpacer, getPointTypes, trap, UI_SIZE } from '../FarmUtil';
 import { useGetPestsQuery } from '../../features/pests/pestsApiSlice';
 import { DatePicker } from '@mui/x-date-pickers';
 
@@ -35,7 +35,7 @@ const FieldPointDialog = ({ defaultValues, open, handleClose, deletable,/*, type
   //const type = useWatch({ control, name: "type" })
   // const [type, setType] = useState(defaultValues.type);
 
-//  console.log(type);
+  //  console.log(type);
   const saveFieldPoint = (data) => {
     if (data.id === null) {
       return createFieldPoint(data).unwrap();
@@ -63,7 +63,7 @@ const FieldPointDialog = ({ defaultValues, open, handleClose, deletable,/*, type
     //  setOpen(false)
   }
 
-  if(defaultValues.type === trap && isPestsLoading){
+  if (defaultValues.type === trap && isPestsLoading) {
     return <></>
   }
 
@@ -126,27 +126,27 @@ const FieldPointDialog = ({ defaultValues, open, handleClose, deletable,/*, type
           {defaultValues.type === trap &&
             <Fragment>
 
-              <Box margin={2} />
+              <FormSpacer/>
 
+              <Controller
+                name="pest"
+                control={control}
+                rules={{ required: true }}
+                render={({ field: { ref, onChange, ...field } }) => <Autocomplete
+                  // disablePortal
+                  onChange={(_, data) => onChange(data)}
+                  options={pests.filter(e => e.active)}
+
+                  // fullWidth
+                  size={UI_SIZE}
+                  sx={{ flex: 2 }}
+                  getOptionLabel={(option) => option ? option.name : ''}
+                  isOptionEqualToValue={(option, value) => (value === undefined) || option?.id?.toString() === (value?.id ?? value)?.toString()}
+                  renderInput={(params) => <TextFieldBase error={errors.pest ? true : false} sx={{ marginTop: 0.5 }} {...params} label={text.pest} />}
+                  {...field} />}
+              />
+              <FormSpacer/>
               <Box display={'flex'} flexDirection={'row'} justifyContent={'space-between'}>
-                <Controller
-                  name="pest"
-                  control={control}
-                  rules={{ required: true }}
-                  render={({ field: { ref, onChange, ...field } }) => <Autocomplete
-                    // disablePortal
-                    onChange={(_, data) => onChange(data)}
-                    options={pests.filter(e => e.active)}
-
-                    // fullWidth
-                    size={UI_SIZE}
-                    sx={{ flex: 2 }}
-                    getOptionLabel={(option) => option ? option.name : ''}
-                    isOptionEqualToValue={(option, value) => (value === undefined) || option?.id?.toString() === (value?.id ?? value)?.toString()}
-                    renderInput={(params) => <TextFieldBase error={errors.pest ? true : false} sx={{ marginTop: 0.5 }} {...params} label={text.pest} />}
-                    {...field} />}
-                />
-                <Box margin={1}></Box>
 
                 <Controller
                   name="expiry"
