@@ -1,8 +1,39 @@
 import { BugReportOutlined, CenterFocusStrong, Opacity, Water } from '@mui/icons-material'
 import React from 'react'
-import { irrigationHead, trap } from '../FarmUtil';
+import { irrigationHead, parseISOOrNull, trap } from '../FarmUtil';
 import { Avatar } from '@mui/material';
 import { SECONDARY_MAIN } from '../../App';
+
+
+const height = 32;
+
+const isExpired = ( point) => {
+    if(point.active && point.expiry){
+        const expiry =  parseISOOrNull(point.expiry);
+        console.log(expiry);
+        if(expiry.valueOf() < new Date().valueOf()) {
+            return true;
+        }
+
+    }
+    return false;
+}
+
+const getBorderColor = ( point ) => {
+    if(isExpired(point)) {
+        return 'red';
+    }
+
+    return null;
+}
+
+const getBorderWidth = ( point ) => {
+    if(getBorderColor(point) === null) {
+        return null;
+    }
+
+    return 3;
+}
 
 function PointIcon({ point }) {
 
@@ -10,11 +41,12 @@ function PointIcon({ point }) {
         return <BugReportOutlined fontSize="medium"/*sx={{color: 'orange'}}*/ />;
     }
     else if (point.type === trap) {
-        return <Avatar sx={{backgroundColor: point.active ? 'white' : 'gray'}}> <CenterFocusStrong fontSize="medium" sx={{backgroundColor: SECONDARY_MAIN}} /></Avatar>;
+        return <Avatar sx={{height: height, width: height,backgroundColor: point.active ? 'white' : 'gray', border: getBorderWidth(point), borderColor: getBorderColor(point)}}> <CenterFocusStrong fontSize="medium" sx={{color: 'black'}} /></Avatar>;
     }
     else if (point.type === irrigationHead) {
-        return <Opacity fontSize="medium"/*sx={{color: 'orange'}}*/ />;
+        return <Avatar sx={{height: height, width: height,backgroundColor: point.active ? '#82b1ff' : 'gray', border: getBorderWidth(point), borderColor: getBorderColor(point)}}> <Opacity fontSize="medium" sx={{color: 'black'}} /></Avatar>;
     }
 }
+
 
 export default PointIcon

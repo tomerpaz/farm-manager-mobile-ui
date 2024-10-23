@@ -149,7 +149,7 @@ const FieldsMap = (props) => {
         else if (editLayer) {
             return points;
         } else {
-            return points.filter(e => e.active === true);
+            return points.filter(e => e.active === true && showLayers.includes(e.type));
         }
     }
 
@@ -192,7 +192,7 @@ const FieldsMap = (props) => {
                                     mapCliecked(event, e, 'point', index);
                                 }
                             }}
-                            key={index} radius={14}
+                            key={index} radius={12}
                             color={e.active ? 'white' : 'gray'}
                             weight={4}
                             fillColor={e.active ? 'white' : 'gray'}
