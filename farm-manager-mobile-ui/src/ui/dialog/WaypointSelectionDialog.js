@@ -14,6 +14,7 @@ import SatelliteMapProvider from "../../components/map/SatelliteMapProvider";
 import GeoLocation from "../../components/GeoLocation";
 import { safeParseJson } from "../../features/fields/fieldsApiSlice";
 import WaypointDialog from "./WaypointDialog";
+import ActivityTypeIcon from "../../icons/ActivityTypeIcon";
 
 
 
@@ -42,7 +43,7 @@ const getMapZoom = (fields, user) => {
 
 }
 
-const WaypointSelectionDialog = ({ open, handleClose, fields, waypoints }) => {
+const WaypointSelectionDialog = ({ open, handleClose, fields, waypoints, activityType }) => {
     const text = useSelector(selectLang);
     const [filter, setFilter] = useState('');
 
@@ -128,7 +129,8 @@ const WaypointSelectionDialog = ({ open, handleClose, fields, waypoints }) => {
             setOpenWaypointDialog(true);
             setSelectedIndex(index);
         } else {
-            setPoints(points.concat({ note: '', date: asLocalDateTime(newDate(), true), point: { lat: e.latlng.lat.toFixed(5), lng: e.latlng.lng.toFixed(5) } }));
+            setPoints(points.concat({ note: '', date: asLocalDateTime(newDate(), true),
+                 createTime: asLocalDateTime(newDate(), true), point: { lat: e.latlng.lat.toFixed(5), lng: e.latlng.lng.toFixed(5) } }));
         }
     }
 
@@ -219,17 +221,11 @@ const WaypointSelectionDialog = ({ open, handleClose, fields, waypoints }) => {
                                         <Tooltip 
                                             className={'empty-tooltip'}
                                             direction="center" opacity={1} permanent>
-                                            <BugReportOutlined fontSize="medium"/*sx={{color: 'orange'}}*/ />
+                                            <ActivityTypeIcon type={activityType} />
                                         </Tooltip>
                                     </CircleMarker>
                                 )
                             }
-
-
-
-
-
-
                             <HandleMapEvents />
                         </MapContainer>
 

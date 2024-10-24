@@ -44,7 +44,7 @@ const WaypointDialog = ({ open, handleClose, selectedPoint, handleDelete }) => {
                             {text.note}
                         </Typography>
                         <Typography marginLeft={3} marginRight={3} variant="h6">
-                            {asShortStringDateTime(parseISOOrNull(selectedPoint.date))}
+                            {asShortStringDateTime(parseISOOrNull(selectedPoint.createTime ? selectedPoint.createTime : selectedPoint.date))}
                         </Typography>
                     </Box>
                 } />
