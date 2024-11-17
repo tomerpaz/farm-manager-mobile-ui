@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { Outlet } from 'react-router-dom'
 import { useGetUserDataQuery } from '../features/auth/authApiSlice'
-import { setFieldsViewStatus, setCurrentYear, setLang } from '../features/app/appSlice'
+import { setFieldsViewStatus, setCurrentYear, setLang, setMapCenter, setMapZoom } from '../features/app/appSlice'
 import Loading from '../components/Loading'
 import he from "../lang/he.json";
 import en from "../lang/en.json";
@@ -33,6 +33,8 @@ const UserRoutes = () => {
             dispatch(setLang(getUserLang(lang)));
             dispatch(setCurrentYear(user.year));
             dispatch(setFieldsViewStatus(user.fieldsViewStatus));
+            dispatch(setMapCenter([user.lat, user.lng]));
+            dispatch(setMapZoom(user.zoom));
 
             
         } 

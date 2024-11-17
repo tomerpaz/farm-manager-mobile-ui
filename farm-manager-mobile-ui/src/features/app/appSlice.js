@@ -4,9 +4,13 @@ import { asLocalDate, newDate, PLAN } from "../../ui/FarmUtil";
 export const DEFAULT_PLAN_STATUS = ''
 export const DEFAULT_ACTIVITY_STATUS = ''
 
-const lang  = localStorage.getItem('lang')
+const lang = localStorage.getItem('lang')
 const showInventory = 'true' === localStorage.getItem('showInventory');
 const showPlans = 'true' === localStorage.getItem('showPlans');
+
+const showFieldName = 'true' === localStorage.getItem('showFieldName');
+const showFieldAlias = 'true' === localStorage.getItem('showFieldAlias');
+
 const appSlice = createSlice({
     name: 'auth',
     initialState: {
@@ -41,6 +45,10 @@ const appSlice = createSlice({
         openLayers: false,
         showLayers: [],
         editLayer: null,
+        mapCenter: null,
+        mapZoom: null,
+        showFieldName,
+        showFieldAlias,
         // showPestsLayer: false,
         // showTrapsLayer: false,
         // showIrrigationHeadsLayer: false,
@@ -118,16 +126,16 @@ const appSlice = createSlice({
         },
         setSnackbar: (state, action) => {
             state.snackbarMsg = action.payload.msg;
-            state.snackbarSeverity = action.payload.severity ? action.payload.severity : 'success' ;
+            state.snackbarSeverity = action.payload.severity ? action.payload.severity : 'success';
         },
         setInventoryFreeTextFilter: (state, action) => {
             state.inventoryFreeTextFilter = action.payload
         },
         setInventoryDateFilter: (state, action) => {
             state.inventoryDateFilter = action.payload
-        }, 
+        },
         setInventoryWarehouseFilter: (state, action) => {
-            state.inventoryWarehouseFilter = action.payload ?  action.payload: 0;
+            state.inventoryWarehouseFilter = action.payload ? action.payload : 0;
         },
         setShowInventory: (state, action) => {
             localStorage.setItem('showInventory', action.payload);
@@ -142,13 +150,28 @@ const appSlice = createSlice({
         setEditLayer: (state, action) => {
             state.editLayer = action.payload
         },
+        setMapCenter: (state, action) => {
+            state.mapCenter = action.payload
+        },
+        setMapZoom: (state, action) => {
+            state.mapZoom = action.payload
+        },
+        setShowFieldAlias: (state, action) => {
+            state.showFieldAlias = action.payload;
+            localStorage.setItem('showFieldAlias', action.payload);
+        },
+        setShowFieldName: (state, action) => {
+            state.showFieldName = action.payload;
+            localStorage.setItem('showFieldName', action.payload);
+        },
     },
 })
 
 export const { setCredentials, logOut, setLang, setCurrentYear, setAppBarDialogOpen, setFieldFreeTextFilter, setActivityFreeTextFilter,
     setStartDateFilter, setEndDateFilter, setActivityTypeFilter, setFieldSiteFilter, setFieldBaseFieldFilter, setFieldDashboardYear, setFieldsViewStatus,
     setActivityPlanStatusFilter, setActivityPlanTypeFilter, setActivityStatusFilter, setActivityType, setSnackbar, setOpenSettings, setInventoryFreeTextFilter,
-    setInventoryDateFilter, setInventoryWarehouseFilter, setShowInventory,setShowPlans, setOpenLayers, setShowLayers, setEditLayer} = appSlice.actions
+    setInventoryDateFilter, setInventoryWarehouseFilter, setShowInventory, setShowPlans, setOpenLayers, setShowLayers, setEditLayer, setMapCenter, setMapZoom,
+    setShowFieldAlias, setShowFieldName } = appSlice.actions
 
 export default appSlice.reducer
 
@@ -180,3 +203,7 @@ export const selectShowPlans = (state) => state.app.showPlans
 export const selectOpenLayers = (state) => state.app.openLayers
 export const selectShowLayers = (state) => state.app.showLayers
 export const selectEditLayer = (state) => state.app.editLayer
+export const selectMapCenter = (state) => state.app.mapCenter
+export const selectMapZoom = (state) => state.app.mapZoom
+export const selectShowFieldName = (state) => state.app.showFieldName
+export const selectShowFieldAlias = (state) => state.app.showFieldAlias

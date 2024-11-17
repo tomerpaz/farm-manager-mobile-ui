@@ -109,6 +109,15 @@ export const displayFieldName = (field) => {
     return field.alias ? `${field.name}, ${field.alias}` : field.name;
 }
 
+export const mapDisplayFieldName = (field, showName, showAlias) => {
+    if (showName && !showAlias) {
+        return field.name;
+    } else if (!showName && showAlias) {
+        return field.alias ? field.alias : '';
+    } else {
+        return field.alias ? `${field.name}, ${field.alias}` : field.name;
+    }
+}
 
 export const mapTextStyle = {
     color: 'white',
@@ -118,8 +127,8 @@ export const mapTextStyle = {
 export const MAX_PER_MAP = 600;
 
 
-export const MapToolTip = ({textArr, large}) => {
-    const variant  = large ? 'h6' : 'subtitle1';
+export const MapToolTip = ({ textArr, large }) => {
+    const variant = large ? 'h6' : 'subtitle1';
 
     return <Tooltip
         className={'empty-tooltip'}

@@ -109,7 +109,7 @@ const ActivityForm = ({ activity }) => {
     setValue('reference', null);
     setValue('editable', true);
     setValue('status', null);
-
+    setValue('points', []);
     setIsDuplicate(true);
   }
 

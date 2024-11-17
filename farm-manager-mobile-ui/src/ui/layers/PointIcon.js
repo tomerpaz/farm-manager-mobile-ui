@@ -3,6 +3,7 @@ import React from 'react'
 import { irrigationHead, parseISOOrNull, trap } from '../FarmUtil';
 import { Avatar } from '@mui/material';
 import { SECONDARY_MAIN } from '../../App';
+import Scout from '@mui/icons-material/PestControl';
 
 
 const height = 32;
@@ -10,11 +11,9 @@ const height = 32;
 const isExpired = ( point) => {
     if(point.active && point.expiry){
         const expiry =  parseISOOrNull(point.expiry);
-        console.log(expiry);
         if(expiry.valueOf() < new Date().valueOf()) {
             return true;
         }
-
     }
     return false;
 }
@@ -38,7 +37,7 @@ const getBorderWidth = ( point ) => {
 function PointIcon({ point }) {
 
     if (point.type === "scout") {
-        return <BugReportOutlined fontSize="medium"/*sx={{color: 'orange'}}*/ />;
+        return <Avatar sx={{height: height, width: height,backgroundColor:  'white',  borderColor: getBorderColor(point)}}> <Scout fontSize="medium" sx={{color: 'black'}} /></Avatar>;
     }
     else if (point.type === trap) {
         return <Avatar sx={{height: height, width: height,backgroundColor: point.active ? 'white' : 'gray', border: getBorderWidth(point), borderColor: getBorderColor(point)}}> <CenterFocusStrong fontSize="medium" sx={{color: 'black'}} /></Avatar>;
