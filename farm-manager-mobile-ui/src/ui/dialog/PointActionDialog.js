@@ -1,24 +1,28 @@
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, MenuItem, TextField, Typography } from "@mui/material";
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, List, ListItem, ListItemButton, ListItemIcon, ListItemText, MenuItem, TextField, Typography } from "@mui/material";
 import TextFieldBase from "../../components/ui/TextField";
-import { Cancel, Delete, Save } from "@mui/icons-material";
+import { Edit, Share, PestControl as Scout, History } from "@mui/icons-material";
 import { useEffect, useState } from "react";
 import { AREA_UNIT, asShortStringDateTime, getUnitText, parseISOOrNull } from "../FarmUtil";
 import DialogAppBar from "./DialogAppBar";
 import { selectLang } from "../../features/app/appSlice";
 import { useSelector } from "react-redux";
+import WhatsAppIcon from '@mui/icons-material/WhatsApp';
+import TelegramIcon from '@mui/icons-material/Telegram';
+import { msgTelegram, msgWhatsapp, shareMsg } from "../../appbar/components/ShareLocationMenu";
 
 const PointActionDialog = ({ open, handleClose, selectedPoint }) => {
 
     const text = useSelector(selectLang);
     // const [touched, setTouched] = useState(false);
 
-    // const [note, setNote] = useState(selectedPoint.note);
+    const [share, setShare] = useState(false);
 
 
+    console.log('selectedPoint', selectedPoint)
 
     const handleSetNote = (val) => {
-        setNote(val);
-        setTouched(true)
+        // setNote(val);
+        // setTouched(true)
     }
 
     const onAction = (val) => {
@@ -29,7 +33,13 @@ const PointActionDialog = ({ open, handleClose, selectedPoint }) => {
         // setTouched(false);
         // setNote('');
     }
-
+    /**
+     Share,
+    Edit,
+    History,
+    Scout,
+    Activity
+     */
     return (
         <Dialog
             open={open}
@@ -38,29 +48,52 @@ const PointActionDialog = ({ open, handleClose, selectedPoint }) => {
             fullWidth
         >
             <DialogAppBar onClose={() => onAction(false)}
-                // title={
-                //     <Box display={'flex'} flexDirection={'row'} justifyContent={'space-between'}>
-                //         <Typography variant="h6">
-                //             {text.note}
-                //         </Typography>
-                //         <Typography marginLeft={3} marginRight={3} variant="h6">
-                //             {asShortStringDateTime(parseISOOrNull(selectedPoint.createTime ? selectedPoint.createTime : selectedPoint.date))}
-                //         </Typography>
-                //     </Box>
-                // } 
-                />
+                title={selectedPoint.name}
+            />
             <DialogContent>
-                {/* <TextFieldBase value={note} onChange={e => handleSetNote(e.target.value)} fullWidth={true} /*label={`${text.total} ${text.qty}`}*/ /> */}
-<Box>Hi</Box>
-<Box>Bye</Box>
-
-                {/* {selectedPoint.date} */}
+                <List>
+                    <ListItemButton onClick={() => msgWhatsapp(shareMsg(selectedPoint.lat, selectedPoint.lng))}>
+                        <ListItemIcon>
+                            <WhatsAppIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={text.share} secondary="Whatsapp" />
+                    </ListItemButton>
+                    <Divider />
+                    <ListItemButton onClick={() => msgTelegram(shareMsg(selectedPoint.lat, selectedPoint.lng))}>
+                        <ListItemIcon>
+                            <TelegramIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={text.share} secondary="Telegram" />
+                    </ListItemButton>
+                    {/* <Divider />
+                    <ListItemButton>
+                        <ListItemIcon>
+                            <Edit />
+                        </ListItemIcon>
+                        <ListItemText
+                            primary={text.edit}
+                        />
+                    </ListItemButton>
+                    <Divider />
+                    <ListItem disablePadding>
+                        <ListItemButton>
+                            <ListItemIcon>
+                                <Scout />
+                            </ListItemIcon>
+                            <ListItemText primary={text.scouting} />
+                        </ListItemButton>
+                    </ListItem>
+                    <Divider />
+                    <ListItem disablePadding>
+                        <ListItemButton>
+                            <ListItemIcon>
+                                <History />
+                            </ListItemIcon>
+                            <ListItemText primary={text.history} />
+                        </ListItemButton>
+                    </ListItem> */}
+                </List>
             </DialogContent>
-            {/* <DialogActions sx={{ justifyContent: 'center' }}>
-                <Button disabled={!touched} size='large' endIcon={<Save />} disableElevation={true} variant='contained' onClick={() => onAction(true)} >
-                    {text.save}
-                </Button>
-            </DialogActions> */}
         </Dialog>
     )
 }

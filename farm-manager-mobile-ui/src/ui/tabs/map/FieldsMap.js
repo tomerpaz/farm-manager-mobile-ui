@@ -15,6 +15,7 @@ import WaypointSelectionDialog from "../../dialog/WaypointSelectionDialog";
 import { BugReportOutlined, Close } from "@mui/icons-material";
 import FieldPointDialog from "../../point/FieldPointDialog";
 import PointIcon from "../../layers/PointIcon";
+import PointActionDialog from "../../dialog/PointActionDialog";
 
 
 const FieldsMap = (props) => {
@@ -124,7 +125,7 @@ const FieldsMap = (props) => {
         } else if (type === 'point') {
             console.log('point lng', e.latlng.lng.toFixed(5), ' lat', e.latlng.lat.toFixed(5));
             console.log(f);
-         //   setSelectedPoint(f);
+            setSelectedPoint(f);
             stopMapEventPropagation(e);
         }
 
@@ -232,7 +233,8 @@ const FieldsMap = (props) => {
                 sx={{ width: '100%', bottom: { xs: 10, sm: 0 } }}
             />
 
-            {selectedPoint && <FieldPointDialog open={selectedPoint !== null} deletable={true} defaultValues={{...selectedPoint, expiry : parseISOOrNull(selectedPoint.expiry)}} handleClose={handleCloseEditPoint} />}
+            {selectedPoint && editLayer && <FieldPointDialog open={selectedPoint !== null} deletable={true} defaultValues={{...selectedPoint, expiry : parseISOOrNull(selectedPoint.expiry)}} handleClose={handleCloseEditPoint} />}
+            {selectedPoint && !editLayer && <PointActionDialog open={selectedPoint !== null} deletable={true} selectedPoint={selectedPoint} handleClose={handleCloseEditPoint} />}
 
         </Box>
     )

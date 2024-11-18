@@ -4,6 +4,19 @@ import { Share } from '@mui/icons-material';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import TelegramIcon from '@mui/icons-material/Telegram';
 
+
+export const shareMsg =(lat,lng)=> {
+    return encodeURIComponent(`Maps:\nhttps://www.google.com/maps/search/?api=1&query=${lat},${lng}\n\nWaze:\nhttps://waze.com/ul?q=&ll=${lat},${lng}&navigate=yes`);
+}
+
+export const msgWhatsapp = (msg) => {
+    window.open(`whatsapp://send?text=${msg}`);
+}
+
+export const msgTelegram = (msg) => {
+    window.open(`tg://msg?text=${msg}`);
+}
+
 const ShareLocationMenu = ({ lat, lng }) => {
 
 
@@ -17,7 +30,8 @@ const ShareLocationMenu = ({ lat, lng }) => {
         setAnchorEl(null);
     };
 
-    const msg = encodeURIComponent(`Maps:\nhttps://www.google.com/maps/search/?api=1&query=${lat},${lng}\n\nWaze:\nhttps://waze.com/ul?q=&ll=${lat},${lng}&navigate=yes`);
+    const msg = shareMsg(lat,lng);
+    
 
     return (
 
@@ -47,7 +61,7 @@ const ShareLocationMenu = ({ lat, lng }) => {
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
             >
-                <MenuItem onClick={() => window.open(`whatsapp://send?text=${msg}`)}>
+                <MenuItem onClick={() =>  msgWhatsapp(msg)}>
                     <IconButton
                         size="large"
                         aria-label="log out"
@@ -57,7 +71,7 @@ const ShareLocationMenu = ({ lat, lng }) => {
                     </IconButton>
                     {'Whatsapp'}
                 </MenuItem>
-                <MenuItem onClick={() => window.open(`tg://msg?text=${msg}`)}>
+                <MenuItem onClick={() => msgTelegram(msg)}>
                     <IconButton
                         size="large"
                         aria-label="log out"
