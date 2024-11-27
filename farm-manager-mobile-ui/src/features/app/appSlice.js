@@ -142,6 +142,7 @@ const appSlice = createSlice({
             state.showInventory = action.payload;
         },
         setShowPlans: (state, action) => {
+            localStorage.setItem('showPlans', action.payload);
             state.showPlans = action.payload;
         },
         setShowLayers: (state, action) => {

@@ -148,6 +148,7 @@ const ActivityForm = ({ activity }) => {
     }
   }
 
+  const saveDisabled = !isExecutePlan && !isDirty;
 
   return (
     <Box sx={{ maxHeight: window.innerHeight - 130, overflow: 'auto' }}>
@@ -211,7 +212,7 @@ const ActivityForm = ({ activity }) => {
               onClick={executePlan}
               icon={<CheckCircleOutline fontSize='large' />}
             />}
-            {editable && <BottomNavigationAction disabled={!isDirty} sx={{ color: !isDirty ? 'lightGray' : null }}
+            {editable && <BottomNavigationAction disabled={saveDisabled} sx={{ color: saveDisabled ? 'lightGray' : null }}
               type="submit"
               label={<Typography >{text.save}</Typography>}
               icon={<Save fontSize='large' />}

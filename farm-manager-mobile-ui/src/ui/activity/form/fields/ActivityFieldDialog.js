@@ -135,7 +135,7 @@ const ActivityFieldDialog = ({ selectedRow, selectedIndex, handleClose, activity
                         <TextFieldBase sx={{ flex: 1 }} value={activityArea} onChange={e => handleSetActivityArea(Number(e.target.value))} type='number' label={text[user.areaUnit]} />
                         <Box margin={1}></Box>
                         <DatePicker
-                            label={text.executed}
+                            label={text.executedDate}
                             closeOnSelect
                             localeText={{
                                 cancelButtonLabel: text.cancel,
