@@ -539,6 +539,16 @@ export const FormSpacer = () => {
     return <Box margin={1} />
 }
 
+export const getFieldCenter=(center, field) => {
+    if(center){
+        return center;
+    } else if(field.lat &&  field.lng){
+        return [field.lat, field.lng];
+    } else if (!isArrayEmpty(field.geoPoints)){
+        return field.geoPoints[0];
+    }
+}
+
 // export function daysDif(before, after){
 //     if(after && before){
 //         return (((after.getTime() - before .getTime())/(1000 * 3600 * 24))+2).toFixed(0) 

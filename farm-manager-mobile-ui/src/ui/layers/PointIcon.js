@@ -1,4 +1,4 @@
-import { BugReportOutlined, CenterFocusStrong, Opacity, Water } from '@mui/icons-material'
+import { BugReportOutlined, CenterFocusStrong, Opacity, Water,  AdjustOutlined as Activity } from '@mui/icons-material'
 import React from 'react'
 import { irrigationHead, parseISOOrNull, trap } from '../FarmUtil';
 import { Avatar } from '@mui/material';
@@ -35,7 +35,7 @@ const getBorderWidth = ( point ) => {
 }
 
 function PointIcon({ point }) {
-
+    console.log(point)
     if (point.type === "scout") {
         return <Avatar sx={{height: height, width: height,backgroundColor:  'white',  borderColor: getBorderColor(point)}}> <Scout fontSize="medium" sx={{color: 'black'}} /></Avatar>;
     }
@@ -44,6 +44,8 @@ function PointIcon({ point }) {
     }
     else if (point.type === irrigationHead) {
         return <Avatar sx={{height: height, width: height,backgroundColor: point.active ? '#82b1ff' : 'gray', border: getBorderWidth(point), borderColor: getBorderColor(point)}}> <Opacity fontSize="medium" sx={{color: 'black'}} /></Avatar>;
+    } else {
+        return <Avatar sx={{height: height, width: height,backgroundColor: point.active ? 'white' : 'gray', border: getBorderWidth(point), borderColor: getBorderColor(point)}}> <Activity fontSize="medium" sx={{color: 'black'}} /></Avatar>;
     }
 }
 

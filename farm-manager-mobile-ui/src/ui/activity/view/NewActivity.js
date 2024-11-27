@@ -3,12 +3,14 @@ import { useSelector } from 'react-redux'
 import { useParams, useSearchParams } from 'react-router-dom'
 import { selectCurrentYear } from '../../../features/app/appSlice'
 import ActivityForm from '../form/ActivityForm'
-import { IRRIGARION_TYPES, MARKET, SCOUT, SPRAY, SPRAY_TYPES, firstDayOfThisMonth, getWinds, lastDayOfThisMonth, newDate, startOfDay } from '../../FarmUtil'
+import { IRRIGARION_TYPES, MARKET, SCOUT, SPRAY, SPRAY_TYPES, asLocalDateTime, firstDayOfThisMonth, getWinds, lastDayOfThisMonth, newDate, startOfDay } from '../../FarmUtil'
 import { useGetUserDataQuery } from '../../../features/auth/authApiSlice'
 import { useFieldsById } from '../../../features/fields/fieldsApiSlice'
 import { parseISO } from 'date-fns'
 import { fi } from 'date-fns/locale'
 import { newFieldMarketParams } from '../form/fields/ActivityFields'
+import { useGetPointQuery } from '../../../features/points/pointsApiSlice'
+import Loading from '../../../components/Loading'
 
 const NewActivity = () => {
 
@@ -19,7 +21,19 @@ const NewActivity = () => {
   const { data: user, isLoading } = useGetUserDataQuery()
   const currentYear = useSelector(selectCurrentYear)
   const fid = searchParams.get("fid");
+  
   const field = useFieldsById(currentYear, Number(fid));
+
+  const pid = searchParams.get("pid");
+
+  const { data: point, isLoading: isLoadingPoint, isFetching: isFetchingPoint } = useGetPointQuery({ id: pid }, { skip: !pid });
+
+
+  if(isLoadingPoint || isFetchingPoint){
+    return <Loading/>
+  }
+
+  console.log('useGetPointQuery',pid,point, isLoadingPoint, isFetchingPoint);
 
   const isPlan = type.includes("_PLAN")
   const isSpray = SPRAY_TYPES.includes(type);
@@ -34,6 +48,15 @@ const NewActivity = () => {
     fieldMarketParams: isMarket ? newFieldMarketParams() : null
   }] : [];
 
+
+  const points = point ? [{
+    point, note: '', createTime: asLocalDateTime(newDate(), true)
+  }] : [];
+
+  const scouts = isScout && point?.pest ? [{
+    finding: point.pest, note: '', location: 'none', infectionLevel: 'none', value: ''
+  }] : [];
+
   const crop = field ? { id: field?.cropId, name: field?.cropName } : null;
   const activity = {
     type, plan: isPlan,
@@ -42,10 +65,10 @@ const NewActivity = () => {
     endHour: isSpray ? new Date() : null,
     irrigationParams: isIrrigation ? {} : null,
     sprayParams: isSpray || isScout ? { volumePerAreaUnit: '', volume: '', wind, crop } : null,
-    scoutParams: isScout ? { scouts: [] } : null,
+    scoutParams: isScout ? { scouts } : null,
     marketParams: isMarket ? { incomeCalc: '', sortDate: null, sortReference: '' } : null,
     activityDef: null, year: user.year, customer: null, fields, resources: [], note: '', invoice: '', editable: true, waybill: '',
-    points: []
+    points
   };
 
   return (

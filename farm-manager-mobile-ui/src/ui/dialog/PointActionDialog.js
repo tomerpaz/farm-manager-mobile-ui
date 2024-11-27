@@ -1,14 +1,15 @@
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, List, ListItem, ListItemButton, ListItemIcon, ListItemText, MenuItem, TextField, Typography } from "@mui/material";
 import TextFieldBase from "../../components/ui/TextField";
 import { Edit, Share, PestControl as Scout, History } from "@mui/icons-material";
-import { useEffect, useState } from "react";
-import { AREA_UNIT, asShortStringDateTime, getUnitText, parseISOOrNull } from "../FarmUtil";
+import { Fragment, useEffect, useState } from "react";
+import { AREA_UNIT, asShortStringDateTime, getUnitText, parseISOOrNull, SCOUT, trap } from "../FarmUtil";
 import DialogAppBar from "./DialogAppBar";
-import { selectLang } from "../../features/app/appSlice";
-import { useSelector } from "react-redux";
+import { selectLang, setActivityType } from "../../features/app/appSlice";
+import { useDispatch, useSelector } from "react-redux";
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import TelegramIcon from '@mui/icons-material/Telegram';
-import { msgTelegram, msgWhatsapp, shareMsg } from "../../appbar/components/ShareLocationMenu";
+import { msgTelegram, msgWhatsapp, shareMsg, Telegram, Whatsapp } from "../../appbar/components/ShareLocationMenu";
+import { createSearchParams, useNavigate } from "react-router-dom";
 
 const PointActionDialog = ({ open, handleClose, selectedPoint }) => {
 
@@ -40,6 +41,42 @@ const PointActionDialog = ({ open, handleClose, selectedPoint }) => {
     Scout,
     Activity
      */
+
+    const shareClick = (app) => {
+        const msg = shareMsg(selectedPoint.lat, selectedPoint.lng);
+        if (app === Whatsapp) {
+            msgWhatsapp(msg)
+        } else if (app === Telegram) {
+            msgTelegram(msg)
+        }
+        handleClose();
+    }
+
+    const dispatch = useDispatch()
+
+    const navigate = useNavigate()
+
+
+    //   const { data: user } = useGetUserDataQuery()
+    //   const actionTypes = user.userConf.filter(e => e.write).map(e => e.type);
+    const newActivity = (type, pointId, fieldId) => {
+        //  console.log('new',e, 'map',map)
+
+        //  console.log('handleAction',fieldId)
+        console.log(type, pointId);
+        const searchParams = createSearchParams({ pid: pointId, fid: fieldId }).toString()
+        dispatch(setActivityType(type));
+          navigate(
+            {
+              pathname: `/activity/new/${type}`,
+              search: searchParams
+            }
+          )
+
+
+        handleClose();
+    }
+
     return (
         <Dialog
             open={open}
@@ -52,19 +89,36 @@ const PointActionDialog = ({ open, handleClose, selectedPoint }) => {
             />
             <DialogContent>
                 <List>
-                    <ListItemButton onClick={() => msgWhatsapp(shareMsg(selectedPoint.lat, selectedPoint.lng))}>
+                    {/* {selectedPoint.type === trap &&
+                        <Fragment>
+                            <ListItem disablePadding>
+                                <ListItemButton onClick={() => newActivity(SCOUT, selectedPoint.id, selectedPoint.fieldId)}>
+                                    <ListItemIcon>
+                                        <Scout />
+                                    </ListItemIcon>
+                                    <ListItemText primary={text.scouting} secondary={selectedPoint.pest?.name} />
+                                </ListItemButton>
+                            </ListItem>
+                            <Divider />
+                        </Fragment>
+                    } */}
+                    <ListItemButton onClick={() => shareClick(Whatsapp)}>
                         <ListItemIcon>
                             <WhatsAppIcon />
                         </ListItemIcon>
-                        <ListItemText primary={text.share} secondary="Whatsapp" />
+                        <ListItemText primary={text.share} secondary={Whatsapp} />
                     </ListItemButton>
                     <Divider />
-                    <ListItemButton onClick={() => msgTelegram(shareMsg(selectedPoint.lat, selectedPoint.lng))}>
+                    <ListItemButton onClick={() => shareClick(Telegram)}>
                         <ListItemIcon>
                             <TelegramIcon />
                         </ListItemIcon>
-                        <ListItemText primary={text.share} secondary="Telegram" />
+                        <ListItemText primary={text.share} secondary={Telegram} />
                     </ListItemButton>
+
+
+
+
                     {/* <Divider />
                     <ListItemButton>
                         <ListItemIcon>
@@ -75,15 +129,7 @@ const PointActionDialog = ({ open, handleClose, selectedPoint }) => {
                         />
                     </ListItemButton>
                     <Divider />
-                    <ListItem disablePadding>
-                        <ListItemButton>
-                            <ListItemIcon>
-                                <Scout />
-                            </ListItemIcon>
-                            <ListItemText primary={text.scouting} />
-                        </ListItemButton>
-                    </ListItem>
-                    <Divider />
+
                     <ListItem disablePadding>
                         <ListItemButton>
                             <ListItemIcon>

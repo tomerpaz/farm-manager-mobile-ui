@@ -5,6 +5,9 @@ import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import TelegramIcon from '@mui/icons-material/Telegram';
 
 
+export const Whatsapp = 'Whatsapp';
+export const Telegram = 'Telegram';
+
 export const shareMsg =(lat,lng)=> {
     return encodeURIComponent(`Maps:\nhttps://www.google.com/maps/search/?api=1&query=${lat},${lng}\n\nWaze:\nhttps://waze.com/ul?q=&ll=${lat},${lng}&navigate=yes`);
 }
@@ -69,7 +72,7 @@ const ShareLocationMenu = ({ lat, lng }) => {
                     >
                         <WhatsAppIcon />
                     </IconButton>
-                    {'Whatsapp'}
+                    {Whatsapp}
                 </MenuItem>
                 <MenuItem onClick={() => msgTelegram(msg)}>
                     <IconButton
@@ -79,7 +82,7 @@ const ShareLocationMenu = ({ lat, lng }) => {
                     >
                         <TelegramIcon />
                     </IconButton>
-                    {'Telegram'}
+                    {Telegram}
                 </MenuItem>
             </Menu>
         </Box>)

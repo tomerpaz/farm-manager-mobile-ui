@@ -3,6 +3,7 @@ import { Box } from '@mui/material'
 import { CircleMarker, MapContainer, Polygon, TileLayer, useMapEvents } from 'react-leaflet'
 import SatelliteMapProvider from '../../components/map/SatelliteMapProvider'
 import GeoLocation from '../../components/GeoLocation'
+import { getFieldCenter, isArrayEmpty } from '../FarmUtil'
 
 const FieldMap = ({ field, height, tile, setMap, onClick, points, setCenter, center, setZoom, zoom }) => {
 
@@ -36,9 +37,10 @@ const FieldMap = ({ field, height, tile, setMap, onClick, points, setCenter, cen
 
     const hasPoints = Array.isArray(points);
 
+
     return (
         <Box flex={1} id="map" dir='ltr'>
-            <MapContainer style={{ height: height, width: '100%' }} center={center ? center : [field.lat, field.lng]} zoom={zoom ? zoom : field.zoom} scrollWheelZoom={false}
+            <MapContainer style={{ height: height, width: '100%' }} center={getFieldCenter(center,field)} zoom={zoom ? zoom : field.zoom} scrollWheelZoom={false}
                 ref={setMap}
             >
                 <SatelliteMapProvider />

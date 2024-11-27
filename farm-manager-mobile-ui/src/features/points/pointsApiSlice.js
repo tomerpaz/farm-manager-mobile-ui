@@ -22,6 +22,10 @@ export const pointsApiSlice = apiSlice.injectEndpoints({
             providesTags: [Points_TAG],
         }),
 
+        getPoint: builder.query({
+            query: (args) => `/api/farm/points/${args.id}`,
+        }),
+
         createFieldPoint: builder.mutation({
             query: args => ({
                 url: '/api/farm/points',
@@ -74,9 +78,10 @@ const buildPointSearch = ({ types }) => {
 export const {
     useGetFieldPointsQuery,
     useGetPointsQuery,
+    useGetPointQuery,
     useCreateFieldPointMutation,
     useUpdateFieldPointMutation,
-    useDeleteFieldPointMutation
+    useDeleteFieldPointMutation,
 } = pointsApiSlice
 
 

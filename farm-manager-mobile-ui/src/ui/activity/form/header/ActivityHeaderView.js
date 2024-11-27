@@ -151,7 +151,7 @@ const ActivityHeaderView = ({ activity, control, errors, customers, activityDefs
             control={control}
             rules={{ required: true }}
             render={({ field: { ref, onChange, ...field } }) => <Autocomplete
-              // disablePortal
+              blurOnSelect={true}
               onChange={(_, data) => onChange(data)}
               options={activityDefs.filter(e => e.active && config.activityType === e.type)}
               sx={{ flex: 1.6 }}

@@ -15,6 +15,7 @@ import GeoLocation from "../../components/GeoLocation";
 import { safeParseJson } from "../../features/fields/fieldsApiSlice";
 import WaypointDialog from "./WaypointDialog";
 import ActivityTypeIcon from "../../icons/ActivityTypeIcon";
+import PointIcon from "../layers/PointIcon";
 
 
 
@@ -221,7 +222,7 @@ const WaypointSelectionDialog = ({ open, handleClose, fields, waypoints, activit
                                         <Tooltip 
                                             className={'empty-tooltip'}
                                             direction="center" opacity={1} permanent>
-                                            <ActivityTypeIcon type={activityType} />
+                                            <PointIcon point={e.point} />
                                         </Tooltip>
                                     </CircleMarker>
                                 )
