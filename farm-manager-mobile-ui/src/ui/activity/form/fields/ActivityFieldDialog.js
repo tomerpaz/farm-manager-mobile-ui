@@ -181,6 +181,7 @@ const ActivityFieldDialog = ({ selectedRow, selectedIndex, handleClose, activity
                     }
                     {HARVEST === activityType &&
                         <Autocomplete
+                            blurOnSelect={true}
                             value={container}
                             onChange={(_, data) => setContainer(data)}
                             options={!isArrayEmpty(containers) ? containers : [container]}
@@ -193,6 +194,7 @@ const ActivityFieldDialog = ({ selectedRow, selectedIndex, handleClose, activity
                     {isMarket &&
                         <Box display={'flex'} flex={1} flexDirection={'row'} alignItems={'center'}>
                             <Autocomplete
+                                blurOnSelect={true}
                                 value={size}
                                 onChange={(_, data) => setSize(data)}
                                 options={!isArrayEmpty(sizes) ? sizes : [size]}
@@ -204,6 +206,7 @@ const ActivityFieldDialog = ({ selectedRow, selectedIndex, handleClose, activity
                             <Box margin={1}></Box>
 
                             <Autocomplete
+                                blurOnSelect={true}
                                 value={quality}
                                 onChange={(_, data) => setQuality(data)}
                                 options={!isArrayEmpty(qualities) ? qualities : [quality]}

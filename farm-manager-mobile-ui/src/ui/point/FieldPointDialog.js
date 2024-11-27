@@ -134,6 +134,7 @@ const FieldPointDialog = ({ defaultValues, open, handleClose, deletable,/*, type
                 rules={{ required: true }}
                 render={({ field: { ref, onChange, ...field } }) => <Autocomplete
                   // disablePortal
+                  blurOnSelect={true}
                   onChange={(_, data) => onChange(data)}
                   options={pests.filter(e => e.active)}
 

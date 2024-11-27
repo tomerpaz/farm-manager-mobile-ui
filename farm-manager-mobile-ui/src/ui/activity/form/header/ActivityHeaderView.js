@@ -29,16 +29,16 @@ export const EXECUTE_STATUS_COLOR = '#C5E1A5';
 export const DUPLICATE_COLOR = '#ffc107';
 
 const getColor = (isDuplicate, isExecutePlan) => {
-  if(isDuplicate){
+  if (isDuplicate) {
     return DUPLICATE_COLOR;
-  } else if(isExecutePlan){
+  } else if (isExecutePlan) {
     return EXECUTE_STATUS_COLOR;
   } else {
     return null;
   }
 }
 
-const ActivityHeaderView = ({ activity, control, errors, customers, activityDefs,  type, crops, reference, isDuplicate, execution, days, crop, onCropCHange, isExecutePlan }) => {
+const ActivityHeaderView = ({ activity, control, errors, customers, activityDefs, type, crops, reference, isDuplicate, execution, days, crop, onCropCHange, isExecutePlan }) => {
 
   const text = useSelector(selectLang)
   const config = HEADER_CONFIG.filter(e => type === e.type)[0];
@@ -55,7 +55,7 @@ const ActivityHeaderView = ({ activity, control, errors, customers, activityDefs
     <Box margin={1} paddingTop={1}>
       <Box display={'flex'} flex={1} alignItems={'center'} justifyContent={'space-between'} flexDirection={'row'} >
         <Box flex={1} display={'flex'} flexDirection={'row'} alignItems={'center'} >
-          <Typography sx={{ backgroundColor: getColor(isDuplicate , isExecutePlan), borderRadius: 2, paddingLeft: 1, paddingRight: 1 }} variant='h6'>{getActivityTypeText(type, text, true)}</Typography>
+          <Typography sx={{ backgroundColor: getColor(isDuplicate, isExecutePlan), borderRadius: 2, paddingLeft: 1, paddingRight: 1 }} variant='h6'>{getActivityTypeText(type, text, true)}</Typography>
           <Avatar sx={{ bgcolor: 'white' }}>
             <ActivityTypeIcon type={type} />
           </Avatar>
@@ -103,23 +103,24 @@ const ActivityHeaderView = ({ activity, control, errors, customers, activityDefs
         />
         <Box margin={1} />
         {SCOUT === type &&
-        < Box display={'flex'} flex={1} alignItems={'center'} justifyContent={'space-between'} flexDirection={'row'} >
-          <Controller
-            name="sprayParams.crop"
-            control={control}
-            rules={{ required: true }}
-            render={({ field: { ref, onChange, ...field } }) => <Autocomplete
-              onChange={(_, data) => _onCropChange(onChange, data)}
-              options={crops.filter(e => e.active)}
-              fullWidth
-              size='small'
-              getOptionLabel={(option) => option ? option.name : ''}
-              isOptionEqualToValue={(option, value) => (value === undefined) || option?.id?.toString() === (value?.id ?? value)?.toString()}
-              renderInput={(params) => <TextFieldBase error={errors.sprayParams?.crop ? true : false} sx={{ marginTop: 0.5 }} {...params} label={text.crop} />}
-              {...field} />}
-          />
-         </Box>
-      }
+          < Box display={'flex'} flex={1} alignItems={'center'} justifyContent={'space-between'} flexDirection={'row'} >
+            <Controller
+              name="sprayParams.crop"
+              control={control}
+              rules={{ required: true }}
+              render={({ field: { ref, onChange, ...field } }) => <Autocomplete
+                blurOnSelect={true}
+                onChange={(_, data) => _onCropChange(onChange, data)}
+                options={crops.filter(e => e.active)}
+                fullWidth
+                size='small'
+                getOptionLabel={(option) => option ? option.name : ''}
+                isOptionEqualToValue={(option, value) => (value === undefined) || option?.id?.toString() === (value?.id ?? value)?.toString()}
+                renderInput={(params) => <TextFieldBase error={errors.sprayParams?.crop ? true : false} sx={{ marginTop: 0.5 }} {...params} label={text.crop} />}
+                {...field} />}
+            />
+          </Box>
+        }
 
 
         {config.endDate &&
@@ -193,6 +194,7 @@ const ActivityHeaderView = ({ activity, control, errors, customers, activityDefs
             control={control}
             render={({ field: { ref, onChange, ...field } }) => <Autocomplete
               disablePortal
+              blurOnSelect={true}
               onChange={(_, data) => onChange(data)}
               options={customers}
               sx={{ flex: 1 }}
@@ -223,6 +225,7 @@ const ActivityHeaderView = ({ activity, control, errors, customers, activityDefs
             rules={{ required: true }}
             render={({ field: { ref, onChange, ...field } }) => <Autocomplete
               // disablePortal
+              blurOnSelect={true}
               onChange={(_, data) => _onCropChange(onChange, data)}
               options={crops.filter(e => e.active)}
               // sx={{ width: 150 }}
@@ -276,6 +279,7 @@ const ActivityHeaderView = ({ activity, control, errors, customers, activityDefs
               control={control}
               render={({ field: { ref, onChange, ...field } }) => <Autocomplete
                 disablePortal
+                blurOnSelect={true}
                 onChange={(_, data) => onChange(data)}
                 options={customers}
                 sx={{ flex: 1 }}
