@@ -539,14 +539,24 @@ export const FormSpacer = () => {
     return <Box margin={1} />
 }
 
-export const getFieldCenter=(center, field) => {
-    if(center){
+export const getFieldCenter = (center, field) => {
+    if (center) {
         return center;
-    } else if(field.lat &&  field.lng){
+    } else if (field.lat && field.lng) {
         return [field.lat, field.lng];
-    } else if (!isArrayEmpty(field.geoPoints)){
+    } else if (!isArrayEmpty(field.geoPoints)) {
         return field.geoPoints[0];
     }
+}
+
+export const countLines = (text) => {
+    if (text) {
+        const lines = text.split('\n').length;
+        console.log(text,lines)
+
+        return lines;
+    }
+    return 0;
 }
 
 // export function daysDif(before, after){

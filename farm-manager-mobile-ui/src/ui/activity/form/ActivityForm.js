@@ -2,7 +2,7 @@ import { BottomNavigation, BottomNavigationAction, Box, TextField, Typography } 
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { selectLang, setSnackbar } from '../../../features/app/appSlice'
-import { PESTICIDE, PLAN, SCOUT, asLocalDate, asLocalTime, daysDif, daysDiff } from '../../FarmUtil'
+import { PESTICIDE, PLAN, SCOUT, asLocalDate, asLocalTime, countLines, daysDif, daysDiff } from '../../FarmUtil'
 import ActivityHeaderView from './header/ActivityHeaderView'
 import { useForm, Controller, useWatch } from "react-hook-form";
 import { Cancel, CheckCircleOutline, ControlPointDuplicate, Delete, Save } from '@mui/icons-material'
@@ -70,6 +70,7 @@ const ActivityForm = ({ activity }) => {
   const activityArea = getTotalActivityArea(fields);
   const editable = useWatch({ control, name: "editable" })
   const type = useWatch({ control, name: "type" })
+  const note = useWatch({ control, name: "note" })
 
   const scoutParams = useWatch({ control, name: "scoutParams" })
 
@@ -150,6 +151,18 @@ const ActivityForm = ({ activity }) => {
 
   const saveDisabled = !isExecutePlan && !isDirty;
 
+
+  const getLineNum = () => {
+    const noteLineNum = countLines(note); 
+    if(noteLineNum <= 3 ){
+      return 3;
+    } else if(noteLineNum >= 10 ){
+      return 10;
+    } else {
+      return noteLineNum;
+    }
+  }
+
   return (
     <Box sx={{ maxHeight: window.innerHeight - 130, overflow: 'auto' }}>
       <Box margin={1}>
@@ -185,7 +198,7 @@ const ActivityForm = ({ activity }) => {
                 <TextField
                   id="activity-note"
                   size='small'
-                  label={text.note} fullWidth multiline rows={3} {...field} />
+                  label={text.note} fullWidth multiline rows={getLineNum()} {...field} />
               )}
             />
           </Box>
