@@ -34,9 +34,11 @@ const getBorderWidth = ( point ) => {
     return 3;
 }
 
+export const SCOUT_POINT_TYPE = 'scout';
+export const ACTIVITY_POINT_TYPE = 'activity';
+
 function PointIcon({ point }) {
-    console.log(point)
-    if (point.type === "scout") {
+    if (point.type === SCOUT_POINT_TYPE) {
         return <Avatar sx={{height: height, width: height,backgroundColor:  'white',  borderColor: getBorderColor(point)}}> <Scout fontSize="medium" sx={{color: 'black'}} /></Avatar>;
     }
     else if (point.type === trap) {

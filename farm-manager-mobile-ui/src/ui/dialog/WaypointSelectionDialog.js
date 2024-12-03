@@ -4,7 +4,7 @@ import { selectLang } from "../../features/app/appSlice";
 import { Fragment, useState } from "react";
 import { Transition } from "../Util";
 import { BugReport, BugReportOutlined, Delete, Nature, PestControl, Save } from "@mui/icons-material";
-import { asLocalDateTime, getFillColor, getOpacity, isMobile, isStringEmpty, newDate, stopMapEventPropagation } from "../FarmUtil";
+import { asLocalDateTime, getFillColor, getOpacity, isMobile, isStringEmpty, newDate, SCOUT, stopMapEventPropagation } from "../FarmUtil";
 
 import DialogAppBar from "./DialogAppBar";
 
@@ -15,13 +15,20 @@ import GeoLocation from "../../components/GeoLocation";
 import { safeParseJson } from "../../features/fields/fieldsApiSlice";
 import WaypointDialog from "./WaypointDialog";
 import ActivityTypeIcon from "../../icons/ActivityTypeIcon";
-import PointIcon from "../layers/PointIcon";
+import PointIcon, { ACTIVITY_POINT_TYPE, SCOUT_POINT_TYPE } from "../layers/PointIcon";
 
 
+
+const getPointType = (activityType) => {
+    if(activityType === SCOUT){
+        return SCOUT_POINT_TYPE;
+    } else {
+        return ACTIVITY_POINT_TYPE;
+    }
+}
 
 const getFirstFieldWIthGIS = (fields) => {
     return fields.find(e => e.polygon !== null && e.lat !== null && e.lng != null);
-
 }
 
 const getMapCenter = (fields, user) => {
@@ -31,7 +38,6 @@ const getMapCenter = (fields, user) => {
     } else {
         return [user.lat, user.lng]
     }
-
 }
 
 const getMapZoom = (fields, user) => {
@@ -131,7 +137,7 @@ const WaypointSelectionDialog = ({ open, handleClose, fields, waypoints, activit
             setSelectedIndex(index);
         } else {
             setPoints(points.concat({ note: '', date: asLocalDateTime(newDate(), true),
-                 createTime: asLocalDateTime(newDate(), true), point: { lat: e.latlng.lat.toFixed(5), lng: e.latlng.lng.toFixed(5) } }));
+                 createTime: asLocalDateTime(newDate(), true), point: { lat: e.latlng.lat.toFixed(5), lng: e.latlng.lng.toFixed(5), type: getPointType(activityType), active: true } }));
         }
     }
 

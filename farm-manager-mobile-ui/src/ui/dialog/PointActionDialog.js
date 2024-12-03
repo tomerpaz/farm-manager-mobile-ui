@@ -19,7 +19,6 @@ const PointActionDialog = ({ open, handleClose, selectedPoint }) => {
     const [share, setShare] = useState(false);
 
 
-    console.log('selectedPoint', selectedPoint)
 
     const handleSetNote = (val) => {
         // setNote(val);
@@ -60,10 +59,7 @@ const PointActionDialog = ({ open, handleClose, selectedPoint }) => {
     //   const { data: user } = useGetUserDataQuery()
     //   const actionTypes = user.userConf.filter(e => e.write).map(e => e.type);
     const newActivity = (type, pointId, fieldId) => {
-        //  console.log('new',e, 'map',map)
 
-        //  console.log('handleAction',fieldId)
-        console.log(type, pointId);
         const searchParams = createSearchParams({ pid: pointId, fid: fieldId }).toString()
         dispatch(setActivityType(type));
           navigate(
@@ -87,9 +83,9 @@ const PointActionDialog = ({ open, handleClose, selectedPoint }) => {
             <DialogAppBar onClose={() => onAction(false)}
                 title={selectedPoint.name}
             />
-            <DialogContent>
-                <List>
-                    {/* {selectedPoint.type === trap &&
+            <DialogContent sx={{padding: 0, margin: 0}}>
+                <List dense>
+                    {selectedPoint.type === trap &&
                         <Fragment>
                             <ListItem disablePadding>
                                 <ListItemButton onClick={() => newActivity(SCOUT, selectedPoint.id, selectedPoint.fieldId)}>
@@ -101,7 +97,7 @@ const PointActionDialog = ({ open, handleClose, selectedPoint }) => {
                             </ListItem>
                             <Divider />
                         </Fragment>
-                    } */}
+                    }
                     <ListItemButton onClick={() => shareClick(Whatsapp)}>
                         <ListItemIcon>
                             <WhatsAppIcon />
