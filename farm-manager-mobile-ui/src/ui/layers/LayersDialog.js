@@ -14,7 +14,7 @@ import {
 import { isMobile } from '../FarmUtil';
 import { useGetUserDataQuery } from '../../features/auth/authApiSlice';
 import DialogAppBar from '../dialog/DialogAppBar';
-import { Edit, EditLocationAlt } from '@mui/icons-material';
+import { CenterFocusStrong, Edit, EditLocationAlt } from '@mui/icons-material';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -77,10 +77,14 @@ const LayersDialog = () => {
                 <Box marginTop={2} display={'flex'} flexDirection={'row'} justifyContent={'space-between'} >
                     <FormControlLabel control={<Checkbox checked={showLayers.includes(trap)} onChange={() => handleChange(trap)} />} label={text.traps} />
                     <IconButton onClick={() => handleEditLayer(trap)}><EditLocationAlt /></IconButton>
+                    {/* <Button disableElevation variant='outlined' color='secondary' onClick={() => handleEditLayer(trap)} startIcon={<CenterFocusStrong  />}>{text.add}</Button> */}
+
                 </Box>
                 <Box marginTop={2} display={'flex'} flexDirection={'row'} justifyContent={'space-between'} >
                     <FormControlLabel control={<Checkbox checked={showLayers.includes(irrigationHead)} onChange={() => handleChange(irrigationHead)} />} label={text.irrigationHeads} />
                     <IconButton onClick={() => handleEditLayer(irrigationHead)}><EditLocationAlt /></IconButton>
+                    {/* <Button disableElevation variant='outlined' color='secondary' onClick={() => handleEditLayer(irrigationHead)} startIcon={<Opacity  />}>{text.add}</Button> */}
+
                 </Box>
 
                 <Divider />

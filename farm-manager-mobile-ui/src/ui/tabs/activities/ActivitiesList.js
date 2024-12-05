@@ -17,7 +17,7 @@ const getColor = (e) => {
     if (PLAN === s) {
         const daysPassed = daysDiffToday(parseISOOrNull(e.execution));
 
-        return daysPassed > 1 ? PLAN_PASSED_STATUS_COLOR : PLAN_STATUS_COLOR;
+        return daysPassed > 2 ? PLAN_PASSED_STATUS_COLOR : PLAN_STATUS_COLOR;
     } else if (EXECUTED === s) {
         return EXECUTE_STATUS_COLOR;
     }
