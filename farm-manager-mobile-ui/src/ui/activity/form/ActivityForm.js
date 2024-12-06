@@ -156,9 +156,7 @@ const ActivityForm = ({ activity }) => {
     const noteLineNum = countLines(note); 
     if(noteLineNum <= 3 ){
       return 3;
-    } else if(noteLineNum >= 10 ){
-      return 10;
-    } else {
+    }  else {
       return noteLineNum;
     }
   }

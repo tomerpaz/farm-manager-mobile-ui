@@ -1,5 +1,5 @@
-import React from 'react'
-import { Box, Checkbox, Dialog, DialogContent, Divider, FormControlLabel, IconButton, Slide } from '@mui/material'
+import React, { useState } from 'react'
+import { Box, Button, Checkbox, Dialog, DialogContent, Divider, FormControlLabel, IconButton, Slide } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux';
 import {
     selectLang, selectOpenLayers, selectShowPestsLayer, setOpenLayers, setShowPestsLayer,
@@ -14,7 +14,10 @@ import {
 import { isMobile } from '../FarmUtil';
 import { useGetUserDataQuery } from '../../features/auth/authApiSlice';
 import DialogAppBar from '../dialog/DialogAppBar';
-import { CenterFocusStrong, Edit, EditLocationAlt } from '@mui/icons-material';
+import { CenterFocusStrong, Edit, EditLocationAlt, Opacity } from '@mui/icons-material';
+import FieldPointDialog from '../point/FieldPointDialog';
+import { point } from 'leaflet';
+import PointForm from '../point/PointForm';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -31,6 +34,8 @@ const LayersDialog = () => {
     const dispatch = useDispatch()
     const open = useSelector(selectOpenLayers)
 
+    const [newPoint, setNewPoint] = useState(null);
+
 
     const { data: user, isSuccess: isUserSuccess } = useGetUserDataQuery()
 
@@ -40,6 +45,24 @@ const LayersDialog = () => {
     const showFieldAlias = useSelector(selectShowFieldAlias);
     const showFieldName = useSelector(selectShowFieldName);
 
+
+    const onNewPointSaved = () => {
+        setNewPoint(null);
+    }
+
+    const addPoint = (type) => {
+        const point  = {
+            id: null,
+            lat: null, lng: null,
+            fieldId: null,
+            name: '',
+            pest: null,
+            expiry: null,
+            active: true, type: type
+        };
+        setNewPoint(point)
+
+    }
 
     const handleClose = () => {
         dispatch(setOpenLayers(false));
@@ -77,16 +100,17 @@ const LayersDialog = () => {
                 <Box marginTop={2} display={'flex'} flexDirection={'row'} justifyContent={'space-between'} >
                     <FormControlLabel control={<Checkbox checked={showLayers.includes(trap)} onChange={() => handleChange(trap)} />} label={text.traps} />
                     <IconButton onClick={() => handleEditLayer(trap)}><EditLocationAlt /></IconButton>
-                    {/* <Button disableElevation variant='outlined' color='secondary' onClick={() => handleEditLayer(trap)} startIcon={<CenterFocusStrong  />}>{text.add}</Button> */}
+                    {/* <Button disableElevation variant='outlined' color='secondary' onClick={() => addPoint(trap)} startIcon={<CenterFocusStrong  />}>{text.add}</Button> */}
 
                 </Box>
-                <Box marginTop={2} display={'flex'} flexDirection={'row'} justifyContent={'space-between'} >
+                <Box marginTop={2}  display={'flex'} flexDirection={'row'} justifyContent={'space-between'} >
                     <FormControlLabel control={<Checkbox checked={showLayers.includes(irrigationHead)} onChange={() => handleChange(irrigationHead)} />} label={text.irrigationHeads} />
                     <IconButton onClick={() => handleEditLayer(irrigationHead)}><EditLocationAlt /></IconButton>
-                    {/* <Button disableElevation variant='outlined' color='secondary' onClick={() => handleEditLayer(irrigationHead)} startIcon={<Opacity  />}>{text.add}</Button> */}
+                    {/* <Button disableElevation variant='outlined' color='secondary' onClick={() => addPoint(irrigationHead)} startIcon={<Opacity  />}>{text.add}</Button> */}
 
                 </Box>
 
+                <Box marginTop={2}></Box>
                 <Divider />
 
 
@@ -106,6 +130,10 @@ const LayersDialog = () => {
                 } */}
 
             </DialogContent>
+            {newPoint && <PointForm open={newPoint !== null}
+            defaultValues={newPoint}  handleClose={()=>setNewPoint(null)} deletable ={ false}
+            
+            />}
         </Dialog>
     )
 }

@@ -1,6 +1,6 @@
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, List, ListItem, ListItemButton, ListItemIcon, ListItemText, MenuItem, TextField, Typography } from "@mui/material";
 import TextFieldBase from "../../components/ui/TextField";
-import { Edit, Share, PestControl as Scout, History } from "@mui/icons-material";
+import { Edit, Share, PestControl as Scout, History, EditLocation } from "@mui/icons-material";
 import { Fragment, useEffect, useState } from "react";
 import { AREA_UNIT, asShortStringDateTime, getUnitText, parseISOOrNull, SCOUT, trap } from "../FarmUtil";
 import DialogAppBar from "./DialogAppBar";
@@ -10,6 +10,7 @@ import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import TelegramIcon from '@mui/icons-material/Telegram';
 import { msgTelegram, msgWhatsapp, shareMsg, Telegram, Whatsapp } from "../../appbar/components/ShareLocationMenu";
 import { createSearchParams, useNavigate } from "react-router-dom";
+import PointForm from "../point/PointForm";
 
 const PointActionDialog = ({ open, handleClose, selectedPoint }) => {
 
@@ -18,6 +19,7 @@ const PointActionDialog = ({ open, handleClose, selectedPoint }) => {
 
     const [share, setShare] = useState(false);
 
+    const [editPoint, setEditPoint] = useState(null);
 
 
     const handleSetNote = (val) => {
@@ -62,12 +64,12 @@ const PointActionDialog = ({ open, handleClose, selectedPoint }) => {
 
         const searchParams = createSearchParams({ pid: pointId, fid: fieldId }).toString()
         dispatch(setActivityType(type));
-          navigate(
+        navigate(
             {
-              pathname: `/activity/new/${type}`,
-              search: searchParams
+                pathname: `/activity/new/${type}`,
+                search: searchParams
             }
-          )
+        )
 
 
         handleClose();
@@ -83,7 +85,7 @@ const PointActionDialog = ({ open, handleClose, selectedPoint }) => {
             <DialogAppBar onClose={() => onAction(false)}
                 title={selectedPoint.name}
             />
-            <DialogContent sx={{padding: 0, margin: 0}}>
+            <DialogContent sx={{ padding: 0, margin: 0 }}>
                 <List dense>
                     {selectedPoint.type === trap &&
                         <Fragment>
@@ -111,6 +113,13 @@ const PointActionDialog = ({ open, handleClose, selectedPoint }) => {
                         </ListItemIcon>
                         <ListItemText primary={text.share} secondary={Telegram} />
                     </ListItemButton>
+                    {/* <Divider /> */}
+                    {/* <ListItemButton onClick={() => setEditPoint(selectedPoint)}>
+                        <ListItemIcon>
+                            <EditLocation />
+                        </ListItemIcon>
+                        <ListItemText primary={text.edit} secondary={selectedPoint.name} />
+                    </ListItemButton> */}
 
 
 
@@ -136,6 +145,7 @@ const PointActionDialog = ({ open, handleClose, selectedPoint }) => {
                     </ListItem> */}
                 </List>
             </DialogContent>
+            {editPoint && <PointForm open={true} defaultValues={{ ...editPoint }} handleClose={() => setEditPoint(null)} deletable={true} />}
         </Dialog>
     )
 }
