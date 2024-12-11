@@ -90,7 +90,7 @@ const FieldsMap = (props) => {
     }, [center])
 
     const mapCliecked = (e, f, type) => {
-        console.log('mapCliecked', type)
+        // console.log('mapCliecked', type)
         if (editLayer !== null) {
             if (type === 'polygon') {
                 const p = {
@@ -123,8 +123,8 @@ const FieldsMap = (props) => {
             stopMapEventPropagation(e);
 
         } else if (type === 'point') {
-            console.log('point lng', e.latlng.lng.toFixed(5), ' lat', e.latlng.lat.toFixed(5));
-            console.log(f);
+            // console.log('point lng', e.latlng.lng.toFixed(5), ' lat', e.latlng.lat.toFixed(5));
+            // console.log(f);
             setSelectedPoint(f);
             stopMapEventPropagation(e);
         }
@@ -233,8 +233,8 @@ const FieldsMap = (props) => {
                 sx={{ width: '100%', bottom: { xs: 10, sm: 0 } }}
             />
 
-            {selectedPoint && editLayer && <FieldPointDialog open={selectedPoint !== null} deletable={true} defaultValues={{...selectedPoint, expiry : parseISOOrNull(selectedPoint.expiry)}} handleClose={handleCloseEditPoint} />}
-            {selectedPoint && !editLayer && <PointActionDialog open={selectedPoint !== null} deletable={true} selectedPoint={selectedPoint} handleClose={handleCloseEditPoint} />}
+            {/* {selectedPoint && editLayer && <FieldPointDialog open={selectedPoint !== null} deletable={true} defaultValues={{...selectedPoint, expiry : parseISOOrNull(selectedPoint.expiry)}} handleClose={handleCloseEditPoint} />} */}
+            {selectedPoint  && <PointActionDialog open={selectedPoint !== null} deletable={true} selectedPoint={selectedPoint} handleClose={handleCloseEditPoint} />}
 
         </Box>
     )

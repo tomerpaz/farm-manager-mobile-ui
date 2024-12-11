@@ -94,30 +94,34 @@ const LayersDialog = () => {
 
             <DialogContent>
 
-                <Box marginTop={2} display={'flex'} flexDirection={'row'} >
+                <Box marginTop={1} display={'flex'} flexDirection={'row'} >
                     <FormControlLabel control={<Checkbox checked={showLayers.includes(scout)} onChange={() => handleChange(scout)} />} label={text.scouting} />
                 </Box>
-                <Box marginTop={2} display={'flex'} flexDirection={'row'} justifyContent={'space-between'} >
+                <Divider />
+
+                <Box marginTop={1} marginBottom={1} display={'flex'} flexDirection={'row'} justifyContent={'space-between'} >
                     <FormControlLabel control={<Checkbox checked={showLayers.includes(trap)} onChange={() => handleChange(trap)} />} label={text.traps} />
-                    <IconButton onClick={() => handleEditLayer(trap)}><EditLocationAlt /></IconButton>
-                    {/* <Button disableElevation variant='outlined' color='secondary' onClick={() => addPoint(trap)} startIcon={<CenterFocusStrong  />}>{text.add}</Button> */}
+                    {/* <IconButton onClick={() => handleEditLayer(trap)}><EditLocationAlt /></IconButton> */}
+                    <Button disableElevation variant='outlined' color='secondary' onClick={() => addPoint(trap)} startIcon={<CenterFocusStrong  />}>{text.add}</Button>
 
                 </Box>
-                <Box marginTop={2}  display={'flex'} flexDirection={'row'} justifyContent={'space-between'} >
+                <Divider />
+
+                <Box marginTop={1}  display={'flex'} flexDirection={'row'} justifyContent={'space-between'} >
                     <FormControlLabel control={<Checkbox checked={showLayers.includes(irrigationHead)} onChange={() => handleChange(irrigationHead)} />} label={text.irrigationHeads} />
-                    <IconButton onClick={() => handleEditLayer(irrigationHead)}><EditLocationAlt /></IconButton>
-                    {/* <Button disableElevation variant='outlined' color='secondary' onClick={() => addPoint(irrigationHead)} startIcon={<Opacity  />}>{text.add}</Button> */}
+                    {/* <IconButton onClick={() => handleEditLayer(irrigationHead)}><EditLocationAlt /></IconButton> */}
+                    <Button disableElevation variant='outlined' color='secondary' onClick={() => addPoint(irrigationHead)} startIcon={<Opacity  />}>{text.add}</Button>
 
                 </Box>
 
-                <Box marginTop={2}></Box>
+                <Box marginTop={1}></Box>
                 <Divider />
 
 
-                <Box marginTop={2} display={'flex'} flexDirection={'row'} justifyContent={'space-between'} >
+                <Box marginTop={1} display={'flex'} flexDirection={'row'} justifyContent={'space-between'} >
                     <FormControlLabel control={<Checkbox checked={showFieldName} onChange={() => dispatch(setShowFieldName(!showFieldName))} />} label={text.field} />
                 </Box>
-                <Box marginTop={2} display={'flex'} flexDirection={'row'} justifyContent={'space-between'} >
+                <Box marginTop={1} display={'flex'} flexDirection={'row'} justifyContent={'space-between'} >
                     <FormControlLabel control={<Checkbox checked={showFieldAlias} onChange={() => dispatch(setShowFieldAlias(!showFieldAlias))} />} label={text.alias} />
                 </Box>
 

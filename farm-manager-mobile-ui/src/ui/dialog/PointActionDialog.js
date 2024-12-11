@@ -28,9 +28,8 @@ const PointActionDialog = ({ open, handleClose, selectedPoint }) => {
     }
 
     const onAction = (val) => {
-        // if (val) {
-        //     selectedPoint.note = note;
-        // }
+
+        setEditPoint(null);
         handleClose();
         // setTouched(false);
         // setNote('');
@@ -58,6 +57,11 @@ const PointActionDialog = ({ open, handleClose, selectedPoint }) => {
     const navigate = useNavigate()
 
 
+    const onPointFormClose = () => {
+        onAction();
+       // setEditPoint(null)
+    }
+
     //   const { data: user } = useGetUserDataQuery()
     //   const actionTypes = user.userConf.filter(e => e.write).map(e => e.type);
     const newActivity = (type, pointId, fieldId) => {
@@ -74,6 +78,14 @@ const PointActionDialog = ({ open, handleClose, selectedPoint }) => {
 
         handleClose();
     }
+
+
+    const newPoint = () => {
+        setEditPoint({ ...selectedPoint, expiry: parseISOOrNull(selectedPoint.expiry) })
+        //handleClose();
+        
+    }
+   // console.log('editPoint',editPoint)
 
     return (
         <Dialog
@@ -113,13 +125,13 @@ const PointActionDialog = ({ open, handleClose, selectedPoint }) => {
                         </ListItemIcon>
                         <ListItemText primary={text.share} secondary={Telegram} />
                     </ListItemButton>
-                    {/* <Divider /> */}
-                    {/* <ListItemButton onClick={() => setEditPoint(selectedPoint)}>
+                    <Divider />
+                    <ListItemButton onClick={() => newPoint()}>
                         <ListItemIcon>
                             <EditLocation />
                         </ListItemIcon>
                         <ListItemText primary={text.edit} secondary={selectedPoint.name} />
-                    </ListItemButton> */}
+                    </ListItemButton>
 
 
 
@@ -145,7 +157,7 @@ const PointActionDialog = ({ open, handleClose, selectedPoint }) => {
                     </ListItem> */}
                 </List>
             </DialogContent>
-            {editPoint && <PointForm open={true} defaultValues={{ ...editPoint }} handleClose={() => setEditPoint(null)} deletable={true} />}
+            {editPoint && <PointForm open={true} defaultValues={editPoint} handleClose={onPointFormClose} deletable={true} />}
         </Dialog>
     )
 }

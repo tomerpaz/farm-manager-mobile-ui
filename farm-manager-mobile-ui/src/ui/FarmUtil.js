@@ -552,8 +552,6 @@ export const getFieldCenter = (center, field) => {
 export const countLines = (text) => {
     if (text) {
         const lines = text.split('\n').length;
-        console.log(text,lines)
-
         return lines;
     }
     return 0;

@@ -4,20 +4,21 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
 import { AppBar, Autocomplete, Box, Checkbox, DialogActions, DialogContent, FormControlLabel, IconButton, InputAdornment, MenuItem, TextField, Toolbar, Typography } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectCurrentYear, selectLang, selectMapCenter, selectMapZoom, setMapCenter, setMapZoom, setSnackbar } from '../../features/app/appSlice';
+import { selectCurrentYear, selectLang, selectMapCenter, selectMapZoom, selectShowFieldAlias, selectShowFieldName, setMapCenter, setMapZoom, setSnackbar } from '../../features/app/appSlice';
 import TextFieldBase from '../../components/ui/TextField';
 import { useGetUserDataQuery } from '../../features/auth/authApiSlice';
-import { useCreateFieldPointMutation, useDeleteFieldPointMutation, useUpdateFieldPointMutation } from '../../features/points/pointsApiSlice';
+import { useCreateFieldPointMutation, useDeleteFieldPointMutation, useGetPointsQuery, useUpdateFieldPointMutation } from '../../features/points/pointsApiSlice';
 import { Controller, useForm, useWatch } from 'react-hook-form';
 import { Cancel, Close, Delete, PestControl, Save } from '@mui/icons-material';
-import { FormSpacer, getPointTypes, isMobile, MapToolTip, trap, UI_SIZE } from '../FarmUtil';
+import { displayFieldName, FormSpacer, getFillColor, getOpacity, getPointTypes, isArrayEmpty, isMobile, mapDisplayFieldName, MapToolTip, MAX_PER_MAP, stopMapEventPropagation, trap, UI_SIZE } from '../FarmUtil';
 import { useGetPestsQuery } from '../../features/pests/pestsApiSlice';
 import { DatePicker } from '@mui/x-date-pickers';
 import { useFields } from '../../features/fields/fieldsApiSlice';
-import { CircleMarker, MapContainer, Tooltip, useMapEvents } from 'react-leaflet';
+import { CircleMarker, MapContainer, Polygon, Tooltip, useMapEvents } from 'react-leaflet';
 import SatelliteMapProvider from '../../components/map/SatelliteMapProvider';
 import GeoLocation from '../../components/GeoLocation';
 import PointIcon from '../layers/PointIcon';
+import Loading from '../../components/Loading';
 
 const PointForm = ({ defaultValues, open, handleClose, deletable,/*, types*/ }) => {
 
@@ -36,7 +37,9 @@ const PointForm = ({ defaultValues, open, handleClose, deletable,/*, types*/ }) 
   const year = useSelector(selectCurrentYear);
   const fields = useFields(year).filter(f => f.geoPoints);
 
-  const displayFields = fields;
+  const { data: points, isLoading: isLoadingPoints, isFetching: isFetchingPoints } = useGetPointsQuery({ types: [defaultValues.type] });
+
+  const displayFields = fields.filter(e => e.baseFieldActive);
 
   const { control, register, handleSubmit, getValues, watch, formState: { errors },
     formState: { isDirty, dirtyFields }, reset, setValue, trigger
@@ -55,6 +58,29 @@ const PointForm = ({ defaultValues, open, handleClose, deletable,/*, types*/ }) 
     } else {
       return updateFieldPoint(data).unwrap();
     }
+  }
+
+  const mapCliecked = (e, f, type) => {
+
+    //                name: `${text[editLayer]} - ${displayFieldName(f)}: ${points.length + 1} `,
+
+
+    // console.log('mapCliecked', type)
+
+
+    // console.log(e);
+    setValue('lng', e.latlng.lng.toFixed(5));
+    setValue('lat', e.latlng.lat.toFixed(5));
+    if (f) {
+      setValue('fieldId', f.id);
+      if (defaultValues.id === null) {
+        setValue('name', `${displayFieldName(displayFields.find(e => e.id === f.id))} ${text[defaultValues.type]} - ${points.length}`)
+      }
+    }
+
+
+    stopMapEventPropagation(e);
+
   }
 
   const onSubmit = async (data) => {
@@ -77,10 +103,18 @@ const PointForm = ({ defaultValues, open, handleClose, deletable,/*, types*/ }) 
   }
 
 
-  const height = window.innerHeight - 400;
+  const heightOffset =  defaultValues.type === trap ? 515 : 300; 
+  const desktopOffset =  isMobile() ? 0 : 50;
+  const height = window.innerHeight - (heightOffset+desktopOffset);
 
-  const zoom = useSelector(selectMapZoom);
-  const center = useSelector(selectMapCenter);
+  const systemCenter = useSelector(selectMapCenter);
+  const [zoom, setZoom] = useState(useSelector(selectMapZoom));
+  const [center, setCenter] = useState(defaultValues.id ? [defaultValues.lat, defaultValues.lng] : systemCenter);
+
+  const showFieldAlias = useSelector(selectShowFieldAlias);
+  const showFieldName = useSelector(selectShowFieldName);
+  const showMapToolTip = showFieldAlias || showFieldName;
+
 
   const [map, setMap] = useState(0);
 
@@ -88,31 +122,35 @@ const PointForm = ({ defaultValues, open, handleClose, deletable,/*, types*/ }) 
   function HandleMapEvents() {
     const m = useMapEvents({
       zoomend: () => {
-        dispatch(setMapZoom(m.getZoom()));
+        setZoom(m.getZoom());
       },
       dragend: (e) => {
-        dispatch(setMapCenter([e.target.getCenter().lat, e.target.getCenter().lng]));
+        setCenter([e.target.getCenter().lat, e.target.getCenter().lng]);
 
       },
       click: (e) => {
 
-        setValue('lng', e.latlng.lng.toFixed(5));
-        setValue('lat', e.latlng.lat.toFixed(5));
 
         // console.log('lng', e.latlng.lng.toFixed(5));
         // console.log('lat', e.latlng.lat.toFixed(5));
 
-        //   mapCliecked(e, null, 'map')
+        mapCliecked(e, null, 'map');
       }
     })
     return <div></div>
   }
 
 
-  if (defaultValues.type === trap && isPestsLoading) {
-    return <></>
-  }
+  // if (defaultValues.type === trap && isPestsLoading) {
+  //   return <></>
+  // }
 
+
+
+  const pointsLoaded = isFetchingPoints && isLoadingPoints;
+  const pestLoaded = !isPestsLoading
+  const getDisplayPoints = () => {
+    return (!isFetchingPoints && !isLoadingPoints) ?  points.filter(e => e.active && e.id !== defaultValues.id) : []  }
   return (
 
     <Dialog fullScreen={isMobile()} fullWidth={!isMobile()}
@@ -176,6 +214,26 @@ const PointForm = ({ defaultValues, open, handleClose, deletable,/*, types*/ }) 
               <FormSpacer />
 
               <Controller
+                name="fieldId"
+                control={control}
+                rules={{ required: true }}
+                render={({ field: { ref, onChange, ...field } }) => <Autocomplete
+                  // disablePortal
+                  blurOnSelect={true}
+                  onChange={(_, data) => onChange(data)}
+                  options={displayFields.map(e => e.id)}
+
+                  // fullWidth
+                  size={UI_SIZE}
+                  sx={{ flex: 2 }}
+                  getOptionLabel={(option) => option ? displayFieldName(displayFields.find(e => e.id === option)) : ''}
+                  isOptionEqualToValue={(option, value) => (value === undefined) || option?.id?.toString() === (value)?.toString()}
+                  renderInput={(params) => <TextFieldBase error={errors.fieldId ? true : false} sx={{ marginTop: 0.5 }} {...params} label={text.field} />}
+                  {...field} />}
+              />
+              <FormSpacer />
+
+              <Controller
                 name="pest"
                 control={control}
                 rules={{ required: true }}
@@ -183,7 +241,7 @@ const PointForm = ({ defaultValues, open, handleClose, deletable,/*, types*/ }) 
                   // disablePortal
                   blurOnSelect={true}
                   onChange={(_, data) => onChange(data)}
-                  options={pests.filter(e => e.active)}
+                  options={isPestsLoading ? [] :  pests.filter(e => e.active)}
 
                   // fullWidth
                   size={UI_SIZE}
@@ -214,7 +272,7 @@ const PointForm = ({ defaultValues, open, handleClose, deletable,/*, types*/ }) 
                       }}
                       {...field} />}
                 />
-              </Box>
+              </Box>  
             </Fragment>
           }
 
@@ -234,14 +292,14 @@ const PointForm = ({ defaultValues, open, handleClose, deletable,/*, types*/ }) 
 
 
 
-          <Box flex={1} style={{ height: '100%' }} id="map" dir='ltr' >
+          <Box marginTop={2} flex={1} style={{ height: '100%' }} id="map" dir='ltr' >
             <MapContainer style={{ height: height, width: '100%' }} center={center} zoom={zoom} scrollWheelZoom={false}
               ref={setMap}
             >
 
               <SatelliteMapProvider />
               <GeoLocation />
-              {/* {displayFields.map((f, index) =>
+              {displayFields.map((f, index) =>
                 <Polygon field={f} key={f.id}
                   color={f.color}
                   fillColor={getFillColor(f)}
@@ -258,18 +316,18 @@ const PointForm = ({ defaultValues, open, handleClose, deletable,/*, types*/ }) 
                     <MapToolTip textArr={[mapDisplayFieldName(f, showFieldName, showFieldAlias)]} />
                   </Tooltip>}
                 </Polygon>
-              )} */}
+              )}
 
-              {/* {getDisplayPoints().map((e, index, arr) =>
+              {getDisplayPoints().map((e, index, arr) =>
 
                 <CircleMarker
 
-                  eventHandlers={{
-                    click: (event) => {
+                  // eventHandlers={{
+                  //   click: (event) => {
 
-                      mapCliecked(event, e, 'point', index);
-                    }
-                  }}
+                  //     mapCliecked(event, e, 'point', index);
+                  //   }
+                  // }}
                   key={index} radius={12}
                   color={e.active ? 'white' : 'gray'}
                   weight={4}
@@ -279,11 +337,11 @@ const PointForm = ({ defaultValues, open, handleClose, deletable,/*, types*/ }) 
                 >
                   <Tooltip
                     className={'empty-tooltip'}
-                    direction="center" opacity={1} permanent>
+                    direction="center" opacity={0.3} permanent>
                     <PointIcon point={e} />
                   </Tooltip>
                 </CircleMarker>
-              )} */}
+              )}
 
               {lat && lng &&
 
@@ -296,16 +354,16 @@ const PointForm = ({ defaultValues, open, handleClose, deletable,/*, types*/ }) 
                   //   }
                   // }}
                   radius={12}
-                  //color={'yello'}
+                  color={'white'}
                   weight={4}
-                  // fillColor={'white'}
-                  // fillOpacity={0.5}
+                  fillColor={'white'}
+                  fillOpacity={1}
                   center={[lat, lng]}
                 >
                   <Tooltip
                     className={'empty-tooltip'}
-                    direction="center" opacity={0.5} permanent>
-                    <PointIcon point={defaultValues} />
+                    direction="center" opacity={1} permanent>
+                    <PointIcon point={defaultValues} color={'orange'} />
                   </Tooltip>
                 </CircleMarker>
               }
@@ -314,20 +372,17 @@ const PointForm = ({ defaultValues, open, handleClose, deletable,/*, types*/ }) 
             <Box height={10} display={'flex'} justifyContent={'space-around'}>
               {lat && <Typography >{`${lat}/${lng}`}</Typography>}
             </Box>
-
           </Box>
-
         </DialogContent>
         <DialogActions sx={{ justifyContent: 'center' }}>
           {defaultValues.id && deletable && <Button size='large' endIcon={<Delete />} variant='outlined' onClick={() => onAction('delete')}>{text.delete}</Button>}
 
-          <Button size='large' endIcon={<Save />} disableElevation={true} variant='contained' type="submit" >
+          <Button size='large' endIcon={<Save />} disabled={!isDirty} disableElevation={true} variant='contained' type="submit" >
             {text.save}
           </Button>
           {/* {!defaultValues.id &&
             <Button size='large' endIcon={<PestControl />} variant='contained' type="submit" onClick={() => console.log('save +')}>{`${text.save} +`}</Button>
           } */}
-
         </DialogActions>
       </form >
 
