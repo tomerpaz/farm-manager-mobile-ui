@@ -1,6 +1,6 @@
 import { useEffect } from "react"
 import { useMap } from "react-leaflet"
-import Locate from "leaflet.locatecontrol"
+import {LocateControl} from "leaflet.locatecontrol"
 const locateOptions = {
   position: "topleft",
   // Set other options in here for locate control
@@ -9,7 +9,7 @@ const locateOptions = {
   showPopup: false,
   keepCurrentZoomLevel: true,
 }
-const locateControl = new Locate(locateOptions)
+const control = new LocateControl(locateOptions)
 let ok = false;
 const GeoLocation = () => {
   // Access the map context with the useMap hook
@@ -17,8 +17,8 @@ const GeoLocation = () => {
 
   // Add locate control once the map loads
   useEffect(() => {
-    map.addControl(locateControl);
-    return () => map.removeControl(locateControl);
+    map.addControl(control);
+    return () => map.removeControl(control);
   }, [map])
 
   return null
