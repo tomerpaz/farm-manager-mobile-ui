@@ -9,7 +9,7 @@ import ActivityTypeIcon from '../../../icons/ActivityTypeIcon';
 import { useNavigate, useParams } from 'react-router-dom';
 import ActivitiesFilter from '../../../components/filters/ActivitiesFilter';
 import { EXECUTED, PLAN, activityDescription, buildActiviyFilter, daysDiffToday, isArrayEmpty, parseDate, parseISOOrNull } from '../../FarmUtil';
-import { EXECUTE_STATUS_COLOR, PLAN_PASSED_STATUS_COLOR, PLAN_STATUS_COLOR } from '../../activity/form/header/ActivityHeaderView';
+import { EXECUTE_STATUS_COLOR, PLAN_PASSED_STATUS_COLOR, PLAN_STATUS_COLOR, WHITE } from '../../activity/form/header/ActivityHeaderView';
 import { LocationOn } from '@mui/icons-material';
 
 const getColor = (e) => {
@@ -21,7 +21,7 @@ const getColor = (e) => {
     } else if (EXECUTED === s) {
         return EXECUTE_STATUS_COLOR;
     }
-    return null;
+    return WHITE;
 
 }
 
@@ -81,11 +81,11 @@ const ActivitiesList = ({ plans }) => {
             const activities = data.content;
             return activities.map(e =>
                 <Fragment key={e.uuid}>
-                    <ListItem onClick={() => navigate(`/activity/al/${e.uuid}`)}
+                    <ListItem sx={{backgroundColor: getColor(e)}} onClick={() => navigate(`/activity/al/${e.uuid}`)}
 
                     >
                         <ListItemAvatar>
-                            <Avatar sx={{ bgcolor: 'white' }}>
+                            <Avatar sx={{ bgcolor: getColor(e) }}>
                                 <ActivityTypeIcon type={e.type} />
                             </Avatar>
                         </ListItemAvatar>

@@ -27,7 +27,7 @@ export const PLAN_PASSED_STATUS_COLOR = '#EF9A9A';
 export const PLAN_STATUS_COLOR = '#FFF59D';
 export const EXECUTE_STATUS_COLOR = '#C5E1A5';
 export const DUPLICATE_COLOR = '#ffc107';
-
+export const WHITE = 'white';
 const getColor = (isDuplicate, isExecutePlan) => {
   if (isDuplicate) {
     return DUPLICATE_COLOR;
