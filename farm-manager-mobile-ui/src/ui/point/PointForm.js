@@ -10,7 +10,7 @@ import { useGetUserDataQuery } from '../../features/auth/authApiSlice';
 import { useCreateFieldPointMutation, useDeleteFieldPointMutation, useGetPointsQuery, useUpdateFieldPointMutation } from '../../features/points/pointsApiSlice';
 import { Controller, useForm, useWatch } from 'react-hook-form';
 import { Cancel, Close, Delete, PestControl, Save } from '@mui/icons-material';
-import { displayFieldName, FormSpacer, getFillColor, getOpacity, getPointTypes, isArrayEmpty, isMobile, mapDisplayFieldName, MapToolTip, MAX_PER_MAP, stopMapEventPropagation, trap, UI_SIZE } from '../FarmUtil';
+import { displayFieldName, FormSpacer, getExpieryText, getFillColor, getOpacity, getPointTypes, isArrayEmpty, isMobile, mapDisplayFieldName, MapToolTip, MAX_PER_MAP, stopMapEventPropagation, trap, UI_SIZE } from '../FarmUtil';
 import { useGetPestsQuery } from '../../features/pests/pestsApiSlice';
 import { DatePicker } from '@mui/x-date-pickers';
 import { useFields } from '../../features/fields/fieldsApiSlice';
@@ -101,7 +101,6 @@ const PointForm = ({ defaultValues, open, handleClose, deletable,/*, types*/ }) 
     handleClose('delete');
     //  setOpen(false)
   }
-
 
   const heightOffset =  defaultValues.type === trap ? 515 : 300; 
   const desktopOffset =  isMobile() ? 0 : 50;
@@ -258,7 +257,7 @@ const PointForm = ({ defaultValues, open, handleClose, deletable,/*, types*/ }) 
                   name="expiry"
                   control={control}
                   render={({ field }) =>
-                    <DatePicker label={text.expiry}
+                    <DatePicker label={getExpieryText(text, defaultValues.type)}
                       closeOnSelect
                       showToolbar={false}
                       localeText={{

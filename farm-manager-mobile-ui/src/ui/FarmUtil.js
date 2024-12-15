@@ -557,6 +557,15 @@ export const countLines = (text) => {
     return 0;
 }
 
+export const getExpieryText = (text, type ) =>{
+    if([trap].includes(type)){
+        return text.baitExpiry;
+    } else {
+        return text.expiry;
+    }
+
+}
+
 // export function daysDif(before, after){
 //     if(after && before){
 //         return (((after.getTime() - before .getTime())/(1000 * 3600 * 24))+2).toFixed(0) 
