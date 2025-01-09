@@ -161,7 +161,7 @@ const ActivityResources = ({ activity, control, errors, register, tariffs, activ
                 const r = e.resource ? e.resource : e;
                 const pesticideListItem = e.pestId ? e : null;
                 const qty = pesticideListItem ? calacTotalPesticideVolume(
-                    pesticideListItem.unit, pesticideListItem.dosage, sprayParams.volume, activityArea) : 0;
+                    pesticideListItem.unit, pesticideListItem.dosage, sprayParams.volumePerAreaUnit, activityArea) : 0;
                 return {
                     resource: r,
                     qty,
@@ -270,13 +270,13 @@ const ActivityResources = ({ activity, control, errors, register, tariffs, activ
         onChange(value);
         const sprayVolume = calcSprayVolume(Number(value), Number(activityArea));
         setValue('sprayParams.volume', sprayVolume)
-        updatePesticideQty(sprayVolume)
+        updatePesticideQty(value)
     }
 
-    const updatePesticideQty = (sprayVolume) => {
+    const updatePesticideQty = (sprayVolumePerAreaUnit) => {
         fields.map((row, index) => {
             if (row.pesticideListItem && !row.manualQty) {
-                const newQty = calacTotalPesticideVolume(row.pesticideListItem.unit, row.dosage, sprayVolume, activityArea)
+                const newQty = calacTotalPesticideVolume(row.pesticideListItem.unit, row.dosage, sprayVolumePerAreaUnit, activityArea)
                 if (newQty && newQty !== row.qty) {
                     row.qty = newQty;
                     if (row.tariff) {

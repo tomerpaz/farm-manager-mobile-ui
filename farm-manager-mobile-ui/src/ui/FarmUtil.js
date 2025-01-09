@@ -566,6 +566,26 @@ export const getExpieryText = (text, type ) =>{
 
 }
 
+
+export function getLocation() {
+    if (navigator.geolocation) {
+        const lonLat = []
+      navigator.geolocation.getCurrentPosition((position) => {
+        lonLat[0] = position.coords.latitude;
+        lonLat[1] = position.coords.longitude;
+        console.log('position',position)
+
+      });
+    } else {
+    //  x.innerHTML = "Geolocation is not supported by this browser.";
+    }
+  }
+  
+  function showPosition(position) {
+    return [position.coords.latitude,position.coords.longitude];
+
+  }
+
 // export function daysDif(before, after){
 //     if(after && before){
 //         return (((after.getTime() - before .getTime())/(1000 * 3600 * 24))+2).toFixed(0) 

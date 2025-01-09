@@ -86,10 +86,11 @@ export function calcSprayerCount(area, sprayerCapacity, sprayVolume) {
     }
 }
 
-export function calacTotalPesticideVolume(unit, pesticideDosage, sprayVolume, area) {
+export function calacTotalPesticideVolume(unit, pesticideDosage, sprayVolumePerAreaUnit, area) {
 
-    const sprayVolumeValue = sprayVolume ? sprayVolume : 0;
+    const sprayVolumeValue = sprayVolumePerAreaUnit ? sprayVolumePerAreaUnit : 0;
     const point = 2;
+    console.log(sprayVolumeValue,unit)
     switch (unit) {
         case 'PERCENT': {
             return toFixed((((pesticideDosage * sprayVolumeValue) / 100) * area), point);

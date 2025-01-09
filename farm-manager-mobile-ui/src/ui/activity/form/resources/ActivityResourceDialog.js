@@ -111,7 +111,7 @@ const ActivityResourceDialog = ({ selectedRow, selectedIndex, handleClose, updat
         if (value && activityArea && !selectedRow.manualQty) {
             const pesticideListItem = selectedRow.pesticideListItem;
             const calcQty = calacTotalPesticideVolume(
-                pesticideListItem.unit, value, sprayParams.volume, activityArea)
+                pesticideListItem.unit, value, sprayParams.volumePerAreaUnit, activityArea)
             setQty(calcQty);
         }
     }
