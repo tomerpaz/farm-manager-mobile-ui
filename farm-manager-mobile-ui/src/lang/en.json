@@ -196,5 +196,6 @@
   "expiry": "Expiry",
   "share": "Share",
   "add": "Add",
-  "baitExpiry": "Bait Expiry"
+  "baitExpiry": "Bait Expiry",
+  "newActivityGeo":"New Activity GEO"
 }

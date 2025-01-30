@@ -11,7 +11,7 @@ import { selectEditLayer, selectLang, selectShowInventory, selectShowPlans } fro
 import { useSelector } from 'react-redux';
 import ActionFab from '../../components/ui/ActionFab';
 import { useGetUserDataQuery } from '../../features/auth/authApiSlice';
-import { getLocation, isInventoryPossible, isPlansPossible } from '../FarmUtil';
+import { isInventoryPossible, isPlansPossible } from '../FarmUtil';
 import InventoryTable from './inventory/InventoryTable';
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -56,7 +56,6 @@ const MainTabs = () => {
     const { page } = useParams()
     const text = useSelector(selectLang)
 
-   // getLocation();
 
     const plansPath = `${plansBasePath}${page}`;
 

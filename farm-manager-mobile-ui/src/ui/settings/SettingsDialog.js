@@ -1,7 +1,7 @@
 import React from 'react'
 import { AppBar, Box, Checkbox, Dialog, DialogContent, FormControlLabel, IconButton, MenuItem, Select, Slide, Toolbar, Typography } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux';
-import { selectLang, selectOpenSettings, selectShowInventory, selectShowPlans, setLang, setOpenSettings, setShowInventory, setShowPlans } from '../../features/app/appSlice';
+import { selectLang, selectNewActivityGeo, selectOpenSettings, selectShowInventory, selectShowPlans, setLang, setNewActivityGeo, setOpenSettings, setShowInventory, setShowPlans } from '../../features/app/appSlice';
 import { Close, DesktopWindowsOutlined, MobileFriendlyOutlined } from '@mui/icons-material';
 import { getUserLang } from '../../router/UserRoutes';
 import { isInventoryPossible, isMobile, isPlansPossible } from '../FarmUtil';
@@ -35,6 +35,7 @@ const SettingsDialog = () => {
 
     const showInventory = useSelector(selectShowInventory);
     const showPlans = useSelector(selectShowPlans);
+    const newActivityGeo = useSelector(selectNewActivityGeo);
 
     const handleClose = () => {
         dispatch(setOpenSettings(false));
@@ -52,6 +53,11 @@ const SettingsDialog = () => {
 
     const handlePlansChange = () => {
         dispatch(setShowPlans(!showPlans));
+        dispatch(setOpenSettings(false));
+    }
+
+    const handleNewActivityGeoChange = () => {
+        dispatch(setNewActivityGeo(!newActivityGeo));
         dispatch(setOpenSettings(false));
     }
 
@@ -94,6 +100,12 @@ const SettingsDialog = () => {
 
                     </Box>
                 }
+                {isMobile() &&
+                    <Box marginTop={2} display={'flex'} flexDirection={'row'} >
+                        <FormControlLabel control={<Checkbox checked={newActivityGeo} onChange={handleNewActivityGeoChange} />} label={text.newActivityGeo} />
+                    </Box>
+                }
+
                 <Box marginTop={2} display={'flex'} flexDirection={'row'} >
                     <Box>
                         <IconButton sx={{ padding: 0 }} onClick={_ => setShowAgent(!showAgent)} >

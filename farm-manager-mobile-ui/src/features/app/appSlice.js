@@ -7,10 +7,10 @@ export const DEFAULT_ACTIVITY_STATUS = ''
 const lang = localStorage.getItem('lang')
 const showInventory = 'true' === localStorage.getItem('showInventory');
 const showPlans = 'true' === localStorage.getItem('showPlans');
+const newActivityGeo = 'true' === localStorage.getItem('newActivityGeo');
 
 const showFieldName = 'true' === localStorage.getItem('showFieldName');
 const showFieldAlias = 'true' === localStorage.getItem('showFieldAlias');
-
 const appSlice = createSlice({
     name: 'auth',
     initialState: {
@@ -49,6 +49,7 @@ const appSlice = createSlice({
         mapZoom: null,
         showFieldName,
         showFieldAlias,
+        newActivityGeo,
         // showPestsLayer: false,
         // showTrapsLayer: false,
         // showIrrigationHeadsLayer: false,
@@ -165,6 +166,10 @@ const appSlice = createSlice({
             state.showFieldName = action.payload;
             localStorage.setItem('showFieldName', action.payload);
         },
+        setNewActivityGeo: (state, action) => {
+            localStorage.setItem('newActivityGeo', action.payload);
+            state.newActivityGeo = action.payload;
+        },
     },
 })
 
@@ -172,7 +177,7 @@ export const { setCredentials, logOut, setLang, setCurrentYear, setAppBarDialogO
     setStartDateFilter, setEndDateFilter, setActivityTypeFilter, setFieldSiteFilter, setFieldBaseFieldFilter, setFieldDashboardYear, setFieldsViewStatus,
     setActivityPlanStatusFilter, setActivityPlanTypeFilter, setActivityStatusFilter, setActivityType, setSnackbar, setOpenSettings, setInventoryFreeTextFilter,
     setInventoryDateFilter, setInventoryWarehouseFilter, setShowInventory, setShowPlans, setOpenLayers, setShowLayers, setEditLayer, setMapCenter, setMapZoom,
-    setShowFieldAlias, setShowFieldName } = appSlice.actions
+    setShowFieldAlias, setShowFieldName, setNewActivityGeo } = appSlice.actions
 
 export default appSlice.reducer
 
@@ -208,3 +213,4 @@ export const selectMapCenter = (state) => state.app.mapCenter
 export const selectMapZoom = (state) => state.app.mapZoom
 export const selectShowFieldName = (state) => state.app.showFieldName
 export const selectShowFieldAlias = (state) => state.app.showFieldAlias
+export const selectNewActivityGeo = (state) => state.app.newActivityGeo

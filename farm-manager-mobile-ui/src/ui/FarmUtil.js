@@ -4,6 +4,7 @@ import { selectShowInventory } from "../features/app/appSlice";
 import { useSelector } from "react-redux";
 import { Tooltip } from "react-leaflet";
 import { Box, Typography } from "@mui/material";
+import { position } from "stylis";
 
 export const UI_SIZE = 'medium';
 
@@ -557,8 +558,8 @@ export const countLines = (text) => {
     return 0;
 }
 
-export const getExpieryText = (text, type ) =>{
-    if([trap].includes(type)){
+export const getExpieryText = (text, type) => {
+    if ([trap].includes(type)) {
         return text.baitExpiry;
     } else {
         return text.expiry;
@@ -566,30 +567,38 @@ export const getExpieryText = (text, type ) =>{
 
 }
 
+export const getGeoPosition = (setPosition) => {
 
-export function getLocation() {
-    if (navigator.geolocation) {
-        const lonLat = []
-      navigator.geolocation.getCurrentPosition((position) => {
-        lonLat[0] = position.coords.latitude;
-        lonLat[1] = position.coords.longitude;
-        console.log('position',position)
+    const geoOptions = {
+        enableHighAccuracy: true,
+        timeOut: 5000
+    };
 
-      });
-    } else {
-    //  x.innerHTML = "Geolocation is not supported by this browser.";
+    const geoSucces = (position) => {
+        //console.log('geoSucces', position)
+        setPosition([position.coords.latitude, position.coords.longitude])
     }
-  }
-  
-  function showPosition(position) {
-    return [position.coords.latitude,position.coords.longitude];
 
-  }
+    const goFailure = (err) => {
+        console.log('Error getCurrentPosition: ' + err);
+        setPosition(-1);
+    }
 
-// export function daysDif(before, after){
-//     if(after && before){
-//         return (((after.getTime() - before .getTime())/(1000 * 3600 * 24))+2).toFixed(0) 
-//     }
-//     return 0;
+    if (isMobile() && navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(geoSucces, goFailure, geoOptions);
+    }
+    else {
+        setPosition(-2)
+    }
+}
 
-// }
+export function isPointInPoly(poly, pt) {
+    if (isArrayEmpty(poly) || isArrayEmpty(pt)) {
+        return false;
+    }
+    for (var c = false, i = -1, l = poly.length, j = l - 1; ++i < l; j = i)
+        ((poly[i][1] <= pt[1] && pt[1] < poly[j][1]) || (poly[j][1] <= pt[1] && pt[1] < poly[i][1]))
+            && (pt[0] < (poly[j][0] - poly[i][0]) * (pt[1] - poly[i][1]) / (poly[j][1] - poly[i][1]) + poly[i][0])
+            && (c = !c);
+    return c;
+}

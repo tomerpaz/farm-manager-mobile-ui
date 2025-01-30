@@ -1,16 +1,49 @@
 import { Box } from '@mui/material'
 import { useSelector } from 'react-redux'
 import { useParams, useSearchParams } from 'react-router-dom'
-import { selectCurrentYear } from '../../../features/app/appSlice'
+import { selectCurrentYear, selectNewActivityGeo } from '../../../features/app/appSlice'
 import ActivityForm from '../form/ActivityForm'
-import { IRRIGARION_TYPES, MARKET, SCOUT, SPRAY, SPRAY_TYPES, asLocalDateTime, firstDayOfThisMonth, getWinds, lastDayOfThisMonth, newDate, startOfDay } from '../../FarmUtil'
+import { IRRIGARION_TYPES, MARKET, SCOUT, SPRAY, SPRAY_TYPES, asLocalDateTime, firstDayOfThisMonth, getGeoPosition, getLocalitation, getLocation, getWinds, isArrayEmpty, isPointInPoly, lastDayOfThisMonth, newDate, startOfDay, testIsPointInPoly } from '../../FarmUtil'
 import { useGetUserDataQuery } from '../../../features/auth/authApiSlice'
-import { useFieldsById } from '../../../features/fields/fieldsApiSlice'
+import { useFields, useFieldsById } from '../../../features/fields/fieldsApiSlice'
 import { parseISO } from 'date-fns'
 import { fi } from 'date-fns/locale'
 import { newFieldMarketParams } from '../form/fields/ActivityFields'
 import { useGetPointQuery } from '../../../features/points/pointsApiSlice'
 import Loading from '../../../components/Loading'
+import { useState } from 'react'
+
+
+export function getFieldsByLocation(data, pt) {
+
+  if (data) {
+    if (pt && Array.isArray(pt)) {
+      const inFields = data.filter(e => e.endDate === null && isPointInPoly(e.geoPoints, pt));
+      return inFields;
+    }
+  }
+  return [];
+}
+
+const prepareFields = (activityFields, isMarket) => {
+  if (isArrayEmpty(activityFields)) {
+    return [];
+  } else {
+    return activityFields.map(field => {
+      return {
+        field, activityArea: field.area, fieldNote: null, actualExecution: null,
+        fieldMarketParams: isMarket ? newFieldMarketParams() : null
+      }
+    }
+    );
+  }
+
+  // const fields = field ? [{
+  //   field, activityArea: field.area, fieldNote: null, actualExecution: null,
+  //   fieldMarketParams: isMarket ? newFieldMarketParams() : null
+  // }] : [];
+
+}
 
 const NewActivity = () => {
 
@@ -21,19 +54,38 @@ const NewActivity = () => {
   const { data: user, isLoading } = useGetUserDataQuery()
   const currentYear = useSelector(selectCurrentYear)
   const fid = searchParams.get("fid");
-  
+  const data = useFields(currentYear)
+
+  const [position, setPosition] = useState(0);
+
+  const newActivityGeo = useSelector(selectNewActivityGeo);
+
+console.log('newActivityGeo',newActivityGeo)
+  //testIsPointInPoly();
+
   const field = useFieldsById(currentYear, Number(fid));
+  // console.log('data',data) 
+
+  const isLoadingPosition = (fid === null && position === 0 && newActivityGeo);
+
+  if (isLoadingPosition) {
+    getGeoPosition(setPosition)
+  }
 
   const pid = searchParams.get("pid");
 
   const { data: point, isLoading: isLoadingPoint, isFetching: isFetchingPoint } = useGetPointQuery({ id: pid }, { skip: !pid });
 
-
-  if(isLoadingPoint || isFetchingPoint){
-    return <Loading/>
+  if (isLoadingPoint || isFetchingPoint || isLoadingPosition) {
+    return <Loading />
   }
 
-  console.log('useGetPointQuery',pid,point, isLoadingPoint, isFetchingPoint);
+  console.log('field: ', field);
+
+  if (!field) {
+    const fieldsByLocation = getFieldsByLocation(data, position);
+  }
+
 
   const isPlan = type.includes("_PLAN")
   const isSpray = SPRAY_TYPES.includes(type);
@@ -43,10 +95,9 @@ const NewActivity = () => {
 
   const wind = isSpray ? getWinds()[0] : null;
 
-  const fields = field ? [{
-    field, activityArea: field.area, fieldNote: null, actualExecution: null,
-    fieldMarketParams: isMarket ? newFieldMarketParams() : null
-  }] : [];
+  const fields = prepareFields(field ? [field] : getFieldsByLocation(data, position), isMarket)
+
+
 
 
   const points = point ? [{
