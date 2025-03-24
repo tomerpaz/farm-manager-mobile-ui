@@ -14,6 +14,7 @@ import UpdateAllFieldsDialog from "./UpdateAllFieldsDialog"
 import { getTotalQty, getTotalweight } from "../ActivityUtil"
 import UpdateAllFieldsAreaDialog from "./UpdateAllFieldsAreaDialog"
 import WaypointSelectionDialog from "../../../dialog/WaypointSelectionDialog"
+import { blue } from '@mui/material/colors';
 
 const TRASHHOLD = 3;
 
@@ -29,7 +30,7 @@ export function newFieldMarketParams() {
 
 }
 
-const ActivityFields = ({ activity, getValues, control, register, errors, activityArea, crop, openWaypointSelection, setOpenWaypointSelection }) => {
+const ActivityFields = ({ activity, getValues, control, register, errors, activityArea, crop, openWaypointSelection, setOpenWaypointSelection, pointsCount }) => {
 
     const { fields, append, prepend, remove, swap, move, insert, update, replace } = useFieldArray({
         control, // control props comes from useForm (optional: if you are using FormContext)
@@ -121,7 +122,7 @@ const ActivityFields = ({ activity, getValues, control, register, errors, activi
                 </Box>
                 <Box>
                     {[HARVEST].includes(activity.type) && <IconButton size='large' disabled={isArrayEmpty(fields)} onClick={_ => setOpenBulkUpdateFields(true)}><MoreVert fontSize='large' /></IconButton>}
-                    {[SCOUT, GENERAL].includes(activity.type) && <IconButton size='large' disabled={isArrayEmpty(fields)} onClick={() => setOpenWaypointSelection(true)}><AddLocation fontSize='large' /></IconButton>}
+                    {[SCOUT, GENERAL].includes(activity.type) && <IconButton size='large' disabled={isArrayEmpty(fields)} onClick={() => setOpenWaypointSelection(true)}><AddLocation sx={pointsCount && pointsCount > 0 ?{color: blue[800]} : null} fontSize='large' /></IconButton>}
                     {![MARKET].includes(activity.type) && <IconButton size='large' disabled={isArrayEmpty(fields)} onClick={_ => setOpenBulkUpdateFieldsArea(true)}><Percent fontSize='large' /></IconButton>}
                     <IconButton size='large' disabled={isArrayEmpty(fields)} onClick={e => remove()}><Delete fontSize='large' /></IconButton>
                 </Box>

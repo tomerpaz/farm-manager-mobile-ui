@@ -2,7 +2,7 @@ import { BottomNavigation, BottomNavigationAction, Box, TextField, Typography } 
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { selectLang, setSnackbar } from '../../../features/app/appSlice'
-import { PESTICIDE, PLAN, SCOUT, asLocalDate, asLocalTime, countLines, daysDif, daysDiff } from '../../FarmUtil'
+import { PESTICIDE, PLAN, SCOUT, asLocalDate, asLocalTime, countLines, daysDif, daysDiff, isArrayEmpty } from '../../FarmUtil'
 import ActivityHeaderView from './header/ActivityHeaderView'
 import { useForm, Controller, useWatch } from "react-hook-form";
 import { Cancel, CheckCircleOutline, ControlPointDuplicate, Delete, Save } from '@mui/icons-material'
@@ -37,6 +37,7 @@ const ActivityForm = ({ activity }) => {
   const [isDuplicate, setIsDuplicate] = useState(false);
   const [isExecutePlan, setIsExecutePlan] = useState(false);
 
+  const [pointsCount, setPointsCount] = useState(activity.points.length);
 
 
   const [openWaypointSelection, setOpenWaypointSelection] = useState(false);
@@ -75,7 +76,6 @@ const ActivityForm = ({ activity }) => {
   const scoutParams = useWatch({ control, name: "scoutParams" })
 
 
-
   const tariffResourceIds = resources.filter(e => e.manualTariff === false).map(e => e.resource.id);
   const { data: tariffs, isSuccess: isTariffsSuccess, isLoading: isTariffLoading, } = useGetResourcesTariffQuery({
     activityType: activity.type,
@@ -87,6 +87,7 @@ const ActivityForm = ({ activity }) => {
   if (!isCropsSuccess || !isActivityDefsSuccess || !isCustomersSuccess) {
     return <Loading />
   }
+
 
   const saveActivity = (data) => {
     data.execution = asLocalDate(data.execution, true);
@@ -173,12 +174,12 @@ const ActivityForm = ({ activity }) => {
           <ActivityHeaderView control={control} register={register} type={type} activity={activity} errors={errors} crops={crops} activityDefs={activityDefs} customers={customers} reference={reference} isDuplicate={isDuplicate} isExecutePlan={isExecutePlan}
             execution={execution} days={days} crop={crop} onCropCHange={onCropCHange} />
           <ActivityFields control={control} register={register} activity={activity} getValues={getValues} activityArea={activityArea} errors={errors} crop={crop}
-            openWaypointSelection={openWaypointSelection} setOpenWaypointSelection={setOpenWaypointSelection}
+            openWaypointSelection={openWaypointSelection} setOpenWaypointSelection={setOpenWaypointSelection} pointsCount = {pointsCount }
           />
 
           {openWaypointSelection && <ActivityWaypoints
             control={control} register={register} activity={activity} getValues={getValues} errors={errors} crop={crop}
-            openWaypointSelection={openWaypointSelection} setOpenWaypointSelection={setOpenWaypointSelection}
+            openWaypointSelection={openWaypointSelection} setOpenWaypointSelection={setOpenWaypointSelection} setPointsCount={setPointsCount}
 
           />}
           {activity.type === SCOUT && <ActivityScouts control={control} register={register} activity={activity} getValues={getValues} />}
