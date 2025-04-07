@@ -8,6 +8,7 @@ const locateOptions = {
   drawCircle: false,
   showPopup: false,
   keepCurrentZoomLevel: true,
+  enableHighAccuracy: true,
 }
 const control = new LocateControl(locateOptions)
 let ok = false;
