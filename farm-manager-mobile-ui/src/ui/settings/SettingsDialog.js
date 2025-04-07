@@ -1,10 +1,10 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { AppBar, Box, Checkbox, Dialog, DialogContent, FormControlLabel, IconButton, MenuItem, Select, Slide, Toolbar, Typography } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux';
 import { selectLang, selectNewActivityGeo, selectOpenSettings, selectShowInventory, selectShowPlans, setLang, setNewActivityGeo, setOpenSettings, setShowInventory, setShowPlans } from '../../features/app/appSlice';
-import { Close, DesktopWindowsOutlined, MobileFriendlyOutlined } from '@mui/icons-material';
+import { Close, DesktopWindowsOutlined, LocationOn, MobileFriendlyOutlined } from '@mui/icons-material';
 import { getUserLang } from '../../router/UserRoutes';
-import { isInventoryPossible, isMobile, isPlansPossible } from '../FarmUtil';
+import { getGeoCurrentPosition, isInventoryPossible, isMobile, isPlansPossible } from '../FarmUtil';
 import { useGetUserDataQuery } from '../../features/auth/authApiSlice';
 import DialogAppBar from '../dialog/DialogAppBar';
 import { Transition } from '../Util';
@@ -27,6 +27,10 @@ const SettingsDialog = () => {
     const open = useSelector(selectOpenSettings)
 
     const [showAgent, setShowAgent] = React.useState(false);
+    const [showCoords, setShowCoords] = React.useState(false);
+
+    const [accuracy, setAccuracy] = React.useState(false);
+
 
     const { data: user, isSuccess: isUserSuccess } = useGetUserDataQuery()
 
@@ -36,6 +40,24 @@ const SettingsDialog = () => {
     const showInventory = useSelector(selectShowInventory);
     const showPlans = useSelector(selectShowPlans);
     const newActivityGeo = useSelector(selectNewActivityGeo);
+
+    const [geoPosition, setGeoPosition] = React.useState(null);
+
+
+    
+    useEffect(() => {
+        if (showCoords) {
+            getGeoCurrentPosition(setGeoPosition);
+            
+        } 
+    }, [ showCoords])
+    
+    useEffect(() => {
+        if (geoPosition?.coords?.accuracy) {
+            setAccuracy(geoPosition?.coords?.accuracy);
+            
+        } 
+    }, [ geoPosition])
 
     const handleClose = () => {
         dispatch(setOpenSettings(false));
@@ -114,8 +136,17 @@ const SettingsDialog = () => {
                     </Box>
                     <Box margin={1} />
                     {showAgent && <Box>{navigator.userAgent}</Box>}
-
                 </Box>
+
+                {isMobile() &&    <Box marginTop={2} display={'flex'} flexDirection={'row'} >
+                    <Box>
+                        <IconButton sx={{ padding: 0 }} onClick={_ => setShowCoords(!showCoords)} >
+                            <LocationOn />
+                        </IconButton>
+                    </Box>
+                    <Box margin={1} />
+                    {showCoords && accuracy && <Box>{`ACC ${accuracy}`}</Box>}
+                </Box>}
             </DialogContent>
         </Dialog>
     )

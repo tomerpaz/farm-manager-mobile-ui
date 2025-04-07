@@ -567,15 +567,26 @@ export const getExpieryText = (text, type) => {
 
 }
 
+const geoOptions = {
+    enableHighAccuracy: true,
+    timeOut: 5000
+};
+
+export const getGeoCurrentPosition = (setPosition) => {
+
+    if (isMobile() && navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(setPosition, setPosition(-1), geoOptions);
+    }
+    else {
+        setPosition(-2)
+    }
+}
+
 export const getGeoPosition = (setPosition) => {
 
-    const geoOptions = {
-        enableHighAccuracy: true,
-        timeOut: 5000
-    };
+
 
     const geoSucces = (position) => {
-        //console.log('geoSucces', position)
         setPosition([position.coords.latitude, position.coords.longitude])
     }
 
