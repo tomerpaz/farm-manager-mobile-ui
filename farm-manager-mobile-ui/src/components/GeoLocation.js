@@ -10,6 +10,7 @@ const locateOptions = {
   keepCurrentZoomLevel: true,
   enableHighAccuracy: true,
   cacheLocation: false,
+  watch: true,
 }
 const control = new LocateControl(locateOptions)
 let ok = false;
