@@ -1,9 +1,9 @@
 import { AppBar, Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from "@mui/material";
 import { useSelector } from "react-redux";
-import { selectLang } from "../../features/app/appSlice";
-import { Fragment, useState } from "react";
+import { selectActiveGPS, selectLang, selectLatitude, selectLongitude } from "../../features/app/appSlice";
+import { Fragment, useEffect, useState } from "react";
 import { Transition } from "../Util";
-import { BugReport, BugReportOutlined, Delete, Nature, PestControl, Save } from "@mui/icons-material";
+import { Add, BugReport, BugReportOutlined, Delete, GpsFixed, Nature, PestControl, Save } from "@mui/icons-material";
 import { asLocalDateTime, getFillColor, getOpacity, isMobile, isStringEmpty, newDate, SCOUT, stopMapEventPropagation } from "../FarmUtil";
 
 import DialogAppBar from "./DialogAppBar";
@@ -16,11 +16,12 @@ import { safeParseJson } from "../../features/fields/fieldsApiSlice";
 import WaypointDialog from "./WaypointDialog";
 import ActivityTypeIcon from "../../icons/ActivityTypeIcon";
 import PointIcon, { ACTIVITY_POINT_TYPE, SCOUT_POINT_TYPE } from "../layers/PointIcon";
+import Accuracy from "../../appbar/components/Accuracy";
 
 
 
 const getPointType = (activityType) => {
-    if(activityType === SCOUT){
+    if (activityType === SCOUT) {
         return SCOUT_POINT_TYPE;
     } else {
         return ACTIVITY_POINT_TYPE;
@@ -57,7 +58,12 @@ const WaypointSelectionDialog = ({ open, handleClose, fields, waypoints, activit
     const { data: user } = useGetUserDataQuery()
 
 
-    const [center, setCenter] = useState(getMapCenter(fields.map(e => e.field), user));
+    const longitude = useSelector(selectLongitude);
+    const latitude = useSelector(selectLatitude);
+    const activeGPS = useSelector(selectActiveGPS);
+
+
+    const [center, setCenter] = useState(activeGPS && latitude && longitude ? [latitude, longitude] : getMapCenter(fields.map(e => e.field), user));
     const [zoom, setZoom] = useState(getMapZoom(fields.map(e => e.field), user));
     const [map, setSetMap] = useState(0);
 
@@ -70,11 +76,20 @@ const WaypointSelectionDialog = ({ open, handleClose, fields, waypoints, activit
     const [openWaypointDialog, setOpenWaypointDialog] = useState(false);
 
 
+    useEffect(() => {
+        //console.log(activeGPS,longitude, latitude)
+        if (map && activeGPS && longitude && latitude) {
+            map.setView([latitude, longitude], zoom);
+        }
+
+    }, [activeGPS, longitude, latitude])
+
+
     const height = window.innerHeight - 65;
 
     const deleteWaypoint = () => {
         const arr = [...points]
-       
+
         arr.splice(selectedIndex, 1);
         //handleDelete(selectedIndex);
         setSelectedIndex(null);
@@ -127,6 +142,39 @@ const WaypointSelectionDialog = ({ open, handleClose, fields, waypoints, activit
         setPoints([])
     }
 
+    const addNewPoint = () => {
+
+
+        var point = null;
+        var index = null;
+        var lat =  activeGPS? latitude : center[0];
+        var lng =  activeGPS? longitude : center[1];
+        points.forEach((e, i) => {
+
+
+
+            if (e.point.lat === lat && e.point.lng === lng) {
+                point = e;
+                index = i;
+            }
+        })
+
+        if (point === null) {
+            point = {
+                note: '', date: asLocalDateTime(newDate(), true),
+                createTime: asLocalDateTime(newDate(), true), point: { lat, lng, type: getPointType(activityType), active: true }
+            };
+            index = points.length;
+
+            setPoints(points.concat(point));
+
+        }
+
+        setSelectedPoint(point);
+        setOpenWaypointDialog(true);
+        setSelectedIndex(index);
+    }
+
 
     const mapCliecked = (e, element, type, index) => {
         console.log('mapCliecked', type, index)
@@ -136,8 +184,18 @@ const WaypointSelectionDialog = ({ open, handleClose, fields, waypoints, activit
             setOpenWaypointDialog(true);
             setSelectedIndex(index);
         } else {
-            setPoints(points.concat({ note: '', date: asLocalDateTime(newDate(), true),
-                 createTime: asLocalDateTime(newDate(), true), point: { lat: e.latlng.lat.toFixed(5), lng: e.latlng.lng.toFixed(5), type: getPointType(activityType), active: true } }));
+            stopMapEventPropagation(e);
+
+            var i = points.length;
+            var point = {
+                note: '', date: asLocalDateTime(newDate(), true),
+                createTime: asLocalDateTime(newDate(), true), point: { lat: e.latlng.lat.toFixed(5), lng: e.latlng.lng.toFixed(5), type: getPointType(activityType), active: true }
+            };
+
+            setPoints(points.concat(point));
+            setSelectedPoint(point);
+            setOpenWaypointDialog(true);
+            setSelectedIndex(i);
         }
     }
 
@@ -168,7 +226,7 @@ const WaypointSelectionDialog = ({ open, handleClose, fields, waypoints, activit
             TransitionComponent={Transition}
         >
             <DialogAppBar onClose={() => onAction(false)}
-                title={`${text.map}`} />
+                title={<Box display={'flex'} flexDirection={'row'} justifyContent={'space-between'} alignItems={'center'}><Typography variant="h6">{`${text.map}`}</Typography><Box padding={2}><Accuracy /></Box></Box>} />
 
             <DialogTitle id="alert-dialog-title" sx={{ margin: 0, padding: 0 }}>
                 {/* <Box display={'flex'} flexDirection={'row'}>
@@ -191,7 +249,7 @@ const WaypointSelectionDialog = ({ open, handleClose, fields, waypoints, activit
                         >
 
                             <SatelliteMapProvider />
-                            <GeoLocation />
+                            {!activeGPS && <GeoLocation />}
                             {polygons.map(f =>
                                 <Polygon field={f} key={f.id}
                                     color={f.color}
@@ -207,6 +265,7 @@ const WaypointSelectionDialog = ({ open, handleClose, fields, waypoints, activit
                                 </Polygon>
                             )}
 
+                            {activeGPS && latitude && longitude && <CircleMarker color={'white'} fillColor={'blue'} fillOpacity={1} center={[latitude, longitude]} />}
                             {
                                 points.map((e, index, arr) =>
 
@@ -225,7 +284,7 @@ const WaypointSelectionDialog = ({ open, handleClose, fields, waypoints, activit
                                         fillOpacity={1}
                                         center={[e.point.lat, e.point.lng]}
                                     >
-                                        <Tooltip 
+                                        <Tooltip
                                             className={'empty-tooltip'}
                                             direction="center" opacity={1} permanent>
                                             <PointIcon point={e.point} />
@@ -241,6 +300,9 @@ const WaypointSelectionDialog = ({ open, handleClose, fields, waypoints, activit
                 {openWaypointDialog && <WaypointDialog open={openWaypointDialog} selectedPoint={selectedPoint} handleClose={handleCloseWaypointDialog} handleDelete={deleteWaypoint} />}
             </DialogContent>
             <DialogActions sx={{ justifyContent: 'center' }}>
+                <Button size='large' endIcon={activeGPS ? <GpsFixed/> : <Add />} disableElevation={true} variant='outlined' onClick={() => addNewPoint()} autoFocus>
+                    {text.add}
+                </Button>
                 <Button size='large' endIcon={<Delete />} disableElevation={true} variant='outlined' onClick={() => setPoints([])}>{`${text.delete} ${text.all}`}</Button>
 
                 <Button size='large' endIcon={<Save />} disableElevation={true} variant='contained' onClick={() => onAction(true)} autoFocus>

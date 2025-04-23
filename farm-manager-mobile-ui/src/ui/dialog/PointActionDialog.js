@@ -43,6 +43,7 @@ const PointActionDialog = ({ open, handleClose, selectedPoint }) => {
      */
 
     const shareClick = (app) => {
+        console.log('selectedPoint',selectedPoint)
         const msg = shareMsg(selectedPoint.lat, selectedPoint.lng);
         if (app === Whatsapp) {
             msgWhatsapp(msg)

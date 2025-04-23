@@ -2,14 +2,16 @@ import { Close, FilterAlt } from '@mui/icons-material'
 import { AppBar, IconButton, Toolbar } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
-import { DEFAULT_ACTIVITY_STATUS, DEFAULT_PLAN_STATUS, selectActivityFreeTextFilter, selectActivityPlanStatusFilter, selectActivityPlanTypeFilter, selectActivityStatusFilter, selectActivityTypeFilter, selectEndDateFilter, selectStartDateFilter, setActivityFreeTextFilter, setAppBarDialogOpen, setEndDateFilter, setStartDateFilter } from '../../features/app/appSlice'
+import { DEFAULT_ACTIVITY_STATUS, DEFAULT_PLAN_STATUS, selectAccuracy, selectActivityFreeTextFilter, selectActivityPlanStatusFilter, selectActivityPlanTypeFilter, selectActivityStatusFilter, selectActivityTypeFilter, selectEndDateFilter, selectStartDateFilter, setActivityFreeTextFilter, setAppBarDialogOpen, setEndDateFilter, setStartDateFilter } from '../../features/app/appSlice'
 import { isStringEmpty } from '../../ui/FarmUtil'
 import AppBarMenu from '../components/AppBarMenu'
 import AppBarSearch from '../components/AppBarSearch'
+import Accuracy from '../components/Accuracy'
 
 const ActivitiesListBar = ({ plans }) => {
     const dispatch = useDispatch()
     const { pathname } = useLocation();
+    
 
     const { fieldId, src } = useParams()
     const navigate = useNavigate()
@@ -38,6 +40,7 @@ const ActivitiesListBar = ({ plans }) => {
                     <FilterAlt sx={{ color: noFilter ? null : 'blue' }} />
                 </IconButton>
                 <AppBarSearch value={useSelector(selectActivityFreeTextFilter)} onChange={(e) => dispatch(setActivityFreeTextFilter(e))} />
+                <Accuracy/>
                 {!fieldId && <AppBarMenu />}
                {fieldId && <IconButton color="inherit" onClick={() => navigate(`/tabs/${src}`)}>
                     <Close />

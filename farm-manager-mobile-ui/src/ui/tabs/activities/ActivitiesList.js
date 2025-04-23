@@ -11,6 +11,7 @@ import ActivitiesFilter from '../../../components/filters/ActivitiesFilter';
 import { EXECUTED, PLAN, activityDescription, buildActiviyFilter, daysDiffToday, isArrayEmpty, parseDate, parseISOOrNull } from '../../FarmUtil';
 import { EXECUTE_STATUS_COLOR, PLAN_PASSED_STATUS_COLOR, PLAN_STATUS_COLOR, WHITE } from '../../activity/form/header/ActivityHeaderView';
 import { LocationOn } from '@mui/icons-material';
+import { blue } from '@mui/material/colors';
 
 const getColor = (e) => {
     const s = e.status;
@@ -96,7 +97,7 @@ const ActivitiesList = ({ plans }) => {
                                 </Typography>
 
                                 <Typography whiteSpace={'nowrap'}  >
-                                    {!isArrayEmpty(e.points) && <LocationOn color='secondary' fontSize={'small'} />}
+                                    {!isArrayEmpty(e.points) && <LocationOn sx={{color: blue[800]}} fontSize={'small'} />}
                                     {`${e.reference}`}
                                     {e.status && <Box component={'span'} padding={0.5}></Box>}
                                     {e.status && <Box borderRadius={1} backgroundColor={getColor(e)} component={'span'}>{gerStatus(e.status, text)}</Box>}
@@ -104,9 +105,6 @@ const ActivitiesList = ({ plans }) => {
                             </Box>
 
                         } secondary={parseDate(e.execution)}
-
-
-
 
                         />
                     </ListItem>

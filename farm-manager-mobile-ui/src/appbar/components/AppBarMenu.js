@@ -1,9 +1,9 @@
-import { Logout, More, MoreVert, Settings } from '@mui/icons-material';
-import { Box, IconButton, Menu, MenuItem } from '@mui/material'
+import { Logout, More, MoreVert, Settings, GpsFixed } from '@mui/icons-material';
+import { Box, IconButton, Menu, MenuItem, Typography } from '@mui/material'
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { logOut, selectLang, setOpenSettings } from '../../features/app/appSlice';
+import { logOut, selectActiveGPS, selectLang, setActiveGPS, setOpenSettings } from '../../features/app/appSlice';
 import SettingsDialog from '../../ui/settings/SettingsDialog';
 import { useGetUserDataQuery } from '../../features/auth/authApiSlice';
 import LayersDialog from '../../ui/layers/LayersDialog';
@@ -21,6 +21,8 @@ const AppBarMenu = () => {
     const [anchorEl, setAnchorEl] = React.useState(null);
 
     const { data: user, isSuccess } = useGetUserDataQuery()
+    
+    const activeGPS = useSelector(selectActiveGPS);
 
     const handleMenu = (event) => {
         setAnchorEl(event.currentTarget);
@@ -41,6 +43,11 @@ const AppBarMenu = () => {
         setAnchorEl(null);
         dispatch(setOpenSettings(true));
 
+    };
+
+    const handleActiveGPS = () => {
+        setAnchorEl(null);
+        dispatch(setActiveGPS(!activeGPS));
     };
 
     return (
@@ -90,6 +97,16 @@ const AppBarMenu = () => {
                         <Settings />
                     </IconButton>
                     {isSuccess ? user.displayName: text.settings}
+                </MenuItem>
+                <MenuItem  color={activeGPS ? 'primary' : "inherit"} onClick={handleActiveGPS} >
+                    <IconButton
+                        size="large"
+                        aria-label="settings"
+                        color={activeGPS ? 'primary' : "inherit"}
+                    >
+                        <GpsFixed />
+                    </IconButton>
+                    <Typography color={activeGPS ? 'primary' : "inherit"} >{'Active GPS'}</Typography>               
                 </MenuItem>
             </Menu>
             <SettingsDialog/>

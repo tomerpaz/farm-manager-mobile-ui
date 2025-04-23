@@ -1,7 +1,7 @@
 import { Box } from '@mui/material'
 import { useSelector } from 'react-redux'
 import { useParams, useSearchParams } from 'react-router-dom'
-import { selectCurrentYear, selectNewActivityGeo } from '../../../features/app/appSlice'
+import { selectActiveGPS, selectCurrentYear, selectNewActivityGeo } from '../../../features/app/appSlice'
 import ActivityForm from '../form/ActivityForm'
 import { IRRIGARION_TYPES, MARKET, SCOUT, SPRAY, SPRAY_TYPES, asLocalDateTime, firstDayOfThisMonth, getGeoPosition, getLocalitation, getLocation, getWinds, isArrayEmpty, isPointInPoly, lastDayOfThisMonth, newDate, startOfDay, testIsPointInPoly } from '../../FarmUtil'
 import { useGetUserDataQuery } from '../../../features/auth/authApiSlice'
@@ -59,14 +59,14 @@ const NewActivity = () => {
   const [position, setPosition] = useState(0);
 
   const newActivityGeo = useSelector(selectNewActivityGeo);
+  const activeGPS = useSelector(selectActiveGPS);
 
-console.log('newActivityGeo',newActivityGeo)
   //testIsPointInPoly();
 
   const field = useFieldsById(currentYear, Number(fid));
   // console.log('data',data) 
 
-  const isLoadingPosition = (fid === null && position === 0 && newActivityGeo);
+  const isLoadingPosition = (!activeGPS && fid === null && position === 0 && newActivityGeo);
 
   if (isLoadingPosition) {
     getGeoPosition(setPosition)

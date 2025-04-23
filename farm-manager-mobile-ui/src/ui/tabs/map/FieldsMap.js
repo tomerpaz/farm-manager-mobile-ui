@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { Alert, Box, Button, IconButton, Snackbar, Typography } from "@mui/material";
 import { useFields } from "../../../features/fields/fieldsApiSlice";
 import { useGetUserDataQuery } from '../../../features/auth/authApiSlice'
-import { selectActivityType, selectCurrentYear, selectEditLayer, selectFieldBaseFieldFilter, selectFieldFreeTextFilter, selectFieldSiteFilter, selectFieldsViewStatus, selectLang, selectMapCenter, selectMapZoom, selectShowFieldAlias, selectShowFieldName, selectShowLayers, selectShowsPestLayer, setEditLayer, setMapCenter, setMapZoom } from "../../../features/app/appSlice";
+import { selectActiveGPS, selectActivityType, selectCurrentYear, selectEditLayer, selectFieldBaseFieldFilter, selectFieldFreeTextFilter, selectFieldSiteFilter, selectFieldsViewStatus, selectLang, selectLatitude, selectLongitude, selectMapCenter, selectMapZoom, selectShowFieldAlias, selectShowFieldName, selectShowLayers, selectShowsPestLayer, setEditLayer, setMapCenter, setMapZoom } from "../../../features/app/appSlice";
 import { useDispatch, useSelector } from "react-redux";
 import FieldsFilter from "../../../components/filters/FieldsFilter";
 import { asLocalDateTime, buildPointFilter, displayFieldName, filterFields, getFillColor, getOpacity, isArrayEmpty, isStringEmpty, mapDisplayFieldName, MapToolTip, MAX_PER_MAP, parseISOOrNull, SCOUT, stopMapEventPropagation, trap } from "../../FarmUtil";
@@ -17,6 +17,12 @@ import FieldPointDialog from "../../point/FieldPointDialog";
 import PointIcon from "../../layers/PointIcon";
 import PointActionDialog from "../../dialog/PointActionDialog";
 
+
+const sortByEndDate = (fields) => {
+    if (fields !== null) {
+        fields?.sort((a, b) => a.endDate?.localeCompare(b.endDate));
+    }
+}
 
 const FieldsMap = (props) => {
 
@@ -40,6 +46,11 @@ const FieldsMap = (props) => {
     const zoom = useSelector(selectMapZoom);
     const center = useSelector(selectMapCenter);
 
+    const longitude = useSelector(selectLongitude);
+    const latitude = useSelector(selectLatitude);
+    const activeGPS = useSelector(selectActiveGPS);
+
+
     const showFieldAlias = useSelector(selectShowFieldAlias);
     const showFieldName = useSelector(selectShowFieldName);
 
@@ -50,6 +61,8 @@ const FieldsMap = (props) => {
     const displayFields = filterFields(fields, freeText, fieldSiteFilter, fieldBaseFieldFilter, fieldsViewStatus);
 
 
+    sortByEndDate(displayFields);
+
     const { data: points, isLoading: isLoadingPoints, isFetching: isFetchingPoints } = useGetPointsQuery({ types: showLayers }, { skip: isArrayEmpty(showLayers) });
 
     function HandleMapEvents() {
@@ -58,7 +71,7 @@ const FieldsMap = (props) => {
                 dispatch(setMapZoom(m.getZoom()));
             },
             dragend: (e) => {
-                dispatch(setMapCenter([e.target.getCenter().lat,e.target.getCenter().lng]));
+                dispatch(setMapCenter([e.target.getCenter().lat, e.target.getCenter().lng]));
 
             },
             click: (e) => {
@@ -77,7 +90,7 @@ const FieldsMap = (props) => {
             dispatch(setMapCenter([user.lat, user.lng]));
         } else {
             const c = (fields.length === displayFields.length) || isArrayEmpty(displayFields) ? center : [displayFields[0].lat, displayFields[0].lng];
-          dispatch(setMapCenter(c));
+            dispatch(setMapCenter(c));
         }
     }, [freeText, fieldSiteFilter, fieldBaseFieldFilter])
 
@@ -88,6 +101,14 @@ const FieldsMap = (props) => {
         }
 
     }, [center])
+
+
+    useEffect(() => {
+        console.log(activeGPS,longitude, latitude)
+        if (map && activeGPS && longitude && latitude) {
+            map.setView([latitude,longitude], zoom);
+        }
+    }, [activeGPS, longitude, latitude])
 
     const mapCliecked = (e, f, type) => {
         // console.log('mapCliecked', type)
@@ -148,7 +169,7 @@ const FieldsMap = (props) => {
 
     const height = window.innerHeight - 115;
 
-   // console.log(points)
+    // console.log(points)
 
     const getDisplayPoints = () => {
         if (isArrayEmpty(showLayers) || !points || isLoadingPoints || isFetchingPoints) {
@@ -170,9 +191,8 @@ const FieldsMap = (props) => {
                 <MapContainer style={{ height: height, width: '100%' }} center={center} zoom={zoom} scrollWheelZoom={false}
                     ref={setSetMap}
                 >
-
                     <SatelliteMapProvider />
-                    <GeoLocation />
+                   {!activeGPS &&  <GeoLocation />}
                     {displayFields.map((f, index) =>
                         <Polygon field={f} key={f.id}
                             color={f.color}
@@ -184,10 +204,10 @@ const FieldsMap = (props) => {
                                 }
                             }}
                             positions={f.geoPoints}>
-                            {showMapToolTip && index < MAX_PER_MAP &&  <Tooltip
+                            {showMapToolTip && index < MAX_PER_MAP && <Tooltip
                                 className={'empty-tooltip'}
                                 direction="center" opacity={1} permanent>
-                                <MapToolTip textArr={[mapDisplayFieldName(f, showFieldName,showFieldAlias)]} />
+                                <MapToolTip textArr={[mapDisplayFieldName(f, showFieldName, showFieldAlias)]} />
                             </Tooltip>}
                         </Polygon>
                     )}
@@ -234,7 +254,7 @@ const FieldsMap = (props) => {
             />
 
             {/* {selectedPoint && editLayer && <FieldPointDialog open={selectedPoint !== null} deletable={true} defaultValues={{...selectedPoint, expiry : parseISOOrNull(selectedPoint.expiry)}} handleClose={handleCloseEditPoint} />} */}
-            {selectedPoint  && <PointActionDialog open={selectedPoint !== null} deletable={true} selectedPoint={selectedPoint} handleClose={handleCloseEditPoint} />}
+            {selectedPoint && <PointActionDialog open={selectedPoint !== null} deletable={true} selectedPoint={selectedPoint} handleClose={handleCloseEditPoint} />}
 
         </Box>
     )

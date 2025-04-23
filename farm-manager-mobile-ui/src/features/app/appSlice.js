@@ -8,6 +8,7 @@ const lang = localStorage.getItem('lang')
 const showInventory = 'true' === localStorage.getItem('showInventory');
 const showPlans = 'true' === localStorage.getItem('showPlans');
 const newActivityGeo = 'true' === localStorage.getItem('newActivityGeo');
+const activeGPS = 'true' === localStorage.getItem('activeGPS');
 
 const showFieldName = 'true' === localStorage.getItem('showFieldName');
 const showFieldAlias = 'true' === localStorage.getItem('showFieldAlias');
@@ -50,6 +51,10 @@ const appSlice = createSlice({
         showFieldName,
         showFieldAlias,
         newActivityGeo,
+        accuracy: null,
+        longitude: null,
+        latitude: null,
+        activeGPS,
         // showPestsLayer: false,
         // showTrapsLayer: false,
         // showIrrigationHeadsLayer: false,
@@ -170,6 +175,21 @@ const appSlice = createSlice({
             localStorage.setItem('newActivityGeo', action.payload);
             state.newActivityGeo = action.payload;
         },
+
+        setActiveGPS: (state, action) => {
+            localStorage.setItem('activeGPS', action.payload);
+            state.activeGPS = action.payload;
+        },
+
+        setAccuracy: (state, action) => {
+            state.accuracy = action.payload
+        },
+        setLatitude: (state, action) => {
+            state.latitude = action.payload
+        },
+        setLongitude: (state, action) => {
+            state.longitude = action.payload
+        },
     },
 })
 
@@ -177,7 +197,7 @@ export const { setCredentials, logOut, setLang, setCurrentYear, setAppBarDialogO
     setStartDateFilter, setEndDateFilter, setActivityTypeFilter, setFieldSiteFilter, setFieldBaseFieldFilter, setFieldDashboardYear, setFieldsViewStatus,
     setActivityPlanStatusFilter, setActivityPlanTypeFilter, setActivityStatusFilter, setActivityType, setSnackbar, setOpenSettings, setInventoryFreeTextFilter,
     setInventoryDateFilter, setInventoryWarehouseFilter, setShowInventory, setShowPlans, setOpenLayers, setShowLayers, setEditLayer, setMapCenter, setMapZoom,
-    setShowFieldAlias, setShowFieldName, setNewActivityGeo } = appSlice.actions
+    setShowFieldAlias, setShowFieldName, setNewActivityGeo, setAccuracy, setActiveGPS, setLongitude, setLatitude } = appSlice.actions
 
 export default appSlice.reducer
 
@@ -214,3 +234,7 @@ export const selectMapZoom = (state) => state.app.mapZoom
 export const selectShowFieldName = (state) => state.app.showFieldName
 export const selectShowFieldAlias = (state) => state.app.showFieldAlias
 export const selectNewActivityGeo = (state) => state.app.newActivityGeo
+export const selectAccuracy = (state) => state.app.accuracy
+export const selectActiveGPS = (state) => state.app.activeGPS
+export const selectLongitude = (state) => state.app.longitude
+export const selectLatitude = (state) => state.app.latitude

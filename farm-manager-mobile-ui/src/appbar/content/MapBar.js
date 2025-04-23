@@ -1,10 +1,11 @@
 import { FilterAlt, Layers } from '@mui/icons-material'
-import { AppBar, IconButton, Toolbar } from '@mui/material'
+import { AppBar, IconButton, Toolbar, Typography } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
-import { selectCurrentYear, selectFieldBaseFieldFilter, selectFieldFreeTextFilter, selectFieldSiteFilter, selectFieldsViewStatus, setAppBarDialogOpen, setFieldFreeTextFilter, setOpenLayers } from '../../features/app/appSlice'
+import { selectCurrentYear, selectFieldBaseFieldFilter, selectFieldFreeTextFilter, selectFieldSiteFilter, selectFieldsViewStatus, selectNewActivityGeo, selectPosition, setAppBarDialogOpen, setFieldFreeTextFilter, setOpenLayers } from '../../features/app/appSlice'
 import { useGetUserDataQuery } from '../../features/auth/authApiSlice'
 import AppBarMenu from '../components/AppBarMenu'
 import AppBarSearch from '../components/AppBarSearch'
+import Accuracy from '../components/Accuracy'
 
 const MapBar = () => {
 
@@ -17,8 +18,10 @@ const MapBar = () => {
     const currentYear = useSelector(selectCurrentYear)
     const { data: user } = useGetUserDataQuery()
 
+   // const position = useSelector(selectPosition)
     const noFilter = fieldSiteFilter === 0 && fieldBaseFieldFilter === 0 && user && user.year === currentYear && user.fieldsViewStatus === fieldsViewStatus;
 
+    // console.log('position',position)
     return (
         <AppBar position="static" elevation={0}>
             <Toolbar>
@@ -40,10 +43,12 @@ const MapBar = () => {
                     onClick={() => dispatch(setOpenLayers(true))}
                     sx={{ mr: 1 }}
                 >
-                    <Layers 
+                    <Layers
                     />
                 </IconButton>
                 <AppBarSearch value={useSelector(selectFieldFreeTextFilter)} onChange={(e) => dispatch(setFieldFreeTextFilter(e))} />
+                <Accuracy/>
+                {/* {position && position > 0 && <Typography>{`${position.toFixed(1)}m`}</Typography>} */}
                 <AppBarMenu />
             </Toolbar>
         </AppBar>

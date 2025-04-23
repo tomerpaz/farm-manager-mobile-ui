@@ -1,10 +1,11 @@
-import { FilterAlt,  MoreVert } from '@mui/icons-material'
+import { FilterAlt, MoreVert } from '@mui/icons-material'
 import { AppBar, IconButton, Toolbar } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
 import { selectCurrentYear, selectFieldBaseFieldFilter, selectFieldFreeTextFilter, selectFieldSiteFilter, selectFieldsViewStatus, setAppBarDialogOpen, setFieldFreeTextFilter } from '../../features/app/appSlice'
 import { useGetUserDataQuery } from '../../features/auth/authApiSlice'
 import AppBarMenu from '../components/AppBarMenu'
 import AppBarSearch from '../components/AppBarSearch'
+import Accuracy from '../components/Accuracy'
 
 const FieldsBar = () => {
     const dispatch = useDispatch()
@@ -15,7 +16,7 @@ const FieldsBar = () => {
     const fieldsViewStatus = useSelector(selectFieldsViewStatus)
     const { data: user } = useGetUserDataQuery()
 
-    const noFilter = fieldSiteFilter === 0 && fieldBaseFieldFilter === 0  && user && user.year === currentYear && user.fieldsViewStatus === fieldsViewStatus;;
+    const noFilter = fieldSiteFilter === 0 && fieldBaseFieldFilter === 0 && user && user.year === currentYear && user.fieldsViewStatus === fieldsViewStatus;;
 
     return (
         <AppBar position="static" elevation={0}>
@@ -25,12 +26,13 @@ const FieldsBar = () => {
                     edge="start"
                     color="inherit"
                     aria-label="open drawer"
-                    onClick={() =>  dispatch(setAppBarDialogOpen(true))}
+                    onClick={() => dispatch(setAppBarDialogOpen(true))}
                     sx={{ mr: 1 }}
                 >
-                    <FilterAlt sx={{color: noFilter ? null : 'blue'}}/>
+                    <FilterAlt sx={{ color: noFilter ? null : 'blue' }} />
                 </IconButton>
                 <AppBarSearch value={useSelector(selectFieldFreeTextFilter)} onChange={(e) => dispatch(setFieldFreeTextFilter(e))} />
+                <Accuracy />
                 <AppBarMenu />
             </Toolbar>
         </AppBar>
