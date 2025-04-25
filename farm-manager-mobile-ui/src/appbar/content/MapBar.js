@@ -18,10 +18,8 @@ const MapBar = () => {
     const currentYear = useSelector(selectCurrentYear)
     const { data: user } = useGetUserDataQuery()
 
-   // const position = useSelector(selectPosition)
     const noFilter = fieldSiteFilter === 0 && fieldBaseFieldFilter === 0 && user && user.year === currentYear && user.fieldsViewStatus === fieldsViewStatus;
 
-    // console.log('position',position)
     return (
         <AppBar position="static" elevation={0}>
             <Toolbar>

@@ -30,8 +30,6 @@ function Accuracy() {
     }
   
     useEffect(() => {
-        console.log('positionCallCount',positionCallCount)
-
       if (activeGPS) {
         setTimeout(getNewPosition, 500)
       }

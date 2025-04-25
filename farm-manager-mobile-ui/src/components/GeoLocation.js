@@ -28,15 +28,11 @@ const GeoLocation = () => {
   // }
   // Access the map context with the useMap hook
   const map = useMap()
-  //  map.on('locationfound', function (evt) {
-  //control.start();
+
   map.on('locationfound', function (evt) {
     var LatLng = evt.latlng;
     var longitude = LatLng.lng;
     var latitude = LatLng.lat;
-    // var altitud= evt.altitude;	
-    // var currentPos = [latitud, longitud];
-    // console.log(currentPos);
     map.setView([latitude, longitude]);
 
   });

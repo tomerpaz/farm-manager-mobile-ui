@@ -153,6 +153,13 @@ const ActivityResources = ({ activity, control, errors, register, tariffs, activ
     const handleClickOpen = () => {
         setOpen(true);
     };
+
+
+    const getResourceDefaultQty = (e) => {
+        return e?.usageUnit.toLowerCase() === AREA_UNIT ? activityArea : 0;
+
+    }
+
     const handleClose = (selectedResources) => {
         setOpen(false);
         if (selectedResources) {
@@ -161,7 +168,7 @@ const ActivityResources = ({ activity, control, errors, register, tariffs, activ
                 const r = e.resource ? e.resource : e;
                 const pesticideListItem = e.pestId ? e : null;
                 const qty = pesticideListItem ? calacTotalPesticideVolume(
-                    pesticideListItem.unit, pesticideListItem.dosage, sprayParams.volumePerAreaUnit, activityArea) : 0;
+                    pesticideListItem.unit, pesticideListItem.dosage, sprayParams.volumePerAreaUnit, activityArea) : getResourceDefaultQty(r);
                 return {
                     resource: r,
                     qty,
