@@ -99,7 +99,23 @@ export function getActivityStatuses(role, isPlan) {
 }
 
 export const activityDescription = (e, text) => {
-    return e.activityDef ? e.activityDef.name : text[e.type.toLowerCase()];
+    if(!e){
+        return '';
+    }
+    return e?.activityDef ? e.activityDef?.name : text[e.type.toLowerCase()];
+}
+
+export const activityLongText = (e, text) => {
+    if(!e){
+        return '';
+    }
+    if(e.type === SCOUT){
+        return e.scoutParams?.scouts?.map(s=>s.finding.name).join(", ")
+    } else {
+        return e.note
+    }
+  //  return 'e'
+    // return e.activityDef ? e.activityDef.name : text[e.type.toLowerCase()];
 }
 
 export const maxLenghtStr = (str, maxLenght) => {
@@ -416,7 +432,8 @@ export function filterFields(fields, freeText, fieldSiteFilter, fieldBaseFieldFi
     return result;
 }
 
-export const buildActiviyFilter = (start, end, activityType, freeText, status) => {
+export const buildActiviyFilter = (start, end, activityType, freeText, status, activitySiteFilter,
+    activityBaseFieldFilter,  activityParentFieldFilter) => {
     const filter = [];
     if (!isStringEmpty(start)) {
         filter.push(`start_${start.replaceAll('-', '')}`)
@@ -432,6 +449,15 @@ export const buildActiviyFilter = (start, end, activityType, freeText, status) =
     }
     if (!isStringEmpty(status)) {
         filter.push(`status_${status}`)
+    }
+    if (!isStringEmpty(activitySiteFilter)) {
+        filter.push(`site_${activitySiteFilter}`)
+    }
+    if (!isStringEmpty(activityBaseFieldFilter)) {
+        filter.push(`field_${activityBaseFieldFilter}`)
+    }
+    if (!isStringEmpty(activityParentFieldFilter)) {
+        filter.push(`parentField_${activityParentFieldFilter}`)
     }
     return filter;
 }

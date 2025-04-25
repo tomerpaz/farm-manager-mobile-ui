@@ -2,7 +2,7 @@ import { Close, FilterAlt } from '@mui/icons-material'
 import { AppBar, IconButton, Toolbar } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
-import { DEFAULT_ACTIVITY_STATUS, DEFAULT_PLAN_STATUS, selectAccuracy, selectActivityFreeTextFilter, selectActivityPlanStatusFilter, selectActivityPlanTypeFilter, selectActivityStatusFilter, selectActivityTypeFilter, selectEndDateFilter, selectStartDateFilter, setActivityFreeTextFilter, setAppBarDialogOpen, setEndDateFilter, setStartDateFilter } from '../../features/app/appSlice'
+import { DEFAULT_ACTIVITY_STATUS, DEFAULT_PLAN_STATUS, selectAccuracy, selectActivityBaseFieldFilter, selectActivityFreeTextFilter, selectActivityParentFieldFilter, selectActivityPlanStatusFilter, selectActivityPlanTypeFilter, selectActivitySiteFilter, selectActivityStatusFilter, selectActivityTypeFilter, selectEndDateFilter, selectStartDateFilter, setActivityFreeTextFilter, setAppBarDialogOpen, setEndDateFilter, setStartDateFilter } from '../../features/app/appSlice'
 import { isStringEmpty } from '../../ui/FarmUtil'
 import AppBarMenu from '../components/AppBarMenu'
 import AppBarSearch from '../components/AppBarSearch'
@@ -22,9 +22,15 @@ const ActivitiesListBar = ({ plans }) => {
     const typeFilter = useSelector(isPlan ? selectActivityPlanTypeFilter : selectActivityTypeFilter);
     const statusFilter = useSelector(isPlan ? selectActivityPlanStatusFilter : selectActivityStatusFilter);
 
+    const activitySiteFilter = useSelector(selectActivitySiteFilter);
+    const activityBaseFieldFilter = useSelector(selectActivityBaseFieldFilter);
+    const activityParentFieldFilter = useSelector(selectActivityParentFieldFilter)
+
+
     const isDefault = isPlan ? statusFilter === DEFAULT_PLAN_STATUS : statusFilter === DEFAULT_ACTIVITY_STATUS;
 
-    const noFilter = isStringEmpty(startDateFilter) && isStringEmpty(endDateFilter) && isStringEmpty(typeFilter) && isDefault;
+    const noFilter = isStringEmpty(startDateFilter) && isStringEmpty(endDateFilter) && isStringEmpty(typeFilter) && 
+    isStringEmpty(activitySiteFilter) && isStringEmpty(activityBaseFieldFilter) && isStringEmpty(activityParentFieldFilter) && isDefault;
 
     return (
         <AppBar position="static" elevation={0}>

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { AppBar, Box, Dialog, Divider, IconButton, InputAdornment, List, ListItem, ListItemText, MenuItem, Slide, TextField, Toolbar, Typography } from '@mui/material'
-import { DEFAULT_ACTIVITY_STATUS, DEFAULT_PLAN_STATUS, selectActivityPlanStatusFilter, selectActivityPlanTypeFilter, selectActivityStatusFilter, selectActivityTypeFilter, selectAppBarDialogOpen, selectEndDateFilter, selectLang, selectStartDateFilter, setActivityPlanStatusFilter, setActivityPlanTypeFilter, setActivityStatusFilter, setActivityTypeFilter, setAppBarDialogOpen, setEndDateFilter, setStartDateFilter } from '../../features/app/appSlice';
+import { DEFAULT_ACTIVITY_STATUS, DEFAULT_PLAN_STATUS, selectActivityBaseFieldFilter, selectActivityPlanStatusFilter, selectActivityPlanTypeFilter, selectActivitySiteFilter, selectActivityStatusFilter, selectActivityTypeFilter, selectAppBarDialogOpen, selectCurrentYear, selectEndDateFilter, selectLang, selectActivityParentFieldFilter, selectStartDateFilter, setActivityBaseFieldFilter, setActivityParentFieldFilter, setActivityPlanStatusFilter, setActivityPlanTypeFilter, setActivitySiteFilter, setActivityStatusFilter, setActivityTypeFilter, setAppBarDialogOpen, setEndDateFilter, setStartDateFilter } from '../../features/app/appSlice';
 import DoneIcon from '@mui/icons-material/Done';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useParams } from 'react-router-dom';
@@ -8,6 +8,7 @@ import { MobileDatePicker } from '@mui/x-date-pickers';
 import { asLocalDate, getActivityStatuses, getActivityStatusText, getActivityTypes, getActivityTypeText, isMobile, isStringEmpty, parseISOOrNull, PLAN } from '../../ui/FarmUtil';
 import { FilterAltOff } from '@mui/icons-material';
 import { Transition } from '../../ui/Util';
+import { useFields } from '../../features/fields/fieldsApiSlice';
 
 
 const ActivitiesFilter = () => {
@@ -15,12 +16,17 @@ const ActivitiesFilter = () => {
     const dispatch = useDispatch()
     const { pathname } = useLocation();
 
+    const year = useSelector(selectCurrentYear);
+    const fields = useFields(year)
+
     const isPlan = pathname.includes('plans');
     const typeFilter = useSelector(isPlan ? selectActivityPlanTypeFilter : selectActivityTypeFilter);
 
     const statusFilter = useSelector(isPlan ? selectActivityPlanStatusFilter : selectActivityStatusFilter);
 
-
+    const activitySiteFilter = useSelector(selectActivitySiteFilter)
+    const activityBaseFieldFilter = useSelector(selectActivityBaseFieldFilter)
+    const activityParentFieldFilter = useSelector(selectActivityParentFieldFilter)
 
     const role = null;
 
@@ -37,11 +43,20 @@ const ActivitiesFilter = () => {
     const startDateFilter = useSelector(selectStartDateFilter);
     const endDateFilter = useSelector(selectEndDateFilter);
 
-    const noFilter = isStringEmpty(startDateFilter) && isStringEmpty(endDateFilter) && isStringEmpty(typeFilter) && isDefault;
+    const noFilter = isStringEmpty(startDateFilter) && isStringEmpty(endDateFilter) && isStringEmpty(typeFilter) && isStringEmpty(activitySiteFilter) && isStringEmpty(activityBaseFieldFilter) && isStringEmpty(activityParentFieldFilter) && isDefault;
+
+
+    const sites = [...new Map(fields.map(item => [item['siteId'], { name: item.siteName, id: item.siteId }])).values()];
+    const baseFields = [...new Map(fields.map(item => [item['baseFieldId'], { name: item.name, id: item.baseFieldId }])).values()];
+    const parentFields = [...new Map(fields.filter(e => e.parentFieldId !== null).map(item => [item['parentFieldId'], { name: item.name, id: item.parentFieldId }])).values()];
 
     const clearFilters = () => {
         dispatch(setStartDateFilter(null));
         dispatch(setEndDateFilter(null));
+        dispatch(setActivityBaseFieldFilter(''))
+        dispatch(setActivitySiteFilter(''))
+        dispatch(setActivityParentFieldFilter(''))
+
         if (isPlan) {
             dispatch(setActivityPlanTypeFilter(''))
             dispatch(setActivityPlanStatusFilter(DEFAULT_PLAN_STATUS))
@@ -193,11 +208,72 @@ const ActivitiesFilter = () => {
                             </TextField>
                         }
                     </ListItem>
-
-
                 </Box>
-
                 <Divider />
+                <ListItem >
+                    <TextField
+                        id="outlined-select-site"
+                        select
+                        fullWidth
+                        size='small'
+                        label={text.site}
+                        value={activitySiteFilter}
+                        onChange={e => dispatch(setActivitySiteFilter(Number(e.target.value)))}
+                    >
+                        <MenuItem value={0}>
+                            <em></em>
+                        </MenuItem>
+                        {sites.map((option) => (
+                            <MenuItem key={option.id} value={option.id}>
+                                {option.name}
+                            </MenuItem>
+                        ))}
+                    </TextField>
+                </ListItem>
+                <Divider />
+                <ListItem button>
+                    <TextField
+                        id="outlined-select-basefield"
+                        select
+                        fullWidth
+                        size='small'
+                        label={text.field}
+                        value={activityBaseFieldFilter}
+                        onChange={e => dispatch(setActivityBaseFieldFilter(Number(e.target.value)))}
+                    >
+                        <MenuItem value={0}>
+                            <em></em>
+                        </MenuItem>
+                        {baseFields.map((option) => (
+                            <MenuItem key={option.id} value={option.id}>
+                                {option.name}
+                            </MenuItem>
+                        ))}
+                    </TextField>
+                </ListItem>
+                <Divider />
+                <ListItem button>
+                        <TextField
+                            id="outlined-select-parentField"
+                            select
+                            fullWidth
+                            size='small'
+                            label={text.parentField}
+                            value={activityParentFieldFilter}
+                            onChange={e => dispatch(setActivityParentFieldFilter(Number(e.target.value)))}
+                        >
+                            <MenuItem value={0}>
+                                <em></em>
+                            </MenuItem>
+                            {parentFields.map((option) => (
+                                <MenuItem key={option.id} value={option.id}>
+                                    {option.name}
+                                </MenuItem>
+                            ))}
+                        </TextField>
+                    </ListItem>
+                    <Divider />
+
                 {/* <ListItem button>
                     <ListItemText
                         primary="Default notification ringtone"

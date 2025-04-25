@@ -33,7 +33,7 @@ function Accuracy() {
         console.log('positionCallCount',positionCallCount)
 
       if (activeGPS) {
-        setTimeout(getNewPosition, 3000)
+        setTimeout(getNewPosition, 500)
       }
     }, [positionCallCount,activeGPS])
   

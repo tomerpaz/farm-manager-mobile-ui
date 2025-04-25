@@ -23,7 +23,8 @@ const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const scout = 'scout'
+export const SCOUT = 'scout'
+export const ACTIVITY = 'activity'
 const irrigationHead = 'irrigationHead'
 const trap = 'trap'
 //const irrigationHeads = 'irrigationHeads'
@@ -95,10 +96,13 @@ const LayersDialog = () => {
             <DialogContent>
 
                 <Box marginTop={1} display={'flex'} flexDirection={'row'} >
-                    <FormControlLabel control={<Checkbox checked={showLayers.includes(scout)} onChange={() => handleChange(scout)} />} label={text.scouting} />
+                    <FormControlLabel control={<Checkbox checked={showLayers.includes(SCOUT)} onChange={() => handleChange(SCOUT)} />} label={text.scouting} />
                 </Box>
                 <Divider />
-
+                <Box marginTop={1} display={'flex'} flexDirection={'row'} >
+                    <FormControlLabel control={<Checkbox checked={showLayers.includes(ACTIVITY)} onChange={() => handleChange(ACTIVITY)} />} label={text.activities} />
+                </Box>
+                <Divider />
                 <Box marginTop={1} marginBottom={1} display={'flex'} flexDirection={'row'} justifyContent={'space-between'} >
                     <FormControlLabel control={<Checkbox checked={showLayers.includes(trap)} onChange={() => handleChange(trap)} />} label={text.traps} />
                     {/* <IconButton onClick={() => handleEditLayer(trap)}><EditLocationAlt /></IconButton> */}
@@ -113,11 +117,8 @@ const LayersDialog = () => {
                     <Button disableElevation variant='outlined' color='secondary' onClick={() => addPoint(irrigationHead)} startIcon={<Opacity  />}>{text.add}</Button>
 
                 </Box>
-
                 <Box marginTop={1}></Box>
                 <Divider />
-
-
                 <Box marginTop={1} display={'flex'} flexDirection={'row'} justifyContent={'space-between'} >
                     <FormControlLabel control={<Checkbox checked={showFieldName} onChange={() => dispatch(setShowFieldName(!showFieldName))} />} label={text.field} />
                 </Box>

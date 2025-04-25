@@ -4,6 +4,7 @@ import { irrigationHead, parseISOOrNull, trap } from '../FarmUtil';
 import { Avatar } from '@mui/material';
 import { SECONDARY_MAIN } from '../../App';
 import Scout from '@mui/icons-material/PestControl';
+import { ACTIVITY, SCOUT } from './LayersDialog';
 
 
 const height = 32;
@@ -34,8 +35,8 @@ const getBorderWidth = (point) => {
     return 3;
 }
 
-export const SCOUT_POINT_TYPE = 'scout';
-export const ACTIVITY_POINT_TYPE = 'activity';
+export const SCOUT_POINT_TYPE = "scout";
+export const ACTIVITY_POINT_TYPE = "activity";
 
 const getBgColor = (point, color) => {
     if (color) {

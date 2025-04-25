@@ -17,6 +17,7 @@ import WaypointDialog from "./WaypointDialog";
 import ActivityTypeIcon from "../../icons/ActivityTypeIcon";
 import PointIcon, { ACTIVITY_POINT_TYPE, SCOUT_POINT_TYPE } from "../layers/PointIcon";
 import Accuracy from "../../appbar/components/Accuracy";
+import { calacTotalPesticideVolume } from "../FarmCalculator";
 
 
 
@@ -104,7 +105,7 @@ const WaypointSelectionDialog = ({ open, handleClose, fields, waypoints, activit
                 setZoom(m.getZoom())
             },
             dragend: (e) => {
-                setCenter(e.target.getCenter())
+                setCenter([e.target.getCenter().lat.toFixed(5),e.target.getCenter().lng.toFixed(5)])
             },
             click: (e) => {
                 mapCliecked(e, null, 'map');
@@ -144,14 +145,11 @@ const WaypointSelectionDialog = ({ open, handleClose, fields, waypoints, activit
 
     const addNewPoint = () => {
 
-
         var point = null;
         var index = null;
         var lat =  activeGPS? latitude : center[0];
         var lng =  activeGPS? longitude : center[1];
         points.forEach((e, i) => {
-
-
 
             if (e.point.lat === lat && e.point.lng === lng) {
                 point = e;
@@ -160,19 +158,15 @@ const WaypointSelectionDialog = ({ open, handleClose, fields, waypoints, activit
         })
 
         if (point === null) {
+            var i = points.length +1;
             point = {
-                note: '', date: asLocalDateTime(newDate(), true),
+                note: `${i}`, date: asLocalDateTime(newDate(), true),
                 createTime: asLocalDateTime(newDate(), true), point: { lat, lng, type: getPointType(activityType), active: true }
             };
-            index = points.length;
-
-            setPoints(points.concat(point));
-
         }
-
         setSelectedPoint(point);
         setOpenWaypointDialog(true);
-        setSelectedIndex(index);
+      //  setSelectedIndex(index);
     }
 
 
@@ -183,23 +177,23 @@ const WaypointSelectionDialog = ({ open, handleClose, fields, waypoints, activit
             setSelectedPoint(element);
             setOpenWaypointDialog(true);
             setSelectedIndex(index);
-        } else {
+        } 
+        else if(!activeGPS){
             stopMapEventPropagation(e);
 
-            var i = points.length;
+            var i = points.length+1;
             var point = {
-                note: '', date: asLocalDateTime(newDate(), true),
+                note: `${i}`, date: asLocalDateTime(newDate(), true),
                 createTime: asLocalDateTime(newDate(), true), point: { lat: e.latlng.lat.toFixed(5), lng: e.latlng.lng.toFixed(5), type: getPointType(activityType), active: true }
             };
 
-            setPoints(points.concat(point));
+          //  setPoints(points.concat(point));
             setSelectedPoint(point);
             setOpenWaypointDialog(true);
-            setSelectedIndex(i);
+          //  setSelectedIndex(i);
         }
     }
 
-    //const visableFields = pestst.filter(e => filterField(e, filter, cropId, active));
 
     const displayFields = fields.map(e => e.field);
 
@@ -207,9 +201,13 @@ const WaypointSelectionDialog = ({ open, handleClose, fields, waypoints, activit
 
 
     const handleCloseWaypointDialog = (val) => {
-
+       // console.log('val',val)
+        if(val && selectedIndex === null){
+            setPoints(points.concat(selectedPoint));
+        }
         setOpenWaypointDialog(false);
         setSelectedPoint(null);
+        setSelectedIndex(null);
     }
 
     // const customMarkerIcon = divIcon({
@@ -264,6 +262,8 @@ const WaypointSelectionDialog = ({ open, handleClose, fields, waypoints, activit
                                     positions={safeParseJson(f.polygon)}>
                                 </Polygon>
                             )}
+
+{/* {!activeGPS  && <CircleMarker color={'black'} fillColor={'yellow'} fillOpacity={1} center={[center[0], center[1]]} />} */}
 
                             {activeGPS && latitude && longitude && <CircleMarker color={'white'} fillColor={'blue'} fillOpacity={1} center={[latitude, longitude]} />}
                             {

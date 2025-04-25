@@ -1,8 +1,8 @@
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, List, ListItem, ListItemButton, ListItemIcon, ListItemText, MenuItem, TextField, Typography } from "@mui/material";
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, List, ListItem, ListItemAvatar, ListItemButton, ListItemIcon, ListItemText, MenuItem, TextField, Typography } from "@mui/material";
 import TextFieldBase from "../../components/ui/TextField";
 import { Edit, Share, PestControl as Scout, History, EditLocation } from "@mui/icons-material";
 import { Fragment, useEffect, useState } from "react";
-import { AREA_UNIT, asShortStringDateTime, getUnitText, parseISOOrNull, SCOUT, trap } from "../FarmUtil";
+import { activityDescription, activityLongText, AREA_UNIT, asShortStringDateTime, getUnitText, parseDate, parseISOOrNull, SCOUT, trap } from "../FarmUtil";
 import DialogAppBar from "./DialogAppBar";
 import { selectLang, setActivityType } from "../../features/app/appSlice";
 import { useDispatch, useSelector } from "react-redux";
@@ -11,6 +11,8 @@ import TelegramIcon from '@mui/icons-material/Telegram';
 import { msgTelegram, msgWhatsapp, shareMsg, Telegram, Whatsapp } from "../../appbar/components/ShareLocationMenu";
 import { createSearchParams, useNavigate } from "react-router-dom";
 import PointForm from "../point/PointForm";
+import PointIcon, { ACTIVITY_POINT_TYPE, SCOUT_POINT_TYPE } from "../layers/PointIcon";
+import ActivityTypeIcon from "../../icons/ActivityTypeIcon";
 
 const PointActionDialog = ({ open, handleClose, selectedPoint }) => {
 
@@ -43,7 +45,7 @@ const PointActionDialog = ({ open, handleClose, selectedPoint }) => {
      */
 
     const shareClick = (app) => {
-        console.log('selectedPoint',selectedPoint)
+        console.log('selectedPoint', selectedPoint)
         const msg = shareMsg(selectedPoint.lat, selectedPoint.lng);
         if (app === Whatsapp) {
             msgWhatsapp(msg)
@@ -60,9 +62,10 @@ const PointActionDialog = ({ open, handleClose, selectedPoint }) => {
 
     const onPointFormClose = () => {
         onAction();
-       // setEditPoint(null)
+        // setEditPoint(null)
     }
 
+    console.log(selectedPoint)
     //   const { data: user } = useGetUserDataQuery()
     //   const actionTypes = user.userConf.filter(e => e.write).map(e => e.type);
     const newActivity = (type, pointId, fieldId) => {
@@ -84,10 +87,13 @@ const PointActionDialog = ({ open, handleClose, selectedPoint }) => {
     const newPoint = () => {
         setEditPoint({ ...selectedPoint, expiry: parseISOOrNull(selectedPoint.expiry) })
         //handleClose();
-        
-    }
-   // console.log('editPoint',editPoint)
 
+    }
+
+
+    const activityBased = [SCOUT_POINT_TYPE, ACTIVITY_POINT_TYPE].includes(selectedPoint?.type);
+
+    const title = activityBased ? activityDescription(selectedPoint.activity, text) : selectedPoint.name;
     return (
         <Dialog
             open={open}
@@ -96,7 +102,7 @@ const PointActionDialog = ({ open, handleClose, selectedPoint }) => {
             fullWidth
         >
             <DialogAppBar onClose={() => onAction(false)}
-                title={selectedPoint.name}
+                title={title}
             />
             <DialogContent sx={{ padding: 0, margin: 0 }}>
                 <List dense>
@@ -127,12 +133,23 @@ const PointActionDialog = ({ open, handleClose, selectedPoint }) => {
                         <ListItemText primary={text.share} secondary={Telegram} />
                     </ListItemButton>
                     <Divider />
-                    <ListItemButton onClick={() => newPoint()}>
+                    {!activityBased && <ListItemButton onClick={() => newPoint()}>
                         <ListItemIcon>
                             <EditLocation />
                         </ListItemIcon>
                         <ListItemText primary={text.edit} secondary={selectedPoint.name} />
-                    </ListItemButton>
+                    </ListItemButton>}
+                    {activityBased &&
+                        <ListItem alignItems="flex-start">
+                            <ListItemAvatar>
+                                <ActivityTypeIcon type={selectedPoint?.activity?.type} />
+                            </ListItemAvatar>
+                            <ListItemText
+                                primary={parseDate(selectedPoint?.activity?.execution)}
+                                secondary={activityLongText(selectedPoint.activity)}/>
+                        </ListItem>
+
+                    }
 
 
 

@@ -25,9 +25,9 @@ const WaypointDialog = ({ open, handleClose, selectedPoint, handleDelete }) => {
         if (val) {
             selectedPoint.note = note;
         }
-        handleClose();
+        handleClose(val);
         setTouched(false);
-        setNote('');
+        // setNote('');
     }
 
     return (
@@ -55,7 +55,7 @@ const WaypointDialog = ({ open, handleClose, selectedPoint, handleDelete }) => {
             </DialogContent>
             <DialogActions sx={{ justifyContent: 'center' }}>
                 <Button size='large' endIcon={<Delete />} disableElevation={true} variant='outlined' onClick={handleDelete}>{text.delete}</Button>
-                <Button disabled={!touched} size='large' endIcon={<Save />} disableElevation={true} variant='contained' onClick={() => onAction(true)} >
+                <Button /*disabled={!touched}*/ size='large' endIcon={<Save />} disableElevation={true} variant='contained' onClick={() => onAction(true)} >
                     {text.save}
                 </Button>
             </DialogActions>

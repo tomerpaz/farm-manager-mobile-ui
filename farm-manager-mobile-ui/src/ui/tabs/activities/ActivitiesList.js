@@ -2,7 +2,7 @@ import React, { Fragment, useEffect } from 'react'
 import { Avatar, List, ListItem, ListItemText, ListItemAvatar, Box, Button, Typography, Divider } from '@mui/material';
 import { useSelector } from 'react-redux';
 import { useGetActivitiesFlatQuery } from '../../../features/activities/activitiesApiSlice';
-import { selectActivityFreeTextFilter, selectActivityPlanStatusFilter, selectActivityPlanTypeFilter, selectActivityStatusFilter, selectActivityTypeFilter, selectEndDateFilter, selectLang, selectStartDateFilter } from '../../../features/app/appSlice';
+import { selectActivityBaseFieldFilter, selectActivityFreeTextFilter, selectActivityParentFieldFilter, selectActivityPlanStatusFilter, selectActivityPlanTypeFilter, selectActivitySiteFilter, selectActivityStatusFilter, selectActivityTypeFilter, selectEndDateFilter, selectLang, selectStartDateFilter } from '../../../features/app/appSlice';
 import ListPager from '../../../components/ui/ListPager';
 import Loading from '../../../components/Loading';
 import ActivityTypeIcon from '../../../icons/ActivityTypeIcon';
@@ -52,7 +52,14 @@ const ActivitiesList = ({ plans }) => {
     const status = useSelector(isPlan ? selectActivityPlanStatusFilter : selectActivityStatusFilter);
 
     const activityFreeTextFilter = useSelector(selectActivityFreeTextFilter);
-    const filter = buildActiviyFilter(startDateFilter, endDateFilter, typeFilter, activityFreeTextFilter, status);
+
+    const activitySiteFilter = useSelector(selectActivitySiteFilter)
+    const activityBaseFieldFilter = useSelector(selectActivityBaseFieldFilter)
+    const activityParentFieldFilter = useSelector(selectActivityParentFieldFilter)
+
+
+    const filter = buildActiviyFilter(startDateFilter, endDateFilter, typeFilter, activityFreeTextFilter, status, activitySiteFilter,
+        activityBaseFieldFilter,  activityParentFieldFilter);
 
     // useEffect(() => {
     //     if (page !== 0) {
@@ -82,7 +89,7 @@ const ActivitiesList = ({ plans }) => {
             const activities = data.content;
             return activities.map(e =>
                 <Fragment key={e.uuid}>
-                    <ListItem sx={{backgroundColor: getColor(e)}} onClick={() => navigate(`/activity/al/${e.uuid}`)}
+                    <ListItem sx={{ backgroundColor: getColor(e) }} onClick={() => navigate(`/activity/al/${e.uuid}`)}
 
                     >
                         <ListItemAvatar>
@@ -97,7 +104,7 @@ const ActivitiesList = ({ plans }) => {
                                 </Typography>
 
                                 <Typography whiteSpace={'nowrap'}  >
-                                    {!isArrayEmpty(e.points) && <LocationOn sx={{color: blue[800]}} fontSize={'small'} />}
+                                    {!isArrayEmpty(e.points) && <LocationOn sx={{ color: blue[800] }} fontSize={'small'} />}
                                     {`${e.reference}`}
                                     {e.status && <Box component={'span'} padding={0.5}></Box>}
                                     {e.status && <Box borderRadius={1} backgroundColor={getColor(e)} component={'span'}>{gerStatus(e.status, text)}</Box>}

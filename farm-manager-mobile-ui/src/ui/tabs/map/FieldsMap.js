@@ -193,6 +193,8 @@ const FieldsMap = (props) => {
                 >
                     <SatelliteMapProvider />
                    {!activeGPS &&  <GeoLocation />}
+                   {activeGPS && latitude && longitude && <CircleMarker color={'white'} fillColor={'blue'} fillOpacity={1} center={[latitude, longitude]} />}
+
                     {displayFields.map((f, index) =>
                         <Polygon field={f} key={f.id}
                             color={f.color}

@@ -27,6 +27,9 @@ const appSlice = createSlice({
         startDateFilter: null,
         endDateFilter: null,
         activityTypeFilter: '',
+        activitySiteFilter: '',
+        activityBaseFieldFilter: '',
+        activityParentFieldFilter: '',
         activityPlanTypeFilter: '',
         fieldSiteFilter: 0,
         fieldBaseFieldFilter: 0,
@@ -102,6 +105,12 @@ const appSlice = createSlice({
             state.endDateFilter = action.payload
         }, setActivityTypeFilter: (state, action) => {
             state.activityTypeFilter = action.payload
+        }, setActivitySiteFilter: (state, action) => {
+            state.activitySiteFilter = action.payload
+        }, setActivityBaseFieldFilter: (state, action) => {
+            state.activityBaseFieldFilter = action.payload
+        }, setActivityParentFieldFilter: (state, action) => {
+            state.activityParentFieldFilter = action.payload
         }, setActivityPlanTypeFilter: (state, action) => {
             state.activityPlanTypeFilter = action.payload
         }, setActivityPlanStatusFilter: (state, action) => {
@@ -197,7 +206,8 @@ export const { setCredentials, logOut, setLang, setCurrentYear, setAppBarDialogO
     setStartDateFilter, setEndDateFilter, setActivityTypeFilter, setFieldSiteFilter, setFieldBaseFieldFilter, setFieldDashboardYear, setFieldsViewStatus,
     setActivityPlanStatusFilter, setActivityPlanTypeFilter, setActivityStatusFilter, setActivityType, setSnackbar, setOpenSettings, setInventoryFreeTextFilter,
     setInventoryDateFilter, setInventoryWarehouseFilter, setShowInventory, setShowPlans, setOpenLayers, setShowLayers, setEditLayer, setMapCenter, setMapZoom,
-    setShowFieldAlias, setShowFieldName, setNewActivityGeo, setAccuracy, setActiveGPS, setLongitude, setLatitude } = appSlice.actions
+    setShowFieldAlias, setShowFieldName, setNewActivityGeo, setAccuracy, setActiveGPS, setLongitude, setLatitude, setActivityParentFieldFilter,setActivityBaseFieldFilter,setActivitySiteFilter
+} = appSlice.actions
 
 export default appSlice.reducer
 
@@ -238,3 +248,6 @@ export const selectAccuracy = (state) => state.app.accuracy
 export const selectActiveGPS = (state) => state.app.activeGPS
 export const selectLongitude = (state) => state.app.longitude
 export const selectLatitude = (state) => state.app.latitude
+export const selectActivitySiteFilter = (state) => state.app.activitySiteFilter
+export const selectActivityBaseFieldFilter = (state) => state.app.activityBaseFieldFilter
+export const selectActivityParentFieldFilter = (state) => state.app.activityParentFieldFilter
