@@ -25,9 +25,9 @@ export const PestsStages_TAG = 'PestsStages';
 export const InfectionLevels_TAG = 'InfectionLevels';
 export const PlantParts_TAG = 'PlantParts';
 
- export const FARM_MANAGER = 'http://localhost:8080'
+//  export const FARM_MANAGER = 'http://localhost:8080'
 
-// export const FARM_MANAGER = 'https://api.manager.farm'
+export const FARM_MANAGER = 'https://api.manager.farm'
 
 
 const baseQuery = fetchBaseQuery({
