@@ -116,7 +116,7 @@ const NewActivity = () => {
     endHour: isSpray ? new Date() : null,
     irrigationParams: isIrrigation ? {} : null,
     sprayParams: isSpray || isScout ? { volumePerAreaUnit: '', volume: '', wind, crop } : null,
-    scoutParams: isScout ? { scouts } : null,
+    scoutParams: isScout ? { scouts, phenologicalStage: '' } : null,
     marketParams: isMarket ? { incomeCalc: '', sortDate: null, sortReference: '' } : null,
     activityDef: null, year: user.year, customer: null, fields, resources: [], note: '', invoice: '', editable: true, waybill: '',
     points

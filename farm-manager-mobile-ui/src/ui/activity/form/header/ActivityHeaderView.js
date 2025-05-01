@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
 import { selectLang } from '../../../../features/app/appSlice'
 import ActivityTypeIcon from '../../../../icons/ActivityTypeIcon'
-import { GENERAL, GENERAL_PLAN, getActivityTypeText, getMarketingCalcMethods, getMarketingDestinations, getMarketingIncomeCalcOptions, getMinDateWidth, getWinds, getYearArray, HARVEST, IRRIGARION_TYPES, IRRIGATION, IRRIGATION_PLAN, MARKET, SCOUT, SPRAY, SPRAY_PLAN, SPRAY_TYPES } from '../../../FarmUtil'
+import { GENERAL, GENERAL_PLAN, getActivityTypeText, getMarketingCalcMethods, getMarketingDestinations, getMarketingIncomeCalcOptions, getMinDateWidth, getWinds, getYearArray, HARVEST, IRRIGARION_TYPES, IRRIGATION, IRRIGATION_PLAN, isArrayEmpty, MARKET, SCOUT, SPRAY, SPRAY_PLAN, SPRAY_TYPES } from '../../../FarmUtil'
 import { DatePicker, TimePicker } from '@mui/x-date-pickers';
 import { Controller } from 'react-hook-form'
 import TextFieldBase from '../../../../components/ui/TextField'
@@ -47,7 +47,6 @@ const ActivityHeaderView = ({ activity, control, errors, customers, activityDefs
   const _onCropChange = (onChange, data) => {
     onChange(data)
     onCropCHange();
-    //console.log('onCropChange', data, crop)
 
   }
 
@@ -121,7 +120,6 @@ const ActivityHeaderView = ({ activity, control, errors, customers, activityDefs
             />
           </Box>
         }
-
 
         {config.endDate &&
           <Controller
@@ -216,6 +214,32 @@ const ActivityHeaderView = ({ activity, control, errors, customers, activityDefs
         /> */}
 
       </Box>
+
+      {SCOUT === type && crop && !isArrayEmpty(crop.stages) &&
+          <Box paddingTop={1} display={'flex'} flex={1} >
+            <Controller
+              control={control}
+              name="scoutParams.phenologicalStage"
+              render={({ field }) => (
+                <TextField 
+                sx={{ flex: 1 }}
+                  id="outlined-select-crop-phenologicalStage"
+                  select
+                  {...field}
+                  size='small'
+                  label={text.phenologicalStage}
+                >
+                  <MenuItem><em></em></MenuItem>
+                  {crop.stages?.map((option) => (
+                    <MenuItem key={option} value={option}>
+                      {option}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              )}
+            />
+          </Box>
+        }
 
       {SPRAY_TYPES.includes(type) &&
         < Box display={'flex'} marginTop={2} flex={1} alignItems={'center'} justifyContent={'space-between'} flexDirection={'row'} >
