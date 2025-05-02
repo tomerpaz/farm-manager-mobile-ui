@@ -1,12 +1,14 @@
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, MenuItem, TextField, Typography } from "@mui/material";
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, ListItemButton, ListItemIcon, ListItemText, Menu, MenuItem, TextField, Typography } from "@mui/material";
 import TextFieldBase from "../../components/ui/TextField";
-import { Cancel, Delete, Save } from "@mui/icons-material";
+import { Cancel, Delete, Save, Share } from "@mui/icons-material";
 import { useEffect, useState } from "react";
 import { AREA_UNIT, asShortStringDateTime, getUnitText, parseISOOrNull } from "../FarmUtil";
 import DialogAppBar from "./DialogAppBar";
 import { selectLang } from "../../features/app/appSlice";
 import { useSelector } from "react-redux";
-
+import { msgTelegram, msgWhatsapp, shareMsg, Telegram, Whatsapp } from "../../appbar/components/ShareLocationMenu";
+import WhatsAppIcon from '@mui/icons-material/WhatsApp';
+import TelegramIcon from '@mui/icons-material/Telegram';
 const WaypointDialog = ({ open, handleClose, selectedPoint, handleDelete }) => {
 
     const text = useSelector(selectLang);
@@ -14,7 +16,14 @@ const WaypointDialog = ({ open, handleClose, selectedPoint, handleDelete }) => {
 
     const [note, setNote] = useState(selectedPoint.note);
 
-
+    const [anchorEl, setAnchorEl] = useState(null);
+    const openShare = Boolean(anchorEl);
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+    const handleCloseShare = () => {
+        setAnchorEl(null);
+    };
 
     const handleSetNote = (val) => {
         setNote(val);
@@ -28,6 +37,17 @@ const WaypointDialog = ({ open, handleClose, selectedPoint, handleDelete }) => {
         handleClose(val);
         setTouched(false);
         // setNote('');
+    }
+
+    const shareClick = (app) => {
+        console.log('selectedPoint', selectedPoint)
+        const msg = shareMsg(selectedPoint.lat, selectedPoint.lng);
+        if (app === Whatsapp) {
+            msgWhatsapp(msg)
+        } else if (app === Telegram) {
+            msgTelegram(msg)
+        }
+        setAnchorEl(null);
     }
 
     return (
@@ -55,6 +75,39 @@ const WaypointDialog = ({ open, handleClose, selectedPoint, handleDelete }) => {
             </DialogContent>
             <DialogActions sx={{ justifyContent: 'center' }}>
                 <Button size='large' endIcon={<Delete />} disableElevation={true} variant='outlined' onClick={handleDelete}>{text.delete}</Button>
+                <Button
+                    size='large' endIcon={<Share />}
+                    disableElevation={true} variant='outlined'
+                    id="share-button"
+                    aria-controls={open ? 'share-button' : undefined}
+                    aria-haspopup="true"
+                    aria-expanded={open ? 'true' : undefined}
+                    onClick={handleClick}
+                >
+                    {text.share}
+                </Button>
+                <Menu
+                    id="share-menu"
+                    anchorEl={anchorEl}
+                    open={openShare}
+                    onClose={handleClose}
+                    MenuListProps={{
+                        'aria-labelledby': 'basic-button',
+                    }}
+                >
+                    <MenuItem onClick={() => shareClick(Whatsapp)}>
+                        <ListItemIcon>
+                            <WhatsAppIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={Whatsapp} />
+                    </MenuItem>
+                    <MenuItem onClick={() => shareClick(Telegram)}>
+                        <ListItemIcon>
+                            <TelegramIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={Telegram}/>
+                    </MenuItem>
+                </Menu>
                 <Button /*disabled={!touched}*/ size='large' endIcon={<Save />} disableElevation={true} variant='contained' onClick={() => onAction(true)} >
                     {text.save}
                 </Button>

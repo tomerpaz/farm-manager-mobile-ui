@@ -1,24 +1,21 @@
-import { AppBar, Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from "@mui/material";
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from "@mui/material";
 import { useSelector } from "react-redux";
 import { selectActiveGPS, selectLang, selectLatitude, selectLongitude } from "../../features/app/appSlice";
-import { Fragment, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Transition } from "../Util";
-import { Add, BugReport, BugReportOutlined, Delete, GpsFixed, Nature, PestControl, Save } from "@mui/icons-material";
-import { asLocalDateTime, getFillColor, getOpacity, isMobile, isStringEmpty, newDate, SCOUT, stopMapEventPropagation } from "../FarmUtil";
+import { Add, Delete, GpsFixed, Save } from "@mui/icons-material";
+import { asLocalDateTime, getFillColor, getOpacity, newDate, SCOUT, stopMapEventPropagation } from "../FarmUtil";
 
 import DialogAppBar from "./DialogAppBar";
 
 import { useGetUserDataQuery } from "../../features/auth/authApiSlice";
-import { CircleMarker, MapContainer, Marker, Polygon, Popup, Tooltip, useMapEvents } from "react-leaflet";
+import { CircleMarker, MapContainer, Polygon, Tooltip, useMapEvents } from "react-leaflet";
 import SatelliteMapProvider from "../../components/map/SatelliteMapProvider";
 import GeoLocation from "../../components/GeoLocation";
 import { safeParseJson } from "../../features/fields/fieldsApiSlice";
 import WaypointDialog from "./WaypointDialog";
-import ActivityTypeIcon from "../../icons/ActivityTypeIcon";
 import PointIcon, { ACTIVITY_POINT_TYPE, SCOUT_POINT_TYPE } from "../layers/PointIcon";
 import Accuracy from "../../appbar/components/Accuracy";
-import { calacTotalPesticideVolume } from "../FarmCalculator";
-
 
 
 const getPointType = (activityType) => {
@@ -298,6 +295,8 @@ const WaypointSelectionDialog = ({ open, handleClose, fields, waypoints, activit
                     </Box>
                 </Box>
                 {openWaypointDialog && <WaypointDialog open={openWaypointDialog} selectedPoint={selectedPoint} handleClose={handleCloseWaypointDialog} handleDelete={deleteWaypoint} />}
+                            {/* {openWaypointDialog && <ActivityPointActionDialog open={openWaypointDialog} selectedPoint={selectedPoint} handleClose={handleCloseWaypointDialog} handleDelete={deleteWaypoint} />} */}
+
             </DialogContent>
             <DialogActions sx={{ justifyContent: 'center' }}>
                 <Button size='large' endIcon={activeGPS ? <GpsFixed/> : <Add />} disableElevation={true} variant='outlined' onClick={() => addNewPoint()} autoFocus>
