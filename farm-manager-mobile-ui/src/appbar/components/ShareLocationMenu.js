@@ -3,13 +3,15 @@ import { Box, IconButton, Menu, MenuItem } from '@mui/material'
 import { Share } from '@mui/icons-material';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import TelegramIcon from '@mui/icons-material/Telegram';
+import { isStringEmpty } from '../../ui/FarmUtil';
 
 
 export const Whatsapp = 'Whatsapp';
 export const Telegram = 'Telegram';
 
-export const shareMsg =(lat,lng)=> {
-    return encodeURIComponent(`Maps:\nhttps://www.google.com/maps/search/?api=1&query=${lat},${lng}\n\nWaze:\nhttps://waze.com/ul?q=&ll=${lat},${lng}&navigate=yes`);
+export const shareMsg =(lat,lng, text)=> {
+    const preText = isStringEmpty(text) ? '' :text +'\n';
+    return encodeURIComponent(`${preText}Maps:\nhttps://www.google.com/maps/search/?api=1&query=${lat},${lng}\n\nWaze:\nhttps://waze.com/ul?q=&ll=${lat},${lng}&navigate=yes`);
 }
 
 export const msgWhatsapp = (msg) => {

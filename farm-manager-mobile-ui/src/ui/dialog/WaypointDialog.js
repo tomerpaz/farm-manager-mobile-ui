@@ -36,12 +36,10 @@ const WaypointDialog = ({ open, handleClose, selectedPoint, handleDelete }) => {
         }
         handleClose(val);
         setTouched(false);
-        // setNote('');
     }
 
     const shareClick = (app) => {
-        console.log('selectedPoint', selectedPoint)
-        const msg = shareMsg(selectedPoint.lat, selectedPoint.lng);
+        const msg = shareMsg(selectedPoint.point.lat, selectedPoint.point.lng, note);
         if (app === Whatsapp) {
             msgWhatsapp(msg)
         } else if (app === Telegram) {
@@ -90,10 +88,8 @@ const WaypointDialog = ({ open, handleClose, selectedPoint, handleDelete }) => {
                     id="share-menu"
                     anchorEl={anchorEl}
                     open={openShare}
-                    onClose={handleClose}
-                    MenuListProps={{
-                        'aria-labelledby': 'basic-button',
-                    }}
+                    onClose={handleCloseShare}
+             
                 >
                     <MenuItem onClick={() => shareClick(Whatsapp)}>
                         <ListItemIcon>
