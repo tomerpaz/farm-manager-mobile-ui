@@ -123,7 +123,11 @@ export const maxLenghtStr = (str, maxLenght) => {
 }
 
 export const displayFieldName = (field) => {
-    return field.alias ? `${field.name}, ${field.alias}` : field.name;
+    if(field){
+     return field.alias ? `${field.name}, ${field.alias}` : field.name;
+    } else {
+        return '';
+    }
 }
 
 export const mapDisplayFieldName = (field, showName, showAlias) => {
