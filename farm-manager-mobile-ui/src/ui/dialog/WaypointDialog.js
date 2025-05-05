@@ -2,14 +2,14 @@ import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, ListIte
 import TextFieldBase from "../../components/ui/TextField";
 import { Cancel, Delete, Save, Share } from "@mui/icons-material";
 import { useEffect, useState } from "react";
-import { AREA_UNIT, asShortStringDateTime, getUnitText, parseISOOrNull } from "../FarmUtil";
+import { AREA_UNIT, asShortStringDateTime, getUnitText, isStringEmpty, parseISOOrNull } from "../FarmUtil";
 import DialogAppBar from "./DialogAppBar";
 import { selectLang } from "../../features/app/appSlice";
 import { useSelector } from "react-redux";
 import { msgTelegram, msgWhatsapp, shareMsg, Telegram, Whatsapp } from "../../appbar/components/ShareLocationMenu";
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import TelegramIcon from '@mui/icons-material/Telegram';
-const WaypointDialog = ({ open, handleClose, selectedPoint, handleDelete }) => {
+const WaypointDialog = ({ open, handleClose, selectedPoint, handleDelete, title }) => {
 
     const text = useSelector(selectLang);
     const [touched, setTouched] = useState(false);
@@ -39,7 +39,8 @@ const WaypointDialog = ({ open, handleClose, selectedPoint, handleDelete }) => {
     }
 
     const shareClick = (app) => {
-        const msg = shareMsg(selectedPoint.point.lat, selectedPoint.point.lng, note);
+        const preFix =  isStringEmpty(title) ? '' :  title +' - ';
+        const msg = shareMsg(selectedPoint.point.lat, selectedPoint.point.lng, preFix + note);
         if (app === Whatsapp) {
             msgWhatsapp(msg)
         } else if (app === Telegram) {

@@ -1,19 +1,17 @@
-import { MapContainer, TileLayer, Polygon, useMapEvents, Circle, CircleMarker, Tooltip } from "react-leaflet";
+import { MapContainer, Polygon, useMapEvents, CircleMarker, Tooltip } from "react-leaflet";
 import { useEffect, useState } from "react";
 import GeoLocation from "../../../components/GeoLocation";
 import { useNavigate } from "react-router-dom";
-import { Alert, Box, Button, IconButton, Snackbar, Typography } from "@mui/material";
+import { Alert, Box, IconButton, Snackbar, Typography } from "@mui/material";
 import { useFields } from "../../../features/fields/fieldsApiSlice";
 import { useGetUserDataQuery } from '../../../features/auth/authApiSlice'
-import { selectActiveGPS, selectActivityType, selectCurrentYear, selectEditLayer, selectFieldBaseFieldFilter, selectFieldFreeTextFilter, selectFieldSiteFilter, selectFieldsViewStatus, selectLang, selectLatitude, selectLongitude, selectMapCenter, selectMapZoom, selectShowFieldAlias, selectShowFieldName, selectShowLayers, selectShowsPestLayer, setEditLayer, setMapCenter, setMapZoom } from "../../../features/app/appSlice";
+import { selectActiveGPS, selectCurrentYear, selectEditLayer, selectFieldBaseFieldFilter, selectFieldFreeTextFilter, selectFieldSiteFilter, selectFieldsViewStatus, selectLang, selectLatitude, selectLongitude, selectMapCenter, selectMapZoom, selectShowFieldAlias, selectShowFieldName, selectShowLayers, selectShowsPestLayer, setEditLayer, setMapCenter, setMapZoom } from "../../../features/app/appSlice";
 import { useDispatch, useSelector } from "react-redux";
 import FieldsFilter from "../../../components/filters/FieldsFilter";
-import { asLocalDateTime, buildPointFilter, displayFieldName, filterFields, getFillColor, getOpacity, isArrayEmpty, isStringEmpty, mapDisplayFieldName, MapToolTip, MAX_PER_MAP, parseISOOrNull, SCOUT, stopMapEventPropagation, trap } from "../../FarmUtil";
+import { displayFieldName, filterFields, getFillColor, getOpacity, isArrayEmpty, isStringEmpty, mapDisplayFieldName, MapToolTip, MAX_PER_MAP, parseISOOrNull, SCOUT, stopMapEventPropagation, trap } from "../../FarmUtil";
 import SatelliteMapProvider from "../../../components/map/SatelliteMapProvider";
 import { useGetPointsQuery } from "../../../features/points/pointsApiSlice";
-import WaypointSelectionDialog from "../../dialog/WaypointSelectionDialog";
-import { BugReportOutlined, Close } from "@mui/icons-material";
-import FieldPointDialog from "../../point/FieldPointDialog";
+import { Close } from "@mui/icons-material";
 import PointIcon from "../../layers/PointIcon";
 import PointActionDialog from "../../dialog/PointActionDialog";
 

@@ -1,7 +1,7 @@
 import { useFieldArray } from "react-hook-form";
 import WaypointSelectionDialog from "../../../dialog/WaypointSelectionDialog"
 
-const ActivityWaypoints = ({ getValues, control, openWaypointSelection, setOpenWaypointSelection, activity, setPointsCount }) => {
+const ActivityWaypoints = ({ getValues, control, openWaypointSelection, setOpenWaypointSelection, activity, setPointsCount, activityDef }) => {
 
     const { fields, replace } = useFieldArray({
         control,
@@ -19,7 +19,7 @@ const ActivityWaypoints = ({ getValues, control, openWaypointSelection, setOpenW
     }
 
     return (
-        <WaypointSelectionDialog activityType={activity.type} open={openWaypointSelection} handleClose={handleCloseWaypoints} fields={getValues('fields')} waypoints={fields} />
+        <WaypointSelectionDialog activityType={activity.type} activityDef={activityDef} open={openWaypointSelection} handleClose={handleCloseWaypoints} fields={getValues('fields')} waypoints={fields} />
     )
 }
 

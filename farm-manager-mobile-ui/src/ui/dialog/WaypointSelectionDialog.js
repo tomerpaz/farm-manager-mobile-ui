@@ -4,7 +4,7 @@ import { selectActiveGPS, selectLang, selectLatitude, selectLongitude } from "..
 import { useEffect, useState } from "react";
 import { Transition } from "../Util";
 import { Add, Delete, GpsFixed, Save } from "@mui/icons-material";
-import { asLocalDateTime, getFillColor, getOpacity, newDate, SCOUT, stopMapEventPropagation } from "../FarmUtil";
+import { activityDescription, asLocalDateTime, getFillColor, getOpacity, newDate, SCOUT, stopMapEventPropagation } from "../FarmUtil";
 
 import DialogAppBar from "./DialogAppBar";
 
@@ -49,7 +49,7 @@ const getMapZoom = (fields, user) => {
 
 }
 
-const WaypointSelectionDialog = ({ open, handleClose, fields, waypoints, activityType }) => {
+const WaypointSelectionDialog = ({ open, handleClose, fields, waypoints, activityType, activityDef }) => {
     const text = useSelector(selectLang);
     const [filter, setFilter] = useState('');
 
@@ -73,6 +73,9 @@ const WaypointSelectionDialog = ({ open, handleClose, fields, waypoints, activit
 
     const [openWaypointDialog, setOpenWaypointDialog] = useState(false);
 
+
+
+    const title = activityDescription({activityDef, type: activityType}, text);
 
     useEffect(() => {
         //console.log(activeGPS,longitude, latitude)
@@ -224,6 +227,7 @@ const WaypointSelectionDialog = ({ open, handleClose, fields, waypoints, activit
                 title={<Box display={'flex'} flexDirection={'row'} justifyContent={'space-between'} alignItems={'center'}><Typography variant="h6">{`${text.map}`}</Typography><Box padding={2}><Accuracy /></Box></Box>} />
 
             <DialogTitle id="alert-dialog-title" sx={{ margin: 0, padding: 0 }}>
+                {/* {title} */}
                 {/* <Box display={'flex'} flexDirection={'row'}>
 
                     <TextFieldBase fullWidth={true} label={text.filter} value={filter}
@@ -294,7 +298,7 @@ const WaypointSelectionDialog = ({ open, handleClose, fields, waypoints, activit
 
                     </Box>
                 </Box>
-                {openWaypointDialog && <WaypointDialog open={openWaypointDialog} selectedPoint={selectedPoint} handleClose={handleCloseWaypointDialog} handleDelete={deleteWaypoint} />}
+                {openWaypointDialog && <WaypointDialog title={title} open={openWaypointDialog} selectedPoint={selectedPoint} handleClose={handleCloseWaypointDialog} handleDelete={deleteWaypoint} />}
                             {/* {openWaypointDialog && <ActivityPointActionDialog open={openWaypointDialog} selectedPoint={selectedPoint} handleClose={handleCloseWaypointDialog} handleDelete={deleteWaypoint} />} */}
 
             </DialogContent>

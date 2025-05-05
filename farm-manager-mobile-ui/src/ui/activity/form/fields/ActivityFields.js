@@ -13,7 +13,6 @@ import { HARVEST, MARKET, SCOUT, GENERAL, SPRAY_TYPES, isArrayEmpty } from "../.
 import UpdateAllFieldsDialog from "./UpdateAllFieldsDialog"
 import { getTotalQty, getTotalweight } from "../ActivityUtil"
 import UpdateAllFieldsAreaDialog from "./UpdateAllFieldsAreaDialog"
-import WaypointSelectionDialog from "../../../dialog/WaypointSelectionDialog"
 import { blue } from '@mui/material/colors';
 
 const TRASHHOLD = 3;

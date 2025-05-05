@@ -178,7 +178,7 @@ const ActivityForm = ({ activity }) => {
           />
 
           {openWaypointSelection && <ActivityWaypoints
-            control={control} register={register} activity={activity} getValues={getValues} errors={errors} crop={crop}
+            control={control} register={register} activity={activity} activityDef={activityDef} getValues={getValues} errors={errors} crop={crop}
             openWaypointSelection={openWaypointSelection} setOpenWaypointSelection={setOpenWaypointSelection} setPointsCount={setPointsCount}
 
           />}
