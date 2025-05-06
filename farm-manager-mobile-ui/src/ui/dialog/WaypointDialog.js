@@ -39,8 +39,10 @@ const WaypointDialog = ({ open, handleClose, selectedPoint, handleDelete, title 
     }
 
     const shareClick = (app) => {
-        const preFix =  isStringEmpty(title) ? '' :  title +' - ';
-        const msg = shareMsg(selectedPoint.point.lat, selectedPoint.point.lng, preFix + note);
+        const prefix =  isStringEmpty(title) ? '' :  title +' - ';
+        const suffix = isStringEmpty(note) ? '' : note;
+        
+        const msg = shareMsg(selectedPoint.point.lat, selectedPoint.point.lng, prefix + suffix);
         if (app === Whatsapp) {
             msgWhatsapp(msg)
         } else if (app === Telegram) {
