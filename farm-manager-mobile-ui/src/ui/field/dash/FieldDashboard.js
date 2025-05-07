@@ -54,7 +54,7 @@ const FieldDashboard = () => {
   return (
     <Box sx={{ width: '100%', height: '100%', paddingBottom: 5 }}>
       <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 1, md: 1 }}>
-        <Grid item xs={6}>
+        <Grid size={6}>
           <Card elevation={elevation}>
             <CardHeader sx={{ padding: cardHeaderPadding }}
               avatar={<Avatar sx={{ bgcolor: orange[500] }}>
@@ -65,7 +65,7 @@ const FieldDashboard = () => {
             />
           </Card>
         </Grid>
-        <Grid item xs={6}>
+        <Grid size={6}>
           <Card elevation={elevation} >
             <CardHeader sx={{ padding: cardHeaderPadding }}
               avatar={<Avatar sx={{ bgcolor: red[500] }}>
@@ -76,7 +76,7 @@ const FieldDashboard = () => {
             />
           </Card>
         </Grid>
-        <Grid item xs={4} >
+        <Grid size={4} >
           <Card elevation={elevation}>
             <CardHeader sx={{ padding: cardHeaderPadding }}
               avatar={<Avatar sx={{ bgcolor: 'inherit', color: blue[700], fontWeight: 'bolder' }} aria-label="recipe">K</Avatar>}
@@ -85,7 +85,7 @@ const FieldDashboard = () => {
             />
           </Card>
         </Grid>
-        <Grid item xs={4} >
+        <Grid size={4} >
           <Card elevation={elevation}>
             <CardHeader sx={{ padding: cardHeaderPadding }}
               avatar={<Avatar sx={{ bgcolor: 'inherit', color: green[700], fontWeight: 'bolder' }} aria-label="recipe">P</Avatar>}
@@ -94,7 +94,7 @@ const FieldDashboard = () => {
             />
           </Card>
         </Grid>
-        <Grid item xs={4}>
+        <Grid size={4}>
           <Card elevation={elevation} >
             <CardHeader sx={{ padding: cardHeaderPadding }}
               avatar={<Avatar sx={{ bgcolor: 'inherit', color: red[700], fontWeight: 'bolder' }} aria-label="recipe">N</Avatar>}
@@ -103,7 +103,7 @@ const FieldDashboard = () => {
             />
           </Card>
         </Grid>
-        <Grid item xs={12}>
+        <Grid size={12}>
           <Card elevation={elevation}>
             <CardHeader sx={{ padding: cardHeaderPadding }}
               avatar={<Avatar sx={{ bgcolor: blue[500] }}>
@@ -117,7 +117,7 @@ const FieldDashboard = () => {
             </CardContent>
           </Card>
         </Grid>
-        <Grid item xs={12}>
+        <Grid size={12}>
           <Card elevation={elevation}>
             <CardHeader onClick={() => setPxpandedPesticides(!expandedPesticides)} sx={{ padding: cardHeaderPadding }}
               avatar={<Avatar sx={{ bgcolor: green[500] }} aria-label="recipe"><BugReport /></Avatar>}
@@ -136,7 +136,7 @@ const FieldDashboard = () => {
             </Collapse>
           </Card>
         </Grid>
-        <Grid item xs={12}>
+        <Grid size={12}>
           <Card elevation={elevation}>
             <CardHeader onClick={() => setExpandedFertilizers(!expandedFertilizers)} sx={{ padding: cardHeaderPadding }}
               avatar={<Avatar sx={{ bgcolor: orange[500] }} aria-label="recipe"><ScatterPlot /></Avatar>}
