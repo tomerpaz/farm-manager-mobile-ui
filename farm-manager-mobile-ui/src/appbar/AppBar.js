@@ -1,5 +1,5 @@
 import Box from '@mui/material/Box';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router';
 import { selectActiveGPS, selectCurrentToken, setAccuracy, setLatitude, setLongitude } from '../features/app/appSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import PublicBar from './content/PublicBar';

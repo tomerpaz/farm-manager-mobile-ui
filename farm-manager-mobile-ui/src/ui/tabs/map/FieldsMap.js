@@ -1,7 +1,7 @@
 import { MapContainer, Polygon, useMapEvents, CircleMarker, Tooltip } from "react-leaflet";
 import { useEffect, useState } from "react";
 import GeoLocation from "../../../components/GeoLocation";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import { Alert, Box, IconButton, Snackbar, Typography } from "@mui/material";
 import { useFields } from "../../../features/fields/fieldsApiSlice";
 import { useGetUserDataQuery } from '../../../features/auth/authApiSlice'
@@ -102,7 +102,6 @@ const FieldsMap = (props) => {
 
 
     useEffect(() => {
-        console.log(activeGPS,longitude, latitude)
         if (map && activeGPS && longitude && latitude) {
             map.setView([latitude,longitude], zoom);
         }

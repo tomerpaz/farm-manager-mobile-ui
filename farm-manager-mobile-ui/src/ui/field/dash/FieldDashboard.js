@@ -10,7 +10,7 @@ import { useSelector } from 'react-redux';
 import { useGetUserDataQuery } from '../../../features/auth/authApiSlice';
 import { formatNumber } from '../../FarmUtil';
 import { useGetFieldDashBoardQuery } from '../../../features/dashboard/dashboardApiSlice';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 import Loading from '../../../components/Loading';
 import FieldFertilizerTable from './FieldFertilizerTable';
 import FieldPesticdeTable from './FieldPesticdeTable';

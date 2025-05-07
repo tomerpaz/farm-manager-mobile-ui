@@ -1,7 +1,7 @@
 import { AppBar, Toolbar, IconButton, Box } from '@mui/material'
 import { AddCommentOutlined, Close, Layers, Share } from '@mui/icons-material'
 import ShareLocationMenu from '../components/ShareLocationMenu'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router'
 import { selectCurrentYear, selectFieldDashboardYear, setOpenLayers } from '../../features/app/appSlice'
 import { useFieldsById } from '../../features/fields/fieldsApiSlice'
 import { useDispatch, useSelector } from 'react-redux'

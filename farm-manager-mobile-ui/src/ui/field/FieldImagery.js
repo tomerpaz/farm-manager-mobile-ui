@@ -1,8 +1,7 @@
 import { ChevronLeft, ChevronLeftOutlined, ChevronRight, ChevronRightOutlined, Cloud, CloudOutlined, MoreVert, Streetview, WbSunnyOutlined } from '@mui/icons-material'
 import { Box, Button, MenuItem, Select, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
-import { useFieldsById } from '../../features/fields/fieldsApiSlice'
+import { useParams } from 'react-router'
 import ColorPalette from './ColorPalette'
 import FieldMap from './FieldMap'
 import { useGetUserDataQuery } from '../../features/auth/authApiSlice';

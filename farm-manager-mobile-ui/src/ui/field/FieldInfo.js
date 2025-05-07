@@ -1,7 +1,6 @@
 import { Box, Typography } from '@mui/material'
 import React, { useState } from 'react'
-import { useParams } from 'react-router-dom'
-import { useFieldsById } from '../../features/fields/fieldsApiSlice'
+import { useParams } from 'react-router'
 import FieldMap from './FieldMap'
 import { useGetUserDataQuery } from '../../features/auth/authApiSlice';
 import { useSelector } from 'react-redux'

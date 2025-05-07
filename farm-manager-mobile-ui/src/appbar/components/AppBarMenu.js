@@ -2,7 +2,7 @@ import { Logout, More, MoreVert, Settings, GpsFixed } from '@mui/icons-material'
 import { Box, IconButton, Menu, MenuItem, Typography } from '@mui/material'
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { logOut, selectActiveGPS, selectLang, setActiveGPS, setOpenSettings } from '../../features/app/appSlice';
 import SettingsDialog from '../../ui/settings/SettingsDialog';
 import { useGetUserDataQuery } from '../../features/auth/authApiSlice';

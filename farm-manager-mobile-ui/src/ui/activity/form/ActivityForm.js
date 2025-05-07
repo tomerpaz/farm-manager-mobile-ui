@@ -6,7 +6,7 @@ import { PESTICIDE, PLAN, SCOUT, asLocalDate, asLocalTime, countLines, daysDif, 
 import ActivityHeaderView from './header/ActivityHeaderView'
 import { useForm, Controller, useWatch } from "react-hook-form";
 import { Cancel, CheckCircleOutline, ControlPointDuplicate, Delete, Save } from '@mui/icons-material'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router'
 import ActivityFields from './fields/ActivityFields'
 import ActivityWaypoints from './waypoints/ActivityWaypoints'
 

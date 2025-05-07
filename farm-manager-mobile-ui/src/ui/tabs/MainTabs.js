@@ -3,7 +3,7 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import FieldsMap from './map/FieldsMap';
-import { Link, useLocation, useParams } from 'react-router-dom';
+import { Link, useLocation, useParams } from 'react-router';
 import FieldList from './fields/FieldList';
 import { DEFAULT_ROUTE } from "../../App";
 import ActivitiesList from './activities/ActivitiesList';

@@ -1,6 +1,6 @@
 import React from "react"
 import { useSelector } from "react-redux"
-import { Navigate, Outlet } from "react-router-dom"
+import { Navigate, Outlet } from "react-router"
 import { selectCurrentToken } from "../features/app/appSlice"
 
 const ProtectedRoutes = () => {

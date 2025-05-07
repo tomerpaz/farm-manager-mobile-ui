@@ -1,6 +1,6 @@
 import './App.css';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router";
 import Login from './features/auth/Login';
 import ProtectedRoutes from './router/ProtectedRoutes';
 import PublicRoutes from './router/PublicRoutes';

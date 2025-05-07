@@ -3,7 +3,7 @@ import { Box, Button, Menu, MenuItem } from '@mui/material'
 import { selectFieldDashboardYear, selectCurrentYear, setFieldDashboardYear, setCurrentYear } from '../../features/app/appSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { getYearArray } from '../../ui/FarmUtil';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 import { useFieldsById } from '../../features/fields/fieldsApiSlice';
 
 const SelectYearMenu = () => {

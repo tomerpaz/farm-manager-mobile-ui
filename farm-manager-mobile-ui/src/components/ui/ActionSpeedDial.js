@@ -5,10 +5,10 @@ import SpeedDial from '@mui/material/SpeedDial';
 import SpeedDialIcon from '@mui/material/SpeedDialIcon';
 import SpeedDialAction from '@mui/material/SpeedDialAction';
 import ActivityTypeIcon from '../../icons/ActivityTypeIcon';
-import { GENERAL, HARVEST, IRRIGATION, MARKET, SCOUT, SPRAY, getActivityTypeText, getActivityTypes } from '../../ui/FarmUtil';
+import { getActivityTypeText, getActivityTypes } from '../../ui/FarmUtil';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectActivityType, selectLang, setActivityType } from '../../features/app/appSlice';
-import { createSearchParams, useNavigate } from 'react-router-dom';
+import { selectLang, setActivityType } from '../../features/app/appSlice';
+import { createSearchParams, useNavigate } from 'react-router';
 import { useGetUserDataQuery } from '../../features/auth/authApiSlice';
 
 

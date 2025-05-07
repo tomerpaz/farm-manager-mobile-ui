@@ -6,7 +6,7 @@ import { selectActivityBaseFieldFilter, selectActivityFreeTextFilter, selectActi
 import ListPager from '../../../components/ui/ListPager';
 import Loading from '../../../components/Loading';
 import ActivityTypeIcon from '../../../icons/ActivityTypeIcon';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router';
 import ActivitiesFilter from '../../../components/filters/ActivitiesFilter';
 import { EXECUTED, PLAN, activityDescription, buildActiviyFilter, daysDiffToday, isArrayEmpty, parseDate, parseISOOrNull } from '../../FarmUtil';
 import { EXECUTE_STATUS_COLOR, PLAN_PASSED_STATUS_COLOR, PLAN_STATUS_COLOR, WHITE } from '../../activity/form/header/ActivityHeaderView';

@@ -1,5 +1,5 @@
 import { useSelector } from 'react-redux'
-import { Outlet } from 'react-router-dom'
+import { Outlet } from 'react-router'
 import Loading from '../components/Loading'
 import { selectCurrentYear } from '../features/app/appSlice'
 import { useGetFieldsByYearQuery } from '../features/fields/fieldsApiSlice'

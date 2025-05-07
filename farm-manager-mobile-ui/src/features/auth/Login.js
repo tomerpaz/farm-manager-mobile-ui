@@ -1,5 +1,5 @@
 import { Box, Button, InputAdornment, TextField, Typography } from "@mui/material"
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import { useForm, Controller, useWatch } from "react-hook-form";
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import PasswordOutlined from '@mui/icons-material/PasswordOutlined';

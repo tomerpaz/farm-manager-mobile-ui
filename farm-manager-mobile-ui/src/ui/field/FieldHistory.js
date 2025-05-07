@@ -2,7 +2,7 @@ import React, { Fragment, useEffect } from 'react'
 import { Avatar, List, ListItem, ListItemText, ListItemAvatar, Box, Typography, Divider } from '@mui/material';
 import { useSelector } from 'react-redux';
 import { selectActivityFreeTextFilter, selectActivityTypeFilter, selectEndDateFilter, selectLang, selectStartDateFilter } from '../../features/app/appSlice';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router';
 import { useGetActivitiesFieldQuery } from '../../features/activities/activitiesApiSlice';
 import Loading from '../../components/Loading';
 import ListPager from '../../components/ui/ListPager';

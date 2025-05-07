@@ -23,7 +23,7 @@
     "react-leaflet": "^4.2.1",
     "react-leaflet-google-layer": "^4.0.0",
     "react-redux": "^9.2.0",
-    "react-router-dom": "^6.24.0",
+    "react-router": "^7.5.3",
     "react-scripts": "^5.0.1",
     "react-window": "^1.8.9",
     "recharts": "^2.12.7",

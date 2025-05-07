@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import TelegramIcon from '@mui/icons-material/Telegram';
 import { msgTelegram, msgWhatsapp, shareMsg, Telegram, Whatsapp } from "../../appbar/components/ShareLocationMenu";
-import { createSearchParams, useNavigate } from "react-router-dom";
+import { createSearchParams, useNavigate } from "react-router";
 import PointForm from "../point/PointForm";
 import PointIcon, { ACTIVITY_POINT_TYPE, SCOUT_POINT_TYPE } from "../layers/PointIcon";
 import ActivityTypeIcon from "../../icons/ActivityTypeIcon";

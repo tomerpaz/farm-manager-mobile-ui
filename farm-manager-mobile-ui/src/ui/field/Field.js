@@ -6,7 +6,7 @@ import CardHeader from '@mui/material/CardHeader';
 import CardContent from '@mui/material/CardContent';
 import Avatar from '@mui/material/Avatar';
 import { Box, IconButton, Typography } from '@mui/material';
-import { useParams, Link, useLocation, useNavigate } from 'react-router-dom';
+import { useParams, Link, useLocation, useNavigate } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import Loading from '../../components/Loading';
 import { AddLocationAlt, Cancel, DashboardOutlined, HighlightOffRounded, InfoOutlined, PestControl, SatelliteAltOutlined } from '@mui/icons-material';

@@ -1,6 +1,6 @@
 import { Box } from '@mui/material'
 import React, { useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams } from 'react-router'
 import FieldMap from './FieldMap'
 import { useGetUserDataQuery } from '../../features/auth/authApiSlice';
 import { useGetFieldPointsQuery } from '../../features/points/pointsApiSlice';

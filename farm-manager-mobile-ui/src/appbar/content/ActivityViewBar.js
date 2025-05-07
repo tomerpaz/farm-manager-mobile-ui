@@ -3,7 +3,7 @@ import { Close, PictureAsPdfOutlined } from '@mui/icons-material'
 import { newDate } from '../../ui/FarmUtil';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken, selectLang } from '../../features/app/appSlice';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router';
 import { FARM_MANAGER } from '../../app/api/apiSlice';
 
 
