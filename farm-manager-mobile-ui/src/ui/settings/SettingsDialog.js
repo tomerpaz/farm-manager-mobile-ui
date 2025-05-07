@@ -91,7 +91,8 @@ const SettingsDialog = () => {
             fullScreen={isMobile()} fullWidth={!isMobile()}
             open={open}
             onClose={handleClose}
-            TransitionComponent={Transition}
+            disableRestoreFocus={true}
+            slots={{ transition: Transition }}
         >
             <DialogAppBar onClose={handleClose} title={""} />
 

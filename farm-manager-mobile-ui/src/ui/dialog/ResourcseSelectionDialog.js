@@ -149,8 +149,8 @@ const ResourcseSelectionDialog = ({ open, handleClose, resourceTypes, cropId }) 
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
             fullScreen={isMobile()} fullWidth={!isMobile()}
-            TransitionComponent={Transition}
-
+            disableRestoreFocus={true} 
+            slots={{ transition: Transition }}
         >
             <DialogAppBar onClose={() => onAction(false)}
                 title={`${text.resources}`} />

@@ -29,6 +29,8 @@ const UpdateResourcesQtyDialog = ({ open, units, text, handleClose, areaUnit, ac
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
             fullWidth
+            disableRestoreFocus={true}
+        // slots={{ transition: Transition }}
         >
             <DialogAppBar onClose={() => onAction(false)}
                 title=

@@ -97,7 +97,8 @@ const FieldSelectionDialog = ({ fields, open, handleClose, cropId }) => {
             aria-describedby="alert-dialog-description"
             fullScreen={isMobile()} fullWidth={!isMobile()}
             disableEscapeKeyDown={false}
-            TransitionComponent={Transition}
+            disableRestoreFocus={true}
+            slots={{ transition: Transition }}
         >
             <DialogAppBar onClose={() => onAction(false)}
                 title={`${text.fields}`} />
