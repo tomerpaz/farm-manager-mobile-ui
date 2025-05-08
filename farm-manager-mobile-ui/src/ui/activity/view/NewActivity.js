@@ -1,17 +1,14 @@
 import { Box } from '@mui/material'
 import { useSelector } from 'react-redux'
 import { useParams, useSearchParams } from 'react-router'
-import { selectActiveGPS, selectCurrentYear, selectNewActivityGeo } from '../../../features/app/appSlice'
+import {  selectCurrentYear, selectLatitude, selectLongitude } from '../../../features/app/appSlice'
 import ActivityForm from '../form/ActivityForm'
-import { IRRIGARION_TYPES, MARKET, SCOUT, SPRAY, SPRAY_TYPES, asLocalDateTime, firstDayOfThisMonth, getGeoPosition, getLocalitation, getLocation, getWinds, isArrayEmpty, isPointInPoly, lastDayOfThisMonth, newDate, startOfDay, testIsPointInPoly } from '../../FarmUtil'
+import { IRRIGARION_TYPES, MARKET, SCOUT, SPRAY_TYPES, asLocalDateTime, firstDayOfThisMonth, getWinds, isArrayEmpty, isPointInPoly, lastDayOfThisMonth, newDate } from '../../FarmUtil'
 import { useGetUserDataQuery } from '../../../features/auth/authApiSlice'
 import { useFields, useFieldsById } from '../../../features/fields/fieldsApiSlice'
-import { parseISO } from 'date-fns'
-import { fi } from 'date-fns/locale'
 import { newFieldMarketParams } from '../form/fields/ActivityFields'
 import { useGetPointQuery } from '../../../features/points/pointsApiSlice'
 import Loading from '../../../components/Loading'
-import { useState } from 'react'
 
 
 export function getFieldsByLocation(data, pt) {
@@ -45,6 +42,20 @@ const prepareFields = (activityFields, isMarket) => {
 
 }
 
+const getFieldCrop = (field, fields) => {
+  var f = field;
+  if (field) {
+    f = field
+  } else if (!isArrayEmpty(fields)) {
+    f = fields[0].field;
+  }
+  if(f){
+    return { id: f.cropId, name: f.cropName };
+  } else {
+    return null;
+  }
+}
+
 const NewActivity = () => {
 
   const { type, src } = useParams()
@@ -56,35 +67,22 @@ const NewActivity = () => {
   const fid = searchParams.get("fid");
   const data = useFields(currentYear)
 
-  const [position, setPosition] = useState(0);
-
-  const newActivityGeo = useSelector(selectNewActivityGeo);
-  const activeGPS = useSelector(selectActiveGPS);
-
-  //testIsPointInPoly();
+  const longitude = useSelector(selectLongitude);
+  const latitude = useSelector(selectLatitude);
 
   const field = useFieldsById(currentYear, Number(fid));
-  // console.log('data',data) 
 
-  const isLoadingPosition = (!activeGPS && fid === null && position === 0 && newActivityGeo);
 
-  if (isLoadingPosition) {
-    getGeoPosition(setPosition)
-  }
+  const position = latitude && longitude  ? [latitude,longitude]  : null;
 
   const pid = searchParams.get("pid");
 
   const { data: point, isLoading: isLoadingPoint, isFetching: isFetchingPoint } = useGetPointQuery({ id: pid }, { skip: !pid });
 
-  if (isLoadingPoint || isFetchingPoint || isLoadingPosition) {
+  if (isLoadingPoint || isFetchingPoint) {
     return <Loading />
   }
 
-  console.log('field: ', field);
-
-  if (!field) {
-    const fieldsByLocation = getFieldsByLocation(data, position);
-  }
 
 
   const isPlan = type.includes("_PLAN")
@@ -108,7 +106,7 @@ const NewActivity = () => {
     finding: point.pest, note: '', location: 'none', infectionLevel: 'none', value: ''
   }] : [];
 
-  const crop = field ? { id: field?.cropId, name: field?.cropName } : null;
+  const crop = getFieldCrop(field, fields);
   const activity = {
     type, plan: isPlan,
     execution: isIrrigation ? firstDayOfThisMonth() : new Date(),

@@ -1,17 +1,13 @@
-import React, { useEffect } from 'react'
-import { AppBar, Box, Checkbox, Dialog, DialogContent, FormControlLabel, IconButton, MenuItem, Select, Slide, Toolbar, Typography } from '@mui/material'
+import React from 'react'
+import { Box, Checkbox, Dialog, DialogContent, FormControlLabel, IconButton, MenuItem, Select } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux';
-import { selectLang, selectNewActivityGeo, selectOpenSettings, selectShowInventory, selectShowPlans, setLang, setNewActivityGeo, setOpenSettings, setShowInventory, setShowPlans } from '../../features/app/appSlice';
-import { Close, DesktopWindowsOutlined, LocationOn, MobileFriendlyOutlined, Refresh } from '@mui/icons-material';
+import { selectLang, selectOpenSettings, selectShowInventory, selectShowPlans, setLang, setOpenSettings, setShowInventory, setShowPlans } from '../../features/app/appSlice';
+import { DesktopWindowsOutlined, MobileFriendlyOutlined } from '@mui/icons-material';
 import { getUserLang } from '../../router/UserRoutes';
-import { getGeoCurrentPosition, isInventoryPossible, isMobile, isPlansPossible } from '../FarmUtil';
+import { isInventoryPossible, isMobile, isPlansPossible } from '../FarmUtil';
 import { useGetUserDataQuery } from '../../features/auth/authApiSlice';
 import DialogAppBar from '../dialog/DialogAppBar';
 import { Transition } from '../Util';
-
-// const Transition = React.forwardRef(function Transition(props, ref) {
-//     return <Slide direction="up" ref={ref} {...props} />;
-// });
 
 const flagMap = [
     { id: 'en', flag: 'GB', label: 'English', emoji: '🇬🇧' },
@@ -27,10 +23,6 @@ const SettingsDialog = () => {
     const open = useSelector(selectOpenSettings)
 
     const [showAgent, setShowAgent] = React.useState(false);
-    const [showCoords, setShowCoords] = React.useState(false);
-
-    const [accuracy, setAccuracy] = React.useState(false);
-
 
     const { data: user, isSuccess: isUserSuccess } = useGetUserDataQuery()
 
@@ -39,28 +31,6 @@ const SettingsDialog = () => {
 
     const showInventory = useSelector(selectShowInventory);
     const showPlans = useSelector(selectShowPlans);
-    const newActivityGeo = useSelector(selectNewActivityGeo);
-
-    const [geoPosition, setGeoPosition] = React.useState(null);
-
-
-
-    useEffect(() => {
-        if (showCoords) {
-            getGeoCurrentPosition(setGeoPosition);
-
-        } else {
-            setGeoPosition(null);
-
-        }
-    }, [showCoords])
-
-    useEffect(() => {
-        if (geoPosition?.coords?.accuracy) {
-            setAccuracy(geoPosition?.coords?.accuracy);
-
-        }
-    }, [geoPosition])
 
     const handleClose = () => {
         dispatch(setOpenSettings(false));
@@ -81,10 +51,10 @@ const SettingsDialog = () => {
         dispatch(setOpenSettings(false));
     }
 
-    const handleNewActivityGeoChange = () => {
-        dispatch(setNewActivityGeo(!newActivityGeo));
-        dispatch(setOpenSettings(false));
-    }
+    // const handleNewActivityGeoChange = () => {
+    //     dispatch(setNewActivityGeo(!newActivityGeo));
+    //     dispatch(setOpenSettings(false));
+    // }
 
     return (
         <Dialog
@@ -126,12 +96,6 @@ const SettingsDialog = () => {
 
                     </Box>
                 }
-                {isMobile() &&
-                    <Box marginTop={2} display={'flex'} flexDirection={'row'} >
-                        <FormControlLabel control={<Checkbox checked={newActivityGeo} onChange={handleNewActivityGeoChange} />} label={text.newActivityGeo} />
-                    </Box>
-                }
-
                 <Box marginTop={2} display={'flex'} flexDirection={'row'} >
                     <Box>
                         <IconButton sx={{ padding: 0 }} onClick={_ => setShowAgent(!showAgent)} >
@@ -141,25 +105,6 @@ const SettingsDialog = () => {
                     <Box margin={1} />
                     {showAgent && <Box>{navigator.userAgent}</Box>}
                 </Box>
-
-                {isMobile() && <Box marginTop={2} display={'flex'} flexDirection={'row'} >
-                    <Box>
-                        <IconButton color={showCoords ? 'primary' : 'secondary'} sx={{ padding: 0 }} onClick={_ => setShowCoords(!showCoords)} >
-                            <LocationOn />
-                        </IconButton>
-                    </Box>
-                    <Box paddingLeft={1} paddingRight={1} justifyContent={'space-between'} flex={1} display={'flex'} alignItems={'center'} flexDirection={'row'}  >
-                        {showCoords && accuracy && <Box>{`ACC ${accuracy} m`}</Box>}
-                        {showCoords && accuracy &&
-                            <Box>
-                                <IconButton sx={{ padding: 0 }} onClick={_ => getGeoCurrentPosition(setGeoPosition)} >
-                                    <Refresh />
-                                </IconButton>
-                            </Box>
-
-                        }
-                    </Box>
-                </Box>}
             </DialogContent>
         </Dialog>
     )

@@ -32,11 +32,15 @@ function Accuracy() {
     useEffect(() => {
       if (activeGPS) {
         setTimeout(getNewPosition, 500)
+      } else {
+        dispatch(setAccuracy(null));
+        dispatch(setLatitude(null));
+        dispatch(setLongitude(null));
       }
     }, [positionCallCount,activeGPS])
   
 
-    if ( activeGPS && accuracy) {
+    if ( accuracy) {
         return <Typography>{`${accuracy?.toFixed(1)}m`}</Typography>
 
     }

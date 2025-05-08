@@ -2,7 +2,7 @@ import { useEffect } from "react"
 import { useMap } from "react-leaflet"
 import { LocateControl } from "leaflet.locatecontrol"
 import { useDispatch, useSelector } from "react-redux"
-import { selectActiveGPS, setActiveGPS } from "../features/app/appSlice"
+import { selectActiveGPS, setAccuracy, setActiveGPS, setLatitude, setLongitude } from "../features/app/appSlice"
 const locateOptions = {
   position: "topleft",
   // Set other options in here for locate control
@@ -18,9 +18,9 @@ const control = new LocateControl(locateOptions)
 let ok = false;
 const GeoLocation = () => {
 
-  // const dispatch = useDispatch()
+  const dispatch = useDispatch()
 
-  // const activeGPS = useSelector(selectActiveGPS);
+  const activeGPS = useSelector(selectActiveGPS);
 
 
   // if (activeGPS) {
@@ -34,7 +34,9 @@ const GeoLocation = () => {
     var longitude = LatLng.lng;
     var latitude = LatLng.lat;
     map.setView([latitude, longitude]);
-
+    dispatch(setLatitude(latitude.toFixed(5)));
+    dispatch(setLongitude(longitude.toFixed(5)));
+    dispatch(setAccuracy(evt.accuracy));
   });
 
   // map.on('locateactivate', function (evt) {
@@ -44,11 +46,16 @@ const GeoLocation = () => {
 
   // });
 
-  // map.on('locatedeactivate', function (evt) {
-  //   console.log('locatedeactivate', evt)
-  //   dispatch(setActiveGPS(false));
+  map.on('locatedeactivate', function (evt) {
+    console.log('locatedeactivate', evt)
+    if (!activeGPS) {
+      dispatch(setLatitude(null));
+      dispatch(setLongitude(null));
+      dispatch(setAccuracy(null));
+      
+    }
 
-  // });
+  });
 
   // Add locate control once the map loads
   useEffect(() => {
