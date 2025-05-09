@@ -2,8 +2,9 @@ import { AppBar, Box, Button, Dialog, DialogActions, DialogContent, DialogTitle,
 import TextFieldBase from "../../../../components/ui/TextField";
 import { Cancel, Close, Save } from "@mui/icons-material";
 import { useState } from "react";
-import { AREA_UNIT, getUnitText } from "../../../FarmUtil";
+import { AREA_UNIT, getUnitText, isMobile } from "../../../FarmUtil";
 import DialogAppBar from "../../../dialog/DialogAppBar";
+import { Transition } from "../../../Util";
 
 const UpdateResourcesQtyDialog = ({ open, units, text, handleClose, areaUnit, activityArea }) => {
 
@@ -26,11 +27,9 @@ const UpdateResourcesQtyDialog = ({ open, units, text, handleClose, areaUnit, ac
     return (
         <Dialog
             open={open}
-            aria-labelledby="alert-dialog-title"
-            aria-describedby="alert-dialog-description"
-            fullWidth
             disableRestoreFocus={true}
-        // slots={{ transition: Transition }}
+            fullScreen={isMobile()} fullWidth={!isMobile()}
+            slots={{ transition: Transition }}
         >
             <DialogAppBar onClose={() => onAction(false)}
                 title=
@@ -57,12 +56,13 @@ const UpdateResourcesQtyDialog = ({ open, units, text, handleClose, areaUnit, ac
                     <Box margin={1} />
                     <TextFieldBase type='number' value={qty} onChange={e => setQty(Number(e.target.value))} fullWidth={true} label={text.qty} />
                 </Box>
+                <DialogActions  sx={{ paddingTop: 4, justifyContent: 'center' }}>
+                    <Button disabled={'' === unit || '' === qty} size='large' endIcon={<Save />} disableElevation={true} variant='contained' onClick={() => onAction(true)} >
+                        {text.save}
+                    </Button>
+                </DialogActions>
             </DialogContent>
-            <DialogActions sx={{ justifyContent: 'center' }}>
-                <Button disabled={'' === unit || '' === qty} size='large' endIcon={<Save />} disableElevation={true} variant='contained' onClick={() => onAction(true)} >
-                    {text.save}
-                </Button>
-            </DialogActions>
+
         </Dialog>
     )
 }

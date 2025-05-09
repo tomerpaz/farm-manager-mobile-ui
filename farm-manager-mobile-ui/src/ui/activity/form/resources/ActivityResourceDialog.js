@@ -4,10 +4,11 @@ import { useSelector } from "react-redux";
 import { selectLang } from "../../../../features/app/appSlice";
 import { useState } from "react";
 import { useGetUserDataQuery } from "../../../../features/auth/authApiSlice";
-import { FERTILIZER, IRRIGARION_TYPES, PESTICIDE, QTY_PER_AREA_UNIT_RESOURCE_TYPE, SECONDARY_QTY_RESOURCES, SPRAY_TYPES, WAREHOUSE_RESOURCE_TYPE, WATER, WORKER_GROUP, getResourceTypeText, getUnitText, isStringEmpty, safeDiv } from "../../../FarmUtil";
+import { FERTILIZER, IRRIGARION_TYPES, PESTICIDE, QTY_PER_AREA_UNIT_RESOURCE_TYPE, SECONDARY_QTY_RESOURCES, SPRAY_TYPES, WAREHOUSE_RESOURCE_TYPE, WATER, WORKER_GROUP, getResourceTypeText, getUnitText, isMobile, isStringEmpty, safeDiv } from "../../../FarmUtil";
 import { Cancel, Close, Delete, Save } from "@mui/icons-material";
 import { calacTotalPesticideVolume } from "../../../FarmCalculator";
 import DialogAppBar from "../../../dialog/DialogAppBar";
+import { Transition } from "../../../Util";
 
 const getQtyPerWorker = (selectedRow) => {
 
@@ -150,8 +151,9 @@ const ActivityResourceDialog = ({ selectedRow, selectedIndex, handleClose, updat
     return (
         <Dialog
             open={selectedRow !== null}
-            aria-labelledby="alert-dialog-title"
-            aria-describedby="alert-dialog-description"
+            disableRestoreFocus={true}
+            fullScreen={isMobile()} fullWidth={!isMobile()}
+            slots={{ transition: Transition }}
         >
             <DialogAppBar onClose={() => onAction(false)}
                 title=
@@ -244,16 +246,16 @@ const ActivityResourceDialog = ({ selectedRow, selectedIndex, handleClose, updat
                     />} */}
                     <TextFieldBase value={note} onChange={e => setNote(e.target.value)} fullWidth={true} label={text.resourceNote} />
                 </Box>
+                <DialogActions sx={{ paddingTop: 4, justifyContent: 'center' }}>
+                    <Button size='large' endIcon={<Delete />} disableElevation={true} variant='outlined' onClick={remove}>{text.delete}
+                    </Button>
+                    <Button size='large' disableElevation={true} variant='contained'
+                        endIcon={<Save />}
+                        onClick={() => onAction(true)} >
+                        {text.save}
+                    </Button>
+                </DialogActions>
             </DialogContent>
-            <DialogActions sx={{ justifyContent: 'center' }}>
-                <Button size='large' endIcon={<Delete />} disableElevation={true} variant='outlined' onClick={remove}>{text.delete}
-                </Button>
-                <Button size='large' disableElevation={true} variant='contained'
-                    endIcon={<Save />}
-                    onClick={() => onAction(true)} >
-                    {text.save}
-                </Button>
-            </DialogActions>
         </Dialog>
     )
 }
