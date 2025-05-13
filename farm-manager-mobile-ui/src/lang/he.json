@@ -197,6 +197,7 @@
     "share": "שיתוף",
     "add": "הוסף",
     "baitExpiry": "תוקף נדיפית",
-    "newActivityGeo": "פעולות - חפש חלקות לפי GPS"
+    "newActivityGeo": "פעולות - חפש חלקות לפי GPS",
+    "usernameOrPasswordInvalid": "שם משתמש/סיסמה שגויים"
 
 }

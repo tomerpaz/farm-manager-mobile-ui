@@ -197,5 +197,6 @@
   "share": "Share",
   "add": "Add",
   "baitExpiry": "Bait Expiry",
-  "newActivityGeo":"Activities - search fields by GPS"
+  "newActivityGeo":"Activities - search fields by GPS",
+  "usernameOrPasswordInvalid": "User/Password Invalid"
 }

@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import { Box, Button, InputAdornment, TextField, Typography } from "@mui/material"
 import { useNavigate } from "react-router";
 import { useForm, Controller, useWatch } from "react-hook-form";
@@ -8,13 +9,14 @@ import LoginOutlined from '@mui/icons-material/LoginOutlined';
 import LogoLeaf from "../../icons/LogoLeaf";
 import { useLoginMutation } from "./authApiSlice";
 import { DEFAULT_ROUTE } from "../../App";
-import { useEffect } from "react";
-import { setCredentials } from "../app/appSlice";
-import { useDispatch } from "react-redux";
+import { selectLang, setCredentials, setLang } from "../app/appSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { getUserLang } from '../../router/UserRoutes';
 
 const Login = (props) => {
 
 
+    const [errorMsg, setErrorMsg] = useState(null);
 
     const dispatch = useDispatch()
 
@@ -22,23 +24,29 @@ const Login = (props) => {
 
     const [login] = useLoginMutation()
 
+    const text = useSelector(selectLang)
+
     const { handleSubmit, control } = useForm();
 
 
     const user = useWatch({ name: 'username', control });
     const pwd = useWatch({ name: 'password', control });
 
-
-
     const onSubmit = async (e) => {
-        // console.log(e)
+        setErrorMsg(null)
         try {
             const loginData = await login(e).unwrap()
             dispatch(setCredentials(loginData))
             navigate(DEFAULT_ROUTE)
         } catch (err) {
 
-            console.log(err);
+            dispatch(setLang(getUserLang(text.lang)));
+            setErrorMsg(err.data.message)
+            // if (err?.data?.message) {
+            //     setErrorMsg(err?.data?.message)
+            // }
+
+
             // if (!err?.originalStatus) {
             //     // isLoading: true until timeout occurs
             //     setErrMsg('No Server Response');
@@ -84,7 +92,7 @@ const Login = (props) => {
                 display={'flex'}
                 flexDirection={'column'}>
                 <LogoLeaf color='primary' fontSize={'large'} />
-
+                {errorMsg && <Typography color='error'>{text[errorMsg] ? text[errorMsg] : errorMsg}</Typography>}
                 <Controller
                     name="username"
                     control={control}

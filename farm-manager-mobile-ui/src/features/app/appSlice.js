@@ -15,7 +15,7 @@ const showFieldAlias = 'true' === localStorage.getItem('showFieldAlias');
 const appSlice = createSlice({
     name: 'auth',
     initialState: {
-        lang: { lang: 'en', dir: lang === 'he' ? 'rtl' : 'ltr', },
+        lang: { lang:  lang ? lang : 'en', dir: lang === 'he' ? 'rtl' : 'ltr', },
         token: localStorage.getItem('token'),
         refreshToken: localStorage.getItem('refreshToken'),
         fieldFreeTextFilter: '',
