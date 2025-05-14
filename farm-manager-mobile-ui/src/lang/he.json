@@ -198,6 +198,6 @@
     "add": "הוסף",
     "baitExpiry": "תוקף נדיפית",
     "newActivityGeo": "פעולות - חפש חלקות לפי GPS",
-    "usernameOrPasswordInvalid": "שם משתמש/סיסמה שגויים"
-
+    "usernameOrPasswordInvalid": "שם משתמש/סיסמה שגויים",
+    "accountExpired": "תוקף המנוי הסתיים"
 }

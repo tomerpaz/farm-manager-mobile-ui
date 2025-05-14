@@ -194,5 +194,6 @@
   "add": "Add",
   "baitExpiry": "Bait Expiry",
   "newActivityGeo":"Activities - search fields by GPS",
-  "usernameOrPasswordInvalid": "User/Password Invalid"
+  "usernameOrPasswordInvalid": "User/Password Invalid",
+  "accountExpired": "Account expired"
 }

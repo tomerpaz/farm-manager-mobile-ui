@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Box, Button, InputAdornment, TextField, Typography } from "@mui/material"
 import { useNavigate } from "react-router";
 import { useForm, Controller, useWatch } from "react-hook-form";
@@ -29,8 +29,8 @@ const Login = (props) => {
     const { handleSubmit, control } = useForm();
 
 
-    const user = useWatch({ name: 'username', control });
-    const pwd = useWatch({ name: 'password', control });
+    // const user = useWatch({ name: 'username', control });
+    // const pwd = useWatch({ name: 'password', control });
 
     const onSubmit = async (e) => {
         setErrorMsg(null)
@@ -41,10 +41,9 @@ const Login = (props) => {
         } catch (err) {
 
             dispatch(setLang(getUserLang(text.lang)));
-            setErrorMsg(err.data.message)
-            // if (err?.data?.message) {
-            //     setErrorMsg(err?.data?.message)
-            // }
+            if (err?.data?.message) {
+                setErrorMsg(err?.data?.message)
+            }
 
 
             // if (!err?.originalStatus) {
@@ -105,13 +104,16 @@ const Login = (props) => {
                             //      helperText={error ? error.message : null}
                             value={value}
                             onChange={onChange}
-                            InputProps={{
-                                startAdornment: (
-                                    <InputAdornment position="start">
-                                        <AccountCircle />
-                                    </InputAdornment>
-                                ),
+                            slotProps={{
+                                input: {
+                                    startAdornment: (
+                                        <InputAdornment position="start">
+                                            <AccountCircle />
+                                        </InputAdornment>
+                                    ),
+                                }
                             }}
+
                         />
                     )}
                     rules={{ required: 'Username required' }}
