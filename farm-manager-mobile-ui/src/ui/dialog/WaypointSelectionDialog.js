@@ -78,7 +78,6 @@ const WaypointSelectionDialog = ({ open, handleClose, fields, waypoints, activit
     const title = activityDescription({activityDef, type: activityType}, text);
 
     useEffect(() => {
-        //console.log(activeGPS,longitude, latitude)
         if (map && activeGPS && longitude && latitude) {
             map.setView([latitude, longitude], zoom);
         }
@@ -171,7 +170,7 @@ const WaypointSelectionDialog = ({ open, handleClose, fields, waypoints, activit
 
 
     const mapCliecked = (e, element, type, index) => {
-        console.log('mapCliecked', type, index)
+//          console.log('mapCliecked', type, index)
         if (type === 'point') {
             stopMapEventPropagation(e);
             setSelectedPoint(element);
@@ -200,9 +199,16 @@ const WaypointSelectionDialog = ({ open, handleClose, fields, waypoints, activit
     const polygons = displayFields.filter(e => e.polygon !== null);
 
 
-    const handleCloseWaypointDialog = (val) => {
+    const handleCloseWaypointDialog = (val, note, lat, lng) => {
        // console.log('val',val)
-        if(val && selectedIndex === null){
+       if(val){
+           //const  updatedPoint = {not}
+
+            selectedPoint.note = note;
+            selectedPoint.point.lat = lat;
+            selectedPoint.point.lng = lng;
+       }
+        if(val && selectedIndex === null){            
             setPoints(points.concat(selectedPoint));
         }
         setOpenWaypointDialog(false);
@@ -220,9 +226,8 @@ const WaypointSelectionDialog = ({ open, handleClose, fields, waypoints, activit
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
             fullScreen
-
-            TransitionComponent={Transition}
-        >
+            slots={{ transition: Transition }}
+                    >
             <DialogAppBar onClose={() => onAction(false)}
                 title={<Box display={'flex'} flexDirection={'row'} justifyContent={'space-between'} alignItems={'center'}><Typography variant="h6">{`${text.map}`}</Typography><Box padding={2}><Accuracy /></Box></Box>} />
 
@@ -298,7 +303,7 @@ const WaypointSelectionDialog = ({ open, handleClose, fields, waypoints, activit
 
                     </Box>
                 </Box>
-                {openWaypointDialog && <WaypointDialog title={title} open={openWaypointDialog} selectedPoint={selectedPoint} handleClose={handleCloseWaypointDialog} handleDelete={deleteWaypoint} />}
+                {openWaypointDialog && <WaypointDialog title={title} open={openWaypointDialog} selectedPoint={selectedPoint} handleClose={handleCloseWaypointDialog} handleDelete={deleteWaypoint} polygons={polygons} center={center} initialZoom={zoom}/>}
                             {/* {openWaypointDialog && <ActivityPointActionDialog open={openWaypointDialog} selectedPoint={selectedPoint} handleClose={handleCloseWaypointDialog} handleDelete={deleteWaypoint} />} */}
 
             </DialogContent>
