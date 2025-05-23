@@ -5,10 +5,10 @@ import { useNavigate } from "react-router";
 import { Alert, Box, IconButton, Snackbar, Typography } from "@mui/material";
 import { useFields } from "../../../features/fields/fieldsApiSlice";
 import { useGetUserDataQuery } from '../../../features/auth/authApiSlice'
-import { selectActiveGPS, selectCurrentYear, selectEditLayer, selectFieldBaseFieldFilter, selectFieldFreeTextFilter, selectFieldSiteFilter, selectFieldsViewStatus, selectLang, selectLatitude, selectLongitude, selectMapCenter, selectMapZoom, selectShowFieldAlias, selectShowFieldName, selectShowLayers, selectShowsPestLayer, setEditLayer, setMapCenter, setMapZoom } from "../../../features/app/appSlice";
+import { selectActiveGPS, selectCurrentYear, selectEditLayer, selectFieldBaseFieldFilter, selectFieldFreeTextFilter, selectFieldSiteFilter, selectFieldsViewStatus, selectLang, selectLatitude, selectLongitude, selectMapCenter, selectMapZoom, selectShowFieldAlias, selectShowFieldName, selectShowLayers, selectShowOfficialFieldId, selectShowsPestLayer, setEditLayer, setMapCenter, setMapZoom } from "../../../features/app/appSlice";
 import { useDispatch, useSelector } from "react-redux";
 import FieldsFilter from "../../../components/filters/FieldsFilter";
-import { displayFieldName, filterFields, getFillColor, getOpacity, isArrayEmpty, isStringEmpty, mapDisplayFieldName, MapToolTip, MAX_PER_MAP, parseISOOrNull, SCOUT, stopMapEventPropagation, trap } from "../../FarmUtil";
+import { displayFieldName, filterFields, getFillColor, getOpacity, isArrayEmpty, isStringEmpty, mapDisplayFieldName, MapToolTip, MAX_PER_MAP, stopMapEventPropagation, trap } from "../../FarmUtil";
 import SatelliteMapProvider from "../../../components/map/SatelliteMapProvider";
 import { useGetPointsQuery } from "../../../features/points/pointsApiSlice";
 import { Close } from "@mui/icons-material";
@@ -51,10 +51,10 @@ const FieldsMap = (props) => {
 
     const showFieldAlias = useSelector(selectShowFieldAlias);
     const showFieldName = useSelector(selectShowFieldName);
-
+    const showOfficialFieldId = useSelector(selectShowOfficialFieldId);
 
     const [selectedPoint, setSelectedPoint] = useState(null);
-    const [editPoint, setEditPoint] = useState(false);
+    // const [editPoint, setEditPoint] = useState(false);
 
     const displayFields = filterFields(fields, freeText, fieldSiteFilter, fieldBaseFieldFilter, fieldsViewStatus);
 
@@ -179,7 +179,7 @@ const FieldsMap = (props) => {
         }
     }
 
-    const showMapToolTip = showFieldAlias || showFieldName;
+    const showMapToolTip = showFieldAlias || showFieldName || showOfficialFieldId;
 
     return (
         <Box display={'flex'} flex={1} alignItems={'stretch'} flexDirection={'column'} justifyContent={'space-between'}>
@@ -206,7 +206,7 @@ const FieldsMap = (props) => {
                             {showMapToolTip && index < MAX_PER_MAP && <Tooltip
                                 className={'empty-tooltip'}
                                 direction="center" opacity={1} permanent>
-                                <MapToolTip textArr={[mapDisplayFieldName(f, showFieldName, showFieldAlias)]} />
+                                <MapToolTip textArr={[mapDisplayFieldName(f, showFieldName, showFieldAlias, showOfficialFieldId)]} />
                             </Tooltip>}
                         </Polygon>
                     )}

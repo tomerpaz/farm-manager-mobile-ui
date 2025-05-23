@@ -12,6 +12,7 @@ const activeGPS = 'true' === localStorage.getItem('activeGPS');
 
 const showFieldName = 'true' === localStorage.getItem('showFieldName');
 const showFieldAlias = 'true' === localStorage.getItem('showFieldAlias');
+const showOfficialFieldId = 'true' === localStorage.getItem('showOfficialFieldId');
 const appSlice = createSlice({
     name: 'auth',
     initialState: {
@@ -53,6 +54,7 @@ const appSlice = createSlice({
         mapZoom: null,
         showFieldName,
         showFieldAlias,
+        showOfficialFieldId,
         newActivityGeo,
         accuracy: null,
         longitude: null,
@@ -176,6 +178,10 @@ const appSlice = createSlice({
             state.showFieldAlias = action.payload;
             localStorage.setItem('showFieldAlias', action.payload);
         },
+        setShowOfficialFieldId: (state, action) => {
+            state.showOfficialFieldId = action.payload;
+            localStorage.setItem('showOfficialFieldId', action.payload);
+        },
         setShowFieldName: (state, action) => {
             state.showFieldName = action.payload;
             localStorage.setItem('showFieldName', action.payload);
@@ -206,7 +212,8 @@ export const { setCredentials, logOut, setLang, setCurrentYear, setAppBarDialogO
     setStartDateFilter, setEndDateFilter, setActivityTypeFilter, setFieldSiteFilter, setFieldBaseFieldFilter, setFieldDashboardYear, setFieldsViewStatus,
     setActivityPlanStatusFilter, setActivityPlanTypeFilter, setActivityStatusFilter, setActivityType, setSnackbar, setOpenSettings, setInventoryFreeTextFilter,
     setInventoryDateFilter, setInventoryWarehouseFilter, setShowInventory, setShowPlans, setOpenLayers, setShowLayers, setEditLayer, setMapCenter, setMapZoom,
-    setShowFieldAlias, setShowFieldName, setNewActivityGeo, setAccuracy, setActiveGPS, setLongitude, setLatitude, setActivityParentFieldFilter,setActivityBaseFieldFilter,setActivitySiteFilter
+    setShowFieldAlias, setShowFieldName, setNewActivityGeo, setAccuracy, setActiveGPS, setLongitude, setLatitude, setActivityParentFieldFilter,setActivityBaseFieldFilter,setActivitySiteFilter,
+    setShowOfficialFieldId
 } = appSlice.actions
 
 export default appSlice.reducer
@@ -251,3 +258,4 @@ export const selectLatitude = (state) => state.app.latitude
 export const selectActivitySiteFilter = (state) => state.app.activitySiteFilter
 export const selectActivityBaseFieldFilter = (state) => state.app.activityBaseFieldFilter
 export const selectActivityParentFieldFilter = (state) => state.app.activityParentFieldFilter
+export const selectShowOfficialFieldId = (state) => state.app.showOfficialFieldId

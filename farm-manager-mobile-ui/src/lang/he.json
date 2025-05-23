@@ -199,5 +199,6 @@
     "baitExpiry": "תוקף נדיפית",
     "newActivityGeo": "פעולות - חפש חלקות לפי GPS",
     "usernameOrPasswordInvalid": "שם משתמש/סיסמה שגויים",
-    "accountExpired": "תוקף המנוי הסתיים"
+    "accountExpired": "תוקף המנוי הסתיים",
+    "officialFieldId": "מס משרד חקלאות"
 }
