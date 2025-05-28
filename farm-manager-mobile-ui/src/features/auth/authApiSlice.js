@@ -1,5 +1,5 @@
 import { createEntityAdapter } from "@reduxjs/toolkit";
-import { Activities_TAG, FieldScouts_TAG, Field_TAG, Inventory_TAG, FieldPoints_TAG, Season_TAG, apiSlice, PestsStages_TAG, PlantParts_TAG, InfectionLevels_TAG, Points_TAG, Pests_TAG } from "../../app/api/apiSlice";
+import { Activities_TAG, FieldScouts_TAG, Field_TAG, Inventory_TAG, FieldPoints_TAG, Season_TAG, apiSlice, PestsStages_TAG, PlantParts_TAG, InfectionLevels_TAG, Points_TAG, Pests_TAG, Layers_TAG } from "../../app/api/apiSlice";
 
 
 // export const authAdapter = createEntityAdapter()
@@ -34,7 +34,7 @@ export const authApiSlice = apiSlice.injectEndpoints({
                 Dashboard_TAG, ActivityDefs_TAG, Crops_TAG, SelectedActivity_TAG, Warehouses_TAG,
                 Resources_TAG, Containers_TAG, CropPesticides_TAG, Qualities_TAG, Sizes_TAG, Inventory_TAG, Season_TAG,
                 FieldPoints_TAG, FieldScouts_TAG, PestsStages_TAG, InfectionLevels_TAG, PlantParts_TAG, Points_TAG,
-                Pests_TAG,    
+                Pests_TAG,Layers_TAG    
             ]
         }),
         // getUser: builder.mutation({

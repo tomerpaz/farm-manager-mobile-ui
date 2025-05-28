@@ -1,7 +1,7 @@
 import {
     createEntityAdapter
 } from "@reduxjs/toolkit";
-import { FieldPoints_TAG, Points_TAG, apiSlice } from "../../app/api/apiSlice";
+import { FieldPoints_TAG, Layers_TAG, Points_TAG, apiSlice } from "../../app/api/apiSlice";
 
 export const adapter = createEntityAdapter()
 
@@ -20,6 +20,11 @@ export const pointsApiSlice = apiSlice.injectEndpoints({
         getPoints: builder.query({
             query: (args) => `/api/farm/points?${buildPointSearch(args)}`,
             providesTags: [Points_TAG],
+        }),
+
+        getLayers: builder.query({
+            query: (args) => `/api/farm/layers`,
+            providesTags: [Layers_TAG],
         }),
 
         getPoint: builder.query({
@@ -82,6 +87,7 @@ export const {
     useCreateFieldPointMutation,
     useUpdateFieldPointMutation,
     useDeleteFieldPointMutation,
+    useGetLayersQuery,
 } = pointsApiSlice
 
 

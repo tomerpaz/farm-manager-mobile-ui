@@ -5,15 +5,16 @@ import { useNavigate } from "react-router";
 import { Alert, Box, IconButton, Snackbar, Typography } from "@mui/material";
 import { useFields } from "../../../features/fields/fieldsApiSlice";
 import { useGetUserDataQuery } from '../../../features/auth/authApiSlice'
-import { selectActiveGPS, selectCurrentYear, selectEditLayer, selectFieldBaseFieldFilter, selectFieldFreeTextFilter, selectFieldSiteFilter, selectFieldsViewStatus, selectLang, selectLatitude, selectLongitude, selectMapCenter, selectMapZoom, selectShowFieldAlias, selectShowFieldName, selectShowLayers, selectShowOfficialFieldId, selectShowsPestLayer, setEditLayer, setMapCenter, setMapZoom } from "../../../features/app/appSlice";
+import { selectActiveGPS, selectCurrentYear, selectEditLayer, selectFieldBaseFieldFilter, selectFieldFreeTextFilter, selectFieldSiteFilter, selectFieldsViewStatus, selectLang, selectLatitude, selectLongitude, selectMapCenter, selectMapZoom, selectShowFieldAlias, selectShowFieldName, selectShowLayers, selectShowOfficialFieldId, selectShowsPestLayer, selectVisibilLayes, setEditLayer, setMapCenter, setMapZoom } from "../../../features/app/appSlice";
 import { useDispatch, useSelector } from "react-redux";
 import FieldsFilter from "../../../components/filters/FieldsFilter";
 import { displayFieldName, filterFields, getFillColor, getOpacity, isArrayEmpty, isStringEmpty, mapDisplayFieldName, MapToolTip, MAX_PER_MAP, stopMapEventPropagation, trap } from "../../FarmUtil";
 import SatelliteMapProvider from "../../../components/map/SatelliteMapProvider";
-import { useGetPointsQuery } from "../../../features/points/pointsApiSlice";
+import { useGetLayersQuery, useGetPointsQuery } from "../../../features/points/pointsApiSlice";
 import { Close } from "@mui/icons-material";
 import PointIcon from "../../layers/PointIcon";
 import PointActionDialog from "../../dialog/PointActionDialog";
+import RenderLayerPoints from "./RenderLayerPoints";
 
 
 const sortByEndDate = (fields) => {
@@ -58,6 +59,12 @@ const FieldsMap = (props) => {
 
     const displayFields = filterFields(fields, freeText, fieldSiteFilter, fieldBaseFieldFilter, fieldsViewStatus);
 
+    const visibilLayes = useSelector(selectVisibilLayes);
+    const { data: layers } = useGetLayersQuery();
+
+    const getLayers = () => {
+        return layers ? layers.filter(e => visibilLayes.includes(e.id)) : [];
+    }
 
     sortByEndDate(displayFields);
 
@@ -103,7 +110,7 @@ const FieldsMap = (props) => {
 
     useEffect(() => {
         if (map && activeGPS && longitude && latitude) {
-            map.setView([latitude,longitude], zoom);
+            map.setView([latitude, longitude], zoom);
         }
     }, [activeGPS, longitude, latitude])
 
@@ -189,8 +196,8 @@ const FieldsMap = (props) => {
                     ref={setSetMap}
                 >
                     <SatelliteMapProvider />
-                   {!activeGPS &&  <GeoLocation />}
-                   {activeGPS && latitude && longitude && <CircleMarker color={'white'} fillColor={'blue'} fillOpacity={1} center={[latitude, longitude]} />}
+                    {!activeGPS && <GeoLocation />}
+                    {activeGPS && latitude && longitude && <CircleMarker color={'white'} fillColor={'blue'} fillOpacity={1} center={[latitude, longitude]} />}
 
                     {displayFields.map((f, index) =>
                         <Polygon field={f} key={f.id}
@@ -211,6 +218,10 @@ const FieldsMap = (props) => {
                         </Polygon>
                     )}
 
+
+                    {getLayers().map((e, index, arr) =>
+                        <RenderLayerPoints layer={e} />
+                    )}
                     {getDisplayPoints().map((e, index, arr) =>
 
                         <CircleMarker
@@ -255,7 +266,7 @@ const FieldsMap = (props) => {
             {/* {selectedPoint && editLayer && <FieldPointDialog open={selectedPoint !== null} deletable={true} defaultValues={{...selectedPoint, expiry : parseISOOrNull(selectedPoint.expiry)}} handleClose={handleCloseEditPoint} />} */}
             {selectedPoint && <PointActionDialog open={selectedPoint !== null} deletable={true} selectedPoint={selectedPoint} handleClose={handleCloseEditPoint} />}
 
-        </Box>
+        </Box >
     )
 }
 export default FieldsMap;

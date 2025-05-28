@@ -60,6 +60,7 @@ const appSlice = createSlice({
         longitude: null,
         latitude: null,
         activeGPS,
+        visibleLayers: [],
         // showPestsLayer: false,
         // showTrapsLayer: false,
         // showIrrigationHeadsLayer: false,
@@ -205,6 +206,15 @@ const appSlice = createSlice({
         setLongitude: (state, action) => {
             state.longitude = action.payload
         },
+        setVisibleLayers: (state, action) => {
+            const isSelected = state.visibleLayers.find(e => e === action.payload) ? true : false;
+            if(isSelected){
+                
+                state.visibleLayers = [...state.visibleLayers].filter(e=>e !== action.payload)
+            } else {
+                state.visibleLayers = [...state.visibleLayers].concat([action.payload])
+            }
+        },
     },
 })
 
@@ -213,7 +223,7 @@ export const { setCredentials, logOut, setLang, setCurrentYear, setAppBarDialogO
     setActivityPlanStatusFilter, setActivityPlanTypeFilter, setActivityStatusFilter, setActivityType, setSnackbar, setOpenSettings, setInventoryFreeTextFilter,
     setInventoryDateFilter, setInventoryWarehouseFilter, setShowInventory, setShowPlans, setOpenLayers, setShowLayers, setEditLayer, setMapCenter, setMapZoom,
     setShowFieldAlias, setShowFieldName, setNewActivityGeo, setAccuracy, setActiveGPS, setLongitude, setLatitude, setActivityParentFieldFilter,setActivityBaseFieldFilter,setActivitySiteFilter,
-    setShowOfficialFieldId
+    setShowOfficialFieldId,setVisibleLayers
 } = appSlice.actions
 
 export default appSlice.reducer
@@ -259,3 +269,4 @@ export const selectActivitySiteFilter = (state) => state.app.activitySiteFilter
 export const selectActivityBaseFieldFilter = (state) => state.app.activityBaseFieldFilter
 export const selectActivityParentFieldFilter = (state) => state.app.activityParentFieldFilter
 export const selectShowOfficialFieldId = (state) => state.app.showOfficialFieldId
+export const selectVisibilLayes = (state) => state.app.visibleLayers

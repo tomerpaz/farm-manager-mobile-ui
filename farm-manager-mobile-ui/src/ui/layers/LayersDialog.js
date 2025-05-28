@@ -11,13 +11,17 @@ import {
     setShowFieldName,
     setShowFieldAlias,
     selectShowOfficialFieldId,
-    setShowOfficialFieldId
+    setShowOfficialFieldId,
+    selectVisibilLayes,
+    setVisibleLayers
 } from '../../features/app/appSlice';
 import { isMobile } from '../FarmUtil';
 import { useGetUserDataQuery } from '../../features/auth/authApiSlice';
 import DialogAppBar from '../dialog/DialogAppBar';
 import { CenterFocusStrong, Opacity } from '@mui/icons-material';
 import PointForm from '../point/PointForm';
+import { useGetLayersQuery } from '../../features/points/pointsApiSlice';
+import { vi } from 'date-fns/locale';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -45,6 +49,9 @@ const LayersDialog = () => {
     const showFieldAlias = useSelector(selectShowFieldAlias);
     const showFieldName = useSelector(selectShowFieldName);
     const showOfficialFieldId = useSelector(selectShowOfficialFieldId);
+    const visibilLayes = useSelector(selectVisibilLayes);
+    const { data: layers, isLoading: isLoadingPoints, isFetching: isFetchingPoints } = useGetLayersQuery();
+
 
     // const onNewPointSaved = () => {
     //     setNewPoint(null);
@@ -80,6 +87,10 @@ const LayersDialog = () => {
         } else {
             dispatch(setShowLayers(showLayers.concat(layer)));
         }
+    }
+
+    const getLayers = () => {
+        return layers ? layers : [];
     }
 
     return (
@@ -127,21 +138,24 @@ const LayersDialog = () => {
                 <Box marginTop={1} display={'flex'} flexDirection={'row'} justifyContent={'space-between'} >
                     <FormControlLabel control={<Checkbox checked={showOfficialFieldId} onChange={() => dispatch(setShowOfficialFieldId(!showOfficialFieldId))} />} label={text.officialFieldId} />
                 </Box>
-
-                {/* {isInventory &&
-                    <Box marginTop={2} display={'flex'} flexDirection={'row'} >
-                        <FormControlLabel control={<Checkbox checked={showInventory} onChange={handleInvenotryChange} />} label={text.inventory} />
-
-
+                <Divider />
+                {getLayers().map(e => {
+                    return < Box key={e.id} marginTop={1} display={'flex'} flexDirection={'row'} justifyContent={'space-between'} >
+                        <FormControlLabel control={<Checkbox checked={visibilLayes.find(id => e.id === id) ? true : false} onChange={() => dispatch(setVisibleLayers(e.id))} />} label={e.name} />
                     </Box>
-                } */}
+                }
+
+                )
+                }
 
             </DialogContent>
-            {newPoint && <PointForm open={newPoint !== null}
-                defaultValues={newPoint} handleClose={() => setNewPoint(null)} deletable={false}
+            {
+                newPoint && <PointForm open={newPoint !== null}
+                    defaultValues={newPoint} handleClose={() => setNewPoint(null)} deletable={false}
 
-            />}
-        </Dialog>
+                />
+            }
+        </Dialog >
     )
 }
 export default LayersDialog
