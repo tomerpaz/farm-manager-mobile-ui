@@ -6,6 +6,7 @@ import { useGetUserDataQuery } from '../../features/auth/authApiSlice'
 import AppBarMenu from '../components/AppBarMenu'
 import AppBarSearch from '../components/AppBarSearch'
 import Accuracy from '../components/Accuracy'
+import CountrySelect from './SearchBarAutoComplete'
 
 const FieldsBar = () => {
     const dispatch = useDispatch()
@@ -32,6 +33,7 @@ const FieldsBar = () => {
                     <FilterAlt sx={{ color: noFilter ? null : 'blue' }} />
                 </IconButton>
                 <AppBarSearch value={useSelector(selectFieldFreeTextFilter)} onChange={(e) => dispatch(setFieldFreeTextFilter(e))} />
+                {/* <CountrySelect /> */}
                 <Accuracy />
                 <AppBarMenu />
             </Toolbar>
