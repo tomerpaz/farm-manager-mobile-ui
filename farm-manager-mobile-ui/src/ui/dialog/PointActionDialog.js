@@ -1,8 +1,7 @@
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, List, ListItem, ListItemAvatar, ListItemButton, ListItemIcon, ListItemText, MenuItem, TextField, Typography } from "@mui/material";
-import TextFieldBase from "../../components/ui/TextField";
-import { Edit, Share, PestControl as Scout, History, EditLocation } from "@mui/icons-material";
-import { Fragment, useEffect, useState } from "react";
-import { activityDescription, activityLongText, AREA_UNIT, asShortStringDateTime, getUnitText, parseDate, parseISOOrNull, SCOUT, trap } from "../FarmUtil";
+import {Dialog, DialogContent, Divider, List, ListItem, ListItemAvatar, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
+import { PestControl as Scout, EditLocation } from "@mui/icons-material";
+import { Fragment, useState } from "react";
+import { activityDescription, activityLongText, parseDate, parseISOOrNull, SCOUT, trap } from "../FarmUtil";
 import DialogAppBar from "./DialogAppBar";
 import { selectLang, setActivityType } from "../../features/app/appSlice";
 import { useDispatch, useSelector } from "react-redux";
@@ -11,7 +10,7 @@ import TelegramIcon from '@mui/icons-material/Telegram';
 import { msgTelegram, msgWhatsapp, shareMsg, Telegram, Whatsapp } from "../../appbar/components/ShareLocationMenu";
 import { createSearchParams, useNavigate } from "react-router";
 import PointForm from "../point/PointForm";
-import PointIcon, { ACTIVITY_POINT_TYPE, SCOUT_POINT_TYPE } from "../layers/PointIcon";
+import { ACTIVITY_POINT_TYPE, SCOUT_POINT_TYPE } from "../layers/PointIcon";
 import ActivityTypeIcon from "../../icons/ActivityTypeIcon";
 
 const PointActionDialog = ({ open, handleClose, selectedPoint }) => {
@@ -19,7 +18,7 @@ const PointActionDialog = ({ open, handleClose, selectedPoint }) => {
     const text = useSelector(selectLang);
     // const [touched, setTouched] = useState(false);
 
-    const [share, setShare] = useState(false);
+  //  const [share, setShare] = useState(false);
 
     const [editPoint, setEditPoint] = useState(null);
 
