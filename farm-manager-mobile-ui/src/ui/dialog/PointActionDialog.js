@@ -32,6 +32,8 @@ const PointActionDialog = ({ open, handleClose, selectedPoint }) => {
 
         setEditPoint(null);
         handleClose();
+        // setTouched(false);
+        // setNote('');
     }
 
     const shareClick = (app) => {
@@ -138,7 +140,6 @@ const PointActionDialog = ({ open, handleClose, selectedPoint }) => {
                     }
 
 
-<div>HI</div>
 
 
                     {/* <Divider />
