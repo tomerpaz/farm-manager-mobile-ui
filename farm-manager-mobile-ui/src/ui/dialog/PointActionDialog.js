@@ -32,16 +32,7 @@ const PointActionDialog = ({ open, handleClose, selectedPoint }) => {
 
         setEditPoint(null);
         handleClose();
-        // setTouched(false);
-        // setNote('');
     }
-    /**
-     Share,
-    Edit,
-    History,
-    Scout,
-    Activity
-     */
 
     const shareClick = (app) => {
         console.log('selectedPoint', selectedPoint)
@@ -82,11 +73,9 @@ const PointActionDialog = ({ open, handleClose, selectedPoint }) => {
         handleClose();
     }
 
-
     const newPoint = () => {
         setEditPoint({ ...selectedPoint, expiry: parseISOOrNull(selectedPoint.expiry) })
     }
-
 
     const activityBased = [SCOUT_POINT_TYPE, ACTIVITY_POINT_TYPE].includes(selectedPoint?.type);
     const edit = selectedPoint.type === trap;
