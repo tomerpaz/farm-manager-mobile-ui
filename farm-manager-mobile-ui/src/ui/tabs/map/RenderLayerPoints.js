@@ -7,7 +7,6 @@ const RenderLayerPoints = ({ layer, onClick }) => {
       {layer.elements.map((e, index) => {
         return (
           <CircleMarker
-
             eventHandlers={{
               click: (event) => {
 
