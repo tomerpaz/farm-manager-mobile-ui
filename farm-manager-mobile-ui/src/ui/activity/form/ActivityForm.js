@@ -75,7 +75,6 @@ const ActivityForm = ({ activity }) => {
 
   const scoutParams = useWatch({ control, name: "scoutParams" })
 
-
   const tariffResourceIds = resources.filter(e => e.manualTariff === false).map(e => e.resource.id);
   const { data: tariffs, isSuccess: isTariffsSuccess, isLoading: isTariffLoading, } = useGetResourcesTariffQuery({
     activityType: activity.type,
@@ -174,7 +173,7 @@ const ActivityForm = ({ activity }) => {
           <ActivityHeaderView control={control} register={register} type={type} activity={activity} errors={errors} crops={crops} activityDefs={activityDefs} customers={customers} reference={reference} isDuplicate={isDuplicate} isExecutePlan={isExecutePlan}
             execution={execution} days={days} crop={crop} onCropCHange={onCropCHange} />
           <ActivityFields control={control} register={register} activity={activity} getValues={getValues} activityArea={activityArea} errors={errors} crop={crop}
-            openWaypointSelection={openWaypointSelection} setOpenWaypointSelection={setOpenWaypointSelection} pointsCount = {pointsCount }
+            openWaypointSelection={openWaypointSelection} setOpenWaypointSelection={setOpenWaypointSelection} pointsCount = {pointsCount } scoutParams={scoutParams}
           />
 
           {openWaypointSelection && <ActivityWaypoints

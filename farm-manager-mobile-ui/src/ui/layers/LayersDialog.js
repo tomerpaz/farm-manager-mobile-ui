@@ -106,7 +106,7 @@ const LayersDialog = () => {
             <DialogContent>
 
                 <Box marginTop={1} display={'flex'} flexDirection={'row'} >
-                    <FormControlLabel control={<Checkbox checked={showLayers.includes(SCOUT)} onChange={() => handleChange(SCOUT)} />} label={text.scouting} />
+                    <FormControlLabel control={<Checkbox checked={showLayers.includes(SCOUT)} onChange={() => handleChange(SCOUT)} />} label={text.pests} />
                 </Box>
                 <Divider />
                 <Box marginTop={1} display={'flex'} flexDirection={'row'} >
@@ -121,14 +121,11 @@ const LayersDialog = () => {
                 </Box>
                 <Divider />
 
-                <Box marginTop={1} display={'flex'} flexDirection={'row'} justifyContent={'space-between'} >
+                {/* <Box marginTop={1} display={'flex'} flexDirection={'row'} justifyContent={'space-between'} >
                     <FormControlLabel control={<Checkbox checked={showLayers.includes(irrigationHead)} onChange={() => handleChange(irrigationHead)} />} label={text.irrigationHeads} />
-                    {/* <IconButton onClick={() => handleEditLayer(irrigationHead)}><EditLocationAlt /></IconButton> */}
                     <Button disableElevation variant='outlined' color='secondary' onClick={() => addPoint(irrigationHead)} startIcon={<Opacity />}>{text.add}</Button>
 
-                </Box>
-                <Box marginTop={1}></Box>
-                <Divider />
+                </Box> */}
                 <Box marginTop={1} display={'flex'} flexDirection={'row'} justifyContent={'space-between'} >
                     <FormControlLabel control={<Checkbox checked={showFieldName} onChange={() => dispatch(setShowFieldName(!showFieldName))} />} label={text.field} />
                 </Box>

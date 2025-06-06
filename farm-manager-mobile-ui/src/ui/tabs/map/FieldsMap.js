@@ -220,7 +220,7 @@ const FieldsMap = (props) => {
 
 
                     {getLayers().map((e, index, arr) =>
-                        <RenderLayerPoints layer={e} />
+                        <RenderLayerPoints key={index} layer={e} onClick={mapCliecked} />
                     )}
                     {getDisplayPoints().map((e, index, arr) =>
 

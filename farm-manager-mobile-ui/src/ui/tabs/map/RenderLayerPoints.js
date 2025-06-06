@@ -1,12 +1,20 @@
 import { CircleMarker } from 'react-leaflet';
 import { MapToolTip } from '../../FarmUtil';
 
-const RenderLayerPoints = ({layer}) => {
+const RenderLayerPoints = ({ layer, onClick }) => {
   return (
     <div>
       {layer.elements.map((e, index) => {
         return (
           <CircleMarker
+
+            eventHandlers={{
+              click: (event) => {
+
+                onClick(event, e, 'point', index);
+              }
+            }}
+
             key={index + layer.id}
             center={[e.lat, e.lng]}
             color={layer.color}

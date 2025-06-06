@@ -92,7 +92,7 @@ const PointActionDialog = ({ open, handleClose, selectedPoint }) => {
 
 
     const activityBased = [SCOUT_POINT_TYPE, ACTIVITY_POINT_TYPE].includes(selectedPoint?.type);
-
+    const edit = selectedPoint.type === trap;
     const title = activityBased ? activityDescription(selectedPoint.activity, text) : selectedPoint.name;
     return (
         <Dialog
@@ -132,8 +132,8 @@ const PointActionDialog = ({ open, handleClose, selectedPoint }) => {
                         </ListItemIcon>
                         <ListItemText primary={text.share} secondary={Telegram} />
                     </ListItemButton>
-                    <Divider />
-                    {!activityBased && <ListItemButton onClick={() => newPoint()}>
+                    {edit && <Divider />}
+                    {edit && <ListItemButton onClick={() => newPoint()}>
                         <ListItemIcon>
                             <EditLocation />
                         </ListItemIcon>
