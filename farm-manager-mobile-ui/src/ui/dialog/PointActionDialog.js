@@ -85,8 +85,6 @@ const PointActionDialog = ({ open, handleClose, selectedPoint }) => {
 
     const newPoint = () => {
         setEditPoint({ ...selectedPoint, expiry: parseISOOrNull(selectedPoint.expiry) })
-        //handleClose();
-
     }
 
 
