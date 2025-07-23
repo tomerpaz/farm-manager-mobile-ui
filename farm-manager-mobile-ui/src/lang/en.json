@@ -200,5 +200,6 @@
   "newActivityGeo": "Activities - search fields by GPS",
   "usernameOrPasswordInvalid": "User/Password Invalid",
   "accountExpired": "Account expired",
-  "officialFieldId": "Official Field Id"
+  "officialFieldId": "Official Field Id",
+  "scouter": "Scouter"
 }

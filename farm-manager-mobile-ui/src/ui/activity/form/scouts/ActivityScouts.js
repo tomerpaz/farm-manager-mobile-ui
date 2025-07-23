@@ -100,6 +100,7 @@ const ActivityScouts = ({ activity, control, errors, register, setValue, trigger
         return (expendFields && fields.length > TRASHHOLD) ? fields : fields.slice(0, TRASHHOLD);
     }
 
+    console.log('text.scouter',text.scouter)
     return (
         <Box margin={1} paddingTop={2} display={'flex'} flexDirection={'column'}>
 

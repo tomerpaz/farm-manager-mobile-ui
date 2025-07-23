@@ -14,7 +14,7 @@
     "@testing-library/react": "^13.3.0",
     "@testing-library/user-event": "^13.5.0",
     "date-fns": "^2.30.0",
-    "gh-pages": "^4.0.0",
+    "gh-pages": "^6.3.0",
     "leaflet": "^1.9.4",
     "leaflet.locatecontrol": "^0.84.2",
     "react": "^19.1.0",
