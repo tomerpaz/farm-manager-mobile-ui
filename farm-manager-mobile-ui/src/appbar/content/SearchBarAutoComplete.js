@@ -5,18 +5,24 @@ import Autocomplete, { autocompleteClasses } from '@mui/material/Autocomplete';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import ListSubheader from '@mui/material/ListSubheader';
 import Popper from '@mui/material/Popper';
-import { useTheme, styled } from '@mui/material/styles';
+import { useTheme, styled, alpha } from '@mui/material/styles';
 import { VariableSizeList } from 'react-window';
 import Typography from '@mui/material/Typography';
+import { Chip } from '@mui/material';
+
 
 const LISTBOX_PADDING = 8; // px
 
 function renderRow(props) {
   const { data, index, style } = props;
+  // console.log('data',data)
+
   const dataSet = data[index];
+   console.log('dataSet',dataSet)
   const inlineStyle = {
     ...style,
     top: style.top + LISTBOX_PADDING,
+    //direction: 'rtl'
   };
 
   if (dataSet.hasOwnProperty('group')) {
@@ -29,9 +35,10 @@ function renderRow(props) {
 
   const { key, ...optionProps } = dataSet[0];
 
+  // console.log('key',key)
   return (
-    <Typography key={key} component="li" {...optionProps} noWrap style={inlineStyle}>
-      {`#${dataSet[2] + 1} - ${dataSet[1]}`}
+    <Typography key={dataSet[1]} component="li" {...optionProps} noWrap style={inlineStyle}>
+      {`#${dataSet[2] + 1} - ${dataSet[1].label}`}
     </Typography>
   );
 }
@@ -57,7 +64,9 @@ function useResetCache(data) {
 const ListboxComponent = React.forwardRef(function ListboxComponent(props, ref) {
   const { children, ...other } = props;
   const itemData = [];
+
   children.forEach((item) => {
+
     itemData.push(item);
     itemData.push(...(item.children || []));
   });
@@ -86,6 +95,7 @@ const ListboxComponent = React.forwardRef(function ListboxComponent(props, ref) 
 
   const gridRef = useResetCache(itemCount);
 
+  console.log('children', children)
   return (
     <div ref={ref}>
       <OuterElementContext.Provider value={other}>
@@ -137,25 +147,66 @@ const OPTIONS = Array.from(new Array(10000))
   .map(() => random(10 + Math.ceil(Math.random() * 20)))
   .sort((a, b) => a.toUpperCase().localeCompare(b.toUpperCase()));
 
-export default function CountrySelect() {
+const Search = styled('div')(({ theme }) => ({
+  position: 'relative',
+  borderRadius: theme.shape.borderRadius,
+  backgroundColor: alpha(theme.palette.common.white, 0.15),
+  '&:hover': {
+    backgroundColor: alpha(theme.palette.common.white, 0.25),
+  },
+  marginRight: theme.spacing(2),
+  marginLeft: 0,
+  //flex: 1,
+  width: '100%',
+  [theme.breakpoints.up('sm')]: {
+    marginLeft: theme.spacing(3),
+    width: 'auto',
+  },
+}));
+
+export default function CountrySelect({ options }) {
+  //console.log(OPTIONS)
   return (
-    <Autocomplete 
-       sx={{ width: '100%', border: 0 }}
-      disableListWrap
-      options={OPTIONS}
-      groupBy={(option) => option[0].toUpperCase()}
-      renderInput={(params) => <TextField sx={{padding: 0, backgroundColor: 'white'}} {...params} label="10,000 options" />}
-      renderOption={(props, option, state) => [props, option, state.index]}
-      renderGroup={(params) => params}
-      multiple={true}
-      slots={{
-        popper: StyledPopper,
-      }}
-      slotProps={{
-        listbox: {
-          component: ListboxComponent,
-        },
-      }}
-    />
+    <Search>
+      <Autocomplete
+        size='small'
+        // sx={{ width: '100%' }}
+        disableListWrap
+        options={options}
+        // groupBy={(option) => option[0].toUpperCase()}
+        renderInput={(params) => <TextField  {...params}
+        />}
+        renderOption={(props, option, state) => {
+          // console.log('props',props)
+          return [props, option, state.index]
+        }
+        }
+        renderGroup={(params) => params}
+        multiple={true}
+        slots={{
+          popper: StyledPopper,
+        }}
+        slotProps={{
+          listbox: {
+            component: ListboxComponent,
+          },
+        }}
+        renderValue={(values, getItemProps) =>
+          values.map((option, index) => {
+            const { key, ...itemProps } = getItemProps({ index });
+            return (
+              <Chip
+                color='primary'
+                key={key}
+                // variant="outlined"
+                label={option.label}
+                // size="small"
+                {...itemProps}
+              />
+            );
+          })
+        }
+      />
+    </Search>
   );
 }

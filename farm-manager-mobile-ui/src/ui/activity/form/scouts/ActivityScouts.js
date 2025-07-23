@@ -1,9 +1,9 @@
-import { Box, Button, TextField, IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Badge, List, ListItemButton, ListItemText, ListItemIcon, ListItem } from "@mui/material"
+import { Box, Button, TextField, IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Badge, List, ListItemButton, ListItemText, ListItemIcon, ListItem, Autocomplete } from "@mui/material"
 import { useSelector } from "react-redux"
 import { selectLang } from "../../../../features/app/appSlice"
 import { cellSx, cellSxChange, cellSxLink, headerSx } from "../../../Util"
 import { Fragment, useEffect, useState } from "react"
-import { ACTIVITY_RESOURCES, AREA_UNIT, ENERGY, EQUIPMENT, FERTILIZER, HOUR, IRRIGARION_TYPES, IRRIGATION, IRRIGATION_PLAN, PESTICIDE, SCOUT, SPRAY, SPRAYER, SPRAY_TYPES, WAREHOUSE_RESOURCE_TYPE, WATER, getResourceTypeText, getResourceUsageUnit, getUnitText, isArrayEmpty } from "../../../FarmUtil"
+import { ACTIVITY_RESOURCES, AREA_UNIT, ENERGY, EQUIPMENT, FERTILIZER, HOUR, IRRIGARION_TYPES, IRRIGATION, IRRIGATION_PLAN, PESTICIDE, SCOUT, SPRAY, SPRAYER, SPRAY_TYPES, WAREHOUSE_RESOURCE_TYPE, WATER, WORKER, getResourceTypeText, getResourceUsageUnit, getUnitText, isArrayEmpty } from "../../../FarmUtil"
 import { useGetUserDataQuery } from "../../../../features/auth/authApiSlice"
 import { Controller, useFieldArray } from "react-hook-form"
 import { Agriculture, Delete, DragHandle, Error, Menu, MoreVert } from "@mui/icons-material"
@@ -11,6 +11,8 @@ import PestSelectionDialog from "../../../dialog/PestSelectionDialog"
 import { infectionLevels } from "../../../scout/ScoutingUtil"
 import ActivityScoutDialog from "./ActivityScoutDialog"
 import { useGetPestStagesQuery } from "../../../../features/pests/pestsApiSlice"
+import TextFieldBase from "../../../../components/ui/TextField"
+import { useGetResourcesQuery } from "../../../../features/resources/resourcesApiSlice"
 
 
 const TRASHHOLD = 3;
@@ -31,6 +33,10 @@ const ActivityScouts = ({ activity, control, errors, register, setValue, trigger
     const [showAlert, setShowAlert] = useState(false);
     const { data: stages, isLoading: isLoadingStages } = useGetPestStagesQuery()
 
+
+    const {
+        data: scouters,
+    } = useGetResourcesQuery({ type: WORKER })
 
 
 
@@ -73,7 +79,7 @@ const ActivityScouts = ({ activity, control, errors, register, setValue, trigger
                     qty: 0,
                     location: 'none',
                     infectionLevel: 'none',
-                    stage: stages.find(e=>e.code === 'none')
+                    stage: stages.find(e => e.code === 'none')
                 }
             }
             );
@@ -90,26 +96,20 @@ const ActivityScouts = ({ activity, control, errors, register, setValue, trigger
     };
 
 
-
-
-
-
-
     const getFields = () => {
         return (expendFields && fields.length > TRASHHOLD) ? fields : fields.slice(0, TRASHHOLD);
     }
-
 
     return (
         <Box margin={1} paddingTop={2} display={'flex'} flexDirection={'column'}>
 
             <Box display={'flex'} flex={1} justifyContent={'space-between'} alignItems={'center'}>
-                <Box display={'flex'} flex={1} flexDirection={'row'} alignItems={'center'}>
+                <Box display={'flex'}  flexDirection={'row'} alignItems={'center'}>
                     <Box>
                         <Button id={ELEMENT_ID} size='large' disableElevation={true} variant="contained" onClick={handleClickOpen}>{text.pests} </Button>
                     </Box>
                     {fields.length > TRASHHOLD &&
-                        <IconButton sx={{ marginLeft: 1, marginRight: 1 }} onClick={() => setExpendFields(!expendFields)}>
+                        <IconButton  onClick={() => setExpendFields(!expendFields)}>
                             <Badge badgeContent={fields.length} color="info">
                                 {expendFields && <Menu fontSize='large' />}
                                 {!expendFields && <DragHandle fontSize='large' />}
@@ -117,8 +117,30 @@ const ActivityScouts = ({ activity, control, errors, register, setValue, trigger
                         </IconButton>
                     }
                 </Box>
-                <Box flex={1} />
+                 <Box margin={1} ></Box>
+                <Box flex={1} >
+                    {!isArrayEmpty(scouters) && <Controller
+                        name="scoutParams.scouter"
+                        rules={{ required: true }}
+                        control={control}
+                        render={({ field: { ref, onChange, ...field } }) => <Autocomplete
+                            disablePortal
+                            blurOnSelect={true}
+                            onChange={(_, data) => onChange(data)}
+                            options={scouters.filter(e => e.active)}
+                            sx={{ flex: 1 }}
+                            size='small'
+                            getOptionLabel={(option) => option ? option.name : ''}
+                            isOptionEqualToValue={(option, value) => (value === undefined) || option?.id?.toString() === (value?.id ?? value)?.toString()}
+                            renderInput={(params) => <TextFieldBase
+                                // error={errors.customer ? true : false}
+                                sx={{ marginTop: 0.5 }} {...params} label={text.scouter} />}
+                            {...field} />}
+
+                    />}
+                </Box>
                 <Box display={'flex'} flexDirection={'row'} alignItems={'center'}>
+
                     <IconButton size='large' disabled={isArrayEmpty(fields)} onClick={() => remove()}><Delete fontSize='large' /></IconButton>
                 </Box>
             </Box>

@@ -6,7 +6,8 @@ import { useGetUserDataQuery } from '../../features/auth/authApiSlice'
 import AppBarMenu from '../components/AppBarMenu'
 import AppBarSearch from '../components/AppBarSearch'
 import Accuracy from '../components/Accuracy'
-import CountrySelect from './SearchBarAutoComplete'
+//import AppBarSearch from './SearchBarAutoComplete'
+import { useFields } from '../../features/fields/fieldsApiSlice'
 
 const FieldsBar = () => {
     const dispatch = useDispatch()
@@ -18,7 +19,13 @@ const FieldsBar = () => {
     const { data: user } = useGetUserDataQuery()
 
     const noFilter = fieldSiteFilter === 0 && fieldBaseFieldFilter === 0 && user && user.year === currentYear && user.fieldsViewStatus === fieldsViewStatus;;
+    
+    const fields = useFields(currentYear)
 
+
+    const autoCompleteOptions = fields ? fields.map(e=> {
+        return { key: 'field_'+e.id, id: e.id, label: e.name, element: e}}
+    ) : [];
     return (
         <AppBar position="static" elevation={0}>
             <Toolbar>
@@ -33,7 +40,7 @@ const FieldsBar = () => {
                     <FilterAlt sx={{ color: noFilter ? null : 'blue' }} />
                 </IconButton>
                 <AppBarSearch value={useSelector(selectFieldFreeTextFilter)} onChange={(e) => dispatch(setFieldFreeTextFilter(e))} />
-                {/* <CountrySelect /> */}
+                {/* <AppBarSearch options={autoCompleteOptions} /> */}
                 <Accuracy />
                 <AppBarMenu />
             </Toolbar>
