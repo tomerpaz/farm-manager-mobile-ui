@@ -1,7 +1,7 @@
 import { Box } from '@mui/material'
 import { useSelector } from 'react-redux'
 import { useParams, useSearchParams } from 'react-router'
-import {  selectCurrentYear, selectLatitude, selectLongitude } from '../../../features/app/appSlice'
+import {  selectCurrentYear, selectDefaultScouter, selectLatitude, selectLongitude } from '../../../features/app/appSlice'
 import ActivityForm from '../form/ActivityForm'
 import { IRRIGARION_TYPES, MARKET, SCOUT, SPRAY_TYPES, asLocalDateTime, firstDayOfThisMonth, getWinds, isArrayEmpty, isPointInPoly, lastDayOfThisMonth, newDate } from '../../FarmUtil'
 import { useGetUserDataQuery } from '../../../features/auth/authApiSlice'
@@ -69,6 +69,7 @@ const NewActivity = () => {
 
   const longitude = useSelector(selectLongitude);
   const latitude = useSelector(selectLatitude);
+  const scouter = useSelector(selectDefaultScouter)
 
   const field = useFieldsById(currentYear, Number(fid));
 
@@ -106,6 +107,9 @@ const NewActivity = () => {
     finding: point.pest, note: '', location: 'none', infectionLevel: 'none', value: ''
   }] : [];
 
+
+    
+ 
   const crop = getFieldCrop(field, fields);
   const activity = {
     type, plan: isPlan,
@@ -114,7 +118,7 @@ const NewActivity = () => {
     endHour: isSpray ? new Date() : null,
     irrigationParams: isIrrigation ? {} : null,
     sprayParams: isSpray || isScout ? { volumePerAreaUnit: '', volume: '', wind, crop } : null,
-    scoutParams: isScout ? { scouts, phenologicalStage: '' } : null,
+    scoutParams: isScout ? { scouts, phenologicalStage: '', scouter } : null,
     marketParams: isMarket ? { incomeCalc: '', sortDate: null, sortReference: '' } : null,
     activityDef: null, year: user.year, customer: null, fields, resources: [], note: '', invoice: '', editable: true, waybill: '',
     points

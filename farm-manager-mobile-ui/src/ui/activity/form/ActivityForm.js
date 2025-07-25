@@ -1,7 +1,7 @@
 import { BottomNavigation, BottomNavigationAction, Box, TextField, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { selectLang, setSnackbar } from '../../../features/app/appSlice'
+import { selectLang, setDefaultScouter, setSnackbar } from '../../../features/app/appSlice'
 import { PESTICIDE, PLAN, SCOUT, asLocalDate, asLocalTime, countLines, daysDif, daysDiff, isArrayEmpty } from '../../FarmUtil'
 import ActivityHeaderView from './header/ActivityHeaderView'
 import { useForm, Controller, useWatch } from "react-hook-form";
@@ -93,12 +93,14 @@ const ActivityForm = ({ activity }) => {
     data.executionEnd = asLocalDate(data.executionEnd, true);
     data.endHour = asLocalTime(data.endHour, true);
 
+    if(data.scoutParams?.scouter?.id){
+      dispatch(setDefaultScouter(data.scoutParams?.scouter))
+    }
 
     if (data.uuid) {
       return updateActivity(data).unwrap();
     } else {
       data.src = 'MUI'
-      console.log('create', data)
 
       return createActivity(data).unwrap();
     }

@@ -1,6 +1,6 @@
 import { AppBar, Toolbar, IconButton } from '@mui/material'
 import { Close, PictureAsPdfOutlined } from '@mui/icons-material'
-import { newDate, SCOUT } from '../../ui/FarmUtil';
+import { isStringEmpty, newDate, SCOUT } from '../../ui/FarmUtil';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken, selectLang } from '../../features/app/appSlice';
 import { useNavigate, useParams } from 'react-router';
@@ -63,7 +63,7 @@ const ActivityViewBar = () => {
     const { lang, dir } = useSelector(selectLang)
     const navigate = useNavigate()
 
-    const { data: activity, isLoading, isSuccess, isError, error } = useGetActivityByIdQuery(activityId)
+    const { data: activity, isLoading, isSuccess, isError, error } = useGetActivityByIdQuery(activityId, {skip: isStringEmpty(activityId)})
     
     const showPdf = activity && activity?.type !== SCOUT;
 

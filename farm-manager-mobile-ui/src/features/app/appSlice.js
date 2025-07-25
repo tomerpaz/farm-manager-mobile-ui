@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit"
-import { asLocalDate, newDate, PLAN } from "../../ui/FarmUtil";
+import { asLocalDate, isStringEmpty, newDate, PLAN } from "../../ui/FarmUtil";
 
 export const DEFAULT_PLAN_STATUS = ''
 export const DEFAULT_ACTIVITY_STATUS = ''
@@ -13,10 +13,17 @@ const activeGPS = 'true' === localStorage.getItem('activeGPS');
 const showFieldName = 'true' === localStorage.getItem('showFieldName');
 const showFieldAlias = 'true' === localStorage.getItem('showFieldAlias');
 const showOfficialFieldId = 'true' === localStorage.getItem('showOfficialFieldId');
+
+const scouterId = localStorage.getItem('scouterId');
+const scouterName = localStorage.getItem('scouterName');
+
+
+
+
 const appSlice = createSlice({
     name: 'auth',
     initialState: {
-        lang: { lang:  lang ? lang : 'en', dir: lang === 'he' ? 'rtl' : 'ltr', },
+        lang: { lang: lang ? lang : 'en', dir: lang === 'he' ? 'rtl' : 'ltr', },
         token: localStorage.getItem('token'),
         refreshToken: localStorage.getItem('refreshToken'),
         fieldFreeTextFilter: '',
@@ -61,6 +68,7 @@ const appSlice = createSlice({
         latitude: null,
         activeGPS,
         visibleLayers: [],
+        defaultScouter: isStringEmpty(scouterId) ? null : { id: scouterId, name: scouterName }
         // showPestsLayer: false,
         // showTrapsLayer: false,
         // showIrrigationHeadsLayer: false,
@@ -206,11 +214,18 @@ const appSlice = createSlice({
         setLongitude: (state, action) => {
             state.longitude = action.payload
         },
+        setDefaultScouter: (state, action) => {
+            state.defaultScouter = action.payload
+            if (action.payload) {
+                localStorage.setItem('scouterId', action.payload?.id);
+                localStorage.setItem('scouterName', action.payload?.name);
+            }
+        },
         setVisibleLayers: (state, action) => {
             const isSelected = state.visibleLayers.find(e => e === action.payload) ? true : false;
-            if(isSelected){
-                
-                state.visibleLayers = [...state.visibleLayers].filter(e=>e !== action.payload)
+            if (isSelected) {
+
+                state.visibleLayers = [...state.visibleLayers].filter(e => e !== action.payload)
             } else {
                 state.visibleLayers = [...state.visibleLayers].concat([action.payload])
             }
@@ -222,8 +237,8 @@ export const { setCredentials, logOut, setLang, setCurrentYear, setAppBarDialogO
     setStartDateFilter, setEndDateFilter, setActivityTypeFilter, setFieldSiteFilter, setFieldBaseFieldFilter, setFieldDashboardYear, setFieldsViewStatus,
     setActivityPlanStatusFilter, setActivityPlanTypeFilter, setActivityStatusFilter, setActivityType, setSnackbar, setOpenSettings, setInventoryFreeTextFilter,
     setInventoryDateFilter, setInventoryWarehouseFilter, setShowInventory, setShowPlans, setOpenLayers, setShowLayers, setEditLayer, setMapCenter, setMapZoom,
-    setShowFieldAlias, setShowFieldName, setNewActivityGeo, setAccuracy, setActiveGPS, setLongitude, setLatitude, setActivityParentFieldFilter,setActivityBaseFieldFilter,setActivitySiteFilter,
-    setShowOfficialFieldId,setVisibleLayers
+    setShowFieldAlias, setShowFieldName, setNewActivityGeo, setAccuracy, setActiveGPS, setLongitude, setLatitude, setActivityParentFieldFilter, setActivityBaseFieldFilter, setActivitySiteFilter,
+    setShowOfficialFieldId, setVisibleLayers, setDefaultScouter
 } = appSlice.actions
 
 export default appSlice.reducer
@@ -270,3 +285,4 @@ export const selectActivityBaseFieldFilter = (state) => state.app.activityBaseFi
 export const selectActivityParentFieldFilter = (state) => state.app.activityParentFieldFilter
 export const selectShowOfficialFieldId = (state) => state.app.showOfficialFieldId
 export const selectVisibilLayes = (state) => state.app.visibleLayers
+export const selectDefaultScouter = (state) => state.app.defaultScouter
