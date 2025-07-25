@@ -27,9 +27,9 @@ export const PlantParts_TAG = 'PlantParts';
 export const Layers_TAG = 'Layers';
 
 
- export const FARM_MANAGER = 'http://localhost:8080'
+//  export const FARM_MANAGER = 'http://localhost:8080'
 
-// export const FARM_MANAGER = 'https://api.manager.farm'
+export const FARM_MANAGER = 'https://api.manager.farm'
 
 
 const baseQuery = fetchBaseQuery({
