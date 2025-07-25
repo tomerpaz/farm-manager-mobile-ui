@@ -29,8 +29,6 @@ const ActivityScouts = ({ activity, control, errors, register, setValue, trigger
     const [selectedRow, setSelectedRow] = useState(null);
     const [selectedIndex, setSelectedIndex] = useState(null);
     const [expendFields, setExpendFields] = useState(false);
-
-    const [showAlert, setShowAlert] = useState(false);
     const { data: stages, isLoading: isLoadingStages } = useGetPestStagesQuery()
 
 
@@ -134,8 +132,8 @@ const ActivityScouts = ({ activity, control, errors, register, setValue, trigger
                             getOptionLabel={(option) => option ? option.name : ''}
                             isOptionEqualToValue={(option, value) => (value === undefined) || option?.id?.toString() === (value?.id ?? value)?.toString()}
                             renderInput={(params) => <TextFieldBase
-                                // error={errors.customer ? true : false}
-                                sx={{ marginTop: 0.5 }} {...params} label={text.scouter} />}
+                                 error={errors?.scoutParams?.scouter ? true : false}
+                                sx={{ marginTop: 0.5 }} {...params} label={text.executor} />}
                             {...field} />}
 
                     />}

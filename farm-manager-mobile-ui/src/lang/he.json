@@ -201,5 +201,6 @@
     "usernameOrPasswordInvalid": "שם משתמש/סיסמה שגויים",
     "accountExpired": "תוקף המנוי הסתיים",
     "officialFieldId": "מס משרד חקלאות",
-    "scouter": "נטר"
+    "executor": "מבצע",
+    "seedpod": "תרמיל"
 }

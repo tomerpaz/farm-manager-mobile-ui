@@ -201,5 +201,6 @@
   "usernameOrPasswordInvalid": "User/Password Invalid",
   "accountExpired": "Account expired",
   "officialFieldId": "Official Field Id",
-  "scouter": "Scouter"
+  "executor": "Executor",
+  "seedpod": "Seed Pod"
 }

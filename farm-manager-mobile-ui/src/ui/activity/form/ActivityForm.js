@@ -181,7 +181,7 @@ const ActivityForm = ({ activity }) => {
             openWaypointSelection={openWaypointSelection} setOpenWaypointSelection={setOpenWaypointSelection} setPointsCount={setPointsCount}
 
           />}
-          {activity.type === SCOUT && <ActivityScouts control={control} register={register} activity={activity} getValues={getValues} />}
+          {activity.type === SCOUT && <ActivityScouts control={control} register={register} activity={activity} getValues={getValues} errors={errors} />}
 
           <ActivityResources control={control} register={register} activity={activity} activityDef={activityDef}
             errors={errors} tariffs={tariffs} activityArea={activityArea} days={days}
