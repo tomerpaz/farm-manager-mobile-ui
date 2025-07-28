@@ -99,6 +99,8 @@ const appSlice = createSlice({
         logOut: (state, action) => {
             localStorage.removeItem('token')
             localStorage.removeItem('refreshToken')
+            localStorage.removeItem('scouterId')
+            localStorage.removeItem('scouterName')
             state.token = null
             state.refreshToken = null;
         }, setCurrentYear: (state, action) => {
