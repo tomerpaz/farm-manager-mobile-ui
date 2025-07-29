@@ -52,7 +52,7 @@ const AppBarMenu = () => {
 
     return (
 
-        <Box flex={1} display={'flex'} justifyContent={'end'} /*sx={{ display: { xs: 'flex', md: 'none' } }}*/>
+        <Box display={'flex'} justifyContent={'end'} /*sx={{ display: { xs: 'flex', md: 'none' } }}*/>
             <IconButton
                 size="large"
                 aria-label="account of current user"

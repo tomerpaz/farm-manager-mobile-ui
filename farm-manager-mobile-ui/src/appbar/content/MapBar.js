@@ -1,24 +1,29 @@
 import { FilterAlt, Layers } from '@mui/icons-material'
-import { AppBar, IconButton, Toolbar, Typography } from '@mui/material'
+import { AppBar, IconButton, Toolbar } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
-import { selectCurrentYear, selectFieldBaseFieldFilter, selectFieldFreeTextFilter, selectFieldSiteFilter, selectFieldsViewStatus, setAppBarDialogOpen, setFieldFreeTextFilter, setOpenLayers } from '../../features/app/appSlice'
+import { selectCurrentYear, selectFieldFreeTextFilter, selectFieldsViewStatus, selectSelectedFieldFilterOptions, setAppBarDialogOpen, setOpenLayers, setSelectedFieldFilterOptions } from '../../features/app/appSlice'
 import { useGetUserDataQuery } from '../../features/auth/authApiSlice'
 import AppBarMenu from '../components/AppBarMenu'
-import AppBarSearch from '../components/AppBarSearch'
+import AppBarSearch from './SearchBarAutoComplete'
 import Accuracy from '../components/Accuracy'
+import { buildFieldOptions, isStringEmpty } from '../../ui/FarmUtil'
+import { useFields } from '../../features/fields/fieldsApiSlice'
 
 const MapBar = () => {
 
 
     const dispatch = useDispatch()
 
-    const fieldSiteFilter = useSelector(selectFieldSiteFilter)
-    const fieldBaseFieldFilter = useSelector(selectFieldBaseFieldFilter)
+    const freeTextFilter = useSelector(selectFieldFreeTextFilter)
     const fieldsViewStatus = useSelector(selectFieldsViewStatus)
     const currentYear = useSelector(selectCurrentYear)
     const { data: user } = useGetUserDataQuery()
 
-    const noFilter = fieldSiteFilter === 0 && fieldBaseFieldFilter === 0 && user && user.year === currentYear && user.fieldsViewStatus === fieldsViewStatus;
+
+    const noFilter = isStringEmpty(freeTextFilter) && user && user.year === currentYear && user.fieldsViewStatus === fieldsViewStatus;
+
+    const fields = useFields(currentYear)
+    const autoCompleteOptions = buildFieldOptions(fields)
 
     return (
         <AppBar position="static" elevation={0}>
@@ -44,9 +49,8 @@ const MapBar = () => {
                     <Layers
                     />
                 </IconButton>
-                <AppBarSearch value={useSelector(selectFieldFreeTextFilter)} onChange={(e) => dispatch(setFieldFreeTextFilter(e))} />
-                <Accuracy/>
-                {/* {position && position > 0 && <Typography>{`${position.toFixed(1)}m`}</Typography>} */}
+                <AppBarSearch value={useSelector(selectSelectedFieldFilterOptions)} options={autoCompleteOptions} onChenge={(values, action) => dispatch(setSelectedFieldFilterOptions(values))} />
+                <Accuracy />
                 <AppBarMenu />
             </Toolbar>
         </AppBar>

@@ -5,7 +5,7 @@ import { useNavigate } from "react-router";
 import { Alert, Box, IconButton, Snackbar, Typography } from "@mui/material";
 import { useFields } from "../../../features/fields/fieldsApiSlice";
 import { useGetUserDataQuery } from '../../../features/auth/authApiSlice'
-import { selectActiveGPS, selectCurrentYear, selectEditLayer, selectFieldBaseFieldFilter, selectFieldFreeTextFilter, selectFieldSiteFilter, selectFieldsViewStatus, selectLang, selectLatitude, selectLongitude, selectMapCenter, selectMapZoom, selectShowFieldAlias, selectShowFieldName, selectShowLayers, selectShowOfficialFieldId, selectShowsPestLayer, selectVisibilLayes, setEditLayer, setMapCenter, setMapZoom } from "../../../features/app/appSlice";
+import { selectActiveGPS, selectCurrentYear, selectEditLayer, selectFieldBaseFieldFilter, selectFieldFreeTextFilter, selectFieldSiteFilter, selectFieldsViewStatus, selectLang, selectLatitude, selectLongitude, selectMapCenter, selectMapZoom, selectSelectedFieldFilterOptions, selectShowFieldAlias, selectShowFieldName, selectShowLayers, selectShowOfficialFieldId, selectShowsPestLayer, selectVisibilLayes, setEditLayer, setMapCenter, setMapZoom } from "../../../features/app/appSlice";
 import { useDispatch, useSelector } from "react-redux";
 import FieldsFilter from "../../../components/filters/FieldsFilter";
 import { displayFieldName, filterFields, getFillColor, getOpacity, isArrayEmpty, isStringEmpty, mapDisplayFieldName, MapToolTip, MAX_PER_MAP, stopMapEventPropagation, trap } from "../../FarmUtil";
@@ -55,9 +55,9 @@ const FieldsMap = (props) => {
     const showOfficialFieldId = useSelector(selectShowOfficialFieldId);
 
     const [selectedPoint, setSelectedPoint] = useState(null);
-    // const [editPoint, setEditPoint] = useState(false);
+    const selectedOptions = useSelector(selectSelectedFieldFilterOptions)
 
-    const displayFields = filterFields(fields, freeText, fieldSiteFilter, fieldBaseFieldFilter, fieldsViewStatus);
+    const displayFields = filterFields(fields, selectedOptions, freeText, fieldsViewStatus);
 
     const visibilLayes = useSelector(selectVisibilLayes);
     const { data: layers } = useGetLayersQuery();
@@ -91,20 +91,19 @@ const FieldsMap = (props) => {
     }
 
     useEffect(() => {
-        if (isStringEmpty(freeText) && isArrayEmpty(fieldSiteFilter) && isArrayEmpty(fieldBaseFieldFilter)) {
+        if (isStringEmpty(freeText) && isArrayEmpty(selectedOptions)) {
             dispatch(setMapCenter([user.lat, user.lng]));
         } else {
             const c = (fields.length === displayFields.length) || isArrayEmpty(displayFields) ? center : [displayFields[0].lat, displayFields[0].lng];
             dispatch(setMapCenter(c));
         }
-    }, [freeText, fieldSiteFilter, fieldBaseFieldFilter])
+    }, [freeText, selectedOptions])
 
 
     useEffect(() => {
         if (map && center) {
             map.setView(center, zoom);
         }
-
     }, [center])
 
 

@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import { Tooltip } from "react-leaflet";
 import { Box, Typography } from "@mui/material";
 import { position } from "stylis";
+import { fi } from "date-fns/locale";
 
 export const UI_SIZE = 'medium';
 
@@ -99,22 +100,22 @@ export function getActivityStatuses(role, isPlan) {
 }
 
 export const activityDescription = (e, text) => {
-    if(!e){
+    if (!e) {
         return '';
     }
     return e?.activityDef ? e.activityDef?.name : text[e.type.toLowerCase()];
 }
 
 export const activityLongText = (e, text) => {
-    if(!e){
+    if (!e) {
         return '';
     }
-    if(e.type === SCOUT){
-        return e.scoutParams?.scouts?.map(s=>s.finding.name).join(", ")
+    if (e.type === SCOUT) {
+        return e.scoutParams?.scouts?.map(s => s.finding.name).join(", ")
     } else {
         return e.note
     }
-  //  return 'e'
+    //  return 'e'
     // return e.activityDef ? e.activityDef.name : text[e.type.toLowerCase()];
 }
 
@@ -123,8 +124,8 @@ export const maxLenghtStr = (str, maxLenght) => {
 }
 
 export const displayFieldName = (field) => {
-    if(field){
-     return field.alias ? `${field.name}, ${field.alias}` : field.name;
+    if (field) {
+        return field.alias ? `${field.name}, ${field.alias}` : field.name;
     } else {
         return '';
     }
@@ -132,14 +133,14 @@ export const displayFieldName = (field) => {
 
 export const mapDisplayFieldName = (field, showName, showAlias, showOfficialFieldId) => {
     var tooltipText = [];
-    if(showName){
+    if (showName) {
         tooltipText.push(field.name)
     }
-    if(showAlias && !isStringEmpty(field.alias) ){
+    if (showAlias && !isStringEmpty(field.alias)) {
         tooltipText.push(field.name)
     }
-    if(showOfficialFieldId && !isStringEmpty(field.baseFieldOfficialId)){
-         tooltipText.push(field.baseFieldOfficialId)
+    if (showOfficialFieldId && !isStringEmpty(field.baseFieldOfficialId)) {
+        tooltipText.push(field.baseFieldOfficialId)
     }
 
     return tooltipText.join(', ')
@@ -406,20 +407,38 @@ export function parseDateTime(date) {
     return null;
 }
 
-export function isMatchFreeTextFilter(field, freeText) {
 
-    if (field.name.includes(freeText)) {
-        return true;
-    } else if (field.siteName.includes(freeText)) {
-        return true;
-    } else if (field.alias?.includes(freeText)) {
-        return true;
-    } else if (field.cropName.includes(freeText)) {
-        return true;
-    } else if (field.varietyName.includes(freeText)) {
-        return true;
+export function isMatchFieldFilterOptions(field, filterOptions) {
+    const matchFilter = filterOptions.find(e => {
+        const entry = e.key.split('_');
+        const type = entry[0];
+        const id = Number(entry[1]);
+                const isMatchOption = isFieldMatchOption(field, type, id);
+                 if (isMatchOption) {
+                    return e;
+                 }
+
+    });
+    return matchFilter ? true : null;
+}
+
+export function isFieldMatchOption(field, type, id) {
+    if (type === 'field') {
+        return field.id === id;
+    } else if (type === 'site') {
+        return field.siteId === id;
+    } else if (type === 'variety') {
+        return field.varietyId === id;
+    } else if (type === 'crop') {
+        return field.cropId === id;
     } else {
         return false;
+    }
+}
+
+export function isMatchFreeTextFilter(field, freeText) {
+    if (field.alias?.includes(freeText) || field.note?.includes(freeText)) {
+        return true;
     }
 }
 
@@ -427,17 +446,20 @@ export const ACTIVE = 'active';
 export const INACTIVE = 'inactive';
 export const ALL = 'all';
 
-export function filterFields(fields, freeText, fieldSiteFilter, fieldBaseFieldFilter, fieldsViewStatus) {
+export function filterFields(fields, filterOptions, freeText, fieldsViewStatus) {
     let result = fields;
     if (!isStringEmpty(freeText)) {
         result = fields.filter(e => isMatchFreeTextFilter(e, freeText));
     }
-    if (fieldSiteFilter !== 0) {
-        result = result.filter(e => fieldSiteFilter === e.siteId);
+    if (!isArrayEmpty(filterOptions)) {
+        result = result.filter(e => isMatchFieldFilterOptions(e, filterOptions));
     }
-    if (fieldBaseFieldFilter !== 0) {
-        result = result.filter(e => fieldBaseFieldFilter === e.baseFieldId);
-    }
+    // if (fieldSiteFilter !== 0) {
+    //     result = result.filter(e => fieldSiteFilter === e.siteId);
+    // }
+    // if (fieldBaseFieldFilter !== 0) {
+    //     result = result.filter(e => fieldBaseFieldFilter === e.baseFieldId);
+    // }
     if ([ACTIVE, INACTIVE].includes(fieldsViewStatus)) {
         if (ACTIVE === fieldsViewStatus) {
             result = result.filter(e => e.endDate === null);
@@ -449,7 +471,7 @@ export function filterFields(fields, freeText, fieldSiteFilter, fieldBaseFieldFi
 }
 
 export const buildActiviyFilter = (start, end, activityType, freeText, status, activitySiteFilter,
-    activityBaseFieldFilter,  activityParentFieldFilter) => {
+    activityBaseFieldFilter, activityParentFieldFilter) => {
     const filter = [];
     if (!isStringEmpty(start)) {
         filter.push(`start_${start.replaceAll('-', '')}`)
@@ -655,3 +677,143 @@ export function isPointInPoly(poly, pt) {
             && (c = !c);
     return c;
 }
+
+export const buildFieldOptions = (fields) => {
+    if (isArrayEmpty(fields)) {
+        return [];
+    }
+    const options =
+        (fields.map(e => { return { key: 'field_' + e.id, id: e.id, label: fieldDisplayText(e), element: e } }))
+            .concat(fields.map(e => { return { key: 'site_' + e.siteId, id: e.id, label: e.siteName, element: e } }))
+            .concat(fields.map(e => { return { key: 'crop_' + e.cropId, id: e.id, label: e.cropName, element: e } }))
+            .concat(fields.map(e => { return { key: 'variety_' + e.varietyId, id: e.id, label: e.varietyName, element: e } }))
+
+
+    // const uniqueItems = [...new Map(options.map(item => [item['key'], item])).values()];
+
+
+    return  uniqueArray(options, 'key');
+
+}
+
+const uniqueArray = (array, propertyName) => {
+    return [...new Map(array.map(item => [item[propertyName], item])).values()];
+/*
+    const attr = isStringEmpty(propertyName) ? 'key' : propertyName;
+    return array.reduce((acc, current) => {
+        const x = acc.find(item => item[attr] === current[attr]);
+        if (!x) {
+            return acc.concat([current]);
+        } else {
+            return acc;
+        }
+    }, []);*/
+}
+
+const fieldDisplayText = (f) => {
+    if (isStringEmpty(f.alias)) {
+        return f.name;
+    } else {
+        return `${f.name} (${f.alias})`
+    }
+}
+
+
+
+/*
+export function buildDomainFilter(domains, cropID) {
+    const filterDomains = cropID ? domains.filter(domain => domain.variety.cropID === cropID) : domains;
+
+    let fieldFilter = filterDomains.map(domain => (
+        {
+            value: 'field_' + domain.field.id,
+            label: addBusinessName(domain, getFieldName(domain)),
+        }
+    ));
+
+    let sites = filterDomains.map(domain => {
+        if (domain.field.site)
+            return (
+                {
+                    value: 'site_' + domain.field.site.id,
+                    label: domain.field.site.name
+                }
+            )
+    });
+    let parentField = filterDomains.map(domain => {
+        if (domain.field.parentField)
+            return (
+                {
+                    value: 'parentField_' + domain.field.parentField.id,
+                    label: domain.field.parentField.name
+                }
+            )
+    });
+    let crops = filterDomains.filter(domain => !isEmpty(domain.variety.identification)).map(domain => (
+        {
+            value: 'crop_' + domain.variety.cropID,
+            label: addBusinessName(domain, domain.variety.category),
+        }
+    ));
+    let varieties = filterDomains.filter(domain => !isEmpty(domain.variety.name)).map(domain => {
+        return (
+            {
+                value: 'variety_' + domain.variety.id,
+                label: addBusinessName(domain, domain.variety.name),
+
+            }
+        )
+    });
+
+    let tag1 = filterDomains.map(domain => {
+        if (domain.tag1)
+            return (
+                {
+                    value: 'tag1_' + domain.tag1.id,
+                    label: domain.tag1.name
+                }
+            )
+    });
+
+    let tag2 = filterDomains.map(domain => {
+        if (domain.tag2)
+            return (
+                {
+                    value: 'tag2_' + domain.tag2.id,
+                    label: domain.tag2.name
+                }
+            )
+    });
+
+    let all = [];
+    if (!cropID) {
+        all = all.concat(uniqBy(crops, 'value'));
+    }
+    all = all.concat(uniqBy(varieties, 'value'));
+    all = all.concat(uniqBy(sites, 'value'));
+    all = all.concat(uniqBy(parentField, 'value'));
+    all = all.concat(uniqBy(fieldFilter, 'value'));
+    all = all.concat(uniqBy(tag1, 'value'));
+    all = all.concat(uniqBy(tag2, 'value'));
+
+    return all.filter((element) => element !== undefined);
+}
+
+
+export function filterDomainsFreeText(domains, filter) {
+    if (isEmpty(filter)) {
+        return domains;
+    }
+    return domains.filter(d =>
+        d.field.name.includes(filter) ||
+        d.variety.name.includes(filter) ||
+        d.variety.category.includes(filter) ||
+        (!isEmpty(''+d.year) && (''+d.year).includes(filter)) ||
+        (!isEmpty(d.alias) && d.alias.includes(filter)) ||
+        (!isEmpty(d.description) && d.description.includes(filter)) ||
+        // (d.field.site !== null && d.field.site.name.includes(filter)) ||
+        (d.field.parentField !== null && !isEmpty(d.field.parentField.code) && d.field.parentField.code.includes(filter))
+    );
+}
+
+*/

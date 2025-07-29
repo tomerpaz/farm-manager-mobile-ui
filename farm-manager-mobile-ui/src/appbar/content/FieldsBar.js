@@ -1,31 +1,31 @@
-import { FilterAlt, MoreVert } from '@mui/icons-material'
+import { FilterAlt } from '@mui/icons-material'
 import { AppBar, IconButton, Toolbar } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
-import { selectCurrentYear, selectFieldBaseFieldFilter, selectFieldFreeTextFilter, selectFieldSiteFilter, selectFieldsViewStatus, setAppBarDialogOpen, setFieldFreeTextFilter } from '../../features/app/appSlice'
+import { selectCurrentYear, setSelectedFieldFilterOptions, selectFieldsViewStatus, setAppBarDialogOpen, selectSelectedFieldFilterOptions, selectFieldFreeTextFilter } from '../../features/app/appSlice'
 import { useGetUserDataQuery } from '../../features/auth/authApiSlice'
 import AppBarMenu from '../components/AppBarMenu'
-import AppBarSearch from '../components/AppBarSearch'
+//import AppBarSearch from '../components/AppBarSearch'
 import Accuracy from '../components/Accuracy'
-//import AppBarSearch from './SearchBarAutoComplete'
+import AppBarSearch from './SearchBarAutoComplete'
 import { useFields } from '../../features/fields/fieldsApiSlice'
+import { buildFieldOptions, isStringEmpty } from '../../ui/FarmUtil'
 
 const FieldsBar = () => {
     const dispatch = useDispatch()
 
-    const fieldSiteFilter = useSelector(selectFieldSiteFilter)
-    const fieldBaseFieldFilter = useSelector(selectFieldBaseFieldFilter)
+    const freeTextFilter = useSelector(selectFieldFreeTextFilter)
     const currentYear = useSelector(selectCurrentYear)
     const fieldsViewStatus = useSelector(selectFieldsViewStatus)
     const { data: user } = useGetUserDataQuery()
 
-    const noFilter = fieldSiteFilter === 0 && fieldBaseFieldFilter === 0 && user && user.year === currentYear && user.fieldsViewStatus === fieldsViewStatus;;
-    
+    const noFilter = isStringEmpty(freeTextFilter) && user && user.year === currentYear && user.fieldsViewStatus === fieldsViewStatus;;
+
     const fields = useFields(currentYear)
 
 
-    const autoCompleteOptions = fields ? fields.map(e=> {
-        return { key: 'field_'+e.id, id: e.id, label: e.name, element: e}}
-    ) : [];
+    const autoCompleteOptions = buildFieldOptions(fields)
+
+
     return (
         <AppBar position="static" elevation={0}>
             <Toolbar>
@@ -39,8 +39,7 @@ const FieldsBar = () => {
                 >
                     <FilterAlt sx={{ color: noFilter ? null : 'blue' }} />
                 </IconButton>
-                <AppBarSearch value={useSelector(selectFieldFreeTextFilter)} onChange={(e) => dispatch(setFieldFreeTextFilter(e))} />
-                {/* <AppBarSearch options={autoCompleteOptions} /> */}
+                <AppBarSearch value={useSelector(selectSelectedFieldFilterOptions)} options={autoCompleteOptions} onChenge={(values, action) => dispatch(setSelectedFieldFilterOptions(values))} />
                 <Accuracy />
                 <AppBarMenu />
             </Toolbar>

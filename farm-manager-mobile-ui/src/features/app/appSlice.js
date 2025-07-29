@@ -27,6 +27,7 @@ const appSlice = createSlice({
         token: localStorage.getItem('token'),
         refreshToken: localStorage.getItem('refreshToken'),
         fieldFreeTextFilter: '',
+        selectedFieldFilterOptions: [],
         activityFreeTextFilter: '',
         fieldFilter: '',
         currentYear: newDate().getFullYear(),
@@ -109,7 +110,9 @@ const appSlice = createSlice({
         }, setAppBarDialogOpen: (state, action) => {
             state.appBarDialogOpen = action.payload
         }, setFieldFreeTextFilter: (state, action) => {
-            state.fieldFreeTextFilter = action.payload
+            state.fieldFreeTextFilter = action.payload 
+        }, setSelectedFieldFilterOptions: (state, action) => {
+            state.selectedFieldFilterOptions = action.payload 
         }, setActivityFreeTextFilter: (state, action) => {
             state.activityFreeTextFilter = action.payload
         }, setStartDateFilter: (state, action) => {
@@ -240,7 +243,7 @@ export const { setCredentials, logOut, setLang, setCurrentYear, setAppBarDialogO
     setActivityPlanStatusFilter, setActivityPlanTypeFilter, setActivityStatusFilter, setActivityType, setSnackbar, setOpenSettings, setInventoryFreeTextFilter,
     setInventoryDateFilter, setInventoryWarehouseFilter, setShowInventory, setShowPlans, setOpenLayers, setShowLayers, setEditLayer, setMapCenter, setMapZoom,
     setShowFieldAlias, setShowFieldName, setNewActivityGeo, setAccuracy, setActiveGPS, setLongitude, setLatitude, setActivityParentFieldFilter, setActivityBaseFieldFilter, setActivitySiteFilter,
-    setShowOfficialFieldId, setVisibleLayers, setDefaultScouter
+    setShowOfficialFieldId, setVisibleLayers, setDefaultScouter,setSelectedFieldFilterOptions
 } = appSlice.actions
 
 export default appSlice.reducer
@@ -288,3 +291,5 @@ export const selectActivityParentFieldFilter = (state) => state.app.activityPare
 export const selectShowOfficialFieldId = (state) => state.app.showOfficialFieldId
 export const selectVisibilLayes = (state) => state.app.visibleLayers
 export const selectDefaultScouter = (state) => state.app.defaultScouter
+export const selectSelectedFieldFilterOptions = (state) => state.app.selectedFieldFilterOptions
+

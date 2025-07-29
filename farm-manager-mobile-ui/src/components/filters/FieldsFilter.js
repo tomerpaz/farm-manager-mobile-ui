@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react'
 import { AppBar, Box, Dialog, Divider, FormControl, IconButton, InputLabel, List, ListItem, ListItemText, MenuItem, Select, Slide, TextField, Toolbar, Typography } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux';
-import { selectAppBarDialogOpen, selectCurrentYear, selectFieldBaseFieldFilter, selectFieldSiteFilter, selectFieldsViewStatus, selectLang, setAppBarDialogOpen, setCurrentYear, setFieldBaseFieldFilter, setFieldSiteFilter, setFieldsViewStatus } from '../../features/app/appSlice';
+import { selectAppBarDialogOpen, selectCurrentYear, selectFieldBaseFieldFilter, selectFieldFreeTextFilter, selectFieldSiteFilter, selectFieldsViewStatus, selectLang, setAppBarDialogOpen, setCurrentYear, setFieldBaseFieldFilter, setFieldFreeTextFilter, setFieldSiteFilter, setFieldsViewStatus } from '../../features/app/appSlice';
 import DoneIcon from '@mui/icons-material/Done';
 import { FilterAltOff } from '@mui/icons-material';
-import { ACTIVE, ALL, getYearArray, INACTIVE, isMobile } from '../../ui/FarmUtil';
+import { ACTIVE, ALL, getYearArray, INACTIVE, isMobile, isStringEmpty } from '../../ui/FarmUtil';
 import { useGetUserDataQuery } from '../../features/auth/authApiSlice';
 import { Transition } from '../../ui/Util';
 
@@ -18,20 +18,18 @@ const FieldsFilter = ({ fields, }) => {
 
     const open = useSelector(selectAppBarDialogOpen)
 
-    const fieldSiteFilter = useSelector(selectFieldSiteFilter)
-    const fieldBaseFieldFilter = useSelector(selectFieldBaseFieldFilter)
+    const freeTextFilter = useSelector(selectFieldFreeTextFilter)
     const currentYear = useSelector(selectCurrentYear)
     const { data: user } = useGetUserDataQuery()
 
 
     const fieldsViewStatus = useSelector(selectFieldsViewStatus)
 
-    const noFilter = fieldSiteFilter === 0 && fieldBaseFieldFilter === 0 && user.year === currentYear && user.fieldsViewStatus === fieldsViewStatus;
+    const noFilter = isStringEmpty(freeTextFilter) && user.year === currentYear && user.fieldsViewStatus === fieldsViewStatus;
 
 
     const clearFilters = () => {
-        dispatch(setFieldSiteFilter(0));
-        dispatch(setFieldBaseFieldFilter(0));
+        dispatch(setFieldFreeTextFilter(''));
         dispatch(setCurrentYear(user.year));
         dispatch(setFieldsViewStatus(user.fieldsViewStatus));
 
@@ -46,15 +44,12 @@ const FieldsFilter = ({ fields, }) => {
         dispatch(setAppBarDialogOpen(false))
     }
 
-    const sites = [...new Map(fields.map(item => [item['siteId'], { name: item.siteName, id: item.siteId }])).values()];
-    const baseFields = [...new Map(fields.map(item => [item['baseFieldId'], { name: item.name, id: item.baseFieldId }])).values()];
-
     return (
         <Dialog
             fullScreen={isMobile()} fullWidth={!isMobile()}
             open={open}
             onClose={handleClose}
-            TransitionComponent={Transition}
+            slots={{ transition: Transition }}
         >
             <AppBar sx={{ position: 'relative' }} elevation={0}>
                 <Toolbar>
@@ -122,43 +117,13 @@ const FieldsFilter = ({ fields, }) => {
                 </ListItem>
                 <ListItem >
                     <TextField
-                        id="outlined-select-site"
-                        select
+                        id="outlined-select-freetext"
                         fullWidth
                         size='small'
-                        label={text.site}
-                        value={fieldSiteFilter}
-                        onChange={e => dispatch(setFieldSiteFilter(Number(e.target.value)))}
+                        label={text.freetext}
+                        value={freeTextFilter}
+                        onChange={e => dispatch(setFieldFreeTextFilter(e.target.value))}
                     >
-                        <MenuItem value={0}>
-                            <em></em>
-                        </MenuItem>
-                        {sites.map((option) => (
-                            <MenuItem key={option.id} value={option.id}>
-                                {option.name}
-                            </MenuItem>
-                        ))}
-                    </TextField>
-                </ListItem>
-                <Divider />
-                <ListItem button>
-                    <TextField
-                        id="outlined-select-basefield"
-                        select
-                        fullWidth
-                        size='small'
-                        label={text.field}
-                        value={fieldBaseFieldFilter}
-                        onChange={e => dispatch(setFieldBaseFieldFilter(Number(e.target.value)))}
-                    >
-                        <MenuItem value={0}>
-                            <em></em>
-                        </MenuItem>
-                        {baseFields.map((option) => (
-                            <MenuItem key={option.id} value={option.id}>
-                                {option.name}
-                            </MenuItem>
-                        ))}
                     </TextField>
                 </ListItem>
                 <Divider />
