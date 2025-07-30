@@ -202,5 +202,6 @@
     "accountExpired": "תוקף המנוי הסתיים",
     "officialFieldId": "מס משרד חקלאות",
     "executor": "מבצע",
-    "seedpod": "תרמיל"
+    "seedpod": "תרמיל",
+    "freetext": "טקסט חופשי"
 }

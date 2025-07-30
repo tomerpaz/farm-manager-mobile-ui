@@ -202,5 +202,6 @@
   "accountExpired": "Account expired",
   "officialFieldId": "Official Field Id",
   "executor": "Executor",
-  "seedpod": "Seed Pod"
+  "seedpod": "Seed Pod",
+  "freetext": "Free Text"
 }

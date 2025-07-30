@@ -198,5 +198,6 @@
   "accountExpired": "Account expired",
   "officialFieldId": "Ffficial Field Id",
   "executor": "Executor",
-  "seedpod": "Seed Pod"
+  "seedpod": "Seed Pod",
+  "freetext": "Free Text"
 }
