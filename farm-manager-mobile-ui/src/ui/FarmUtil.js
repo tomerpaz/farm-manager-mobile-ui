@@ -413,10 +413,10 @@ export function isMatchFieldFilterOptions(field, filterOptions) {
         const entry = e.key.split('_');
         const type = entry[0];
         const id = Number(entry[1]);
-                const isMatchOption = isFieldMatchOption(field, type, id);
-                 if (isMatchOption) {
-                    return e;
-                 }
+        const isMatchOption = isFieldMatchOption(field, type, id);
+        if (isMatchOption) {
+            return e;
+        }
 
     });
     return matchFilter ? true : null;
@@ -431,6 +431,12 @@ export function isFieldMatchOption(field, type, id) {
         return field.varietyId === id;
     } else if (type === 'crop') {
         return field.cropId === id;
+    } else if (type === 'tag1') {
+        return field.tag1Id === id;
+    } else if (type === 'tag2') {
+        return field.tag2Id === id;
+    } else if (type === 'parentField') {
+        return field.parentFieldId === id;
     } else {
         return false;
     }
@@ -687,27 +693,25 @@ export const buildFieldOptions = (fields) => {
             .concat(fields.map(e => { return { key: 'site_' + e.siteId, id: e.id, label: e.siteName, element: e } }))
             .concat(fields.map(e => { return { key: 'crop_' + e.cropId, id: e.id, label: e.cropName, element: e } }))
             .concat(fields.map(e => { return { key: 'variety_' + e.varietyId, id: e.id, label: e.varietyName, element: e } }))
+            .concat(fields.filter(e => e.parentFieldId !== null).map(e => { return { key: 'parentField_' + e.parentFieldId, id: e.parentFieldId, label: e.parentFieldName, element: e } }))
+            .concat(fields.filter(e => e.tag1Id !== null).map(e => { return { key: 'tag1_' + e.tag1Id, id: e.tag1Id, label: e.tag1Name, element: e } }))
+            .concat(fields.filter(e => e.tag2Id !== null).map(e => { return { key: 'tag2_' + e.tag2Id, id: e.tag2Id, label: e.tag2Name, element: e } }))
 
-
-    // const uniqueItems = [...new Map(options.map(item => [item['key'], item])).values()];
-
-
-    return  uniqueArray(options, 'key');
-
+    return uniqueArray(options, 'key');
 }
 
 const uniqueArray = (array, propertyName) => {
     return [...new Map(array.map(item => [item[propertyName], item])).values()];
-/*
-    const attr = isStringEmpty(propertyName) ? 'key' : propertyName;
-    return array.reduce((acc, current) => {
-        const x = acc.find(item => item[attr] === current[attr]);
-        if (!x) {
-            return acc.concat([current]);
-        } else {
-            return acc;
-        }
-    }, []);*/
+    /*
+        const attr = isStringEmpty(propertyName) ? 'key' : propertyName;
+        return array.reduce((acc, current) => {
+            const x = acc.find(item => item[attr] === current[attr]);
+            if (!x) {
+                return acc.concat([current]);
+            } else {
+                return acc;
+            }
+        }, []);*/
 }
 
 const fieldDisplayText = (f) => {
