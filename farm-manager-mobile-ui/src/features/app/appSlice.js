@@ -28,6 +28,8 @@ const appSlice = createSlice({
         refreshToken: localStorage.getItem('refreshToken'),
         fieldFreeTextFilter: '',
         selectedFieldFilterOptions: [],
+        selectedActivityFilterOptions: [],
+        selectedActivityPlanFilterOptions: [],
         activityFreeTextFilter: '',
         fieldFilter: '',
         currentYear: newDate().getFullYear(),
@@ -35,16 +37,7 @@ const appSlice = createSlice({
         appBarDialogOpen: false,
         startDateFilter: null,
         endDateFilter: null,
-        activityTypeFilter: '',
-        activitySiteFilter: '',
-        activityBaseFieldFilter: '',
-        activityParentFieldFilter: '',
-        activityPlanTypeFilter: '',
-        fieldSiteFilter: 0,
-        fieldBaseFieldFilter: 0,
         fieldsViewStatus: 'all',
-        activityStatusFilter: '',
-        activityPlanStatusFilter: DEFAULT_PLAN_STATUS,
         activityType: '',
         snackbarMsg: '',
         snackbarSeverity: 'succsess',
@@ -113,31 +106,17 @@ const appSlice = createSlice({
             state.fieldFreeTextFilter = action.payload 
         }, setSelectedFieldFilterOptions: (state, action) => {
             state.selectedFieldFilterOptions = action.payload 
+        }, setSelectedActivityFilterOptions: (state, action) => {
+            state.selectedActivityFilterOptions = action.payload 
+        }, setSelectedActivityPlanFilterOptions: (state, action) => {
+            state.selectedActivityPlanFilterOptions = action.payload 
         }, setActivityFreeTextFilter: (state, action) => {
             state.activityFreeTextFilter = action.payload
         }, setStartDateFilter: (state, action) => {
             state.startDateFilter = action.payload
         }, setEndDateFilter: (state, action) => {
             state.endDateFilter = action.payload
-        }, setActivityTypeFilter: (state, action) => {
-            state.activityTypeFilter = action.payload
-        }, setActivitySiteFilter: (state, action) => {
-            state.activitySiteFilter = action.payload
-        }, setActivityBaseFieldFilter: (state, action) => {
-            state.activityBaseFieldFilter = action.payload
-        }, setActivityParentFieldFilter: (state, action) => {
-            state.activityParentFieldFilter = action.payload
-        }, setActivityPlanTypeFilter: (state, action) => {
-            state.activityPlanTypeFilter = action.payload
-        }, setActivityPlanStatusFilter: (state, action) => {
-            state.activityPlanStatusFilter = action.payload
-        }, setFieldSiteFilter: (state, action) => {
-            state.fieldSiteFilter = action.payload
-            state.fieldBaseFieldFilter = 0;
-        }, setFieldBaseFieldFilter: (state, action) => {
-            state.fieldBaseFieldFilter = action.payload;
-            state.fieldSiteFilter = 0;
-        },
+        }, 
         setFieldDashboardYear: (state, action) => {
             state.fieldDashboardYear = action.payload
         },
@@ -145,12 +124,6 @@ const appSlice = createSlice({
             state.fieldsViewStatus = action.payload
         },
 
-        setActivityStatusFilter: (state, action) => {
-            state.activityStatusFilter = action.payload
-        },
-        setActivityPlanStatusFilter: (state, action) => {
-            state.activityPlanStatusFilter = action.payload
-        },
 
         setActivityType: (state, action) => {
             state.activityType = action.payload
@@ -239,11 +212,12 @@ const appSlice = createSlice({
 })
 
 export const { setCredentials, logOut, setLang, setCurrentYear, setAppBarDialogOpen, setFieldFreeTextFilter, setActivityFreeTextFilter,
-    setStartDateFilter, setEndDateFilter, setActivityTypeFilter, setFieldSiteFilter, setFieldBaseFieldFilter, setFieldDashboardYear, setFieldsViewStatus,
-    setActivityPlanStatusFilter, setActivityPlanTypeFilter, setActivityStatusFilter, setActivityType, setSnackbar, setOpenSettings, setInventoryFreeTextFilter,
+    setStartDateFilter, setEndDateFilter, 
+    setFieldDashboardYear, setFieldsViewStatus,
+    setActivityType, setSnackbar, setOpenSettings, setInventoryFreeTextFilter,
     setInventoryDateFilter, setInventoryWarehouseFilter, setShowInventory, setShowPlans, setOpenLayers, setShowLayers, setEditLayer, setMapCenter, setMapZoom,
     setShowFieldAlias, setShowFieldName, setNewActivityGeo, setAccuracy, setActiveGPS, setLongitude, setLatitude, setActivityParentFieldFilter, setActivityBaseFieldFilter, setActivitySiteFilter,
-    setShowOfficialFieldId, setVisibleLayers, setDefaultScouter,setSelectedFieldFilterOptions
+    setShowOfficialFieldId, setVisibleLayers, setDefaultScouter,setSelectedFieldFilterOptions, setSelectedActivityFilterOptions, setSelectedActivityPlanFilterOptions
 } = appSlice.actions
 
 export default appSlice.reducer
@@ -256,14 +230,8 @@ export const selectFieldFreeTextFilter = (state) => state.app.fieldFreeTextFilte
 export const selectActivityFreeTextFilter = (state) => state.app.activityFreeTextFilter
 export const selectStartDateFilter = (state) => state.app.startDateFilter
 export const selectEndDateFilter = (state) => state.app.endDateFilter
-export const selectActivityTypeFilter = (state) => state.app.activityTypeFilter
-export const selectActivityPlanTypeFilter = (state) => state.app.activityPlanTypeFilter
-export const selectFieldSiteFilter = (state) => state.app.fieldSiteFilter
-export const selectFieldBaseFieldFilter = (state) => state.app.fieldBaseFieldFilter
 export const selectFieldDashboardYear = (state) => state.app.fieldDashboardYear
 export const selectFieldsViewStatus = (state) => state.app.fieldsViewStatus
-export const selectActivityStatusFilter = (state) => state.app.activityStatusFilter
-export const selectActivityPlanStatusFilter = (state) => state.app.activityPlanStatusFilter
 export const selectActivityType = (state) => state.app.activityType
 export const selectSnackbarMsg = (state) => state.app.snackbarMsg
 export const selectSnackbarSeverity = (state) => state.app.snackbarSeverity
@@ -285,11 +253,11 @@ export const selectAccuracy = (state) => state.app.accuracy
 export const selectActiveGPS = (state) => state.app.activeGPS
 export const selectLongitude = (state) => state.app.longitude
 export const selectLatitude = (state) => state.app.latitude
-export const selectActivitySiteFilter = (state) => state.app.activitySiteFilter
-export const selectActivityBaseFieldFilter = (state) => state.app.activityBaseFieldFilter
-export const selectActivityParentFieldFilter = (state) => state.app.activityParentFieldFilter
 export const selectShowOfficialFieldId = (state) => state.app.showOfficialFieldId
 export const selectVisibilLayes = (state) => state.app.visibleLayers
 export const selectDefaultScouter = (state) => state.app.defaultScouter
 export const selectSelectedFieldFilterOptions = (state) => state.app.selectedFieldFilterOptions
+export const selectSelectedActivityFilterOptions = (state) => state.app.selectedActivityFilterOptions
+export const selectSelectedActivityPlanFilterOptions = (state) => state.app.selectedActivityPlanFilterOptions
+
 

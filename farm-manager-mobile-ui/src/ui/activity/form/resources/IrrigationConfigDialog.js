@@ -9,7 +9,6 @@ import DialogAppBar from "../../../dialog/DialogAppBar";
 
 
 const IrrigationConfigDialog = ({ open, units, text, handleClose, areaUnit, activityArea, days, irrigationParams }) => {
-    //  console.log(irrigationParams)
 
     const [irrigationMethod, setIrrigationMethod] = useState(irrigationParams?.irrigationMethod ? irrigationParams?.irrigationMethod : '');
     const [fertilizeMethod, setFertilizeMethod] = useState(irrigationParams?.fertilizeMethod ? irrigationParams?.fertilizeMethod : '');

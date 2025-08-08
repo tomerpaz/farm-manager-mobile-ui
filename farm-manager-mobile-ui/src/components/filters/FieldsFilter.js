@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react'
-import { AppBar, Box, Dialog, Divider, FormControl, IconButton, InputLabel, List, ListItem, ListItemText, MenuItem, Select, Slide, TextField, Toolbar, Typography } from '@mui/material'
+import { useEffect } from 'react'
+import { AppBar, Box, Dialog, Divider, IconButton, List, ListItem, MenuItem, TextField, Toolbar, Typography } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux';
-import { selectAppBarDialogOpen, selectCurrentYear, selectFieldBaseFieldFilter, selectFieldFreeTextFilter, selectFieldSiteFilter, selectFieldsViewStatus, selectLang, setAppBarDialogOpen, setCurrentYear, setFieldBaseFieldFilter, setFieldFreeTextFilter, setFieldSiteFilter, setFieldsViewStatus } from '../../features/app/appSlice';
+import { selectAppBarDialogOpen, selectCurrentYear, selectFieldFreeTextFilter, selectFieldsViewStatus, selectLang, setAppBarDialogOpen, setCurrentYear, setFieldFreeTextFilter, setFieldsViewStatus } from '../../features/app/appSlice';
 import DoneIcon from '@mui/icons-material/Done';
 import { FilterAltOff } from '@mui/icons-material';
 import { ACTIVE, ALL, getYearArray, INACTIVE, isMobile, isStringEmpty } from '../../ui/FarmUtil';
@@ -126,7 +126,6 @@ const FieldsFilter = ({ fields, }) => {
                     >
                     </TextField>
                 </ListItem>
-                <Divider />
             </List>
         </Dialog>
     )

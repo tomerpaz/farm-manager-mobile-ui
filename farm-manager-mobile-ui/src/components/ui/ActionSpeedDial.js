@@ -36,9 +36,7 @@ const ActionSpeedDial = ({ role, plan, map, bottom, fieldId }) => {
   const { data: user } = useGetUserDataQuery()
   const actionTypes = user.userConf.filter(e => e.write).map(e => e.type);
   const handleAction = (e) => {
-    //  console.log('new',e, 'map',map)
 
-    //  console.log('handleAction',fieldId)
     const searchParams = fieldId ?
       createSearchParams({ fid: fieldId }).toString() :
       null

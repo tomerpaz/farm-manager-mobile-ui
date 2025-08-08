@@ -28,7 +28,6 @@ const UserRoutes = () => {
 
     useEffect(() => {
         if (isSuccess) {
-            // console.log('user',user)
             const lang  = localStorage.getItem('lang') ? localStorage.getItem('lang') : user.lang;
             dispatch(setLang(getUserLang(lang)));
             dispatch(setCurrentYear(user.year));

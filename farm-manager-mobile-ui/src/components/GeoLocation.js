@@ -39,12 +39,6 @@ const GeoLocation = () => {
     dispatch(setAccuracy(evt.accuracy));
   });
 
-  // map.on('locateactivate', function (evt) {
-  //   // console.log("locateactivate", evt);
-  //   console.log('set active GPS')
-  //   dispatch(setActiveGPS(true));
-
-  // });
 
   map.on('locatedeactivate', function (evt) {
     console.log('locatedeactivate', evt)

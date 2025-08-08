@@ -1,13 +1,13 @@
-import React, { useEffect } from 'react'
-import { AppBar, Box, Dialog, Divider, IconButton, InputAdornment, List, ListItem, ListItemText, MenuItem, Slide, TextField, Toolbar, Typography } from '@mui/material'
-import { DEFAULT_ACTIVITY_STATUS, DEFAULT_PLAN_STATUS, selectActivityPlanStatusFilter, selectActivityPlanTypeFilter, selectActivityStatusFilter, selectActivityTypeFilter, selectAppBarDialogOpen, selectEndDateFilter, selectInventoryDateFilter, selectInventoryWarehouseFilter, selectLang, selectStartDateFilter, setActivityPlanStatusFilter, setActivityPlanTypeFilter, setActivityStatusFilter, setActivityTypeFilter, setAppBarDialogOpen, setEndDateFilter, setInventoryDateFilter, setInventoryWarehouseFilter, setStartDateFilter } from '../../features/app/appSlice';
+import { useEffect } from 'react'
+import { AppBar, Box, Dialog, Divider, IconButton, List, ListItem, MenuItem, TextField, Toolbar, Typography } from '@mui/material'
+import { selectAppBarDialogOpen, selectEndDateFilter, selectInventoryDateFilter, selectInventoryWarehouseFilter, selectLang, setAppBarDialogOpen, setInventoryDateFilter, setInventoryWarehouseFilter } from '../../features/app/appSlice';
 import DoneIcon from '@mui/icons-material/Done';
 import { useDispatch, useSelector } from 'react-redux';
-import { useLocation, useParams } from 'react-router';
+import { useLocation } from 'react-router';
 import { MobileDatePicker } from '@mui/x-date-pickers';
-import { asLocalDate, getActivityStatuses, getActivityStatusText, getActivityTypes, getActivityTypeText, isMobile, isStringEmpty, parseISOOrNull, PLAN } from '../../ui/FarmUtil';
+import { asLocalDate,  isMobile, parseISOOrNull } from '../../ui/FarmUtil';
 import { FilterAltOff } from '@mui/icons-material';
-import { getWarehousesState, useGetWarehousesQuery } from '../../features/warehouses/warehouseApiSlice';
+import { useGetWarehousesQuery } from '../../features/warehouses/warehouseApiSlice';
 import { Transition } from '../../ui/Util';
 
 

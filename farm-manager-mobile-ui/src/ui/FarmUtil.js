@@ -424,7 +424,7 @@ export function isMatchFieldFilterOptions(field, filterOptions) {
 
 export function isFieldMatchOption(field, type, id) {
     if (type === 'field') {
-        return field.id === id;
+        return field.baseFieldId === id;
     } else if (type === 'site') {
         return field.siteId === id;
     } else if (type === 'variety') {
@@ -476,8 +476,22 @@ export function filterFields(fields, filterOptions, freeText, fieldsViewStatus) 
     return result;
 }
 
-export const buildActiviyFilter = (start, end, activityType, freeText, status, activitySiteFilter,
-    activityBaseFieldFilter, activityParentFieldFilter) => {
+export const buildActiviesFilter = (start, end, freeText, autoComplete) => {
+    const filter = autoComplete.map(e => e.key);
+    if (!isStringEmpty(start)) {
+        filter.push(`start_${start.replaceAll('-', '')}`)
+    }
+    if (!isStringEmpty(end)) {
+        filter.push(`end_${end.replaceAll('-', '')}`)
+    }
+    if (!isStringEmpty(freeText)) {
+        filter.push(`freeText_${freeText}`)
+    }
+    return filter;
+}
+
+//Depricated
+export const buildActiviyFilter = (start, end, freeText) => {
     const filter = [];
     if (!isStringEmpty(start)) {
         filter.push(`start_${start.replaceAll('-', '')}`)
@@ -485,23 +499,8 @@ export const buildActiviyFilter = (start, end, activityType, freeText, status, a
     if (!isStringEmpty(end)) {
         filter.push(`end_${end.replaceAll('-', '')}`)
     }
-    if (!isStringEmpty(activityType)) {
-        filter.push(`activityType_${activityType}`)
-    }
     if (!isStringEmpty(freeText)) {
         filter.push(`freeText_${freeText}`)
-    }
-    if (!isStringEmpty(status)) {
-        filter.push(`status_${status}`)
-    }
-    if (!isStringEmpty(activitySiteFilter)) {
-        filter.push(`site_${activitySiteFilter}`)
-    }
-    if (!isStringEmpty(activityBaseFieldFilter)) {
-        filter.push(`field_${activityBaseFieldFilter}`)
-    }
-    if (!isStringEmpty(activityParentFieldFilter)) {
-        filter.push(`parentField_${activityParentFieldFilter}`)
     }
     return filter;
 }
@@ -689,7 +688,7 @@ export const buildFieldOptions = (fields) => {
         return [];
     }
     const options =
-        (fields.map(e => { return { key: 'field_' + e.id, id: e.id, label: fieldDisplayText(e), element: e } }))
+        (fields.map(e => { return { key: 'field_' + e.baseFieldId, id: e.baseFieldId, label: e.name, element: e } }))
             .concat(fields.map(e => { return { key: 'site_' + e.siteId, id: e.id, label: e.siteName, element: e } }))
             .concat(fields.map(e => { return { key: 'crop_' + e.cropId, id: e.id, label: e.cropName, element: e } }))
             .concat(fields.map(e => { return { key: 'variety_' + e.varietyId, id: e.id, label: e.varietyName, element: e } }))
@@ -699,6 +698,32 @@ export const buildFieldOptions = (fields) => {
 
     return uniqueArray(options, 'key');
 }
+
+const isFieldKey = (key) => {
+    const stateList = ['field_','crop_','variety_','parentField_','tag1_','tag2_']
+    var result = stateList.filter(e => key.startsWith(e));
+    console.log('result',result)
+    return result.length !== 0;
+}
+
+export const buildActivityOptions = (fields, fieldId, text, isPlan, role) => {
+    const options =
+        getActivityStatuses(role, isPlan).map(e => {
+            return { key: 'status_' + e, id: e, label: getActivityStatusText(e, text), element: e }
+        })
+            .concat(
+                getActivityTypes(role, false, isPlan).map(e => {
+                    return { key: 'activityType_' + e, id: e, label: getActivityTypeText(e, text), element: e }
+                }))
+            .concat( isNaN(fieldId) ? buildFieldOptions(fields) : [])
+    return uniqueArray(options, 'key');
+}
+
+export const removeRedundantSelectedActivityOptions = (options, fieldId) => {
+    return isNaN(Number(fieldId)) ? options : options.filter(e=> !isFieldKey(e.key));
+}
+
+
 
 const uniqueArray = (array, propertyName) => {
     return [...new Map(array.map(item => [item[propertyName], item])).values()];

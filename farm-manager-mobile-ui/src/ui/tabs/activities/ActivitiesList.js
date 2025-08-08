@@ -1,14 +1,15 @@
-import React, { Fragment, useEffect } from 'react'
+import { Fragment } from 'react'
 import { Avatar, List, ListItem, ListItemText, ListItemAvatar, Box, Button, Typography, Divider } from '@mui/material';
 import { useSelector } from 'react-redux';
 import { useGetActivitiesFlatQuery } from '../../../features/activities/activitiesApiSlice';
-import { selectActivityBaseFieldFilter, selectActivityFreeTextFilter, selectActivityParentFieldFilter, selectActivityPlanStatusFilter, selectActivityPlanTypeFilter, selectActivitySiteFilter, selectActivityStatusFilter, selectActivityTypeFilter, selectEndDateFilter, selectLang, selectStartDateFilter } from '../../../features/app/appSlice';
+import { selectActivityBaseFieldFilter, selectActivityFreeTextFilter, selectActivityParentFieldFilter, 
+      selectEndDateFilter, selectLang, selectSelectedActivityFilterOptions, selectSelectedActivityPlanFilterOptions, selectStartDateFilter } from '../../../features/app/appSlice';
 import ListPager from '../../../components/ui/ListPager';
 import Loading from '../../../components/Loading';
 import ActivityTypeIcon from '../../../icons/ActivityTypeIcon';
 import { useNavigate, useParams } from 'react-router';
 import ActivitiesFilter from '../../../components/filters/ActivitiesFilter';
-import { EXECUTED, PLAN, activityDescription, buildActiviyFilter, daysDiffToday, isArrayEmpty, parseDate, parseISOOrNull } from '../../FarmUtil';
+import { EXECUTED, PLAN, activityDescription, buildActiviesFilter, daysDiffToday, isArrayEmpty, parseDate, parseISOOrNull } from '../../FarmUtil';
 import { EXECUTE_STATUS_COLOR, PLAN_PASSED_STATUS_COLOR, PLAN_STATUS_COLOR, WHITE } from '../../activity/form/header/ActivityHeaderView';
 import { LocationOn } from '@mui/icons-material';
 import { blue } from '@mui/material/colors';
@@ -47,25 +48,11 @@ const ActivitiesList = ({ plans }) => {
     const startDateFilter = useSelector(selectStartDateFilter);
     const endDateFilter = useSelector(selectEndDateFilter);
 
-    const typeFilter = useSelector(isPlan ? selectActivityPlanTypeFilter : selectActivityTypeFilter);
-
-    const status = useSelector(isPlan ? selectActivityPlanStatusFilter : selectActivityStatusFilter);
-
     const activityFreeTextFilter = useSelector(selectActivityFreeTextFilter);
+    const selectedFilters = useSelector(isPlan ? selectSelectedActivityPlanFilterOptions : selectSelectedActivityFilterOptions);
 
-    const activitySiteFilter = useSelector(selectActivitySiteFilter)
-    const activityBaseFieldFilter = useSelector(selectActivityBaseFieldFilter)
-    const activityParentFieldFilter = useSelector(selectActivityParentFieldFilter)
+    const filter = buildActiviesFilter(startDateFilter, endDateFilter, activityFreeTextFilter,selectedFilters);
 
-
-    const filter = buildActiviyFilter(startDateFilter, endDateFilter, typeFilter, activityFreeTextFilter, status, activitySiteFilter,
-        activityBaseFieldFilter,  activityParentFieldFilter);
-
-    // useEffect(() => {
-    //     if (page !== 0) {
-    //         navigate(`/tabs/activities/0`)
-    //     }
-    // }, [activityFreeTextFilter]);
 
     const {
         data,

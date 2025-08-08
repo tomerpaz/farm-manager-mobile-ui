@@ -1,7 +1,7 @@
-import React, { Fragment, useEffect } from 'react'
+import { Fragment } from 'react'
 import { Avatar, List, ListItem, ListItemText, ListItemAvatar, Box, Typography, Divider } from '@mui/material';
 import { useSelector } from 'react-redux';
-import { selectActivityFreeTextFilter, selectActivityTypeFilter, selectEndDateFilter, selectLang, selectStartDateFilter } from '../../features/app/appSlice';
+import { selectActivityFreeTextFilter, selectEndDateFilter, selectLang, selectStartDateFilter } from '../../features/app/appSlice';
 import { useNavigate, useParams } from 'react-router';
 import { useGetActivitiesFieldQuery } from '../../features/activities/activitiesApiSlice';
 import Loading from '../../components/Loading';
@@ -24,9 +24,8 @@ const FieldHistory = () => {
 
   const startDateFilter = useSelector(selectStartDateFilter);
   const endDateFilter = useSelector(selectEndDateFilter);
-  const activityTypeFilter = useSelector(selectActivityTypeFilter);
   const activityFreeTextFilter = useSelector(selectActivityFreeTextFilter);
-  const filter = buildActiviyFilter(startDateFilter, endDateFilter, activityTypeFilter, activityFreeTextFilter);
+  const filter = buildActiviyFilter(startDateFilter, endDateFilter, activityFreeTextFilter);
 
   // useEffect(() => {
   //   if(page !== 0){

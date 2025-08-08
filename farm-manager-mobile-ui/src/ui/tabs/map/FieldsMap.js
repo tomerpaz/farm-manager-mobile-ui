@@ -2,10 +2,10 @@ import { MapContainer, Polygon, useMapEvents, CircleMarker, Tooltip } from "reac
 import { useEffect, useState } from "react";
 import GeoLocation from "../../../components/GeoLocation";
 import { useNavigate } from "react-router";
-import { Alert, Box, IconButton, Snackbar, Typography } from "@mui/material";
+import { Box, IconButton, Snackbar, Typography } from "@mui/material";
 import { useFields } from "../../../features/fields/fieldsApiSlice";
 import { useGetUserDataQuery } from '../../../features/auth/authApiSlice'
-import { selectActiveGPS, selectCurrentYear, selectEditLayer, selectFieldBaseFieldFilter, selectFieldFreeTextFilter, selectFieldSiteFilter, selectFieldsViewStatus, selectLang, selectLatitude, selectLongitude, selectMapCenter, selectMapZoom, selectSelectedFieldFilterOptions, selectShowFieldAlias, selectShowFieldName, selectShowLayers, selectShowOfficialFieldId, selectShowsPestLayer, selectVisibilLayes, setEditLayer, setMapCenter, setMapZoom } from "../../../features/app/appSlice";
+import { selectActiveGPS, selectCurrentYear, selectEditLayer, selectFieldFreeTextFilter, selectFieldsViewStatus, selectLang, selectLatitude, selectLongitude, selectMapCenter, selectMapZoom, selectSelectedFieldFilterOptions, selectShowFieldAlias, selectShowFieldName, selectShowLayers, selectShowOfficialFieldId, selectVisibilLayes, setEditLayer, setMapCenter, setMapZoom } from "../../../features/app/appSlice";
 import { useDispatch, useSelector } from "react-redux";
 import FieldsFilter from "../../../components/filters/FieldsFilter";
 import { displayFieldName, filterFields, getFillColor, getOpacity, isArrayEmpty, isStringEmpty, mapDisplayFieldName, MapToolTip, MAX_PER_MAP, stopMapEventPropagation, trap } from "../../FarmUtil";
@@ -35,10 +35,7 @@ const FieldsMap = (props) => {
 
     const fields = useFields(year).filter(f => f.geoPoints);
     const freeText = useSelector(selectFieldFreeTextFilter);
-    const fieldSiteFilter = useSelector(selectFieldSiteFilter);
-    const fieldBaseFieldFilter = useSelector(selectFieldBaseFieldFilter);
     const fieldsViewStatus = useSelector(selectFieldsViewStatus);
-    // const activityType = useSelector(selectActivityType);
     const showLayers = useSelector(selectShowLayers);
     const editLayer = useSelector(selectEditLayer);
 

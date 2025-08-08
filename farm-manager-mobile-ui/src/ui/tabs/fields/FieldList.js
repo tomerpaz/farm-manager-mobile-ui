@@ -1,14 +1,13 @@
-import * as React from 'react';
 import Box from '@mui/material/Box';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import { FixedSizeList, } from 'react-window';
-import { Divider, ListItemAvatar, Avatar, BottomNavigation, BottomNavigationAction, IconButton, Typography } from '@mui/material';
+import { Divider, ListItemAvatar, Avatar, Typography } from '@mui/material';
 import { Link } from 'react-router';
 import { getFruitIcon } from '../../../icons/FruitIconUtil';
 import { useSelector } from 'react-redux';
-import { selectCurrentYear, selectFieldBaseFieldFilter, selectFieldFreeTextFilter, selectFieldSiteFilter, selectFieldsViewStatus, selectLang, selectSelectedFieldFilterOptions } from '../../../features/app/appSlice';
+import { selectCurrentYear, selectFieldFreeTextFilter, selectFieldsViewStatus, selectLang, selectSelectedFieldFilterOptions } from '../../../features/app/appSlice';
 import { useFields } from '../../../features/fields/fieldsApiSlice';
 import { useGetUserDataQuery } from '../../../features/auth/authApiSlice';
 import { displayFieldArea, displayFieldName, filterFields, parseDate } from '../../FarmUtil';
@@ -76,8 +75,6 @@ export default function FieldList(props) {
     const text =  useSelector(selectLang)
 
     const freeText = useSelector(selectFieldFreeTextFilter);
-    const fieldSiteFilter = useSelector(selectFieldSiteFilter)
-    const fieldBaseFieldFilter = useSelector(selectFieldBaseFieldFilter)
     const fieldsViewStatus = useSelector(selectFieldsViewStatus)
 
 

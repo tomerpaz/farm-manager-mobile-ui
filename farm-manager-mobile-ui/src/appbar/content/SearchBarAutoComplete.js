@@ -34,7 +34,6 @@ function renderRow(props) {
 
   const { key, ...optionProps } = dataSet[0];
 
-  // console.log('key',key)
   return (
     <Typography key={dataSet[1]} component="li" {...optionProps} noWrap style={inlineStyle}>
       {` ${dataSet[1].label}`}
@@ -94,7 +93,6 @@ const ListboxComponent = React.forwardRef(function ListboxComponent(props, ref) 
 
   const gridRef = useResetCache(itemCount);
 
-  console.log('children', children)
   return (
     <Box display={'flex'} flex={1} ref={ref}>
       <OuterElementContext.Provider value={other}>

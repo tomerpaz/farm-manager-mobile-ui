@@ -2,35 +2,47 @@ import { Close, FilterAlt } from '@mui/icons-material'
 import { AppBar, IconButton, Toolbar } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
 import { useLocation, useNavigate, useParams } from 'react-router'
-import { DEFAULT_ACTIVITY_STATUS, DEFAULT_PLAN_STATUS, selectAccuracy, selectActivityBaseFieldFilter, selectActivityFreeTextFilter, selectActivityParentFieldFilter, selectActivityPlanStatusFilter, selectActivityPlanTypeFilter, selectActivitySiteFilter, selectActivityStatusFilter, selectActivityTypeFilter, selectEndDateFilter, selectStartDateFilter, setActivityFreeTextFilter, setAppBarDialogOpen, setEndDateFilter, setStartDateFilter } from '../../features/app/appSlice'
-import { isStringEmpty } from '../../ui/FarmUtil'
+import { selectActivityFreeTextFilter, selectCurrentYear, selectEndDateFilter, selectLang, selectSelectedActivityFilterOptions, selectSelectedActivityPlanFilterOptions, selectStartDateFilter, setAppBarDialogOpen, setSelectedActivityFilterOptions, setSelectedActivityPlanFilterOptions } from '../../features/app/appSlice'
+import { buildActivityOptions, isStringEmpty, removeRedundantSelectedActivityOptions } from '../../ui/FarmUtil'
 import AppBarMenu from '../components/AppBarMenu'
-import AppBarSearch from '../components/AppBarSearch'
+import AppBarSearch from './SearchBarAutoComplete'
 import Accuracy from '../components/Accuracy'
+import { useFields } from '../../features/fields/fieldsApiSlice'
 
 const ActivitiesListBar = ({ plans }) => {
     const dispatch = useDispatch()
     const { pathname } = useLocation();
-    
+    const text = useSelector(selectLang)
+
 
     const { fieldId, src } = useParams()
     const navigate = useNavigate()
 
     const startDateFilter = useSelector(selectStartDateFilter);
     const endDateFilter = useSelector(selectEndDateFilter);
+    const freeTextFilter = useSelector(selectActivityFreeTextFilter);
+
     const isPlan = pathname && pathname.includes('plans');
-    const typeFilter = useSelector(isPlan ? selectActivityPlanTypeFilter : selectActivityTypeFilter);
-    const statusFilter = useSelector(isPlan ? selectActivityPlanStatusFilter : selectActivityStatusFilter);
 
-    const activitySiteFilter = useSelector(selectActivitySiteFilter);
-    const activityBaseFieldFilter = useSelector(selectActivityBaseFieldFilter);
-    const activityParentFieldFilter = useSelector(selectActivityParentFieldFilter)
+    const currentYear = useSelector(selectCurrentYear)
+
+    const isDefault = true;//isPlan ? statusFilter === DEFAULT_PLAN_STATUS : statusFilter === DEFAULT_ACTIVITY_STATUS;
+
+    const noFilter = isStringEmpty(freeTextFilter) && isStringEmpty(startDateFilter) && isStringEmpty(endDateFilter) && isDefault;
 
 
-    const isDefault = isPlan ? statusFilter === DEFAULT_PLAN_STATUS : statusFilter === DEFAULT_ACTIVITY_STATUS;
+    const activitiesFilterOptions = removeRedundantSelectedActivityOptions(useSelector(isPlan ? selectSelectedActivityPlanFilterOptions : selectSelectedActivityFilterOptions),fieldId);
 
-    const noFilter = isStringEmpty(startDateFilter) && isStringEmpty(endDateFilter) && isStringEmpty(typeFilter) && 
-    isStringEmpty(activitySiteFilter) && isStringEmpty(activityBaseFieldFilter) && isStringEmpty(activityParentFieldFilter) && isDefault;
+    const fields = useFields(currentYear)
+    const autoCompleteOptions = buildActivityOptions(fields, fieldId, text, isPlan)
+
+    const setFilter = (values) => {
+        if (isPlan) {
+            dispatch(setSelectedActivityPlanFilterOptions(values));
+        } else {
+            dispatch(setSelectedActivityFilterOptions(values));
+        }
+    }
 
     return (
         <AppBar position="static" elevation={0}>
@@ -45,12 +57,12 @@ const ActivitiesListBar = ({ plans }) => {
                 >
                     <FilterAlt sx={{ color: noFilter ? null : 'blue' }} />
                 </IconButton>
-                <AppBarSearch value={useSelector(selectActivityFreeTextFilter)} onChange={(e) => dispatch(setActivityFreeTextFilter(e))} />
-                <Accuracy/>
+                <AppBarSearch value={activitiesFilterOptions} options={autoCompleteOptions} onChenge={(values, action) => setFilter(values)} />
+                <Accuracy />
                 {!fieldId && <AppBarMenu />}
-               {fieldId && <IconButton color="inherit" onClick={() => navigate(`/tabs/${src}`)}>
+                {fieldId && <IconButton color="inherit" onClick={() => navigate(`/tabs/${src}`)}>
                     <Close />
-                </IconButton> }
+                </IconButton>}
             </Toolbar>
         </AppBar>
     )
