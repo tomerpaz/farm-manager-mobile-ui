@@ -8,6 +8,7 @@ import AppBarMenu from '../components/AppBarMenu'
 import AppBarSearch from './SearchBarAutoComplete'
 import Accuracy from '../components/Accuracy'
 import { useFields } from '../../features/fields/fieldsApiSlice'
+import { useGetActivityDefsQuery } from '../../features/activityDefs/activityDefsApiSlice'
 
 const ActivitiesListBar = ({ plans }) => {
     const dispatch = useDispatch()
@@ -31,10 +32,11 @@ const ActivitiesListBar = ({ plans }) => {
     const noFilter = isStringEmpty(freeTextFilter) && isStringEmpty(startDateFilter) && isStringEmpty(endDateFilter) && isDefault;
 
 
-    const activitiesFilterOptions = removeRedundantSelectedActivityOptions(useSelector(isPlan ? selectSelectedActivityPlanFilterOptions : selectSelectedActivityFilterOptions),fieldId);
+    const activitiesFilterOptions = removeRedundantSelectedActivityOptions(useSelector(isPlan ? selectSelectedActivityPlanFilterOptions : selectSelectedActivityFilterOptions), fieldId);
 
-    const fields = useFields(currentYear)
-    const autoCompleteOptions = buildActivityOptions(fields, fieldId, text, isPlan)
+    const fields = useFields(currentYear);
+    const { data: activityDefs } = useGetActivityDefsQuery()
+    const autoCompleteOptions = buildActivityOptions(fields, activityDefs, fieldId, text, isPlan)
 
     const setFilter = (values) => {
         if (isPlan) {

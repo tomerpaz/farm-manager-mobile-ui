@@ -1,14 +1,14 @@
 import { Fragment } from 'react'
 import { Avatar, List, ListItem, ListItemText, ListItemAvatar, Box, Typography, Divider } from '@mui/material';
 import { useSelector } from 'react-redux';
-import { selectActivityFreeTextFilter, selectEndDateFilter, selectLang, selectStartDateFilter } from '../../features/app/appSlice';
+import { selectActivityFreeTextFilter, selectEndDateFilter, selectLang, selectSelectedActivityFilterOptions, selectStartDateFilter } from '../../features/app/appSlice';
 import { useNavigate, useParams } from 'react-router';
 import { useGetActivitiesFieldQuery } from '../../features/activities/activitiesApiSlice';
 import Loading from '../../components/Loading';
 import ListPager from '../../components/ui/ListPager';
 import ActivityTypeIcon from '../../icons/ActivityTypeIcon';
 import ActivitiesFilter from '../../components/filters/ActivitiesFilter';
-import { activityDescription, buildActiviyFilter, parseDate } from '../FarmUtil';
+import { activityDescription, buildActiviesFilter, buildActiviyFilter, parseDate } from '../FarmUtil';
 
 const FieldHistory = () => {
   const { fieldId, page, src } = useParams()
@@ -25,7 +25,9 @@ const FieldHistory = () => {
   const startDateFilter = useSelector(selectStartDateFilter);
   const endDateFilter = useSelector(selectEndDateFilter);
   const activityFreeTextFilter = useSelector(selectActivityFreeTextFilter);
-  const filter = buildActiviyFilter(startDateFilter, endDateFilter, activityFreeTextFilter);
+  const selectedFilters = useSelector(selectSelectedActivityFilterOptions);
+
+  const filter = buildActiviesFilter(startDateFilter, endDateFilter, activityFreeTextFilter, selectedFilters);
 
   // useEffect(() => {
   //   if(page !== 0){

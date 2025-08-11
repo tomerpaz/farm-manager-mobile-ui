@@ -490,20 +490,6 @@ export const buildActiviesFilter = (start, end, freeText, autoComplete) => {
     return filter;
 }
 
-//Depricated
-export const buildActiviyFilter = (start, end, freeText) => {
-    const filter = [];
-    if (!isStringEmpty(start)) {
-        filter.push(`start_${start.replaceAll('-', '')}`)
-    }
-    if (!isStringEmpty(end)) {
-        filter.push(`end_${end.replaceAll('-', '')}`)
-    }
-    if (!isStringEmpty(freeText)) {
-        filter.push(`freeText_${freeText}`)
-    }
-    return filter;
-}
 
 export const formatNumber = (value) => {
 
@@ -700,13 +686,12 @@ export const buildFieldOptions = (fields) => {
 }
 
 const isFieldKey = (key) => {
-    const stateList = ['field_','crop_','variety_','parentField_','tag1_','tag2_']
+    const stateList = ['field_', 'crop_', 'variety_', 'parentField_', 'tag1_', 'tag2_']
     var result = stateList.filter(e => key.startsWith(e));
-    console.log('result',result)
     return result.length !== 0;
 }
 
-export const buildActivityOptions = (fields, fieldId, text, isPlan, role) => {
+export const buildActivityOptions = (fields, activityDefs, fieldId, text, isPlan, role) => {
     const options =
         getActivityStatuses(role, isPlan).map(e => {
             return { key: 'status_' + e, id: e, label: getActivityStatusText(e, text), element: e }
@@ -715,12 +700,19 @@ export const buildActivityOptions = (fields, fieldId, text, isPlan, role) => {
                 getActivityTypes(role, false, isPlan).map(e => {
                     return { key: 'activityType_' + e, id: e, label: getActivityTypeText(e, text), element: e }
                 }))
-            .concat( isNaN(fieldId) ? buildFieldOptions(fields) : [])
+            .concat(isNaN(fieldId) ? buildFieldOptions(fields) : [])
+            .concat(asSafeArray(activityDefs).map(e => {
+                return { key: 'activityDef_' + e.id, id: e, label: e.name, element: e }
+            }))
     return uniqueArray(options, 'key');
 }
 
+const asSafeArray = (arr) => {
+   return isArrayEmpty(arr) ? [] : arr;
+}
+
 export const removeRedundantSelectedActivityOptions = (options, fieldId) => {
-    return isNaN(Number(fieldId)) ? options : options.filter(e=> !isFieldKey(e.key));
+    return isNaN(Number(fieldId)) ? options : options.filter(e => !isFieldKey(e.key));
 }
 
 
