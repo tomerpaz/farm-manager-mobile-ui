@@ -566,7 +566,7 @@ export function isInventoryPossible(userConf) {
 }
 
 export function isPlansPossible(userConf) {
-    return userConf.find(e => e.type === INVENTORY) ? true : false;
+    return userConf.find(e => e.type.includes("_PLAN")) ? true : false;
 }
 
 export const trap = 'trap';
