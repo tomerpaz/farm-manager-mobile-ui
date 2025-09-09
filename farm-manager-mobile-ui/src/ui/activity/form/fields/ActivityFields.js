@@ -9,7 +9,7 @@ import FieldSelectionDialog from "../../../dialog/FieldsSelectionDialog"
 import { useFieldArray } from "react-hook-form";
 import { Delete, DragHandle, Menu, MoreVert, Percent, AddLocation } from "@mui/icons-material"
 import ActivityFieldDialog from "./ActivityFieldDialog"
-import { HARVEST, MARKET, SCOUT, GENERAL, SPRAY_TYPES, isArrayEmpty } from "../../../FarmUtil"
+import { HARVEST, MARKET, SCOUT, GENERAL, SPRAY_TYPES, isArrayEmpty, HARVEST_TYPES } from "../../../FarmUtil"
 import UpdateAllFieldsDialog from "./UpdateAllFieldsDialog"
 import { getTotalQty, getTotalweight } from "../ActivityUtil"
 import UpdateAllFieldsAreaDialog from "./UpdateAllFieldsAreaDialog"
@@ -115,6 +115,9 @@ const ActivityFields = ({ activity, getValues, control, register, errors, activi
 
     const disabledSelections = SPRAY_TYPES.concat(SCOUT).includes(activity.type) && crop === null;
 
+    const isHarvest = HARVEST_TYPES.includes(activity.type);
+
+
     const LocationIconSx = () => {
         if (pointsCount && pointsCount > 0) {
             return { color: blue[800] };
@@ -125,9 +128,25 @@ const ActivityFields = ({ activity, getValues, control, register, errors, activi
             return { color: orange[800] };
 
         }
-
-
     }
+
+
+    const getAmountTitle = () => {
+        if (isHarvest) {
+            return text.qty;
+        } else {
+            return `${text[user.areaUnit]}`;
+        }
+    }
+
+    const getTotalValue = () => {
+        if (isHarvest) {
+            return getTotalQty(fields, 0);
+        } else {
+            return activityArea;
+        }
+    }
+
     return (
         <Box margin={1} display={'flex'} flexDirection={'column'}>
             <Box display={'flex'} flex={1} justifyContent={'space-between'} alignItems={'center'}>
@@ -157,16 +176,16 @@ const ActivityFields = ({ activity, getValues, control, register, errors, activi
                             <TableCell sx={headerSx}>{text.alias}</TableCell>
                             <TableCell sx={headerSx}>{text.crop}</TableCell>
                             <TableCell sx={headerSx}>{text.variety}</TableCell>
-                            <TableCell sx={headerSx}>{`${text[user.areaUnit]}`}</TableCell>
+                            <TableCell sx={headerSx}>{getAmountTitle()}</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {getFields().map((row, index) =>
-                            <Row key={row.key} index={index} row={row} text={text} register={register} remove={remove} onClick={() => handleOpenEditRow(index, row)} />
+                            <Row key={row.key} index={index} row={row} text={text} register={register} remove={remove} onClick={() => handleOpenEditRow(index, row)} isHarvest={isHarvest} />
                         )}
                         <TableRow>
-                            <TableCell sx={headerSx} colSpan={4}>{`${text.total} ${text[user.areaUnit]}`}</TableCell>
-                            <TableCell sx={headerSx} >{activityArea}</TableCell>
+                            <TableCell sx={headerSx} colSpan={4}>{`${text.total} ${getAmountTitle()}`}</TableCell>
+                            <TableCell sx={headerSx} >{getTotalValue()}</TableCell>
                         </TableRow>
                     </TableBody>
                 </Table>
@@ -190,7 +209,7 @@ const ActivityFields = ({ activity, getValues, control, register, errors, activi
     )
 }
 function Row(props) {
-    const { row, index, text, onClick, register, remove } = props;
+    const { row, index, text, onClick, register, remove, isHarvest } = props;
 
     //        {...register(`test.${index}.value`)} 
 
@@ -201,18 +220,15 @@ function Row(props) {
                 key={index}
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                 <TableCell onClick={onClick} sx={cellSxLink} >{row.field.name}</TableCell>
-                <TableCell /*onClick={onClick}*/ sx={cellSx}>{row.field.alias}</TableCell>
-                <TableCell /*onClick={onClick}*/ sx={cellSx} >{row.field.cropName}</TableCell>
-                <TableCell /*onClick={onClick}*/ sx={cellSx}>{row.field.varietyName}</TableCell>
-                <TableCell /*onClick={onClick}*/ sx={row.activityArea === row.field.area ? cellSx : cellSxChange}>
+                <TableCell sx={cellSx}>{row.field.alias}</TableCell>
+                <TableCell sx={cellSx} >{row.field.cropName}</TableCell>
+                <TableCell sx={cellSx}>{row.field.varietyName}</TableCell>
+                {!isHarvest && <TableCell sx={row.activityArea === row.field.area ? cellSx : cellSxChange}>
                     <Box {...register(`field.${index}.activityArea`)}>
                         {row.activityArea.toFixed(2)}
                     </Box>
-                </TableCell>
-                {/* <TableCell width={1} sx={{ padding: 0, margin: 0 }}><IconButton margin={0} padding={0} onClick={e => remove(index)}><Delete fontSize='large' /></IconButton></TableCell> */}
-
-
-
+                </TableCell>}
+                {isHarvest && <TableCell sx={cellSx}>{row.qty}</TableCell>}
             </TableRow>
         </Fragment>
     );
