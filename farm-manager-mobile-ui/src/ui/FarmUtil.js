@@ -693,6 +693,7 @@ const isFieldKey = (key) => {
 }
 
 export const buildActivityOptions = (fields, activityDefs, fieldId, text, isPlan, role) => {
+   // const resourceTypes = [PESTICIDE, FERTILIZER]
     const options =
         getActivityStatuses(role, isPlan).map(e => {
             return { key: 'status_' + e, id: e, label: getActivityStatusText(e, text), element: e }
@@ -705,11 +706,17 @@ export const buildActivityOptions = (fields, activityDefs, fieldId, text, isPlan
             .concat(asSafeArray(activityDefs).map(e => {
                 return { key: 'activityDef_' + e.id, id: e, label: e.name, element: e }
             }))
+            .concat(asSafeArray(activityDefs).map(e => {
+                return { key: 'activityDefType_' + e.activityGroupId, id: e.activityGroupId, label: e.activityGroupName, element: e }
+            }))
+    // .concat(resourceTypes.map(e => {
+    //     return { key: 'resourceType_' + e, id: e, label: getResourceTypeText(e,text), element: e }
+    // }))
     return uniqueArray(options, 'key');
 }
 
 const asSafeArray = (arr) => {
-   return isArrayEmpty(arr) ? [] : arr;
+    return isArrayEmpty(arr) ? [] : arr;
 }
 
 export const removeRedundantSelectedActivityOptions = (options, fieldId) => {
