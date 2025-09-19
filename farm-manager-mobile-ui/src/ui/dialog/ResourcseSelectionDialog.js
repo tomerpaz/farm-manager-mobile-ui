@@ -2,7 +2,7 @@ import { AppBar, Box, Button, Checkbox, Dialog, DialogActions, DialogContent, Di
 import TextFieldBase from "../../components/ui/TextField";
 import { useSelector } from "react-redux";
 import { selectLang } from "../../features/app/appSlice";
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import { cellSx, headerSx, Transition } from "../Util";
 import { useGetUserDataQuery } from "../../features/auth/authApiSlice";
 import { Close, Search } from "@mui/icons-material";
@@ -46,6 +46,7 @@ const ResourcseSelectionDialog = ({ open, handleClose, resourceTypes, cropId }) 
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(ROWS_PER_PAGE);
 
+    const tableContainerRef = useRef(null);
 
     const clear = () => {
         setFilter('');
@@ -66,6 +67,14 @@ const ResourcseSelectionDialog = ({ open, handleClose, resourceTypes, cropId }) 
     useEffect(() => {
         clear();
     }, [type]);
+
+    const handleChangePage = (newPage) => {
+        setPage(newPage);
+        console.log(tableContainerRef)
+        if (tableContainerRef.current) {
+            tableContainerRef.current.scrollIntoView();
+        }
+    };
 
     const isPesticidelist = type === LIST_PESTICIDE;
     const isSprayer = type === SPRAYER;
@@ -149,7 +158,7 @@ const ResourcseSelectionDialog = ({ open, handleClose, resourceTypes, cropId }) 
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
             fullScreen={isMobile()} fullWidth={!isMobile()}
-            disableRestoreFocus={true} 
+            disableRestoreFocus={true}
             slots={{ transition: Transition }}
         >
             <DialogAppBar onClose={() => onAction(false)}
@@ -183,8 +192,8 @@ const ResourcseSelectionDialog = ({ open, handleClose, resourceTypes, cropId }) 
                 </Box>
             </DialogTitle>
             <DialogContent sx={{ padding: 0, margin: 0 }}>
-                <TableContainer sx={{ padding: 0, }}>
-                    <Table stickyHeader size="small" sx={{ width: '100%', margin: 0, padding: 0 }} aria-label="a dense table">
+                <TableContainer sx={{ padding: 0, }} ref={tableContainerRef} >
+                    <Table stickyHeader size="small" sx={{ width: '100%', margin: 0, padding: 0, overflowY: 'auto' }} aria-label="a dense table">
                         <TableHead >
                             <TableRow
                             // style={{
@@ -238,7 +247,7 @@ const ResourcseSelectionDialog = ({ open, handleClose, resourceTypes, cropId }) 
                 <Box display={'flex'} flex={1} flexDirection={'column'} justifyContent={'center'}>
                     {showPegination && <Divider />}
                     {showPegination && <ListPager bottom={50} page={Number(page)}
-                        totalPages={Math.ceil(visableResources.length / ROWS_PER_PAGE)} setPage={setPage} />}
+                        totalPages={Math.ceil(visableResources.length / ROWS_PER_PAGE)} setPage={handleChangePage} />}
                     <Box display={'flex'} justifyContent={'center'}>
                         <Button size='large' disableElevation={true} variant='contained' onClick={() => onAction(true)} autoFocus>
                             {text.save}

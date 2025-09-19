@@ -39,7 +39,7 @@ const ActivitiesList = ({ plans }) => {
     const navigate = useNavigate();
 
     const height = window.innerHeight - 190;
-    const maxResult = 20;
+    const maxResult = 40;
     const isPlan = plans;
     const orderBy = 'execution';
     const dir = 'desc';
