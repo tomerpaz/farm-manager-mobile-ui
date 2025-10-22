@@ -13,7 +13,7 @@ import { useGetCropPesticidesQuery } from "../../features/pesticides/pecticidesA
 import DialogAppBar from "./DialogAppBar";
 
 const filterResource = (e, filter, type, text, isSprayer) => {
-    const categopryOk = (isSprayer ? e.category === SPRAYER : e.category !== SPRAYER);
+    const categopryOk = (isSprayer ? e.category === SPRAYER : true);
     if (isStringEmpty(filter)) {
         return type === e.type && categopryOk;
     } else {
