@@ -2,9 +2,9 @@ import { AppBar, Box, Button, Dialog, DialogActions, DialogContent, DialogTitle,
 import TextFieldBase from "../../../../components/ui/TextField";
 import { useSelector } from "react-redux";
 import { selectLang } from "../../../../features/app/appSlice";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useGetUserDataQuery } from "../../../../features/auth/authApiSlice";
-import { FERTILIZER, IRRIGARION_TYPES, PESTICIDE, QTY_PER_AREA_UNIT_RESOURCE_TYPE, SECONDARY_QTY_RESOURCES, SPRAY_TYPES, WAREHOUSE_RESOURCE_TYPE, WATER, WORKER_GROUP, getResourceTypeText, getUnitText, isMobile, isStringEmpty, safeDiv } from "../../../FarmUtil";
+import { AREA_UNIT, FERTILIZER, IRRIGARION_TYPES, PESTICIDE, QTY_PER_AREA_UNIT_RESOURCE_TYPE, SECONDARY_QTY_RESOURCES, SPRAY_TYPES, WAREHOUSE_RESOURCE_TYPE, WATER, WORKER_GROUP, getResourceTypeText, getUnitText, isMobile, isStringEmpty, safeDiv } from "../../../FarmUtil";
 import { Cancel, Close, Delete, Save } from "@mui/icons-material";
 import { calacTotalPesticideVolume } from "../../../FarmCalculator";
 import DialogAppBar from "../../../dialog/DialogAppBar";
@@ -62,7 +62,10 @@ const ActivityResourceDialog = ({ selectedRow, selectedIndex, handleClose, updat
     const isWater = WATER === selectedRow.resource.type;
     const isDosage = selectedRow?.pesticideListItem;
 
-    const autoCalc = SPRAY_TYPES.concat(IRRIGARION_TYPES).includes(activityType) && [WATER, PESTICIDE, FERTILIZER].includes(selectedRow.resource.type);
+
+
+    console.log(selectedRow)
+    const autoCalc = SPRAY_TYPES.concat(IRRIGARION_TYPES).includes(activityType) && [WATER, PESTICIDE, FERTILIZER].includes(selectedRow.resource.type) || AREA_UNIT.toUpperCase() === selectedRow.resource.usageUnit;
     const onAction = (save) => {
         if (save) {
             if (autoCalc) {

@@ -123,6 +123,24 @@ const ActivityResources = ({ activity, control, errors, register, tariffs, activ
         setLoadTariffs(false);
     }, [loadTariffs])
 
+
+
+    const updateActivityArea = () => {
+        fields.map((row, index) => {
+            console.log(row)
+            if (row.resource.usageUnit === AREA_UNIT.toUpperCase() && activityArea !== row.qty && row.manualQty === false) {
+                row.qty = activityArea;
+                update(index, row);
+
+            }
+        })
+    }
+
+    useEffect(() => {
+        updateActivityArea();
+
+    }, [activityArea]);
+
     const clearSingular = (newtlySelectedResources) => {
         if (IRRIGARION_TYPES.concat(SPRAY_TYPES).includes(activity.type)) {
             if (IRRIGARION_TYPES.includes(activity.type)) {
@@ -295,6 +313,8 @@ const ActivityResources = ({ activity, control, errors, register, tariffs, activ
         })
     }
 
+
+
     const totalWaterQty = caclTotalWater();
 
     return (
@@ -354,8 +374,8 @@ const ActivityResources = ({ activity, control, errors, register, tariffs, activ
                         </IconButton>
                     }
                 </Box>
-                <Box flex={1}/>
-                <Box display={'flex'}  flexDirection={'row'} alignItems={'center'}>
+                <Box flex={1} />
+                <Box display={'flex'} flexDirection={'row'} alignItems={'center'}>
                     <IconButton size='large' disabled={isArrayEmpty(resourceBulkUnits)} onClick={() => setOpenEditBulkQty(true)}><MoreVert fontSize='large' /></IconButton>
                     <IconButton size='large' disabled={isArrayEmpty(fields)} onClick={() => remove()}><Delete fontSize='large' /></IconButton>
                 </Box>
@@ -388,7 +408,7 @@ const ActivityResources = ({ activity, control, errors, register, tariffs, activ
                 sprayParams={sprayParams}
             />}
             <AlertDialog open={showAlert} title={'requiredFieldsMissing'} message={errorMsg} varieant={'error'} handleClose={_ => setShowAlert(false)} buttonText={text.close} />
-          { SCOUT !== activity.type && <Box marginTop={2} marginBottom={0} display={'flex'} flex={1} justifyContent={'space-between'} alignItems={'center'}>
+            {SCOUT !== activity.type && <Box marginTop={2} marginBottom={0} display={'flex'} flex={1} justifyContent={'space-between'} alignItems={'center'}>
                 <Controller
                     control={control}
                     name="invoice"
