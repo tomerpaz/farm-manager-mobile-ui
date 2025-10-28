@@ -127,11 +127,9 @@ const ActivityResources = ({ activity, control, errors, register, tariffs, activ
 
     const updateActivityArea = () => {
         fields.map((row, index) => {
-            console.log(row)
             if (row.resource.usageUnit === AREA_UNIT.toUpperCase() && activityArea !== row.qty && row.manualQty === false) {
                 row.qty = activityArea;
                 update(index, row);
-
             }
         })
     }
