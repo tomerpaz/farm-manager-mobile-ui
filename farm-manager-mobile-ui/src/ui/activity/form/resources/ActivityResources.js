@@ -127,10 +127,17 @@ const ActivityResources = ({ activity, control, errors, register, tariffs, activ
 
     const updateActivityArea = () => {
         fields.map((row, index) => {
-            if (row.resource.usageUnit === AREA_UNIT.toUpperCase() && activityArea !== row.qty && row.manualQty === false) {
-                row.qty = activityArea;
-                update(index, row);
+            if (row.manualQty === false) {
+                if (row.resource.usageUnit === AREA_UNIT.toUpperCase() && activityArea !== row.qty) {
+                    row.qty = activityArea;
+                    update(index, row);
+                }
+                else if (row.resource.type === PESTICIDE && row.pesticideListItem &&  row.dosage) {
+                    row.qty = calacTotalPesticideVolume(row.pesticideListItem.unit, row.dosage, sprayParams?.volumePerAreaUnit, activityArea)
+                    update(index, row);
+                }
             }
+
         })
     }
 
