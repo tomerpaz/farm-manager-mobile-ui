@@ -6,7 +6,7 @@ import { getYearArray } from '../../ui/FarmUtil';
 import { useParams } from 'react-router';
 import { useFieldsById } from '../../features/fields/fieldsApiSlice';
 
-const SelectYearMenu = () => {
+const SelectYearMenu = ({minYear}) => {
 
     const dispatch = useDispatch()
 
@@ -63,7 +63,7 @@ const SelectYearMenu = () => {
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
             >
-                {getYearArray().map((option) => (
+                {getYearArray(minYear).map((option) => (
                     <MenuItem sx={{
                         fontWeight: option === currentDashboardYear ? 'bolder' : null
                     }} key={option} value={option} onClick={() => handleChange(option)}>

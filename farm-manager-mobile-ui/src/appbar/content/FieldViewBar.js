@@ -9,6 +9,7 @@ import SelectYearMenu from '../components/SelectYearMenu'
 import { useGetUserDataQuery } from '../../features/auth/authApiSlice'
 import SeasonData from '../../ui/forms/season/SeasonData'
 import { useState } from 'react'
+import { getDateYear } from '../../ui/FarmUtil'
 
 const FieldViewBar = ({ layers, share, years }) => {
 
@@ -36,12 +37,13 @@ const FieldViewBar = ({ layers, share, years }) => {
 
     const lat = field ? field.lat : null;
     const lng = field ? field.lng : null;
+
     return (
         <AppBar position="static" elevation={0}>
             <Toolbar sx={{ justifyContent: 'space-between' }}>
                 <Box display={'flex'} flexDirection={'row'}>
                     {share && lat && lng && <ShareLocationMenu lat={lat} lng={lng} />}
-                    {years && <SelectYearMenu />}
+                    {years && field && <SelectYearMenu minYear={getDateYear(field?.startDate)}/>}
 
                     {layers && <IconButton
                         size="large"

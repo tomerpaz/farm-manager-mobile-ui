@@ -394,6 +394,16 @@ export const daysDiffToday = (before) => {
 }
 
 
+export function getDateYear(date) {
+
+    if (date) {
+        const d = new Date(Date.parse(date)).getFullYear();
+        return d;
+    } else {
+        return null;
+    }
+}
+
 export function parseDate(date) {
     if (date !== null) {
         return asShortStringDate(Date.parse(date));
@@ -502,7 +512,10 @@ export const formatNumber = (value) => {
 
 const thisYear = newDate().getFullYear();
 const yearOptions = [thisYear + 2, thisYear + 1, thisYear, thisYear - 1, thisYear - 2, thisYear - 3];
-export const getYearArray = () => {
+export const getYearArray = (minYear) => {
+    if(minYear){
+        return yearOptions.filter(e=> e >= minYear);
+    }
     return yearOptions;
 }
 
@@ -693,7 +706,7 @@ const isFieldKey = (key) => {
 }
 
 export const buildActivityOptions = (fields, activityDefs, fieldId, text, isPlan, role) => {
-   // const resourceTypes = [PESTICIDE, FERTILIZER]
+    // const resourceTypes = [PESTICIDE, FERTILIZER]
     const options =
         getActivityStatuses(role, isPlan).map(e => {
             return { key: 'status_' + e, id: e, label: getActivityStatusText(e, text), element: e }
