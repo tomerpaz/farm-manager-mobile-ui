@@ -33,7 +33,11 @@ const UpdateAllFieldsDialog = ({ open, text, handleClose, areaUnit, activityArea
 
             newFields.forEach((e, index, arr) => {
                 e.qty = Number((qtyPerAreaUnit * e.activityArea).toFixed(2));
-                e.weight = Number((weightPerAreaUnit * e.activityArea).toFixed(2));
+                if(e.container?.capacity > 0){
+                    e.weight = Number((e.qty * e.container?.capacity).toFixed(2));
+                } else {
+                    e.weight = Number((weightPerAreaUnit * e.activityArea).toFixed(2));
+                }
 
             });
             replace(newFields);
