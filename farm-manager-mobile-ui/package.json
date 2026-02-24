@@ -4,19 +4,17 @@
   "private": true,
   "dependencies": {
     "@emotion/react": "11.14.0",
-    "@emotion/styled": "11.14.0",
-    "@mui/icons-material": "7.1.0",
-    "@mui/material": "7.1.0",
-    "@mui/x-charts": "7.22.3",
-    "@mui/x-date-pickers": "7.7.1",
+    "@emotion/styled": "^11.14.1",
+    "@mui/icons-material": "^7.3.8",
+    "@mui/material": "^7.3.8",
+    "@mui/x-date-pickers": "7.29.4",
     "@reduxjs/toolkit": "2.6.1",
-    "caniuse-lite": "1.0.30001751",
     "date-fns": "2.30.0",
-    "gh-pages": "6.3.0",
+    "gh-pages": "^6.3.0",
     "leaflet": "1.9.4",
     "leaflet.locatecontrol": "0.84.2",
-    "react": "19.1.0",
-    "react-dom": "19.1.0",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
     "react-hook-form": "^7.53.2",
     "react-leaflet": "^5.0.0",
     "react-leaflet-google-layer": "^4.0.0",
@@ -55,9 +53,6 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "@babel/plugin-proposal-private-property-in-object": "^7.21.11"
   },
   "packageManager": "yarn@4.12.0"
 }
